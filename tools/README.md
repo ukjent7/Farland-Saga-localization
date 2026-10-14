@@ -80,6 +80,15 @@ bash flow.sh build full --base en-US-unifont-full07 --output en-text-review --la
 
 当前中文稿的 `EVE/EVE09_1.EVT` 字表与脚本超过原镜像的 8192 字节分配，准确长度见构建输出的 `event_capacity.json`。资源模式保留准确译文并在容量报告中标明不可打包；完整构建明确拒绝超限。原镜像没有足够的未占用全零扇区可安全搬移，审计记录在私有工作区 `work/maintenance/iso-free-extents.json`。这不影响已安装的 07 版本。继续修改该事件时，需结合容量报告审阅字表总容量，不能只看单行字数。
 
+要重跑这份容量审计，用 `tools/iso_extents.py` 只读扫描数据轨，它会复现审计记录里的全部关键数值：
+
+```bash
+bash uv.sh run --locked python tools/iso_extents.py work/decoded/FarlandSaga_track1.bin
+bash uv.sh run --locked python tools/iso_extents.py work/decoded/FarlandSaga_track1.bin --expected-sha256 <轨道哈希> --min-run 5
+```
+
+`free_zero_mode1.runs` 为空即表示没有可安全搬移的连续空闲零扇区。`plan_relocations` 只在目录记录相互一致、且与冻结资源清单吻合时才允许搬移，扫描不完整时直接拒绝。
+
 图片主题通过同一入口单独构建，沿用基础候选的其他资源：
 
 ```bash
@@ -128,6 +137,6 @@ bash flow.sh restore-original --game-is-closed
 
 ## 公共模块
 
-`localize.py` 分发命令；`translation_data.py` 提供三语数据视图与校验；`candidate.py` 管理候选复制、资源校验、字库同步和打包；`native_patches.py` 处理声明式补丁；`container_atlases.py` 负责加密图集；`build_alpha.py` 与镜像模块负责原生文字及 Saturn 镜像编码；`unity_resources.py` 负责 Unity 文字；`bootstrap.py` 从已购游戏安装解包并冻结原版素材；`extract_unity_text.py` 从冻结 Unity 原版重建 `unity.json` 文字行表（`--check` 只校验）；`cd_parity.py` 提供 CD 扇区校验的已知答案向量与压制盘参考；`version_storage.py` 管理大小文件归档与恢复；`workspace_assets.py` 维护共享预览与历史别名；`path_compat.py` 提供 REPO/WORK 双根与路径兼容。
+`localize.py` 分发命令；`translation_data.py` 提供三语数据视图与校验；`candidate.py` 管理候选复制、资源校验、字库同步和打包；`native_patches.py` 处理声明式补丁；`container_atlases.py` 负责加密图集；`build_alpha.py` 与镜像模块负责原生文字及 Saturn 镜像编码；`unity_resources.py` 负责 Unity 文字；`bootstrap.py` 从已购游戏安装解包并冻结原版素材；`extract_unity_text.py` 从冻结 Unity 原版重建 `unity.json` 文字行表（`--check` 只校验）；`cd_parity.py` 提供 CD 扇区校验的已知答案向量与压制盘参考；`iso_extents.py` 只读扫描 ISO9660 数据轨的空闲零扇区扩展区并规划安全搬移；`version_storage.py` 管理大小文件归档与恢复；`workspace_assets.py` 维护共享预览与历史别名；`path_compat.py` 提供 REPO/WORK 双根与路径兼容。
 
 各资源处理器保留独立职责。带版本号的一次性构建和旧翻译任务工具已归档，不作为新工作入口。

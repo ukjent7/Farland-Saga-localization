@@ -209,7 +209,8 @@ def main():
         scripts = [REPO/'tests/test_cli.py', REPO/'tests/test_storage_bundles.py',
                    REPO/'tests/test_translation_merge.py', REPO/'tests/test_resources.py',
                    REPO/'tests/test_chinese_rebuild.py',
-                   REPO/'tests/test_cd_parity.py', REPO/'tests/test_unity_extract.py']
+                   REPO/'tests/test_cd_parity.py', REPO/'tests/test_iso_extents.py',
+                   REPO/'tests/test_unity_extract.py']
         if not args.cli_only:
             # 引导回放要真解包一遍游戏，只在完整档运行。
             scripts.append(REPO/'tests/test_bootstrap.py')
