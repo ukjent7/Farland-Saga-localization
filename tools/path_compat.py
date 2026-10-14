@@ -5,7 +5,8 @@ the translation tables and the patch recipes. The private workspace holds the
 copyrighted game data: extracted resources, decoded images, candidates,
 backups and the storage archive. ``REPO`` and ``WORK`` name those two roots.
 Set ``FARLAND_WORK`` to point ``WORK`` elsewhere when the repository is checked
-out on its own; by default the repository is expected inside the workspace.
+out on its own; by default the workspace is the ``work`` directory beside the
+repository, so a checkout reproduces the same layout wherever it is cloned.
 """
 import os
 from pathlib import Path
@@ -17,7 +18,7 @@ def _private_work():
     override = os.environ.get('FARLAND_WORK')
     if override:
         return Path(override).resolve()
-    return REPO.parent
+    return (REPO.parent / 'work').resolve()
 
 
 WORK = _private_work()

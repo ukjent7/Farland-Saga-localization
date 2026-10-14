@@ -17,6 +17,18 @@
 
 下面第 243-253 行附近的旧 PowerShell 命令块是这段引导链的历史形态，保留作记录。
 
+## 工作区布局反转：仓库成为主目录（2026-10-14）
+
+此前私有工作区 `work/` 是中心，公开仓库只能作为它的 `work/公开仓库/` 子目录存在，入口脚本 `flow.sh`/`uv.sh` 留在私有工作区、靠 glob 发现仓库。本次把两者对调：
+
+- 仓库上移到游戏安装根下的 `farland-saga-localization/`，成为主工作目录；`flow.sh` 与 `uv.sh` 移入仓库，直接运行仓库内的 `tools/localize.py`，不再有发现逻辑。
+- 逆向产物继续留在仓库同级的 `work/`，内部子文件夹名一个未改，因此 `bundles.json` 的快照键、候选清单与 `install_report.json` 里的绝对路径全部原样有效，恢复链零改动。
+- `tools/path_compat.py` 的 `WORK` 默认值从「仓库父目录」改为「仓库同级的 `work/`」，`FARLAND_WORK` 仍可覆盖；`WORKSPACE` 仍是游戏安装根，`ROOT = WORK.parent` 定位游戏目录的逻辑不变。
+- `uv.sh` 在私有工作区工程（含 Hex-Rays IDALib 本地 wheel）存在时优先使用它，单独检出仓库时用仓库自己的 `pyproject.toml`；`.python-version` 与 `.editorconfig` 一并移入仓库。
+- 私有工作区里失效的 `.gitignore` 与 `.gitattributes` 随之移除——该目录本来就不在任何 git 仓库内。
+
+社区成员现在把仓库克隆到任意位置，产物都落在克隆目录同级的 `work/`，目录布局与维护者一致。
+
 ## 术语表对照修正与台版/大陆版规范统一（2026-10-09）
 
 按用户要求，对 `work/translation/glossary.json`（全表 90 条）进行了系统的联网考据、校对与状态转正，深入比对 1997 年台湾 TGL（帝技爷如／智冠总经销）繁体中文版与大陆官方引进版（如成都众心电子）及现代通用规范：

@@ -129,7 +129,7 @@ def doctor(work=WORK):
     def environment():
         project = tomllib.loads((work / 'pyproject.toml').read_text(encoding='utf-8'))
         if sys.version_info[:2] != (3, 14) or Path(sys.prefix).resolve() != (work / '.venv').resolve():
-            raise ValueError('Use the project Python 3.14 environment through bash work/flow.sh')
+            raise ValueError('Use the project Python 3.14 environment through bash flow.sh')
         versions = {}
         for requirement in project['project']['dependencies']:
             name, expected = requirement.split('==')

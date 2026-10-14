@@ -34,9 +34,11 @@ class EntryPoints(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('doctor', result.stdout)
 
-    @unittest.skipUnless((path_compat.WORK/'flow.sh').is_file(), '私有工作区入口脚本不存在，公开仓库单独检出时跳过')
+    @unittest.skipUnless((path_compat.REPO/'flow.sh').is_file()
+                         and (path_compat.WORK/'config/storage_policy.json').is_file(),
+                         '私有工作区不存在，公开仓库单独检出时跳过')
     def test_wrapper_from_another_directory(self):
-        result = subprocess.run(['bash', str(WORK/'flow.sh'), 'status'], cwd=WORK/'.tmp', capture_output=True, text=True)
+        result = subprocess.run(['bash', str(REPO/'flow.sh'), 'status'], cwd=WORK/'.tmp', capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
         data = json.loads(result.stdout)
         self.assertEqual(data['work'], str(WORK))

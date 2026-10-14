@@ -2,7 +2,13 @@
 
 本仓库存放 FARLAND SAGA I Saturn Tribute（世嘉 Saturn 光盘镜像 + Steam 外壳）中、韩、英三语本地化中不涉及版权的部分：工具代码、三语译稿、声明式补丁配方与字体，用于补丁的打包、迭代与分发。游戏原版数据、候选镜像、原版备份等版权相关内容留在私有工作区，不在本仓库。
 
-日常操作仍在私有工作区内进行，入口为 `bash work/flow.sh`；本仓库默认位于私有工作区的 `work/公开仓库/` 子目录，入口通过发现逻辑运行仓库内的 `tools/localize.py`。单独使用本仓库时，用环境变量 `FARLAND_WORK` 指向私有工作区根目录。
+本仓库是项目的主工作目录，入口脚本 `flow.sh` 与 `uv.sh` 就在仓库根下，所有命令从仓库内发起。逆向产物（解包资源、解码镜像、候选、原版备份与归档）全部写在仓库同级的私有工作区 `work/` 中，由 `tools/path_compat.py` 的 `WORK` 指向；设置环境变量 `FARLAND_WORK` 可以改到别处。仓库单独克隆到任何位置都复现同一套目录布局：
+
+```
+<任意位置>/
+  <本仓库>/      工具、译稿、补丁配方与字体
+  work/          私有工作区：解包、解码、候选、备份与归档
+```
 
 ```bash
 uv run --locked python tools/localize.py --help
@@ -16,14 +22,14 @@ pip install -e .
 
 ## 快速开始
 
-需要 Python 3.14，依赖声明在 `pyproject.toml`。公开仓库只含公开依赖；静态反汇编所需的 IDALib 为 Hex-Rays 专有产品，列为可选 extra `ida`，仅在私有工作区从本地 wheel 安装。仓库根、私有工作区根与安装根由 `tools/path_compat.py` 的 `REPO`、`WORK`、`WORKSPACE` 约定，公有数据（`translation/`、`config/patches/`、`fonts/`）走 `REPO`，游戏数据走 `WORK`。
+需要 Python 3.14，依赖声明在 `pyproject.toml`。公开仓库只含公开依赖；静态反汇编所需的 IDALib 为 Hex-Rays 专有产品，列为可选 extra `ida`，仅在私有工作区从本地 wheel 安装。仓库根、私有工作区根与安装根由 `tools/path_compat.py` 的 `REPO`、`WORK`、`WORKSPACE` 约定，公有数据（`translation/`、`config/patches/`、`fonts/`）走 `REPO`，游戏数据走 `WORK`；`WORK` 默认为仓库同级的 `work/` 目录。
 
 ## 从已购游戏安装开始
 
 社区成员持有一份通过 Steam 购买的游戏安装即可从零复现全部产物。整条链只读游戏目录，不启动游戏，也不修改安装文件；解包与冻结产物全部落在私有工作区。
 
 ```bash
-export FARLAND_WORK=/path/to/your/work                        # 私有工作区根，默认为仓库同级目录
+export FARLAND_WORK=/path/to/your/work                        # 私有工作区根，默认为仓库同级的 work/ 目录
 GAME=/path/to/FARLAND\ SAGA\ I\ Saturn\ Tribute                # 游戏安装根
 
 python tools/localize.py status                                          # 确认尚未初始化
@@ -78,7 +84,7 @@ python tools/localize.py build full --base zh-CN-seed01 --output zh-CN-full01 --
 | `fonts/unifont-18.0.01/` | GNU Unifont 字体与许可证 |
 | `HISTORY.md` | 历史版本进度与格式调查记录 |
 
-私有工作区保存游戏数据与私有记录：`extracted/`、`decoded/`、`staging/`（三语候选与历史版本报告）、`analysis/`、`backups/`（原版备份）、`storage/`（归档）、`assets/`（冻结原版素材与预览）、`maintenance/`、`vendor/`（IDA idalib wheel）、`install_report.json`、`config/storage_policy.json`、`config/cleanup.json`、`flow.sh`、`uv.sh`、`pyproject.toml`、`uv.lock`。实际安装以 `install_report.json` 为准，当前候选以 `config/storage_policy.json` 为准。恢复链（原版备份、共享归档对象与各版本清单）完整位于私有工作区，迁移时须连同 `storage/`、`backups/` 与候选清单整体搬迁，不能只复制本仓库。
+私有工作区保存游戏数据与私有记录：`extracted/`、`decoded/`、`staging/`（三语候选与历史版本报告）、`analysis/`、`backups/`（原版备份）、`storage/`（归档）、`assets/`（冻结原版素材与预览）、`maintenance/`、`vendor/`（IDA idalib wheel）、`install_report.json`、`config/storage_policy.json`、`config/cleanup.json`，以及私有运行环境 `pyproject.toml`、`uv.lock`、`.venv`、`.uv-cache`、`.pycache`、`.tmp`。实际安装以 `install_report.json` 为准，当前候选以 `config/storage_policy.json` 为准。恢复链（原版备份、共享归档对象与各版本清单）完整位于私有工作区，迁移时须连同 `storage/`、`backups/` 与候选清单整体搬迁，不能只复制本仓库。
 
 ## 流程说明
 

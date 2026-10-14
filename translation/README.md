@@ -30,6 +30,6 @@
 
 中文虚拟 `events/catalog` 视图与韩英构建视图都从 `corpus.json` 读取，不维护重复可编辑副本。旧对齐输入有 1,714 条中文与当前中文不同，迁移时使用当前中文逐 ID 回填；韩英保持已审校完整译稿。原始行与历史意见保存在维护快照和历史译稿包内。
 
-继续翻译时把临时 ID 键译稿放在仓库内 `translation/draft.json`，使用 `bash work/flow.sh merge --language ko-KR --draft work/公开仓库/translation/draft.json` 合并；需明确替换已有译文时加 `--overwrite`。无参数 `merge` 只校验当前表。`flow.sh review` 生成[统一审阅页](../review.html)。具体合并、构建和容量规则见 [tools/README.md](../tools/README.md)。
+继续翻译时把临时 ID 键译稿放在仓库内 `translation/draft.json`，使用 `bash flow.sh merge --language ko-KR --draft translation/draft.json` 合并；需明确替换已有译文时加 `--overwrite`。无参数 `merge` 只校验当前表。`flow.sh review` 生成[统一审阅页](../review.html)。具体合并、构建和容量规则见 [tools/README.md](../tools/README.md)。
 
 图片、图集、字位与 Unity 的冻结输入在私有工作区的 `assets/sources/`；候选 `inputs/` 保存当次完整输入快照。历史批次由私有工作区的 `flow.sh storage` 命令按原路径恢复，恢复后只作查阅或显式合并，不能重新运行原文提取来覆盖译稿。

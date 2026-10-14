@@ -158,7 +158,7 @@ def guard_original(game, force):
         return record
     if not force:
         raise ValueError('游戏目录已被补丁修改（install_report.json 记录了一次安装）。'
-                         '请先恢复原版：bash work/flow.sh restore-original --game-is-closed，'
+                         '请先恢复原版：bash flow.sh restore-original --game-is-closed，'
                          '或用 --game 指向一份干净的游戏安装，或加 --force 继续处理当前文件')
     print(json.dumps({'warning': '游戏目录已被补丁修改，按 --force 继续处理当前文件',
                       'install_report': str(WORK / 'install_report.json')}, ensure_ascii=False),

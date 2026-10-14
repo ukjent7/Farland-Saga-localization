@@ -4,5 +4,6 @@ __pycache__/
 .uv-cache/
 .pycache/
 .tmp/
+.ruff_cache/
 review.json
 review.html
