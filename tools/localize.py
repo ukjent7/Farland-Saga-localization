@@ -140,6 +140,10 @@ def parser():
     patch.add_argument('--version')
     patch.add_argument('--resources-only', action='store_true')
     patch.add_argument('--no-preview', action='store_true')
+    release = commands.add_parser('package-release', help='Package a candidate into a distributable patch payload')
+    release.add_argument('--stage', required=True, help='候选目录名（work/staging 下）')
+    release.add_argument('--output', help='输出目录（相对于 work/），默认 work/release')
+    release.add_argument('--patcher', help='补丁器可执行文件；提供时同时生成终端用户整合包')
     build = commands.add_parser('build', help='Rebuild full text or selected native UI resources')
     build.add_argument('kind', choices=['full','ui','equipment','titles'])
     build.add_argument('--base', required=True)
@@ -280,6 +284,10 @@ def main():
             compact_if_installed()
         print(json.dumps({'output':str(result.stage),'status':result.report['build_status'],
                           'translated_texts':result.report['translated_texts']},ensure_ascii=False))
+    elif args.command == 'package-release':
+        from package_release import package
+        result = package(args.stage, args.output, args.patcher)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
     elif args.command == 'build':
         output = stage_path(args.output)
         if output.exists():

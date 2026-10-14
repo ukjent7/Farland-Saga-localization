@@ -73,11 +73,34 @@ python tools/localize.py build full --base zh-CN-seed01 --output zh-CN-full01 --
 
 普通文字以当前各语言译稿逐 ID 合并；旧对齐表中的中文快照不能回写覆盖当前中文。继续翻译请编辑统一表或合并 ID 批次，保留源文、偏移、容量、字位和复核记录。构建候选的 `inputs/` 是冻结输入，不能作为新的编辑来源。
 
+## 分发发布
+
+终端用户拿到的是一个独立补丁器，不需要 Python 或本仓库。发布链分两段：CI 只编译公开仓库里的补丁器源码，含游戏数据的补丁载荷由维护者在私有工作区生成，两者挂到同一个 GitHub Release。
+
+```bash
+# 1. CI 已把 FarlandSagaPatcher-windows-amd64.exe 上传为 Release 资产；
+#    也可以在本地用 Go 构建（见 patcher/README.md）。
+
+# 2. 在私有工作区把候选打包成差异载荷，并整合成终端用户压缩包：
+python tools/localize.py package-release --stage zh-CN-unifont08 \
+  --patcher /path/to/FarlandSagaPatcher-windows-amd64.exe
+# 产物在 work/release/：farland-patch-<版本>.zip 与
+# FarlandSagaPatcher-<版本>-win64.zip（补丁器 + 载荷 + 使用说明）
+
+# 3. 挂到 Release：
+gh release upload v1.0.0 work/release/FarlandSagaPatcher-*.zip
+```
+
+载荷只包含相对原版的 4 KiB 差异块（实测约 23 MiB，而补丁后文件约 375 MiB），按 SHA-256 寻址，与冷存储共享对象。补丁器核对游戏文件身份后备份、回放、原子替换，失败自动回滚，随时可以恢复原版。命令、载荷格式与安全边界见 [patcher/README.md](patcher/README.md)。
+
+工作流定义在 `.github/workflows/release.yml`：拉取请求与推送 tag 时执行 `go vet`、单元测试和两个平台的构建；打 tag 或手动确认时创建 Release 并上传可执行文件与 `SHA256SUMS`。
+
 ## 目录职责
 
 | 目录 | 职责 |
 | --- | --- |
 | `tools/` | 公共处理器与 `localize.py` 统一命令入口 |
+| `patcher/` | 分发给终端用户的独立补丁器（Go，无第三方依赖） |
 | `tests/` | 入口与工作流回归检查 |
 | `translation/` | 三语译稿 JSON 与译稿说明 |
 | `config/patches/` | 声明式补丁配方 |

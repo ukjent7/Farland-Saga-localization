@@ -135,8 +135,17 @@ bash flow.sh restore-original --game-is-closed
 
 `--stage` 与 `--language` 二选一。实际写入须显式传入 `--game-is-closed`，安装工具验证候选、备份原版并支持失败回滚。WSL 无法检查 Windows 原生游戏进程。工作流不会自动启动游戏，资源构建也不会安装。
 
+## 发布打包
+
+```bash
+bash flow.sh package-release --stage zh-CN-unifont08 --patcher /path/to/FarlandSagaPatcher-windows-amd64.exe
+bash flow.sh package-release --stage ko-KR-unifont-full07
+```
+
+`package-release` 先按候选报告逐文件核对身份，再把每个文件相对原版备份的 4 KiB 差异块写成载荷 ZIP（默认 `work/release/farland-patch-<版本>.zip`），差异对象进入冷存储并与历史归档共享；`--output` 可改输出目录。带 `--patcher` 时同时生成终端用户整合包 `FarlandSagaPatcher-<版本>-win64.zip`（补丁器、载荷与使用说明），挂到 GitHub Release 即可分发。重复打包同一候选得到字节一致的结果。补丁器本身的构建、命令与安全边界见 [../patcher/README.md](../patcher/README.md)。
+
 ## 公共模块
 
-`localize.py` 分发命令；`translation_data.py` 提供三语数据视图与校验；`candidate.py` 管理候选复制、资源校验、字库同步和打包；`native_patches.py` 处理声明式补丁；`container_atlases.py` 负责加密图集；`build_alpha.py` 与镜像模块负责原生文字及 Saturn 镜像编码；`unity_resources.py` 负责 Unity 文字；`bootstrap.py` 从已购游戏安装解包并冻结原版素材；`extract_unity_text.py` 从冻结 Unity 原版重建 `unity.json` 文字行表（`--check` 只校验）；`cd_parity.py` 提供 CD 扇区校验的已知答案向量与压制盘参考；`iso_extents.py` 只读扫描 ISO9660 数据轨的空闲零扇区扩展区并规划安全搬移；`version_storage.py` 管理大小文件归档与恢复；`workspace_assets.py` 维护共享预览与历史别名；`path_compat.py` 提供 REPO/WORK 双根与路径兼容。
+`localize.py` 分发命令；`translation_data.py` 提供三语数据视图与校验；`candidate.py` 管理候选复制、资源校验、字库同步和打包；`native_patches.py` 处理声明式补丁；`container_atlases.py` 负责加密图集；`build_alpha.py` 与镜像模块负责原生文字及 Saturn 镜像编码；`unity_resources.py` 负责 Unity 文字；`bootstrap.py` 从已购游戏安装解包并冻结原版素材；`extract_unity_text.py` 从冻结 Unity 原版重建 `unity.json` 文字行表（`--check` 只校验）；`cd_parity.py` 提供 CD 扇区校验的已知答案向量与压制盘参考；`iso_extents.py` 只读扫描 ISO9660 数据轨的空闲零扇区扩展区并规划安全搬移；`version_storage.py` 管理大小文件归档与恢复；`package_release.py` 把候选打包成终端用户差异载荷；`workspace_assets.py` 维护共享预览与历史别名；`path_compat.py` 提供 REPO/WORK 双根与路径兼容。
 
 各资源处理器保留独立职责。带版本号的一次性构建和旧翻译任务工具已归档，不作为新工作入口。

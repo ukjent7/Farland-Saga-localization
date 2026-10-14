@@ -7,3 +7,5 @@ __pycache__/
 .ruff_cache/
 review.json
 review.html
+/patcher/FarlandSagaPatcher*.exe
+/patcher/farland-saga-patcher
