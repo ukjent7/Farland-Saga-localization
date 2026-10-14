@@ -123,13 +123,16 @@ def convert(source, output, exe, logical_name, template=None):
     output.with_suffix(output.suffix + ".json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False), flush=True)
 
-if __name__ == "__main__":
-    sys.stdout.reconfigure(encoding="utf-8")
+def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("source")
     parser.add_argument("output")
     parser.add_argument("--exe", default=str(WORK.parent / "FarlandSaga.exe"))
     parser.add_argument("--name", required=True, help="Original basename used by the game")
     parser.add_argument("--template", help="Original encrypted container for repacking")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     convert(args.source, args.output, args.exe, args.name, args.template)
+
+if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
+    main()

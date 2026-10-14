@@ -83,10 +83,13 @@ def extract(source, output):
     print(json.dumps({"volume": report["volume"], "file_count": len(entries), "output": str(output)}, ensure_ascii=False))
     return report
 
-if __name__ == "__main__":
-    sys.stdout.reconfigure(encoding="utf-8")
+def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("source")
     parser.add_argument("output")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     extract(args.source, args.output)
+
+if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
+    main()

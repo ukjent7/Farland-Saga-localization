@@ -44,6 +44,28 @@ bash work/flow.sh review
 
 图片标题、界面标签和外层菜单分别使用浅层三语主题表。图集配置声明边界、字体、布局和保护区域；修改文字后须构建并检查容量报告。
 
+## 从游戏安装引导工作区
+
+持有一份通过 Steam 购买的游戏安装即可从零建出私有工作区。整条链只读游戏目录，不启动游戏，也不修改安装文件。`--game` 缺省为私有工作区同级的安装根；`FARLAND_WORK` 指向别处时必须显式传 `--game`。
+
+```bash
+python tools/localize.py unpack --game <游戏根目录>
+python tools/localize.py assets freeze --game <游戏根目录>
+python tools/localize.py extract-unity
+python tools/localize.py build-first --output zh-CN-seed01 --game <游戏根目录>
+python tools/localize.py verify --stage zh-CN-seed01
+```
+
+`unpack` 依次解出四个 SSF 容器（`FarlandSaga.cue`、`FarlandSaga_Steam.ini`、`FarlandSaga.bin`、`Texture.tex`）到 `decoded/`，还原数据轨得到 `FarlandSaga_track1.bin`，再按 ISO9660 解出 `extracted/steam/`，并把分析用可执行文件放到 `analysis/FarlandSaga.exe`。重复运行幂等；目标 exe 与游戏不一致时需 `--force`。
+
+`assets freeze` 冻结构建要校验身份的原版：`Texture.tex` 按 SSF 容器原样复制（图集解码需要 2048 字节头，补丁配方钉的也是容器哈希），五个 Unity 原版文件复制到 `assets/sources/unity/S-Tribute_Data/`，`S-Tribute_Data/Managed/*.dll` 打成字节可复现的 `unity-managed.zip`（固定时间戳与 deflate 级别），并写 `unity_original_files.json` 清单。
+
+`unpack` 与 `assets freeze` 都带原版守卫：检测到游戏目录安装过补丁时拒绝执行，提示先 `restore-original`、用 `--game` 指向干净安装，或显式 `--force`。已打补丁的安装解包出来的是补丁后的资源，候选会建立在错误的基础上。
+
+`extract-unity` 从冻结的 Unity 原版重建 `assets/sources/unity.json`。扫描规则是在 MonoBehaviour 原始数据上滑动读取定长 UTF-8 段，按文字系统保留日文与繁体中文槽，排除谚文、其他拉丁语言槽、声音列表元数据与含换行的编辑器备注；命中行按 id 与 `translation/corpus.json` 的 `kind == "unity"` 行对齐，未被收录的写入 `unity_unmatched.json` 待人工确认。语料库有而扫描未命中的行直接报错，表示冻结原版与译稿已经漂移。`--check` 只校验不写文件。行序保持扫描顺序，重建结果与历史冻结表字节级一致。
+
+`build-first` 从 `extracted/steam` 直接构建首个候选，不依赖任何既有候选，因此可以在 `build full --base` 之前跑通。它只构建 Saturn 光盘侧；要得到含 Steam 外壳（Unity 文字）的完整候选，在首个候选之上继续 `build full`。镜像编码的 CD parity 自检优先用私有工作区的原版光盘裸镜像 `reference_original.bin`，缺失时退回仓库内的已知答案向量（Steam 版不带原始压制盘的 EDC/ECC，已实测），报告里的 `cd_parity_reference` 记的是实际用了哪一种。
+
 ## 构建与补丁
 
 基础候选按当前存储策略选择，输出必须是新目录。以下命令只准备资源，不生成可安装成品：
@@ -106,6 +128,6 @@ bash work/flow.sh restore-original --game-is-closed
 
 ## 公共模块
 
-`localize.py` 分发命令；`translation_data.py` 提供三语数据视图与校验；`candidate.py` 管理候选复制、资源校验、字库同步和打包；`native_patches.py` 处理声明式补丁；`container_atlases.py` 负责加密图集；`build_alpha.py` 与镜像模块负责原生文字及 Saturn 镜像编码；`unity_resources.py` 负责 Unity 文字；`version_storage.py` 管理大小文件归档与恢复；`workspace_assets.py` 维护共享预览与历史别名；`path_compat.py` 提供 REPO/WORK 双根与路径兼容。
+`localize.py` 分发命令；`translation_data.py` 提供三语数据视图与校验；`candidate.py` 管理候选复制、资源校验、字库同步和打包；`native_patches.py` 处理声明式补丁；`container_atlases.py` 负责加密图集；`build_alpha.py` 与镜像模块负责原生文字及 Saturn 镜像编码；`unity_resources.py` 负责 Unity 文字；`bootstrap.py` 从已购游戏安装解包并冻结原版素材；`extract_unity_text.py` 从冻结 Unity 原版重建 `unity.json` 文字行表（`--check` 只校验）；`cd_parity.py` 提供 CD 扇区校验的已知答案向量与压制盘参考；`version_storage.py` 管理大小文件归档与恢复；`workspace_assets.py` 维护共享预览与历史别名；`path_compat.py` 提供 REPO/WORK 双根与路径兼容。
 
 各资源处理器保留独立职责。带版本号的一次性构建和旧翻译任务工具已归档，不作为新工作入口。

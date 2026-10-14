@@ -4,6 +4,19 @@
 
 本页保存整理前的版本进度、格式调查和旧命令，文字中的“当前”对应记录当时。历史命令块按记录保留，不作为当前操作指引；当前只使用 WSL/Linux 的 Bash 与 POSIX 路径。日常操作从 [工作区首页](README.md) 和 [工具流程](tools/README.md) 进入；实际安装状态读取 `install_report.json`，当前候选读取 `config/storage_policy.json`。
 
+## 公开仓库引导链（2026-10-14）
+
+公开仓库此前只能作为私有工作区的子目录使用，社区成员拿到一份 Steam 购买的游戏安装也无法复现产物。本次补齐了从安装到首个候选的完整入口，全部只读游戏目录、不启动游戏：
+
+- `tools/bootstrap.py` 新增 `unpack` 与 `freeze` 两个操作，并统一接到 `localize.py` 的 `unpack` 与 `assets freeze` 子命令。`steam_container.py`、`disc_decode.py`、`disc_extract.py` 整理成「模块级函数 + `main(argv=None)` 薄壳」，命令行行为不变，可被导入调用。
+- `unpack` 解出四个 SSF 容器、还原数据轨、按 ISO9660 解包 `extracted/steam/` 并 staging 分析用 exe；`freeze` 冻结 `Texture.tex` 容器、五个 Unity 原版文件和字节可复现的 `unity-managed.zip`。两者都带原版守卫：检测到游戏目录安装过补丁时拒绝执行。
+- `tools/extract_unity_text.py`（`localize.py extract-unity`）从冻结 Unity 原版重建 `assets/sources/unity.json`，此前该文件只能靠历史分析产物。扫描规则复现了历史 67 行的字段与行序，重建结果与冻结表字节级一致；未被语料库收录的命中写入 `unity_unmatched.json` 待人工确认。
+- `tools/cd_parity.py` 把 `build_disc` 对原版光盘裸镜像 `reference_original.bin` 的硬依赖改成可选：私有工作区仍优先用真实压制盘扇区，公开仓库退回仓库内的确定性已知答案向量。实测 Steam 数据轨抽样 90 个扇区全部不满足 CD parity，社区成员无法用自己的游戏数据替代。
+- `build_alpha.py` 增加 `--game` 参数并修正 `original_file` 的解析顺序，`localize.py build-first` 因此可以在没有任何既有候选的情况下建出首个候选。同时修掉 `main()` 里一处既有的 `NameError`（`input_snapshots` 用了未定义的 `name`），该入口此前没有任何工具或测试调用。
+- `workspace_status.py` 的 `status`/`doctor` 在全新工作区返回未初始化结构与中文提示，不再抛裸 traceback；测试套件补建 `WORK/.tmp`、`WORK/analysis`，并对依赖私有工作区的用例加 `skipUnless`。
+
+下面第 243-253 行附近的旧 PowerShell 命令块是这段引导链的历史形态，保留作记录。
+
 ## 术语表对照修正与台版/大陆版规范统一（2026-10-09）
 
 按用户要求，对 `work/translation/glossary.json`（全表 90 条）进行了系统的联网考据、校对与状态转正，深入比对 1997 年台湾 TGL（帝技爷如／智冠总经销）繁体中文版与大陆官方引进版（如成都众心电子）及现代通用规范：

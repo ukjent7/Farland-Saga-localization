@@ -814,7 +814,9 @@ def activate_candidate(stage, language=None):
     language = language or report.get('language')
     if language not in {'zh-CN', 'ko-KR', 'en-US'}:
         return
-    policy = load(POLICY)
+    # 全新工作区没有存储策略；从空表开始，让首次完整构建也能收尾。
+    policy = load(POLICY) if Path(POLICY).exists() else {'active_candidates': {}}
+    policy.setdefault('active_candidates', {})
     policy['active_candidates'][language] = stage.name
     atomic_json(POLICY, policy)
 

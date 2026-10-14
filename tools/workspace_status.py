@@ -11,14 +11,31 @@ from path_compat import WORK, local_path
 from version_storage import object_path
 
 LANGUAGES = ('zh-CN', 'ko-KR', 'en-US')
+# 全新工作区（公开仓库单独检出）的下一步提示；两个入口后续会接入 localize.py。
+UNINITIALIZED_HINT = ('全新工作区尚未初始化：缺少 config/storage_policy.json 或 install_report.json。'
+                      '请先运行 python tools/localize.py unpack --game <游戏根目录> 解包游戏资源，'
+                      '再运行 python tools/localize.py assets freeze 冻结原版素材，'
+                      '然后按 README.md 构建候选。')
 
 
 def load(path):
     return json.loads(path.read_text(encoding='utf-8-sig'))
 
 
+def initialized(work=WORK):
+    """有存储策略才算初始化；安装记录单独由 installation 字段反映。
+
+    全新工作区跑完 build full 会生成存储策略，此时 active_candidates 已经可读，
+    不能因为还没安装过就继续报未初始化。
+    """
+    return (work / 'config/storage_policy.json').is_file()
+
+
 def active_stage(language, work=WORK):
-    name = load(work / 'config/storage_policy.json')['active_candidates'][language]
+    candidates = load(work / 'config/storage_policy.json').get('active_candidates', {})
+    if language not in candidates:
+        return None
+    name = candidates[language]
     if not isinstance(name, str) or not name or '/' in name or '\\' in name or ':' in name or name in ('.', '..'):
         raise ValueError(f'Invalid active candidate for {language}: {name!r}')
     stage = (work / 'staging' / name).resolve()
@@ -51,15 +68,30 @@ def candidate_state(stage):
             'missing_or_wrong_size': missing, 'translated_texts': data.get('translated_texts')}
 
 
+def active_candidates(work=WORK):
+    """按存储策略报告各语言当前候选；尚未构建的语言记为 null。"""
+    states = {}
+    for language in LANGUAGES:
+        stage = active_stage(language, work)
+        states[language] = candidate_state(stage) if stage is not None else None
+    return states
+
+
 def status(work=WORK):
     record_path = work / 'install_report.json'
     record = load(record_path) if record_path.exists() else {}
-    return {'work': str(work), 'installation': {
+    ready = initialized(work)
+    result = {'work': str(work), 'installation': {
                 'version': record.get('version'), 'status': record.get('status', 'unrecorded'),
                 'timestamp_utc': record.get('timestamp_utc'), 'files': len(record.get('files', {}))},
-            'active_candidates': {language: candidate_state(active_stage(language, work)) for language in LANGUAGES},
+            'active_candidates': active_candidates(work) if ready else {},
             'archived_snapshots': sum(1 for root in ('staging', 'backups') for _ in (work / root).glob('*/storage_manifest.json')),
             'note': 'Metadata only; run doctor for installed-file hashes and verify for candidate hashes.'}
+    if not ready:
+        # 全新工作区返回未初始化结构与中文提示，退出码仍为 0。
+        result['initialized'] = False
+        result['hint'] = UNINITIALIZED_HINT
+    return result
 
 
 def installed_checks(work=WORK):
@@ -123,5 +155,8 @@ def doctor(work=WORK):
         checks.extend(installed_checks(work))
     except Exception as error:
         checks.append({'check': 'installation', 'ok': False, 'detail': str(error)})
+    # 全新工作区把缺失汇总成一项中文失败检查，其余检查行为不变。
+    if not initialized(work):
+        checks.append({'check': 'workspace_initialized', 'ok': False, 'detail': UNINITIALIZED_HINT})
     return {'ok': all(item['ok'] for item in checks), 'checks': checks,
             'note': 'Candidate contents need verify; archive contents need storage verify.'}

@@ -17,6 +17,8 @@ WORK = path_compat.WORK
 
 class ChineseRebuild(unittest.TestCase):
     def test_partial_candidate_accepts_legacy_ready_ancestor(self):
+        # 全新工作区没有 analysis/，先建出来供 TemporaryDirectory 使用。
+        (WORK / 'analysis').mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(dir=WORK / 'analysis') as temporary:
             root = Path(temporary)
             ready = root / 'legacy-alpha06'

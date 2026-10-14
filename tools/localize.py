@@ -13,6 +13,13 @@ from path_compat import REPO, WORK
 from test_shards import SHARD_ENV, balance, clear_shards, merge_shards
 
 
+def compact_if_installed():
+    """归档历史大文件；保留策略需要安装记录，全新工作区没有可归档的内容。"""
+    if (WORK / 'install_report.json').is_file():
+        from version_storage import compact
+        compact(apply=True)
+
+
 def invoke(module_name, arguments):
     previous = sys.argv
     try:
@@ -139,11 +146,28 @@ def parser():
     build.add_argument('--output', required=True)
     build.add_argument('--language', required=True, choices=['zh-CN','ko-KR','en-US'])
     build.add_argument('--resources-only', action='store_true')
+    first = commands.add_parser('build-first', help='Build the first candidate straight from extracted originals')
+    first.add_argument('--output', required=True, help='New candidate directory under work/staging')
+    first.add_argument('--language', choices=['zh-CN'], default='zh-CN')
+    first.add_argument('--game', help='Game installation root; stages its FarlandSaga.exe into work/analysis')
+    first.add_argument('--force', action='store_true', help='Replace a differing work/analysis/FarlandSaga.exe')
+    first.add_argument('--resources-only', action='store_true', help='Prepare resources and a capacity report without packing the disc')
+    unpack = commands.add_parser('unpack', help='Decode the purchased game install into decoded/ and extracted/steam')
+    unpack.add_argument('--game', help='Game installation root; defaults to the workspace install root')
+    unpack.add_argument('--force', action='store_true', help='Continue even when the install carries a patched candidate')
     verify = commands.add_parser('verify', help='Verify packaged files and native resource hashes')
     verify.add_argument('--stage', required=True)
-    assets = commands.add_parser('assets', help='Manage generated image previews')
-    assets.add_argument('operation', choices=['audit','cleanup','gallery','verify'])
+    assets = commands.add_parser('assets', help='Manage generated image previews and freeze original sources')
+    assets.add_argument('operation', choices=['audit','cleanup','gallery','verify','freeze'])
     assets.add_argument('--apply', action='store_true', help='Apply configured cleanup; default is an inventory')
+    assets.add_argument('--game', help='Game installation root for freeze; defaults to the workspace install root')
+    assets.add_argument('--force', action='store_true', help='Freeze even when the install carries a patched candidate')
+    unity = commands.add_parser('extract-unity', help='Rebuild assets/sources/unity.json from the frozen Unity originals')
+    unity.add_argument('--source', help='Frozen Unity original directory; defaults to work/assets/sources/unity')
+    unity.add_argument('--output', help='Row table to write; defaults to work/assets/sources/unity.json')
+    unity.add_argument('--review', help='Where to write hits the corpus does not cover')
+    unity.add_argument('--corpus', help='Shared corpus to align against; defaults to translation/corpus.json')
+    unity.add_argument('--check', action='store_true', help='Only verify the existing row table; write nothing')
     merge = commands.add_parser('merge', help='Validate the shared corpus or merge an ID-keyed language draft')
     merge.add_argument('--language', choices=['zh-CN','ko-KR','en-US'], default='zh-CN')
     merge.add_argument('--table', action='append', choices=['event','events','catalog','description','host','unity','condition'],
@@ -184,8 +208,11 @@ def main():
             cli.error('--jobs must be at least 1')
         scripts = [REPO/'tests/test_cli.py', REPO/'tests/test_storage_bundles.py',
                    REPO/'tests/test_translation_merge.py', REPO/'tests/test_resources.py',
-                   REPO/'tests/test_chinese_rebuild.py']
+                   REPO/'tests/test_chinese_rebuild.py',
+                   REPO/'tests/test_cd_parity.py', REPO/'tests/test_unity_extract.py']
         if not args.cli_only:
+            # 引导回放要真解包一遍游戏，只在完整档运行。
+            scripts.append(REPO/'tests/test_bootstrap.py')
             scripts.append(REPO/'tests/test_workflows.py')
         for script in scripts:
             started = time.monotonic()
@@ -219,6 +246,24 @@ def main():
             options.append('--game-is-closed')
         invoke('restore_original', options)
         return
+    if args.command == 'unpack':
+        options = []
+        if args.game:
+            options.extend(['--game', args.game])
+        if args.force:
+            options.append('--force')
+        invoke('bootstrap', ['unpack', *options])
+        return
+    if args.command == 'extract-unity':
+        options = []
+        for name in ('source', 'output', 'review', 'corpus'):
+            value = getattr(args, name)
+            if value:
+                options.extend([f'--{name}', value])
+        if args.check:
+            options.append('--check')
+        invoke('extract_unity_text', options)
+        return
     # Load resource/font modules only for commands that use them, keeping help
     # and diagnostics available even if a project dependency needs repair.
     from candidate import stage_path, verify_candidate, prune_intermediates
@@ -231,7 +276,7 @@ def main():
         rewrite_image_links(); export_gallery()
         if not args.resources_only:
             activate_candidate(result.stage,args.language)
-            compact(apply=True)
+            compact_if_installed()
         print(json.dumps({'output':str(result.stage),'status':result.report['build_status'],
                           'translated_texts':result.report['translated_texts']},ensure_ascii=False))
     elif args.command == 'build':
@@ -253,7 +298,7 @@ def main():
         rewrite_image_links(); export_gallery()
         if not args.resources_only:
             activate_candidate(output,args.language)
-            compact(apply=True)
+            compact_if_installed()
     elif args.command == 'verify':
         report=verify_candidate(args.stage)
         print(json.dumps({'version':report.get('version',args.stage),'verified_files':len(report['files']),
@@ -300,6 +345,21 @@ def main():
     elif args.command == 'extract-titles':
         invoke('title_sprites',['--individual'] if args.individual else [])
         rewrite_image_links(); export_gallery()
+    elif args.command == 'build-first':
+        from candidate import stage_path
+        output = stage_path(args.output)
+        if output.exists():
+            cli.error('Use a new output directory; existing releases are not overwritten')
+        options = ['--stage', output.name, '--version', output.name]
+        if args.game:
+            options.extend(['--game', args.game])
+        if args.force:
+            options.append('--force')
+        if args.resources_only:
+            options.append('--resources-only')
+        invoke('build_alpha', options)
+        rewrite_image_links(); export_gallery()
+        return
     elif args.operation in {'audit','cleanup'}:
         result=cleanup_images(args.operation=='cleanup' and args.apply)
         (WORK/'maintenance').mkdir(exist_ok=True)
@@ -310,6 +370,13 @@ def main():
         rewrite_image_links(); export_gallery(); print(WORK/'assets/index.html')
     elif args.operation == 'verify':
         print(json.dumps(verify_previews(),ensure_ascii=False))
+    elif args.operation == 'freeze':
+        options = []
+        if args.game:
+            options.extend(['--game', args.game])
+        if args.force:
+            options.append('--force')
+        invoke('bootstrap', ['freeze', *options])
 
 
 if __name__ == '__main__': main()

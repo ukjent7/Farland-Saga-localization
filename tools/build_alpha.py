@@ -29,9 +29,18 @@ SOURCE = WORK / 'extracted/steam'
 STAGE = WORK / 'staging/alpha'
 EXE = WORK / 'analysis/FarlandSaga.exe'
 GLYPH_SLOTS = WORK / 'assets/sources/glyph-slots.zh-CN.json'
+# --game 指向的已购安装根；单独检出仓库时用它解析原版容器，见 original_file。
+GAME_ROOT = None
 
 
 def original_file(name):
+    """Locate the pristine original of a game file.
+
+    An installation record wins when present. Otherwise prefer the analyzed
+    copy under work/analysis, then the game root passed with --game, so a
+    standalone checkout with FARLAND_WORK pointing elsewhere still resolves the
+    executable and container it was analyzed against.
+    """
     record = WORK / 'install_report.json'
     if record.exists():
         report = json.loads(record.read_text(encoding='utf-8-sig'))
@@ -39,6 +48,11 @@ def original_file(name):
         assert candidate.is_relative_to(WORK.resolve())
         assert digest(candidate) == report['files'][name]['original_sha256']
         return candidate
+    analyzed = WORK / 'analysis' / name
+    if analyzed.is_file():
+        return analyzed
+    if GAME_ROOT is not None and (GAME_ROOT / name).is_file():
+        return GAME_ROOT / name
     return ROOT / name
 
 
@@ -536,9 +550,12 @@ def build_disc(changes, keep_intermediate=False):
             sector(lba)[offset+14:offset+18] = len(payload).to_bytes(4, 'big')
     for lba in changed:
         changed[lba] = finish_sector(changed[lba])
-    # Match the original pressed-disc MODE1 parity on an unchanged sector.
-    original = (WORK / 'reference_original.bin').read_bytes()[:2352]
-    assert finish_sector(bytearray(original)) == original, 'EDC/ECC reference mismatch'
+    # Match the original pressed-disc MODE1 parity on an unchanged sector. The
+    # Steam build carries no pressed-disc EDC/ECC, so a standalone checkout falls
+    # back to the repository's known-answer vector; see cd_parity.
+    from cd_parity import pressed_reference, verify
+    original, parity_source = pressed_reference()
+    verify(original, parity_source)
     # The packing intermediate is rebuildable, so an explicit RAM-disk override
     # keeps it off the workspace drive without touching the candidate itself.
     pack_tmp = os.environ.get('FARLAND_PACK_TMPDIR')
@@ -603,6 +620,7 @@ def build_disc(changes, keep_intermediate=False):
     if not keep_intermediate:
         inner.unlink()
     return {'changed_sectors': len(changed),
+            'cd_parity_reference': parity_source,
             'relocations': [{'path': name, 'lba': lba, 'sectors': sectors,
                              'bytes': needs[name]} for name, (lba, sectors) in sorted(relocations.items())],
             'changed_resources': [{'path': n, 'original_size': entries[n]['size'], 'patched_size': len(p), 'sha256': hashlib.sha256(p).hexdigest()} for n, p in changes.items()]}
@@ -642,14 +660,31 @@ def patch_exe(include_host_strings=True):
 
 
 def main():
-    global STAGE
+    global STAGE, GAME_ROOT
     sys.stdout.reconfigure(encoding='utf-8')
     parser = argparse.ArgumentParser()
     parser.add_argument('--stage', default='alpha')
     parser.add_argument('--version', default='alpha01')
     parser.add_argument('--resources-only', action='store_true', help='Prepare resources and capacity report without packing the disc')
-    parser.add_argument('--font-source', choices=['simsun', 'unifont'], default='simsun')
+    parser.add_argument('--font-source', choices=['simsun', 'unifont'], default='unifont',
+                        help='Glyph source; unifont ships in the repository and needs no Windows font')
+    parser.add_argument('--game', help='Game installation root; copies its FarlandSaga.exe into work/analysis when missing')
+    parser.add_argument('--force', action='store_true', help='Overwrite a differing work/analysis/FarlandSaga.exe')
     args = parser.parse_args()
+    if args.game:
+        GAME_ROOT = Path(args.game).resolve()
+        if not GAME_ROOT.is_dir():
+            raise SystemExit(f'游戏根目录不存在或不是目录：{GAME_ROOT}')
+        source = GAME_ROOT / 'FarlandSaga.exe'
+        if not source.is_file():
+            raise SystemExit(f'游戏可执行文件不存在：{source}')
+        EXE.parent.mkdir(parents=True, exist_ok=True)
+        if EXE.is_file() and digest(EXE) != digest(source):
+            if not args.force:
+                raise SystemExit(f'{EXE} 与 {source} 不一致；确认游戏安装未被修改后加 --force 覆盖')
+            shutil.copyfile(source, EXE)
+        elif not EXE.is_file():
+            shutil.copyfile(source, EXE)
     STAGE = (WORK / 'staging' / args.stage).resolve()
     assert STAGE.is_relative_to((WORK / 'staging').resolve())
     STAGE.mkdir(parents=True, exist_ok=True)
@@ -676,7 +711,7 @@ def main():
         target = STAGE / 'inputs' / source.name
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, target)
-        report['input_snapshots'][name] = digest(target)
+        report['input_snapshots'][source.name] = digest(target)
     (STAGE / 'build_report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(report, ensure_ascii=False, indent=2), flush=True)
 

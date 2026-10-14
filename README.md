@@ -18,6 +18,41 @@ pip install -e .
 
 需要 Python 3.14，依赖声明在 `pyproject.toml`。公开仓库只含公开依赖；静态反汇编所需的 IDALib 为 Hex-Rays 专有产品，列为可选 extra `ida`，仅在私有工作区从本地 wheel 安装。仓库根、私有工作区根与安装根由 `tools/path_compat.py` 的 `REPO`、`WORK`、`WORKSPACE` 约定，公有数据（`translation/`、`config/patches/`、`fonts/`）走 `REPO`，游戏数据走 `WORK`。
 
+## 从已购游戏安装开始
+
+社区成员持有一份通过 Steam 购买的游戏安装即可从零复现全部产物。整条链只读游戏目录，不启动游戏，也不修改安装文件；解包与冻结产物全部落在私有工作区。
+
+```bash
+export FARLAND_WORK=/path/to/your/work                        # 私有工作区根，默认为仓库同级目录
+GAME=/path/to/FARLAND\ SAGA\ I\ Saturn\ Tribute                # 游戏安装根
+
+python tools/localize.py status                                          # 确认尚未初始化
+python tools/localize.py unpack --game "$GAME"                           # 解出 decoded/ 与 extracted/steam
+python tools/localize.py assets freeze --game "$GAME"                    # 冻结原版图集与 Unity 资源
+python tools/localize.py extract-unity                                   # 重建 assets/sources/unity.json
+python tools/localize.py build-first --output zh-CN-seed01 --game "$GAME" # 首个候选
+python tools/localize.py verify --stage zh-CN-seed01
+```
+
+各步骤的职责与产物：
+
+| 命令 | 读取 | 写入 |
+| --- | --- | --- |
+| `unpack` | 游戏安装的 SSF 容器与主程序 | `decoded/`（含 `FarlandSaga_track1.bin`）、`extracted/steam/`、`analysis/FarlandSaga.exe` |
+| `assets freeze` | 游戏安装的 `Texture.tex` 与 `S-Tribute_Data/` | `assets/sources/Texture.tex`、`assets/sources/unity/`、`assets/sources/unity-managed.zip` |
+| `extract-unity` | `assets/sources/unity/` 与 `translation/corpus.json` | `assets/sources/unity.json`；未被语料库收录的命中写入 `unity_unmatched.json` 待人工确认 |
+| `build-first` | `extracted/steam/` 与 `translation/corpus.json` | `staging/<输出>/` 首个候选（Saturn 侧，含加密镜像） |
+
+`unpack` 与 `assets freeze` 在检测到游戏目录已安装过补丁时拒绝执行，提示先恢复原版、用 `--game` 指向干净安装，或显式加 `--force`。已打补丁的安装解包出来的是补丁后的资源，后续候选会建立在错误的基础上。
+
+`build-first` 只构建 Saturn 光盘侧。要得到含 Steam 外壳（Unity 文字）的完整候选，在首个候选之上继续：
+
+```bash
+python tools/localize.py build full --base zh-CN-seed01 --output zh-CN-full01 --language zh-CN
+```
+
+完整候选的 Unity 文字需要 Windows 字体（`C:/Windows/Fonts` 下的 SimHei、Malgun Gothic、Arial）；Saturn 侧使用仓库内的 GNU Unifont，不依赖外部字体。纯 Linux 环境目前只能构建 Saturn 侧。
+
 ## 修改从这里开始
 
 | 需要修改的内容 | 统一来源 |

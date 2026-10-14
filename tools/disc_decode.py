@@ -109,13 +109,16 @@ def decode(source, output, exe, sectors, file_index=None):
         output.with_suffix(output.suffix + ".json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
         print(json.dumps(report, ensure_ascii=False))
 
-if __name__ == "__main__":
-    sys.stdout.reconfigure(encoding="utf-8")
+def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("source")
     parser.add_argument("output")
     parser.add_argument("--exe", default=str(WORK.parent / "FarlandSaga.exe"))
     parser.add_argument("--sectors", type=int, default=128075)
     parser.add_argument("--file-index", type=int, help="SSF FILE number; auto-detected when omitted")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     decode(args.source, args.output, args.exe, args.sectors, args.file_index)
+
+if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
+    main()
