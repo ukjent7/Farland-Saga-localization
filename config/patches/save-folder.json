@@ -1,0 +1,243 @@
+{
+  "schema": 1,
+  "id": "save-folder",
+  "languages": {
+    "zh-CN": "zh",
+    "ko-KR": "ko",
+    "en-US": "en"
+  },
+  "report_key": "save_folder",
+  "runtime_word_writes": {
+    "original_sha256": "fafcc8cbd0c48d22948012999f7a6cffa804e574bb7dc0dcc220497ed3619b67",
+    "labels": [
+      {
+        "id": "folder-1-hook-1",
+        "source": "フォルダ",
+        "text": {
+          "zh-CN": "文件夹",
+          "ko-KR": "폴더",
+          "en-US": "Folder"
+        },
+        "capacity_cells": 4,
+        "ordinal": 1,
+        "ordinal_word": "8250",
+        "word_writes": [
+          {
+            "offset": "0x40231",
+            "memory_address": "0x601b83c",
+            "instruction_hex": "4533c0ba74830000b93cb80106e8b1970600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x40243",
+            "memory_address": "0x601b83e",
+            "instruction_hex": "4533c0ba48830000b93eb80106e89f970600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x40255",
+            "memory_address": "0x601b840",
+            "instruction_hex": "4533c0ba8b830000b940b80106e88d970600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x40267",
+            "memory_address": "0x601b842",
+            "instruction_hex": "4533c0ba5f830000b942b80106e87b970600",
+            "call_target": "0x1400aa5f0"
+          }
+        ]
+      },
+      {
+        "id": "folder-2-hook-1",
+        "source": "フォルダ",
+        "text": {
+          "zh-CN": "文件夹",
+          "ko-KR": "폴더",
+          "en-US": "Folder"
+        },
+        "capacity_cells": 4,
+        "ordinal": 2,
+        "ordinal_word": "8251",
+        "word_writes": [
+          {
+            "offset": "0x4018f",
+            "memory_address": "0x601b828",
+            "instruction_hex": "4533c0ba74830000b928b80106e853980600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x401a1",
+            "memory_address": "0x601b82a",
+            "instruction_hex": "4533c0ba48830000b92ab80106e841980600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x401b3",
+            "memory_address": "0x601b82c",
+            "instruction_hex": "4533c0ba8b830000b92cb80106e82f980600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x401c5",
+            "memory_address": "0x601b82e",
+            "instruction_hex": "4533c0ba5f830000b92eb80106e81d980600",
+            "call_target": "0x1400aa5f0"
+          }
+        ]
+      },
+      {
+        "id": "folder-1-hook-2",
+        "source": "フォルダ",
+        "text": {
+          "zh-CN": "文件夹",
+          "ko-KR": "폴더",
+          "en-US": "Folder"
+        },
+        "capacity_cells": 4,
+        "ordinal": 1,
+        "ordinal_word": "8250",
+        "word_writes": [
+          {
+            "offset": "0x403cb",
+            "memory_address": "0x601b83c",
+            "instruction_hex": "4533c0ba74830000b93cb80106e817960600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x403dd",
+            "memory_address": "0x601b83e",
+            "instruction_hex": "4533c0ba48830000b93eb80106e805960600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x403ef",
+            "memory_address": "0x601b840",
+            "instruction_hex": "4533c0ba8b830000b940b80106e8f3950600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x40401",
+            "memory_address": "0x601b842",
+            "instruction_hex": "4533c0ba5f830000b942b80106e8e1950600",
+            "call_target": "0x1400aa5f0"
+          }
+        ]
+      },
+      {
+        "id": "folder-2-hook-2",
+        "source": "フォルダ",
+        "text": {
+          "zh-CN": "文件夹",
+          "ko-KR": "폴더",
+          "en-US": "Folder"
+        },
+        "capacity_cells": 4,
+        "ordinal": 2,
+        "ordinal_word": "8251",
+        "word_writes": [
+          {
+            "offset": "0x40329",
+            "memory_address": "0x601b828",
+            "instruction_hex": "4533c0ba74830000b928b80106e8b9960600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x4033b",
+            "memory_address": "0x601b82a",
+            "instruction_hex": "4533c0ba48830000b92ab80106e8a7960600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x4034d",
+            "memory_address": "0x601b82c",
+            "instruction_hex": "4533c0ba8b830000b92cb80106e895960600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x4035f",
+            "memory_address": "0x601b82e",
+            "instruction_hex": "4533c0ba5f830000b92eb80106e883960600",
+            "call_target": "0x1400aa5f0"
+          }
+        ]
+      },
+      {
+        "id": "folder-1-hook-3",
+        "source": "フォルダ",
+        "text": {
+          "zh-CN": "文件夹",
+          "ko-KR": "폴더",
+          "en-US": "Folder"
+        },
+        "capacity_cells": 4,
+        "ordinal": 1,
+        "ordinal_word": "8250",
+        "word_writes": [
+          {
+            "offset": "0x4054b",
+            "memory_address": "0x601b83c",
+            "instruction_hex": "4533c0ba74830000b93cb80106e897940600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x4055d",
+            "memory_address": "0x601b83e",
+            "instruction_hex": "4533c0ba48830000b93eb80106e885940600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x4056f",
+            "memory_address": "0x601b840",
+            "instruction_hex": "4533c0ba8b830000b940b80106e873940600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x40581",
+            "memory_address": "0x601b842",
+            "instruction_hex": "4533c0ba5f830000b942b80106e861940600",
+            "call_target": "0x1400aa5f0"
+          }
+        ]
+      },
+      {
+        "id": "folder-2-hook-3",
+        "source": "フォルダ",
+        "text": {
+          "zh-CN": "文件夹",
+          "ko-KR": "폴더",
+          "en-US": "Folder"
+        },
+        "capacity_cells": 4,
+        "ordinal": 2,
+        "ordinal_word": "8251",
+        "word_writes": [
+          {
+            "offset": "0x404a9",
+            "memory_address": "0x601b828",
+            "instruction_hex": "4533c0ba74830000b928b80106e839950600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x404bb",
+            "memory_address": "0x601b82a",
+            "instruction_hex": "4533c0ba48830000b92ab80106e827950600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x404cd",
+            "memory_address": "0x601b82c",
+            "instruction_hex": "4533c0ba8b830000b92cb80106e815950600",
+            "call_target": "0x1400aa5f0"
+          },
+          {
+            "offset": "0x404df",
+            "memory_address": "0x601b82e",
+            "instruction_hex": "4533c0ba5f830000b92eb80106e803950600",
+            "call_target": "0x1400aa5f0"
+          }
+        ]
+      }
+    ]
+  }
+}

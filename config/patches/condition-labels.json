@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "id": "condition-labels",
+  "languages": {
+    "ko-KR": "ko",
+    "en-US": "en"
+  },
+  "report_key": "condition_labels",
+  "preview_name": "condition_preview.png",
+  "fields": [
+    {
+      "file": "1ST.BIN",
+      "offset": "0x75378",
+      "capacity_bytes": 4,
+      "mode": "fixed",
+      "source": "正常",
+      "new_text": true,
+      "id": "1ST.BIN:0x75378"
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x7537c",
+      "capacity_bytes": 4,
+      "mode": "fixed",
+      "source": "眠り",
+      "new_text": true,
+      "id": "1ST.BIN:0x7537c"
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x75380",
+      "capacity_bytes": 4,
+      "mode": "fixed",
+      "source": "毒　",
+      "new_text": true,
+      "id": "1ST.BIN:0x75380"
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x75384",
+      "capacity_bytes": 4,
+      "mode": "fixed",
+      "source": "麻痺",
+      "new_text": true,
+      "id": "1ST.BIN:0x75384"
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x75388",
+      "capacity_bytes": 4,
+      "mode": "fixed",
+      "source": "凍結",
+      "new_text": true,
+      "id": "1ST.BIN:0x75388"
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x7538c",
+      "capacity_bytes": 4,
+      "mode": "fixed",
+      "source": "石化",
+      "new_text": true,
+      "id": "1ST.BIN:0x7538c"
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x75390",
+      "capacity_bytes": 4,
+      "mode": "fixed",
+      "source": "魅了",
+      "new_text": true,
+      "id": "1ST.BIN:0x75390"
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x75394",
+      "capacity_bytes": 4,
+      "mode": "fixed",
+      "source": "沈黙",
+      "new_text": true,
+      "id": "1ST.BIN:0x75394"
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x75398",
+      "capacity_bytes": 4,
+      "mode": "fixed",
+      "source": "気絶",
+      "new_text": true,
+      "id": "1ST.BIN:0x75398"
+    }
+  ],
+  "mirror_checks": [
+    {
+      "file": "1ST.BIN",
+      "offset": "0x75378",
+      "size": 36,
+      "expected": [
+        {
+          "file": "1ST.BIN",
+          "offset": "0x75378"
+        }
+      ]
+    }
+  ],
+  "translation_corpus": "translation/corpus.json"
+}

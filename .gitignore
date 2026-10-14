@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+.uv-cache/
+.pycache/
+.tmp/
+review.json
+review.html

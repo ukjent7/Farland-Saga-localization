@@ -1,0 +1,35 @@
+{
+  "version": "18.0.01",
+  "files": [
+    {
+      "file": "unifont-18.0.01.hex.gz",
+      "url": "https://unifoundry.com/pub/unifont/unifont-18.0.01/font-builds/unifont-18.0.01.hex.gz",
+      "sha256": "e66385c79a0b8b24a466f3129930e08a966a935b4bf3b28c6bb17a9df9bf791d",
+      "bytes": 936593
+    },
+    {
+      "file": "OFL-1.1.txt",
+      "url": "https://unifoundry.com/OFL-1.1.txt",
+      "sha256": "869692af094c57fb7258c57fe26820c759319603321d0ffeb278de3651763ded",
+      "bytes": 4340
+    },
+    {
+      "file": "LICENSE.txt",
+      "url": "https://unifoundry.com/LICENSE.txt",
+      "sha256": "1e74cb82bf476843e97c2596297b04219b1a7e51f7238944a8c031cb9401fa87",
+      "bytes": 24142
+    }
+  ],
+  "hex_sha256": "2ab7801c809b76541a10b25858c1a962bdb650eee56b4c7df1f325b56e3955ee",
+  "source_package": {
+    "url": "https://unifoundry.com/pub/unifont/unifont-18.0.01/unifont-18.0.01.tar.gz",
+    "file": "unifont-18.0.01.tar.gz",
+    "sha256": "eab60847aac34c8768765cecc7821faf50de2636187b452b9b5fa50a12b00bc3"
+  },
+  "bundled_notice_files": {
+    "README": "0c35716b811d92631b60c92c1ab6a650e5da486f82896c1e87aaef931eb9336a",
+    "COPYING": "cd2785c2b8e0a01d203560265b2d2d47cdb1401d2707d25918ac5531bcdba947",
+    "OFL-1.1.txt": "869692af094c57fb7258c57fe26820c759319603321d0ffeb278de3651763ded",
+    "LICENSE.txt": "1e74cb82bf476843e97c2596297b04219b1a7e51f7238944a8c031cb9401fa87"
+  }
+}

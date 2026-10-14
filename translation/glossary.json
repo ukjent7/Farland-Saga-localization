@@ -1,0 +1,1721 @@
+{
+  "schema_version": 1,
+  "source_language": "ja",
+  "target_languages": [
+    "zh-CN",
+    "ko-KR",
+    "en-US"
+  ],
+  "rows": [
+    {
+      "id": "glossary:レオン",
+      "source": "レオン",
+      "translation": "里昂",
+      "category": "人名",
+      "status": "正式",
+      "notes": "游戏主角（Leon）。台版1997旧作“雷龙”（属于明显音义偏差离谱旧译）；大陆引进与现代通用规范定名为“里昂”。",
+      "translations": {
+        "zh-CN": "里昂",
+        "ko-KR": "레온",
+        "en-US": "Leon"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "游戏主角（Leon）。台版1997旧作“雷龙”（属于明显音义偏差离谱旧译）；大陆引进与现代通用规范定名为“里昂”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ラルフ",
+      "source": "ラルフ",
+      "translation": "拉尔夫",
+      "category": "人名",
+      "status": "正式",
+      "notes": "主角好友兼同伴（Ralph）。台版作“拉鲁福”（日文片假名直译），大陆与现代规范译名为“拉尔夫”。",
+      "translations": {
+        "zh-CN": "拉尔夫",
+        "ko-KR": "랄프",
+        "en-US": "Ralph"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "主角好友兼同伴（Ralph）。台版作“拉鲁福”（日文片假名直译），大陆与现代规范译名为“拉尔夫”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:バース",
+      "source": "バース",
+      "translation": "巴斯",
+      "category": "地名",
+      "status": "正式",
+      "notes": "花之都、农业大国（Barth）。台版旧作“琶斯”（生造字不妥），大陆与现代规范译为“巴斯”。",
+      "translations": {
+        "zh-CN": "巴斯",
+        "ko-KR": "바스",
+        "en-US": "Baas"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "花之都、农业大国（Barth）。台版旧作“琶斯”（生造字不妥），大陆与现代规范译为“巴斯”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:王都",
+      "source": "王都",
+      "translation": "王都",
+      "category": "地名",
+      "status": "正式",
+      "notes": "巴斯王国的首都。",
+      "translations": {
+        "zh-CN": "王都",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "巴斯王国的首都。"
+        }
+      }
+    },
+    {
+      "id": "glossary:義父",
+      "source": "義父",
+      "translation": "义父",
+      "category": "称呼",
+      "status": "正式",
+      "notes": "里昂对养父布莱恩的尊称（台版口语中亦作“干爹”）。",
+      "translations": {
+        "zh-CN": "义父",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "里昂对养父布莱恩的尊称（台版口语中亦作“干爹”）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:親父",
+      "source": "親父",
+      "translation": "老爹",
+      "category": "称呼",
+      "status": "正式",
+      "notes": "拉尔夫对抚养人布莱恩的亲昵粗犷称呼。",
+      "translations": {
+        "zh-CN": "老爹",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "拉尔夫对抚养人布莱恩的亲昵粗犷称呼。"
+        }
+      }
+    },
+    {
+      "id": "glossary:モンスター",
+      "source": "モンスター",
+      "translation": "怪物",
+      "category": "通用",
+      "status": "正式",
+      "notes": "通用怪物/魔物统称。",
+      "translations": {
+        "zh-CN": "怪物",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "通用怪物/魔物统称。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ターン",
+      "source": "ターン",
+      "translation": "回合",
+      "category": "战斗",
+      "status": "正式",
+      "notes": "战棋回合制行动轮次（Turn）。",
+      "translations": {
+        "zh-CN": "回合",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "战棋回合制行动轮次（Turn）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:魔法",
+      "source": "魔法",
+      "translation": "魔法",
+      "category": "战斗",
+      "status": "正式",
+      "notes": "战斗法术统称。",
+      "translations": {
+        "zh-CN": "魔法",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "战斗法术统称。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ファム・ド・バーシニア",
+      "source": "ファム・ド・バーシニア",
+      "translation": "法姆·德·巴斯尼亚",
+      "category": "人名",
+      "status": "正式",
+      "notes": "巴斯公主法姆的全名（Fam de Barthinia）。国名バース为巴斯，全名规范定为“法姆·德·巴斯尼亚”。",
+      "translations": {
+        "zh-CN": "法姆·德·巴斯尼亚",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "巴斯公主法姆的全名（Fam de Barthinia）。国名バース为巴斯，全名规范定为“法姆·德·巴斯尼亚”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:カシム",
+      "source": "カシム",
+      "translation": "卡西姆",
+      "category": "人名",
+      "status": "正式",
+      "notes": "阿维身边的部下（Kasim）。台版旧作“卡辛”，大陆与通用规范作“卡西姆”。",
+      "translations": {
+        "zh-CN": "卡西姆",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "阿维身边的部下（Kasim）。台版旧作“卡辛”，大陆与通用规范作“卡西姆”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ノーラ",
+      "source": "ノーラ",
+      "translation": "诺拉",
+      "category": "人名",
+      "status": "正式",
+      "notes": "卡西姆的恋人（Nora）。沿用台版/大陆通用规范译名“诺拉”。",
+      "translations": {
+        "zh-CN": "诺拉",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "卡西姆的恋人（Nora）。沿用台版/大陆通用规范译名“诺拉”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ウルカヌスマウンテン",
+      "source": "ウルカヌスマウンテン",
+      "translation": "乌尔卡努斯山",
+      "category": "地名",
+      "status": "正式",
+      "notes": "火神山/火山地名（Vulcanus Mountain）。沿用台版/大陆通用音译“乌尔卡努斯山”。",
+      "translations": {
+        "zh-CN": "乌尔卡努斯山",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "火神山/火山地名（Vulcanus Mountain）。沿用台版/大陆通用音译“乌尔卡努斯山”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:エントリヒ",
+      "source": "エントリヒ",
+      "translation": "恩特里希",
+      "category": "地名",
+      "status": "正式",
+      "notes": "故事舞台岛屿（Entrich）。台版曾音译为“彦都梨希”（古风汉字附会）；现代与大陆规范音译为“恩特里希”。",
+      "translations": {
+        "zh-CN": "恩特里希",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "故事舞台岛屿（Entrich）。台版曾音译为“彦都梨希”（古风汉字附会）；现代与大陆规范音译为“恩特里希”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ガント",
+      "source": "ガント",
+      "translation": "甘特",
+      "category": "人名",
+      "status": "正式",
+      "notes": "狂战士同伴（Gant）。沿用台版官方译名“甘特”（大陆亦见作“冈特”）。",
+      "translations": {
+        "zh-CN": "甘特",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "狂战士同伴（Gant）。沿用台版官方译名“甘特”（大陆亦见作“冈特”）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:トゥルク",
+      "source": "トゥルク",
+      "translation": "特鲁克",
+      "category": "地名",
+      "status": "正式",
+      "notes": "魔族自治领地/独立国家（Turk/Turku）。台版作“土耳克”，大陆通用与当前剧本统一规范为“特鲁克”。",
+      "translations": {
+        "zh-CN": "特鲁克",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "魔族自治领地/独立国家（Turk/Turku）。台版作“土耳克”，大陆通用与当前剧本统一规范为“特鲁克”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ヨーク",
+      "source": "ヨーク",
+      "translation": "约克",
+      "category": "地名",
+      "status": "正式",
+      "notes": "军事大国（York）。台版旧译“优葛”（发音像酸奶，音义欠佳）；现行规范定为“约克”。",
+      "translations": {
+        "zh-CN": "约克",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "军事大国（York）。台版旧译“优葛”（发音像酸奶，音义欠佳）；现行规范定为“约克”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:カイザー・フォン・バーゼル",
+      "source": "カイザー・フォン・バーゼル",
+      "translation": "凯撒·冯·巴塞尔",
+      "category": "人名",
+      "status": "正式",
+      "notes": "魔王全名（Kaiser von Basel）。台版作“凯萨·冯·巴泽尔”，全名规范定为“凯撒·冯·巴塞尔”。",
+      "translations": {
+        "zh-CN": "凯撒·冯·巴塞尔",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "魔王全名（Kaiser von Basel）。台版作“凯萨·冯·巴泽尔”，全名规范定为“凯撒·冯·巴塞尔”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ヘルマン３世",
+      "source": "ヘルマン３世",
+      "translation": "赫尔曼三世",
+      "category": "人名",
+      "status": "正式",
+      "notes": "约克王国国王（Hermann III）。台版/大陆通用译名。",
+      "translations": {
+        "zh-CN": "赫尔曼三世",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "约克王国国王（Hermann III）。台版/大陆通用译名。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ヘリオス",
+      "source": "ヘリオス",
+      "translation": "赫利俄斯",
+      "category": "人名",
+      "status": "正式",
+      "notes": "恩特里希第一智者/贤者（Helios）。台版亦作“赫利奥斯”，现采用标准神话人名音译。",
+      "translations": {
+        "zh-CN": "赫利俄斯",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "恩特里希第一智者/贤者（Helios）。台版亦作“赫利奥斯”，现采用标准神话人名音译。"
+        }
+      }
+    },
+    {
+      "id": "glossary:アヴィ",
+      "source": "アヴィ",
+      "translation": "阿维",
+      "category": "人名",
+      "status": "正式",
+      "notes": "特鲁克领袖，实为里昂生父（Avi）。沿用台版/大陆官方译名“阿维”。",
+      "translations": {
+        "zh-CN": "阿维",
+        "ko-KR": "아비",
+        "en-US": "Avi"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "特鲁克领袖，实为里昂生父（Avi）。沿用台版/大陆官方译名“阿维”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:セイレーン",
+      "source": "セイレーン",
+      "translation": "塞壬",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "海妖/塞壬（Siren）。神话海妖魔物。",
+      "translations": {
+        "zh-CN": "塞壬",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "海妖/塞壬（Siren）。神话海妖魔物。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ハイエルフ",
+      "source": "ハイエルフ",
+      "translation": "高等精灵",
+      "category": "术语",
+      "status": "正式",
+      "notes": "纯血精灵贵族族群（High Elf）。",
+      "translations": {
+        "zh-CN": "高等精灵",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "纯血精灵贵族族群（High Elf）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:アークデーモン",
+      "source": "アークデーモン",
+      "translation": "大恶魔",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "高阶上位恶魔（Arch Demon）。",
+      "translations": {
+        "zh-CN": "大恶魔",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "高阶上位恶魔（Arch Demon）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ドラゴ",
+      "source": "ドラゴ",
+      "translation": "德拉戈",
+      "category": "人名",
+      "status": "正式",
+      "notes": "龙族长老年长者（Drago）。沿用通用译名“德拉戈”。",
+      "translations": {
+        "zh-CN": "德拉戈",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "龙族长老年长者（Drago）。沿用通用译名“德拉戈”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ドラゴン",
+      "source": "ドラゴン",
+      "translation": "龙",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "巨龙种族统称（Dragon）。",
+      "translations": {
+        "zh-CN": "龙",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "巨龙种族统称（Dragon）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ルシーダ",
+      "source": "ルシーダ",
+      "translation": "露西达",
+      "category": "人名",
+      "status": "正式",
+      "notes": "精灵族族长，奥菲莉亚之母（Lucida）。台版作“露希达”，简中规范作“露西达”。",
+      "translations": {
+        "zh-CN": "露西达",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "精灵族族长，奥菲莉亚之母（Lucida）。台版作“露希达”，简中规范作“露西达”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ウェルナー",
+      "source": "ウェルナー",
+      "translation": "韦尔纳",
+      "category": "人名",
+      "status": "正式",
+      "notes": "特鲁克魔族将领（Werner）。沿用台版译名“韦尔纳”。",
+      "translations": {
+        "zh-CN": "韦尔纳",
+        "ko-KR": "베르너",
+        "en-US": "Werner"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "特鲁克魔族将领（Werner）。沿用台版译名“韦尔纳”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:グレン",
+      "source": "グレン",
+      "translation": "格伦",
+      "category": "人名",
+      "status": "正式",
+      "notes": "阿维的真实本名（Glen）。台版旧译“古廉”，现行规范作“格伦”。",
+      "translations": {
+        "zh-CN": "格伦",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "阿维的真实本名（Glen）。台版旧译“古廉”，现行规范作“格伦”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:エレナ",
+      "source": "エレナ",
+      "translation": "艾莲娜",
+      "category": "人名",
+      "status": "正式",
+      "notes": "凯撒之姐、莉安之母（Elena）。台版旧作“绘蕾安”（音节颠倒生硬）；规范译名为“艾莲娜”。",
+      "translations": {
+        "zh-CN": "艾莲娜",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "凯撒之姐、莉安之母（Elena）。台版旧作“绘蕾安”（音节颠倒生硬）；规范译名为“艾莲娜”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:バーゼル",
+      "source": "バーゼル",
+      "translation": "巴塞尔",
+      "category": "地名",
+      "status": "正式",
+      "notes": "魔族古都/贵族领地（Basel）。台版作“巴泽尔”，现行规范作“巴塞尔”。",
+      "translations": {
+        "zh-CN": "巴塞尔",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "魔族古都/贵族领地（Basel）。台版作“巴泽尔”，现行规范作“巴塞尔”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:カリン",
+      "source": "カリン",
+      "translation": "卡琳",
+      "category": "人名",
+      "status": "正式",
+      "notes": "布莱恩的孙女（Karin）。台版官方在续作《时空道标》中定名为“卡羚”，大陆与民间广泛通称为“卡琳”。",
+      "translations": {
+        "zh-CN": "卡琳",
+        "ko-KR": "카린",
+        "en-US": "Karin"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "布莱恩的孙女（Karin）。台版官方在续作《时空道标》中定名为“卡羚”，大陆与民间广泛通称为“卡琳”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ブライアン",
+      "source": "ブライアン",
+      "translation": "布莱恩",
+      "category": "人名",
+      "status": "正式",
+      "notes": "退役王国骑士，主角养父（Brian）。台版旧作“布莱伊”，通用规范译名为“布莱恩”。",
+      "translations": {
+        "zh-CN": "布莱恩",
+        "ko-KR": "브라이언",
+        "en-US": "Brian"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "退役王国骑士，主角养父（Brian）。台版旧作“布莱伊”，通用规范译名为“布莱恩”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:マーシア",
+      "source": "マーシア",
+      "translation": "玛西亚",
+      "category": "人名",
+      "status": "正式",
+      "notes": "翼人族祭司同伴（Marcia）。沿用台版/大陆官方译名“玛西亚”。",
+      "translations": {
+        "zh-CN": "玛西亚",
+        "ko-KR": "마시아",
+        "en-US": "Marcia"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "翼人族祭司同伴（Marcia）。沿用台版/大陆官方译名“玛西亚”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ファム",
+      "source": "ファム",
+      "translation": "法姆",
+      "category": "人名",
+      "status": "正式",
+      "notes": "巴斯王国公主兼神官（Fam）。台版原译“发牡”严重失当且语感极差，不可取；现统一修正为规范译名“法姆”。",
+      "translations": {
+        "zh-CN": "法姆",
+        "ko-KR": "팜",
+        "en-US": "Fam"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "巴斯王国公主兼神官（Fam）。台版原译“发牡”严重失当且语感极差，不可取；现统一修正为规范译名“法姆”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:リアン",
+      "source": "リアン",
+      "translation": "莉安",
+      "category": "人名",
+      "status": "正式",
+      "notes": "里昂之妹（Rian/Lian）。台版旧作“梨安”（用字怪异）；规范译名定为“莉安”。",
+      "translations": {
+        "zh-CN": "莉安",
+        "ko-KR": "리안",
+        "en-US": "Rian"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "里昂之妹（Rian/Lian）。台版旧作“梨安”（用字怪异）；规范译名定为“莉安”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:オフィーリア",
+      "source": "オフィーリア",
+      "translation": "奥菲莉亚",
+      "category": "人名",
+      "status": "正式",
+      "notes": "精灵族弓手同伴（Ophelia）。台版作“欧菲莉亚”，简中规范定为“奥菲莉亚”。",
+      "translations": {
+        "zh-CN": "奥菲莉亚",
+        "ko-KR": "오필리아",
+        "en-US": "Ophelia"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "精灵族弓手同伴（Ophelia）。台版作“欧菲莉亚”，简中规范定为“奥菲莉亚”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:Ｔ．Ｔ．",
+      "source": "Ｔ．Ｔ．",
+      "translation": "Ｔ．Ｔ．",
+      "category": "人名",
+      "status": "正式",
+      "notes": "自恋魔道士同伴（T.T.）。全版本通用保留全角字母“Ｔ．Ｔ．”。",
+      "translations": {
+        "zh-CN": "Ｔ．Ｔ．",
+        "ko-KR": "T.T.",
+        "en-US": "T.T."
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "自恋魔道士同伴（T.T.）。全版本通用保留全角字母“Ｔ．Ｔ．”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:重兵士",
+      "source": "重兵士",
+      "translation": "重装士兵",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "战棋常规重装近战步兵单位。",
+      "translations": {
+        "zh-CN": "重装士兵",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "战棋常规重装近战步兵单位。"
+        }
+      }
+    },
+    {
+      "id": "glossary:弓兵",
+      "source": "弓兵",
+      "translation": "弓兵",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "战棋常规远程弓箭手单位。",
+      "translations": {
+        "zh-CN": "弓兵",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "战棋常规远程弓箭手单位。"
+        }
+      }
+    },
+    {
+      "id": "glossary:一般兵",
+      "source": "一般兵",
+      "translation": "普通士兵",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "战棋基础敌方常规士兵。",
+      "translations": {
+        "zh-CN": "普通士兵",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "战棋基础敌方常规士兵。"
+        }
+      }
+    },
+    {
+      "id": "glossary:軽歩兵",
+      "source": "軽歩兵",
+      "translation": "轻步兵",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "高机动力轻装步兵单位。",
+      "translations": {
+        "zh-CN": "轻步兵",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "高机动力轻装步兵单位。"
+        }
+      }
+    },
+    {
+      "id": "glossary:上級兵",
+      "source": "上級兵",
+      "translation": "精锐士兵",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "强化型进阶敌军士兵。",
+      "translations": {
+        "zh-CN": "精锐士兵",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "强化型进阶敌军士兵。"
+        }
+      }
+    },
+    {
+      "id": "glossary:コローネル",
+      "source": "コローネル",
+      "translation": "上校",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "王国军高级军官军衔（Colonel）。",
+      "translations": {
+        "zh-CN": "上校",
+        "ko-KR": "대령",
+        "en-US": "Colonel"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "王国军高级军官军衔（Colonel）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ジェネラル",
+      "source": "ジェネラル",
+      "translation": "将军",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "统军敌将/主帅军衔（General）。",
+      "translations": {
+        "zh-CN": "将军",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "统军敌将/主帅军衔（General）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ブラックナイト",
+      "source": "ブラックナイト",
+      "translation": "黑骑士",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "重装黑铠骑士敌人（Black Knight）。",
+      "translations": {
+        "zh-CN": "黑骑士",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "重装黑铠骑士敌人（Black Knight）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:パンプキンヘッド",
+      "source": "パンプキンヘッド",
+      "translation": "南瓜头",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "植物系魔物敌人（Pumpkin Head）。",
+      "translations": {
+        "zh-CN": "南瓜头",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "植物系魔物敌人（Pumpkin Head）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ゴースト",
+      "source": "ゴースト",
+      "translation": "幽灵",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "初级亡灵系敌对生物（Ghost）。",
+      "translations": {
+        "zh-CN": "幽灵",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "初级亡灵系敌对生物（Ghost）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:スペクター",
+      "source": "スペクター",
+      "translation": "幽魂",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "进阶怨灵魔物（Specter）。与普通幽灵（Ghost）区分，译为“幽魂”。",
+      "translations": {
+        "zh-CN": "幽魂",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "进阶怨灵魔物（Specter）。与普通幽灵（Ghost）区分，译为“幽魂”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:フェアリー",
+      "source": "フェアリー",
+      "translation": "妖精",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "自然系妖精生物（Fairy）。",
+      "translations": {
+        "zh-CN": "妖精",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "自然系妖精生物（Fairy）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ピクシー",
+      "source": "ピクシー",
+      "translation": "小妖精",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "小型妖精/皮克西（Pixie）。",
+      "translations": {
+        "zh-CN": "小妖精",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "小型妖精/皮克西（Pixie）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:リッチ",
+      "source": "リッチ",
+      "translation": "巫妖",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "高阶不死魔法师（Lich）。",
+      "translations": {
+        "zh-CN": "巫妖",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "高阶不死魔法师（Lich）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:スケルトン",
+      "source": "スケルトン",
+      "translation": "骷髅",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "白骨不死单位（Skeleton）。",
+      "translations": {
+        "zh-CN": "骷髅",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "白骨不死单位（Skeleton）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ゾンビ",
+      "source": "ゾンビ",
+      "translation": "僵尸",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "腐尸不死生物（Zombie）。",
+      "translations": {
+        "zh-CN": "僵尸",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "腐尸不死生物（Zombie）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ゴブリン",
+      "source": "ゴブリン",
+      "translation": "哥布林",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "小型地栖魔物（Goblin）。",
+      "translations": {
+        "zh-CN": "哥布林",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "小型地栖魔物（Goblin）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ホブゴブリン",
+      "source": "ホブゴブリン",
+      "translation": "高阶哥布林",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "强壮型大型大哥布林（Hobgoblin）。",
+      "translations": {
+        "zh-CN": "高阶哥布林",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "强壮型大型大哥布林（Hobgoblin）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:アースドラゴン",
+      "source": "アースドラゴン",
+      "translation": "地龙",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "土属性巨龙（Earth Dragon）。",
+      "translations": {
+        "zh-CN": "地龙",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "土属性巨龙（Earth Dragon）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:レッドドラゴン",
+      "source": "レッドドラゴン",
+      "translation": "红龙",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "火属性巨龙（Red Dragon）。",
+      "translations": {
+        "zh-CN": "红龙",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "火属性巨龙（Red Dragon）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ブルードラゴン",
+      "source": "ブルードラゴン",
+      "translation": "蓝龙",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "冰/水属性巨龙（Blue Dragon）。",
+      "translations": {
+        "zh-CN": "蓝龙",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "冰/水属性巨龙（Blue Dragon）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ブラックドラゴン",
+      "source": "ブラックドラゴン",
+      "translation": "黑龙",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "暗属性巨龙（Black Dragon）。",
+      "translations": {
+        "zh-CN": "黑龙",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "暗属性巨龙（Black Dragon）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:シルバードラゴン",
+      "source": "シルバードラゴン",
+      "translation": "银龙",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "光/圣属性巨龙（Silver Dragon）。",
+      "translations": {
+        "zh-CN": "银龙",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "光/圣属性巨龙（Silver Dragon）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ハロウィン",
+      "source": "ハロウィン",
+      "translation": "万圣魔",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "特殊南瓜系高阶魔兽（Halloween）。",
+      "translations": {
+        "zh-CN": "万圣魔",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "特殊南瓜系高阶魔兽（Halloween）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:グール",
+      "source": "グール",
+      "translation": "食尸鬼",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "啃食腐肉的不死魔物（Ghoul）。",
+      "translations": {
+        "zh-CN": "食尸鬼",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "啃食腐肉的不死魔物（Ghoul）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:インプ",
+      "source": "インプ",
+      "translation": "小鬼",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "飞行下级恶魔（Imp）。",
+      "translations": {
+        "zh-CN": "小鬼",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "飞行下级恶魔（Imp）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:グレムリン",
+      "source": "グレムリン",
+      "translation": "小恶魔",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "恶作剧型魔物（Gremlin）。",
+      "translations": {
+        "zh-CN": "小恶魔",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "恶作剧型魔物（Gremlin）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ガーゴイル",
+      "source": "ガーゴイル",
+      "translation": "石像鬼",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "飞行石化怪兽（Gargoyle）。",
+      "translations": {
+        "zh-CN": "石像鬼",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "飞行石化怪兽（Gargoyle）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:デーモン",
+      "source": "デーモン",
+      "translation": "恶魔",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "纯种中阶恶魔（Demon）。",
+      "translations": {
+        "zh-CN": "恶魔",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "纯种中阶恶魔（Demon）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ウッドゴーレム",
+      "source": "ウッドゴーレム",
+      "translation": "木魔像",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "木质巨型魔像（Wood Golem）。",
+      "translations": {
+        "zh-CN": "木魔像",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "木质巨型魔像（Wood Golem）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ストーンゴーレム",
+      "source": "ストーンゴーレム",
+      "translation": "石魔像",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "岩石巨型魔像（Stone Golem）。",
+      "translations": {
+        "zh-CN": "石魔像",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "岩石巨型魔像（Stone Golem）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:アイアンゴーレム",
+      "source": "アイアンゴーレム",
+      "translation": "铁魔像",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "精铁坚固魔像（Iron Golem）。",
+      "translations": {
+        "zh-CN": "铁魔像",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "精铁坚固魔像（Iron Golem）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:テラードッグ",
+      "source": "テラードッグ",
+      "translation": "恐惧犬",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "恐怖魔化猎犬（Terror Dog）。",
+      "translations": {
+        "zh-CN": "恐惧犬",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "恐怖魔化猎犬（Terror Dog）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ヘルハウンド",
+      "source": "ヘルハウンド",
+      "translation": "地狱猎犬",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "地狱烈焰犬（Hellhound）。",
+      "translations": {
+        "zh-CN": "地狱猎犬",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "地狱烈焰犬（Hellhound）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:スプライト",
+      "source": "スプライト",
+      "translation": "精灵",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "水或自然系微小精灵（Sprite）。",
+      "translations": {
+        "zh-CN": "精灵",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "水或自然系微小精灵（Sprite）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ウルフ",
+      "source": "ウルフ",
+      "translation": "狼",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "荒野野兽（Wolf）。",
+      "translations": {
+        "zh-CN": "狼",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "荒野野兽（Wolf）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:アマゾネス",
+      "source": "アマゾネス",
+      "translation": "亚马逊女战士",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "好战的女性战士单位（Amazones）。",
+      "translations": {
+        "zh-CN": "亚马逊女战士",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "好战的女性战士单位（Amazones）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:デスウォリアー",
+      "source": "デスウォリアー",
+      "translation": "死亡战士",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "不死身狂战骨骸（Death Warrior）。",
+      "translations": {
+        "zh-CN": "死亡战士",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "不死身狂战骨骸（Death Warrior）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ダークエルフ",
+      "source": "ダークエルフ",
+      "translation": "黑暗精灵",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "魔化的堕落精灵（Dark Elf）。",
+      "translations": {
+        "zh-CN": "黑暗精灵",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "魔化的堕落精灵（Dark Elf）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:エビルシャーマン",
+      "source": "エビルシャーマン",
+      "translation": "邪恶萨满",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "暗黑巫医术士（Evil Shaman）。",
+      "translations": {
+        "zh-CN": "邪恶萨满",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "暗黑巫医术士（Evil Shaman）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ルシア",
+      "source": "ルシア",
+      "translation": "露西亚",
+      "category": "人名",
+      "status": "正式",
+      "notes": "魔族女干部（Lucia）。台版作“露西雅”，简中规范作“露西亚”。",
+      "translations": {
+        "zh-CN": "露西亚",
+        "ko-KR": "루시아",
+        "en-US": "Lucia"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "魔族女干部（Lucia）。台版作“露西雅”，简中规范作“露西亚”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:サッキュバス",
+      "source": "サッキュバス",
+      "translation": "魅魔",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "妖艳魔女（Succubus）。",
+      "translations": {
+        "zh-CN": "魅魔",
+        "ko-KR": "서큐버스",
+        "en-US": "Succubus"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "妖艳魔女（Succubus）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:カイザー",
+      "source": "カイザー",
+      "translation": "凯撒",
+      "category": "人名",
+      "status": "正式",
+      "notes": "魔族之王（Kaiser）。台版作“凯萨”，大陆规范作“凯撒”。",
+      "translations": {
+        "zh-CN": "凯撒",
+        "ko-KR": "카이저",
+        "en-US": "Kaiser"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "魔族之王（Kaiser）。台版作“凯萨”，大陆规范作“凯撒”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:バルガ",
+      "source": "バルガ",
+      "translation": "巴尔加",
+      "category": "人名",
+      "status": "正式",
+      "notes": "黑幕野心家（Barga）。沿用台版/大陆官方译名“巴尔加”。",
+      "translations": {
+        "zh-CN": "巴尔加",
+        "ko-KR": "발가",
+        "en-US": "Balga"
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "黑幕野心家（Barga）。沿用台版/大陆官方译名“巴尔加”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:テラーホーク",
+      "source": "テラーホーク",
+      "translation": "恐惧之鹰",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "巴尔加操纵的凶猛机械鸟/禁咒之物（Terror Hawk）。",
+      "translations": {
+        "zh-CN": "恐惧之鹰",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "巴尔加操纵的凶猛机械鸟/禁咒之物（Terror Hawk）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:ＮＰＣ",
+      "source": "ＮＰＣ",
+      "translation": "ＮＰＣ",
+      "category": "通用",
+      "status": "正式",
+      "notes": "非玩家角色（NPC）。",
+      "translations": {
+        "zh-CN": "ＮＰＣ",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "非玩家角色（NPC）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:宝箱",
+      "source": "宝箱",
+      "translation": "宝箱",
+      "category": "通用",
+      "status": "正式",
+      "notes": "战场可拾取宝箱。",
+      "translations": {
+        "zh-CN": "宝箱",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "战场可拾取宝箱。"
+        }
+      }
+    },
+    {
+      "id": "glossary:金",
+      "source": "金",
+      "translation": "金币",
+      "category": "通用",
+      "status": "正式",
+      "notes": "金钱单位（Gold）。",
+      "translations": {
+        "zh-CN": "金币",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "金钱单位（Gold）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:テラーキャノン",
+      "source": "テラーキャノン",
+      "translation": "恐惧炮",
+      "category": "人物／单位",
+      "status": "正式",
+      "notes": "恐怖巨炮兵器（Terror Cannon）。",
+      "translations": {
+        "zh-CN": "恐惧炮",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "恐怖巨炮兵器（Terror Cannon）。"
+        }
+      }
+    },
+    {
+      "id": "glossary:デスフォルト",
+      "source": "デスフォルト",
+      "translation": "次元斩",
+      "category": "技能",
+      "status": "正式",
+      "notes": "里昂20级终极剑技（Death Fault）。台版旧译“猛打”（过于土俗简陋，完全丧失剑技原义）；原技名意为致命断层/空间断裂，现定名为“次元斩”。",
+      "translations": {
+        "zh-CN": "次元斩",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "里昂20级终极剑技（Death Fault）。台版旧译“猛打”（过于土俗简陋，完全丧失剑技原义）；原技名意为致命断层/空间断裂，现定名为“次元斩”。"
+        }
+      }
+    },
+    {
+      "id": "glossary:メイシア",
+      "source": "メイシア",
+      "translation": "梅西亚",
+      "category": "守护天使",
+      "status": "正式",
+      "notes": "光与守护之天使（Meisia）。历代《Farland》神话守护技能的重要渊源。",
+      "translations": {
+        "zh-CN": "梅西亚",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "光与守护之天使（Meisia）。历代《Farland》神话守护技能的重要渊源。"
+        }
+      }
+    },
+    {
+      "id": "glossary:エリシア",
+      "source": "エリシア",
+      "translation": "艾莉西亚",
+      "category": "守护天使",
+      "status": "正式",
+      "notes": "神圣守护天使（Elisia）。《Farland》世界观神殿传承的关键角色。",
+      "translations": {
+        "zh-CN": "艾莉西亚",
+        "ko-KR": "",
+        "en-US": ""
+      },
+      "reviews": {
+        "zh-CN": {
+          "status": "正式",
+          "notes": "神圣守护天使（Elisia）。《Farland》世界观神殿传承的关键角色。"
+        }
+      }
+    }
+  ]
+}

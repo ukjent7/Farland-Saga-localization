@@ -1,0 +1,243 @@
+{
+  "schema": 1,
+  "id": "item-prices",
+  "languages": [
+    "zh-CN",
+    "ko-KR",
+    "en-US"
+  ],
+  "report_key": "item_prices",
+  "verify_item_attributes": true,
+  "fields": [
+    {
+      "file": "SYSTEM/ITEM.DAT",
+      "offset": "0x924",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "青龍棍",
+      "before": {
+        "en-US": "Azure Dragon Staff"
+      },
+      "text": {
+        "en-US": "Azure Drgn Staff"
+      }
+    },
+    {
+      "file": "SYSTEM/MAIN.DAT",
+      "offset": "0x2af08",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "青龍棍",
+      "before": {
+        "en-US": "Azure Dragon Staff"
+      },
+      "text": {
+        "en-US": "Azure Drgn Staff"
+      }
+    },
+    {
+      "file": "SYSTEM/ITEM.DAT",
+      "offset": "0x96c",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "雷神の棍",
+      "before": {
+        "en-US": "Thunder God Staff"
+      },
+      "text": {
+        "en-US": "Thunder G. Staff"
+      }
+    },
+    {
+      "file": "SYSTEM/MAIN.DAT",
+      "offset": "0x2af50",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "雷神の棍",
+      "before": {
+        "en-US": "Thunder God Staff"
+      },
+      "text": {
+        "en-US": "Thunder G. Staff"
+      }
+    },
+    {
+      "file": "SYSTEM/ITEM.DAT",
+      "offset": "0xd80",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "死者の杖",
+      "before": {
+        "en-US": "Staff of the Dead"
+      },
+      "text": {
+        "en-US": "Staff of Dead"
+      }
+    },
+    {
+      "file": "SYSTEM/MAIN.DAT",
+      "offset": "0x2b364",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "死者の杖",
+      "before": {
+        "en-US": "Staff of the Dead"
+      },
+      "text": {
+        "en-US": "Staff of Dead"
+      }
+    },
+    {
+      "file": "SYSTEM/ITEM.DAT",
+      "offset": "0x1224",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "白金の魔道衣",
+      "before": {
+        "en-US": "Platinum Mage Robe"
+      },
+      "text": {
+        "en-US": "Plat. Mage Robe"
+      }
+    },
+    {
+      "file": "SYSTEM/MAIN.DAT",
+      "offset": "0x2b808",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "白金の魔道衣",
+      "before": {
+        "en-US": "Platinum Mage Robe"
+      },
+      "text": {
+        "en-US": "Plat. Mage Robe"
+      }
+    },
+    {
+      "file": "SYSTEM/ITEM.DAT",
+      "offset": "0x16a4",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "覇王の篭手",
+      "before": {
+        "en-US": "Overlord Gauntlet"
+      },
+      "text": {
+        "en-US": "Overlord Gaunt."
+      }
+    },
+    {
+      "file": "SYSTEM/MAIN.DAT",
+      "offset": "0x2bc88",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "覇王の篭手",
+      "before": {
+        "en-US": "Overlord Gauntlet"
+      },
+      "text": {
+        "en-US": "Overlord Gaunt."
+      }
+    },
+    {
+      "file": "SYSTEM/ITEM.DAT",
+      "offset": "0x16ec",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "明王棍",
+      "before": {
+        "en-US": "Wisdom King Staff"
+      },
+      "text": {
+        "en-US": "Wisdom King Rod"
+      }
+    },
+    {
+      "file": "SYSTEM/MAIN.DAT",
+      "offset": "0x2bcd0",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "明王棍",
+      "before": {
+        "en-US": "Wisdom King Staff"
+      },
+      "text": {
+        "en-US": "Wisdom King Rod"
+      }
+    },
+    {
+      "file": "SYSTEM/ITEM.DAT",
+      "offset": "0x1a4c",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "稲妻の首飾り",
+      "before": {
+        "en-US": "Lightning Necklace"
+      },
+      "text": {
+        "en-US": "Lightning Neck."
+      }
+    },
+    {
+      "file": "SYSTEM/MAIN.DAT",
+      "offset": "0x2c030",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "稲妻の首飾り",
+      "before": {
+        "en-US": "Lightning Necklace"
+      },
+      "text": {
+        "en-US": "Lightning Neck."
+      }
+    },
+    {
+      "file": "SYSTEM/ITEM.DAT",
+      "offset": "0x1a70",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "地脈の首飾り",
+      "before": {
+        "en-US": "Earthflow Necklace"
+      },
+      "text": {
+        "en-US": "Earthflow Neck."
+      }
+    },
+    {
+      "file": "SYSTEM/MAIN.DAT",
+      "offset": "0x2c054",
+      "capacity_bytes": 18,
+      "mode": "nul",
+      "source": "地脈の首飾り",
+      "before": {
+        "en-US": "Earthflow Necklace"
+      },
+      "text": {
+        "en-US": "Earthflow Neck."
+      }
+    }
+  ],
+  "original_ranges": [
+    {
+      "file": "SYSTEM/ITEM.DAT",
+      "source_sha256": "57993802865ebe41ee524c30b6ebbc4287f3a5eb5334915b689b6299ff35ba65",
+      "offset": "0x0",
+      "stride": 36,
+      "count": 200,
+      "field_offset": 18,
+      "size": 2,
+      "before_hex": "0000"
+    },
+    {
+      "file": "SYSTEM/MAIN.DAT",
+      "source_sha256": "f541fcc5914b62c2674b71868bb6c7442f68451af1d2e147a535d67d191fb17b",
+      "offset": "0x2a5e4",
+      "stride": 36,
+      "count": 200,
+      "field_offset": 18,
+      "size": 2,
+      "before_hex": "0000"
+    }
+  ]
+}

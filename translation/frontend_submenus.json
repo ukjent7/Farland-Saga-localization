@@ -1,0 +1,1768 @@
+{
+  "schema": 1,
+  "source": "assets/sources/Texture.tex",
+  "source_sha256": "dd484f4315a9f79fc63ad3dc746581df8f6394195e05a3c931f162b21613536e",
+  "review": "Reviewed against frozen atlas contact sheets; reset and hidden-guide warnings retained.",
+  "groups": [
+    {
+      "id": "confirm-game-selection",
+      "parts": [
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "source": "End play and return to game selection?",
+      "text": {
+        "zh-CN": "结束游戏并返回游戏选择界面？",
+        "ko-KR": "게임을 종료하고 게임 선택 화면으로 돌아가시겠습니까?",
+        "en-US": "End game and return to game selection?"
+      }
+    },
+    {
+      "id": "confirm-quit",
+      "parts": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "source": "Quit game?",
+      "text": {
+        "zh-CN": "退出游戏？",
+        "ko-KR": "게임을 종료하시겠습니까?",
+        "en-US": "Quit game?"
+      }
+    },
+    {
+      "id": "confirm-switch",
+      "parts": [
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "source": "Switch games?",
+      "text": {
+        "zh-CN": "切换游戏？",
+        "ko-KR": "게임을 전환하시겠습니까?",
+        "en-US": "Switch games?"
+      }
+    },
+    {
+      "id": "confirm-load",
+      "parts": [
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "source": "Load this save?",
+      "text": {
+        "zh-CN": "读取此存档？",
+        "ko-KR": "이 세이브 데이터를 불러오시겠습니까?",
+        "en-US": "Load this save data?"
+      }
+    },
+    {
+      "id": "no",
+      "parts": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "source": "No",
+      "text": {
+        "zh-CN": "否",
+        "ko-KR": "아니요",
+        "en-US": "No"
+      }
+    },
+    {
+      "id": "confirm-overwrite",
+      "parts": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ],
+      "source": "Overwrite saved data?",
+      "text": {
+        "zh-CN": "覆盖保存数据？",
+        "ko-KR": "세이브 데이터를 덮어쓰시겠습니까?",
+        "en-US": "Overwrite save data?"
+      }
+    },
+    {
+      "id": "confirm-view-rankings",
+      "parts": [
+        54,
+        55,
+        56,
+        57,
+        58,
+        65
+      ],
+      "source": "End play and show online rankings?",
+      "text": {
+        "zh-CN": "结束游戏并查看在线排行榜？",
+        "ko-KR": "게임을 종료하고 온라인 랭킹을 확인하시겠습니까?",
+        "en-US": "End game and view online rankings?"
+      }
+    },
+    {
+      "id": "confirm-enable-rankings",
+      "parts": [
+        59,
+        60,
+        61,
+        62,
+        63,
+        64
+      ],
+      "source": "Enable online rankings? The game will reset.",
+      "text": {
+        "zh-CN": "开启在线排名模式？游戏将会重置。",
+        "ko-KR": "온라인 랭킹 모드를 활성화하시겠습니까? 게임이 리셋됩니다.",
+        "en-US": "Enable online ranking mode? The game will reset."
+      }
+    },
+    {
+      "id": "confirm-title",
+      "parts": [
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72
+      ],
+      "source": "End play and return to title?",
+      "text": {
+        "zh-CN": "结束游戏并返回标题画面？",
+        "ko-KR": "게임을 종료하고 타이틀 화면으로 돌아가시겠습니까?",
+        "en-US": "End game and return to title?"
+      }
+    },
+    {
+      "id": "confirm-save",
+      "parts": [
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79
+      ],
+      "source": "Save this data?",
+      "text": {
+        "zh-CN": "保存此数据？",
+        "ko-KR": "이 데이터를 저장하시겠습니까?",
+        "en-US": "Save this data?"
+      }
+    },
+    {
+      "id": "confirm-startup",
+      "parts": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86
+      ],
+      "source": "Stop game and return to startup screen?",
+      "text": {
+        "zh-CN": "停止游戏并返回启动画面？",
+        "ko-KR": "게임을 중단하고 시작 화면으로 돌아가시겠습니까?",
+        "en-US": "Stop game and return to startup screen?"
+      }
+    },
+    {
+      "id": "yes",
+      "parts": [
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93
+      ],
+      "source": "Yes",
+      "text": {
+        "zh-CN": "是",
+        "ko-KR": "예",
+        "en-US": "Yes"
+      }
+    },
+    {
+      "id": "ranking-badge",
+      "parts": [
+        111
+      ],
+      "source": "Online Ranking Mode On",
+      "text": {
+        "zh-CN": "在线排名模式\n开启",
+        "ko-KR": "온라인 랭킹 모드\nON",
+        "en-US": "Online Ranking\nMode On"
+      },
+      "region": [
+        14,
+        12,
+        214,
+        132
+      ],
+      "background": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "align": "center",
+      "max_lines": 2
+    },
+    {
+      "id": "registrable",
+      "parts": [
+        112
+      ],
+      "source": "Registable",
+      "text": {
+        "zh-CN": "可登记",
+        "ko-KR": "등록 가능",
+        "en-US": "Registrable"
+      },
+      "fill": [
+        42,
+        200,
+        255,
+        255
+      ],
+      "stroke": 2,
+      "align": "center"
+    },
+    {
+      "id": "slow-badge",
+      "parts": [
+        113
+      ],
+      "source": "Slow Mode",
+      "text": {
+        "zh-CN": "慢放模式",
+        "ko-KR": "슬로우 모드",
+        "en-US": "Slow Mode"
+      },
+      "region": [
+        14,
+        12,
+        214,
+        132
+      ],
+      "background": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "align": "center",
+      "max_lines": 2
+    },
+    {
+      "id": "hint-buttons",
+      "parts": [
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132
+      ],
+      "source": "Configure button assignments.",
+      "text": {
+        "zh-CN": "配置按键分配。",
+        "ko-KR": "버튼 할당을 설정합니다.",
+        "en-US": "Configure button assignments."
+      }
+    },
+    {
+      "id": "hint-default-buttons",
+      "parts": [
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140
+      ],
+      "source": "Restore default button assignments.",
+      "text": {
+        "zh-CN": "恢复默认按键分配。",
+        "ko-KR": "버튼 할당을 기본값으로 되돌립니다.",
+        "en-US": "Restore default button assignments."
+      }
+    },
+    {
+      "id": "hint-credits",
+      "parts": [
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147
+      ],
+      "source": "Display credits.",
+      "text": {
+        "zh-CN": "显示制作人员名单。",
+        "ko-KR": "크레디트를 표시합니다.",
+        "en-US": "Display credits."
+      }
+    },
+    {
+      "id": "hint-database",
+      "parts": [
+        148
+      ],
+      "source": "アイテム・魔法・特技の一覧を表示します。",
+      "text": {
+        "zh-CN": "显示道具、魔法与特技列表。",
+        "ko-KR": "아이템, 마법, 특기 목록을 표시합니다.",
+        "en-US": "Display the list of items, magic, and skills."
+      }
+    },
+    {
+      "id": "hint-double-exp",
+      "parts": [
+        149
+      ],
+      "source": "得られる経験値を2倍にします。",
+      "text": {
+        "zh-CN": "使获得的经验值翻倍。",
+        "ko-KR": "획득하는 경험치를 2배로 증가시킵니다.",
+        "en-US": "Double the experience earned."
+      }
+    },
+    {
+      "id": "hint-player-side",
+      "parts": [
+        150
+      ],
+      "source": "Change play side between 1P and 2P; single player can also start as 2P.",
+      "text": {
+        "zh-CN": "在1P与2P之间切换操作方；单人游玩也可作为2P开始。",
+        "ko-KR": "플레이어를 1P와 2P 중에서 변경합니다. 1인 플레이 시에도 2P로 시작할 수 있습니다.",
+        "en-US": "Switch player side between 1P and 2P; single player can also start as 2P."
+      }
+    },
+    {
+      "id": "hint-extra",
+      "parts": [
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157
+      ],
+      "source": "Configure additional options.",
+      "text": {
+        "zh-CN": "配置附加设置。",
+        "ko-KR": "추가 설정을 구성합니다.",
+        "en-US": "Configure additional options."
+      }
+    },
+    {
+      "id": "hint-saga-two",
+      "parts": [
+        158,
+        159
+      ],
+      "source": "End play and switch to FARLAND SAGA II.",
+      "text": {
+        "zh-CN": "结束游戏并切换至《FARLAND SAGA II》。",
+        "ko-KR": "게임을 종료하고 FARLAND SAGA II로 전환합니다.",
+        "en-US": "End game and switch to FARLAND SAGA II."
+      }
+    },
+    {
+      "id": "hint-switch",
+      "parts": [
+        160,
+        161,
+        162,
+        163,
+        164,
+        165
+      ],
+      "source": "End play and change games.",
+      "text": {
+        "zh-CN": "结束游戏并切换游戏。",
+        "ko-KR": "게임을 종료하고 다른 게임으로 전환합니다.",
+        "en-US": "End game and switch games."
+      }
+    },
+    {
+      "id": "hint-reset",
+      "parts": [
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172
+      ],
+      "source": "Reset the game.",
+      "text": {
+        "zh-CN": "重置游戏。",
+        "ko-KR": "게임을 리셋합니다.",
+        "en-US": "Reset the game."
+      }
+    },
+    {
+      "id": "hint-game-selection",
+      "parts": [
+        173,
+        174,
+        175,
+        176,
+        177,
+        178
+      ],
+      "source": "End play and return to game selection.",
+      "text": {
+        "zh-CN": "结束游戏并返回游戏选择界面。",
+        "ko-KR": "게임을 종료하고 게임 선택 화면으로 돌아갑니다.",
+        "en-US": "End game and return to game selection."
+      }
+    },
+    {
+      "id": "hint-startup",
+      "parts": [
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185
+      ],
+      "source": "Stop game and return to startup screen.",
+      "text": {
+        "zh-CN": "停止游戏并返回启动画面。",
+        "ko-KR": "게임을 중단하고 시작 화면으로 돌아갑니다.",
+        "en-US": "Stop game and return to startup screen."
+      }
+    },
+    {
+      "id": "hint-quit",
+      "parts": [
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192
+      ],
+      "source": "Quit the game.",
+      "text": {
+        "zh-CN": "退出游戏。",
+        "ko-KR": "게임을 종료합니다.",
+        "en-US": "Quit the game."
+      }
+    },
+    {
+      "id": "hint-language",
+      "parts": [
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199
+      ],
+      "source": "Change the option-menu language.",
+      "text": {
+        "zh-CN": "更改选项菜单语言。",
+        "ko-KR": "옵션 메뉴의 언어를 변경합니다.",
+        "en-US": "Change the options menu language."
+      }
+    },
+    {
+      "id": "hint-guide",
+      "parts": [
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206
+      ],
+      "source": "Display the playing guide.",
+      "text": {
+        "zh-CN": "显示游玩指南。",
+        "ko-KR": "플레이 가이드를 표시합니다.",
+        "en-US": "Display the playing guide."
+      }
+    },
+    {
+      "id": "hint-save-load",
+      "parts": [
+        207,
+        208,
+        209,
+        210,
+        211,
+        212,
+        213
+      ],
+      "source": "Save or restore the game state.",
+      "text": {
+        "zh-CN": "保存或恢复游戏状态。",
+        "ko-KR": "게임 상태를 저장하거나 불러옵니다.",
+        "en-US": "Save or restore the game state."
+      }
+    },
+    {
+      "id": "hint-disable-rankings",
+      "parts": [
+        214,
+        215,
+        216,
+        217,
+        218,
+        219
+      ],
+      "source": "Disable online ranking mode.",
+      "text": {
+        "zh-CN": "关闭在线排名模式。",
+        "ko-KR": "온라인 랭킹 모드를 비활성화합니다.",
+        "en-US": "Disable online ranking mode."
+      }
+    },
+    {
+      "id": "hint-enable-rankings",
+      "parts": [
+        220,
+        221,
+        222,
+        223,
+        224,
+        225
+      ],
+      "source": "Enable online ranking mode. The game is interrupted and reset.",
+      "text": {
+        "zh-CN": "开启在线排名模式。游戏将被中断并重置。",
+        "ko-KR": "온라인 랭킹 모드를 활성화합니다. 진행 중인 게임이 중단되고 리셋됩니다.",
+        "en-US": "Enable online ranking mode. The game will be interrupted and reset."
+      }
+    },
+    {
+      "id": "hint-view-rankings",
+      "parts": [
+        226,
+        227,
+        228,
+        229,
+        230,
+        231
+      ],
+      "source": "End play and view online rankings.",
+      "text": {
+        "zh-CN": "结束游戏并查看在线排行榜。",
+        "ko-KR": "게임을 종료하고 온라인 랭킹을 확인합니다.",
+        "en-US": "End game and view online rankings."
+      }
+    },
+    {
+      "id": "hint-ranking-mode",
+      "parts": [
+        232,
+        233,
+        234,
+        235,
+        236,
+        237
+      ],
+      "source": "Toggle online ranking mode.",
+      "text": {
+        "zh-CN": "切换在线排名模式。",
+        "ko-KR": "온라인 랭킹 모드를 전환합니다.",
+        "en-US": "Toggle online ranking mode."
+      }
+    },
+    {
+      "id": "hint-rewind",
+      "parts": [
+        238,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244
+      ],
+      "source": "Rewind a short period of gameplay.",
+      "text": {
+        "zh-CN": "倒回一小段游玩时间。",
+        "ko-KR": "플레이 내용을 일정 시간 되감습니다.",
+        "en-US": "Rewind a short period of gameplay."
+      }
+    },
+    {
+      "id": "hint-load",
+      "parts": [
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251
+      ],
+      "source": "Restore a saved game state.",
+      "text": {
+        "zh-CN": "恢复已保存的游戏状态。",
+        "ko-KR": "저장된 게임 상태를 불러옵니다.",
+        "en-US": "Restore a saved game state."
+      }
+    },
+    {
+      "id": "hint-save",
+      "parts": [
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        258
+      ],
+      "source": "Save the current game state.",
+      "text": {
+        "zh-CN": "保存当前游戏状态。",
+        "ko-KR": "현재 게임 상태를 저장합니다.",
+        "en-US": "Save the current game state."
+      }
+    },
+    {
+      "id": "hint-item-magic",
+      "parts": [
+        259
+      ],
+      "source": "アイテム/魔法の選択時に説明を表示します。",
+      "text": {
+        "zh-CN": "在选择道具/魔法时显示说明。",
+        "ko-KR": "아이템/마법을 선택할 때 설명을 표시합니다.",
+        "en-US": "Display descriptions when selecting items or magic."
+      }
+    },
+    {
+      "id": "hint-position-note",
+      "parts": [
+        260
+      ],
+      "source": "Move screen. Left or Right hides the option-menu button guide.",
+      "text": {
+        "zh-CN": "移动画面。向左或向右移动将隐藏选项菜单按键指南。",
+        "ko-KR": "화면을 이동합니다. 좌/우로 이동하면 옵션 메뉴의 버튼 가이드가 숨겨집니다.",
+        "en-US": "Move screen. Left or Right hides the options menu button guide."
+      },
+      "max_lines": 3
+    },
+    {
+      "id": "hint-status-note",
+      "parts": [
+        261
+      ],
+      "source": "Show status. ON hides the option-menu button guide.",
+      "text": {
+        "zh-CN": "显示状态。开启时将隐藏选项菜单按键指南。",
+        "ko-KR": "상태를 표시합니다. ON 설정 시 옵션 메뉴의 버튼 가이드가 숨겨집니다.",
+        "en-US": "Show status. ON hides the options menu button guide."
+      },
+      "max_lines": 2
+    },
+    {
+      "id": "hint-antialias",
+      "parts": [
+        262,
+        263,
+        264,
+        265,
+        266,
+        267,
+        268
+      ],
+      "source": "Configure anti-aliasing.",
+      "text": {
+        "zh-CN": "配置抗锯齿设置。",
+        "ko-KR": "안티에일리어싱을 설정합니다.",
+        "en-US": "Configure anti-aliasing."
+      }
+    },
+    {
+      "id": "hint-contrast",
+      "parts": [
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275
+      ],
+      "source": "Change scanline contrast.",
+      "text": {
+        "zh-CN": "更改扫描线对比度。",
+        "ko-KR": "스캔라인 대비를 변경합니다.",
+        "en-US": "Change scanline contrast."
+      }
+    },
+    {
+      "id": "hint-default",
+      "parts": [
+        276,
+        277,
+        278,
+        279,
+        280,
+        281,
+        282
+      ],
+      "source": "Restore default settings.",
+      "text": {
+        "zh-CN": "恢复默认设置。",
+        "ko-KR": "설정을 기본값으로 되돌립니다.",
+        "en-US": "Restore default settings."
+      }
+    },
+    {
+      "id": "hint-flip",
+      "parts": [
+        283,
+        284,
+        285,
+        286,
+        287,
+        288
+      ],
+      "source": "Flip the game screen.",
+      "text": {
+        "zh-CN": "翻转游戏画面。",
+        "ko-KR": "게임 화면을 반전합니다.",
+        "en-US": "Flip the game screen."
+      }
+    },
+    {
+      "id": "hint-high-resolution",
+      "parts": [
+        289,
+        290
+      ],
+      "source": "Set the game screen to high resolution.",
+      "text": {
+        "zh-CN": "将游戏画面设为高分辨率。",
+        "ko-KR": "게임 화면을 고해상도로 설정합니다.",
+        "en-US": "Set the game screen to high resolution."
+      }
+    },
+    {
+      "id": "hint-hud",
+      "parts": [
+        291,
+        292,
+        293,
+        294,
+        295,
+        296,
+        297
+      ],
+      "source": "Toggle the HUD display.",
+      "text": {
+        "zh-CN": "切换HUD界面显示。",
+        "ko-KR": "HUD 표시 여부를 전환합니다.",
+        "en-US": "Toggle the HUD display."
+      }
+    },
+    {
+      "id": "hint-scanline",
+      "parts": [
+        298,
+        299,
+        300,
+        301,
+        302,
+        303,
+        304
+      ],
+      "source": "Configure scanline settings.",
+      "text": {
+        "zh-CN": "配置扫描线设置。",
+        "ko-KR": "스캔라인을 설정합니다.",
+        "en-US": "Configure scanline settings."
+      }
+    },
+    {
+      "id": "hint-position",
+      "parts": [
+        305,
+        306
+      ],
+      "source": "Move the game screen.",
+      "text": {
+        "zh-CN": "移动游戏画面。",
+        "ko-KR": "게임 화면을 이동합니다.",
+        "en-US": "Move the game screen."
+      }
+    },
+    {
+      "id": "hint-screen",
+      "parts": [
+        307,
+        308,
+        309,
+        310,
+        311,
+        312,
+        313
+      ],
+      "source": "Configure display settings.",
+      "text": {
+        "zh-CN": "配置画面显示设置。",
+        "ko-KR": "화면 표시 설정을 구성합니다.",
+        "en-US": "Configure display settings."
+      }
+    },
+    {
+      "id": "hint-size",
+      "parts": [
+        314,
+        315,
+        316,
+        317,
+        318,
+        319,
+        320
+      ],
+      "source": "Change the display size.",
+      "text": {
+        "zh-CN": "更改画面显示尺寸。",
+        "ko-KR": "화면 표시 크기를 변경합니다.",
+        "en-US": "Change the display size."
+      }
+    },
+    {
+      "id": "hint-vsync",
+      "parts": [
+        321,
+        322,
+        323,
+        324,
+        325,
+        326,
+        327
+      ],
+      "source": "Configure vertical synchronization.",
+      "text": {
+        "zh-CN": "配置垂直同步设置。",
+        "ko-KR": "수직 동기화를 설정합니다.",
+        "en-US": "Configure vertical synchronization."
+      }
+    },
+    {
+      "id": "hint-wallpaper",
+      "parts": [
+        328,
+        329,
+        330,
+        331,
+        332,
+        333,
+        334
+      ],
+      "source": "Change the wallpaper.",
+      "text": {
+        "zh-CN": "更改壁纸。",
+        "ko-KR": "배경화면을 변경합니다.",
+        "en-US": "Change the wallpaper."
+      }
+    },
+    {
+      "id": "hint-window",
+      "parts": [
+        335,
+        336,
+        337,
+        338,
+        339,
+        340,
+        341
+      ],
+      "source": "Change the window size.",
+      "text": {
+        "zh-CN": "更改窗口大小。",
+        "ko-KR": "창 크기를 변경합니다.",
+        "en-US": "Change the window size."
+      }
+    },
+    {
+      "id": "action-cancel",
+      "parts": [
+        359
+      ],
+      "source": "キャンセル",
+      "text": {
+        "zh-CN": "取消",
+        "ko-KR": "취소",
+        "en-US": "Cancel"
+      }
+    },
+    {
+      "id": "action-confirm-info",
+      "parts": [
+        361
+      ],
+      "source": "決定・情報ページ送り",
+      "text": {
+        "zh-CN": "确定・翻页",
+        "ko-KR": "결정 / 정보 페이지 넘기기",
+        "en-US": "Confirm / Page Forward"
+      }
+    },
+    {
+      "id": "action-confirm-system",
+      "parts": [
+        362
+      ],
+      "source": "決定・システムウィンドウ",
+      "text": {
+        "zh-CN": "确定・系统窗口",
+        "ko-KR": "결정 / 시스템 창",
+        "en-US": "Confirm / System Window"
+      }
+    },
+    {
+      "id": "action-none",
+      "parts": [
+        364
+      ],
+      "source": "None",
+      "text": {
+        "zh-CN": "无",
+        "ko-KR": "없음",
+        "en-US": "None"
+      }
+    },
+    {
+      "id": "action-load",
+      "parts": [
+        365
+      ],
+      "source": "Quick Load",
+      "text": {
+        "zh-CN": "快速读取",
+        "ko-KR": "퀵 로드",
+        "en-US": "Quick Load"
+      }
+    },
+    {
+      "id": "action-save",
+      "parts": [
+        366
+      ],
+      "source": "Quick Save",
+      "text": {
+        "zh-CN": "快速保存",
+        "ko-KR": "퀵 세이브",
+        "en-US": "Quick Save"
+      }
+    },
+    {
+      "id": "action-rewind",
+      "parts": [
+        368
+      ],
+      "source": "Rewind",
+      "text": {
+        "zh-CN": "倒带",
+        "ko-KR": "되감기",
+        "en-US": "Rewind"
+      }
+    },
+    {
+      "id": "action-slow",
+      "parts": [
+        369
+      ],
+      "source": "Slow",
+      "text": {
+        "zh-CN": "慢放",
+        "ko-KR": "슬로우",
+        "en-US": "Slow"
+      }
+    },
+    {
+      "id": "action-next-unit",
+      "parts": [
+        370
+      ],
+      "source": "ユニット変更（進める）",
+      "text": {
+        "zh-CN": "切换单位（下一个）",
+        "ko-KR": "유닛 변경(다음)",
+        "en-US": "Change Unit (Next)"
+      }
+    },
+    {
+      "id": "action-previous-unit",
+      "parts": [
+        371
+      ],
+      "source": "ユニット変更（戻す）",
+      "text": {
+        "zh-CN": "切换单位（上一个）",
+        "ko-KR": "유닛 변경(이전)",
+        "en-US": "Change Unit (Previous)"
+      }
+    },
+    {
+      "id": "database",
+      "parts": [
+        376
+      ],
+      "source": "Data Base",
+      "text": {
+        "zh-CN": "资料库",
+        "ko-KR": "데이터베이스",
+        "en-US": "Database"
+      }
+    },
+    {
+      "id": "default",
+      "parts": [
+        377
+      ],
+      "source": "Default",
+      "text": {
+        "zh-CN": "默认",
+        "ko-KR": "기본값",
+        "en-US": "Default"
+      }
+    },
+    {
+      "id": "double-exp",
+      "parts": [
+        378
+      ],
+      "source": "Increase Experience",
+      "text": {
+        "zh-CN": "经验值翻倍",
+        "ko-KR": "경험치 2배",
+        "en-US": "Double Experience"
+      }
+    },
+    {
+      "id": "player",
+      "parts": [
+        379
+      ],
+      "source": "Player",
+      "text": {
+        "zh-CN": "玩家",
+        "ko-KR": "플레이어",
+        "en-US": "Player"
+      }
+    },
+    {
+      "id": "switch",
+      "parts": [
+        383
+      ],
+      "source": "Game Change",
+      "text": {
+        "zh-CN": "切换游戏",
+        "ko-KR": "게임 변경",
+        "en-US": "Switch Game"
+      }
+    },
+    {
+      "id": "reset",
+      "parts": [
+        384
+      ],
+      "source": "Reset",
+      "text": {
+        "zh-CN": "重置",
+        "ko-KR": "리셋",
+        "en-US": "Reset"
+      }
+    },
+    {
+      "id": "main-menu",
+      "parts": [
+        385
+      ],
+      "source": "Return to Top Menu",
+      "text": {
+        "zh-CN": "返回顶层菜单",
+        "ko-KR": "상위 메뉴로 돌아가기",
+        "en-US": "Return to Top Menu"
+      }
+    },
+    {
+      "id": "language",
+      "parts": [
+        387
+      ],
+      "source": "Language",
+      "text": {
+        "zh-CN": "语言",
+        "ko-KR": "언어",
+        "en-US": "Language"
+      }
+    },
+    {
+      "id": "language-chinese",
+      "parts": [
+        388,
+        395
+      ],
+      "source": "中文（繁体）",
+      "text": {
+        "zh-CN": "中文（繁体）",
+        "ko-KR": "중국어(번체)",
+        "en-US": "Traditional Chinese"
+      }
+    },
+    {
+      "id": "language-english",
+      "parts": [
+        389
+      ],
+      "source": "English",
+      "text": {
+        "zh-CN": "英语",
+        "ko-KR": "영어",
+        "en-US": "English"
+      }
+    },
+    {
+      "id": "language-spanish",
+      "parts": [
+        390
+      ],
+      "source": "Español",
+      "text": {
+        "zh-CN": "西班牙语",
+        "ko-KR": "스페인어",
+        "en-US": "Spanish"
+      }
+    },
+    {
+      "id": "language-french",
+      "parts": [
+        391
+      ],
+      "source": "Français",
+      "text": {
+        "zh-CN": "法语",
+        "ko-KR": "프랑스어",
+        "en-US": "French"
+      }
+    },
+    {
+      "id": "language-german",
+      "parts": [
+        392
+      ],
+      "source": "Deutsch",
+      "text": {
+        "zh-CN": "德语",
+        "ko-KR": "독일어",
+        "en-US": "German"
+      }
+    },
+    {
+      "id": "language-japanese",
+      "parts": [
+        393
+      ],
+      "source": "日本語",
+      "text": {
+        "zh-CN": "日语",
+        "ko-KR": "일본어",
+        "en-US": "Japanese"
+      }
+    },
+    {
+      "id": "language-korean",
+      "parts": [
+        394
+      ],
+      "source": "한국어",
+      "text": {
+        "zh-CN": "韩语",
+        "ko-KR": "한국어",
+        "en-US": "Korean"
+      }
+    },
+    {
+      "id": "off",
+      "parts": [
+        396
+      ],
+      "source": "Off",
+      "text": {
+        "zh-CN": "关",
+        "ko-KR": "OFF",
+        "en-US": "Off"
+      }
+    },
+    {
+      "id": "on",
+      "parts": [
+        397
+      ],
+      "source": "On",
+      "text": {
+        "zh-CN": "开",
+        "ko-KR": "ON",
+        "en-US": "On"
+      }
+    },
+    {
+      "id": "mode-off",
+      "parts": [
+        400
+      ],
+      "source": "Mode Off",
+      "text": {
+        "zh-CN": "模式关闭",
+        "ko-KR": "모드 OFF",
+        "en-US": "Mode Off"
+      }
+    },
+    {
+      "id": "mode-on",
+      "parts": [
+        401
+      ],
+      "source": "Mode On",
+      "text": {
+        "zh-CN": "模式开启",
+        "ko-KR": "모드 ON",
+        "en-US": "Mode On"
+      }
+    },
+    {
+      "id": "ranking",
+      "parts": [
+        402
+      ],
+      "source": "Ranking",
+      "text": {
+        "zh-CN": "排行榜",
+        "ko-KR": "랭킹",
+        "en-US": "Ranking"
+      }
+    },
+    {
+      "id": "online-ranking",
+      "parts": [
+        403
+      ],
+      "source": "Online Ranking",
+      "text": {
+        "zh-CN": "在线排行榜",
+        "ko-KR": "온라인 랭킹",
+        "en-US": "Online Ranking"
+      }
+    },
+    {
+      "id": "quick-load",
+      "parts": [
+        405
+      ],
+      "source": "Quick Load",
+      "text": {
+        "zh-CN": "快速读取",
+        "ko-KR": "퀵 로드",
+        "en-US": "Quick Load"
+      }
+    },
+    {
+      "id": "quick-save",
+      "parts": [
+        406
+      ],
+      "source": "Quick Save",
+      "text": {
+        "zh-CN": "快速保存",
+        "ko-KR": "퀵 세이브",
+        "en-US": "Quick Save"
+      }
+    },
+    {
+      "id": "item-magic-guide",
+      "parts": [
+        407
+      ],
+      "source": "Item/Magic Guide",
+      "text": {
+        "zh-CN": "道具/魔法指南",
+        "ko-KR": "아이템/마법 가이드",
+        "en-US": "Item/Magic Guide"
+      }
+    },
+    {
+      "id": "status-guide",
+      "parts": [
+        408
+      ],
+      "source": "Status Guide",
+      "text": {
+        "zh-CN": "状态指南",
+        "ko-KR": "상태 가이드",
+        "en-US": "Status Guide"
+      }
+    },
+    {
+      "id": "antialias",
+      "parts": [
+        409
+      ],
+      "source": "Anti-alias",
+      "text": {
+        "zh-CN": "抗锯齿",
+        "ko-KR": "안티에일리어싱",
+        "en-US": "Anti-Aliasing"
+      }
+    },
+    {
+      "id": "center",
+      "parts": [
+        410
+      ],
+      "source": "Center",
+      "text": {
+        "zh-CN": "居中",
+        "ko-KR": "중앙",
+        "en-US": "Center"
+      }
+    },
+    {
+      "id": "contrast",
+      "parts": [
+        411
+      ],
+      "source": "Contrast",
+      "text": {
+        "zh-CN": "对比度",
+        "ko-KR": "대비",
+        "en-US": "Contrast"
+      }
+    },
+    {
+      "id": "flip",
+      "parts": [
+        412
+      ],
+      "source": "Screen Flip",
+      "text": {
+        "zh-CN": "画面翻转",
+        "ko-KR": "화면 반전",
+        "en-US": "Screen Flip"
+      }
+    },
+    {
+      "id": "fullscreen",
+      "parts": [
+        414
+      ],
+      "source": "Full Screen",
+      "text": {
+        "zh-CN": "全屏",
+        "ko-KR": "전체 화면",
+        "en-US": "Fullscreen"
+      }
+    },
+    {
+      "id": "high-resolution",
+      "parts": [
+        416
+      ],
+      "source": "High Res",
+      "text": {
+        "zh-CN": "高分辨率",
+        "ko-KR": "고해상도",
+        "en-US": "High Resolution"
+      }
+    },
+    {
+      "id": "hud",
+      "parts": [
+        417
+      ],
+      "source": "HUD Disp",
+      "text": {
+        "zh-CN": "HUD显示",
+        "ko-KR": "HUD 표시",
+        "en-US": "HUD Display"
+      }
+    },
+    {
+      "id": "large",
+      "parts": [
+        418
+      ],
+      "source": "Large",
+      "text": {
+        "zh-CN": "大",
+        "ko-KR": "크게",
+        "en-US": "Large"
+      }
+    },
+    {
+      "id": "left",
+      "parts": [
+        419
+      ],
+      "source": "Left",
+      "text": {
+        "zh-CN": "居左",
+        "ko-KR": "왼쪽",
+        "en-US": "Left"
+      }
+    },
+    {
+      "id": "normal",
+      "parts": [
+        420
+      ],
+      "source": "Normal",
+      "text": {
+        "zh-CN": "标准",
+        "ko-KR": "보통",
+        "en-US": "Normal"
+      }
+    },
+    {
+      "id": "right",
+      "parts": [
+        421
+      ],
+      "source": "Right",
+      "text": {
+        "zh-CN": "居右",
+        "ko-KR": "오른쪽",
+        "en-US": "Right"
+      }
+    },
+    {
+      "id": "orientation",
+      "parts": [
+        422
+      ],
+      "source": "Display Orientation",
+      "text": {
+        "zh-CN": "显示方向",
+        "ko-KR": "화면 방향",
+        "en-US": "Display Orientation"
+      }
+    },
+    {
+      "id": "scanline",
+      "parts": [
+        423
+      ],
+      "source": "Scanline",
+      "text": {
+        "zh-CN": "扫描线",
+        "ko-KR": "스캔라인",
+        "en-US": "Scanlines"
+      }
+    },
+    {
+      "id": "position",
+      "parts": [
+        424
+      ],
+      "source": "Screen Position",
+      "text": {
+        "zh-CN": "画面位置",
+        "ko-KR": "화면 위치",
+        "en-US": "Screen Position"
+      }
+    },
+    {
+      "id": "screen-size",
+      "parts": [
+        425
+      ],
+      "source": "Screen Size",
+      "text": {
+        "zh-CN": "画面尺寸",
+        "ko-KR": "화면 크기",
+        "en-US": "Screen Size"
+      }
+    },
+    {
+      "id": "vsync",
+      "parts": [
+        427
+      ],
+      "source": "VSync",
+      "text": {
+        "zh-CN": "垂直同步",
+        "ko-KR": "수직 동기화",
+        "en-US": "VSync"
+      }
+    },
+    {
+      "id": "wallpaper",
+      "parts": [
+        428
+      ],
+      "source": "Wallpaper",
+      "text": {
+        "zh-CN": "壁纸",
+        "ko-KR": "배경화면",
+        "en-US": "Wallpaper"
+      }
+    },
+    {
+      "id": "window",
+      "parts": [
+        429
+      ],
+      "source": "Window Size",
+      "text": {
+        "zh-CN": "窗口大小",
+        "ko-KR": "창 크기",
+        "en-US": "Window Size"
+      }
+    },
+    {
+      "id": "loading",
+      "parts": [
+        430,
+        431,
+        432,
+        433,
+        434,
+        435
+      ],
+      "source": "Now Loading...",
+      "text": {
+        "zh-CN": "正在加载……",
+        "ko-KR": "로딩 중...",
+        "en-US": "Now Loading..."
+      },
+      "region": [
+        0,
+        0,
+        228,
+        48
+      ]
+    },
+    {
+      "id": "no-data",
+      "parts": [
+        494
+      ],
+      "source": "No Data",
+      "text": {
+        "zh-CN": "无数据",
+        "ko-KR": "데이터 없음",
+        "en-US": "No Data"
+      },
+      "region": [
+        170,
+        188,
+        347,
+        220
+      ],
+      "background": [
+        51,
+        51,
+        51,
+        255
+      ],
+      "align": "right"
+    },
+    {
+      "id": "no-data-vertical",
+      "parts": [
+        495
+      ],
+      "source": "No Data (rotated)",
+      "text": {
+        "zh-CN": "无数据",
+        "ko-KR": "데이터 없음",
+        "en-US": "No Data"
+      },
+      "region": [
+        4,
+        88,
+        36,
+        220
+      ],
+      "background": [
+        51,
+        51,
+        51,
+        255
+      ],
+      "rotation": 90,
+      "align": "center"
+    },
+    {
+      "id": "main-rewind",
+      "parts": [
+        404
+      ],
+      "source": "Rewind",
+      "text": {
+        "zh-CN": "倒带",
+        "ko-KR": "되감기",
+        "en-US": "Rewind"
+      }
+    },
+    {
+      "id": "main-quick-save-load",
+      "parts": [
+        399
+      ],
+      "source": "Quick Save/Load",
+      "text": {
+        "zh-CN": "快速存档/读档",
+        "ko-KR": "빠른 저장/불러오기",
+        "en-US": "Quick Save/Load"
+      }
+    },
+    {
+      "id": "main-extra-options",
+      "parts": [
+        382
+      ],
+      "source": "Extra Options",
+      "text": {
+        "zh-CN": "额外选项",
+        "ko-KR": "추가 옵션",
+        "en-US": "Extra Options"
+      }
+    },
+    {
+      "id": "main-screen-settings",
+      "parts": [
+        426
+      ],
+      "source": "Screen Settings",
+      "text": {
+        "zh-CN": "画面设置",
+        "ko-KR": "화면 설정",
+        "en-US": "Screen Settings"
+      }
+    },
+    {
+      "id": "main-button-config",
+      "parts": [
+        360
+      ],
+      "source": "Button Config",
+      "text": {
+        "zh-CN": "按键设置",
+        "ko-KR": "버튼 설정",
+        "en-US": "Button Config"
+      }
+    },
+    {
+      "id": "main-playing-guide",
+      "parts": [
+        398
+      ],
+      "source": "Playing Guide",
+      "text": {
+        "zh-CN": "操作指南",
+        "ko-KR": "플레이 가이드",
+        "en-US": "Playing Guide"
+      }
+    },
+    {
+      "id": "main-credits",
+      "parts": [
+        375
+      ],
+      "source": "Credits",
+      "text": {
+        "zh-CN": "制作人员",
+        "ko-KR": "제작진",
+        "en-US": "Credits"
+      }
+    },
+    {
+      "id": "main-quit-game",
+      "parts": [
+        386
+      ],
+      "source": "Quit Game",
+      "text": {
+        "zh-CN": "退出游戏",
+        "ko-KR": "게임 종료",
+        "en-US": "Quit Game"
+      }
+    },
+    {
+      "id": "options-panel-title",
+      "parts": [],
+      "source": "Options",
+      "text": {
+        "zh-CN": "选项",
+        "ko-KR": "옵션",
+        "en-US": "Options"
+      }
+    },
+    {
+      "id": "view-button-label",
+      "parts": [],
+      "source": "View button",
+      "text": {
+        "zh-CN": "View 键",
+        "ko-KR": "View 버튼",
+        "en-US": "View button"
+      }
+    }
+  ]
+}

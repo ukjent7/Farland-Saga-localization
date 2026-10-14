@@ -1,0 +1,864 @@
+{
+  "schema_version": 1,
+  "source": "Steam TITLE/TITLE01.SPR through TITLE50.SPR",
+  "source_transcription": "One contact sheet of original indexed title sprites; native layout decoded locally.",
+  "translator": "Codex",
+  "status": "completed",
+  "languages": [
+    "zh-CN",
+    "ko-KR",
+    "en-US"
+  ],
+  "rows": [
+    {
+      "id": "title:01",
+      "file": "TITLE/TITLE01.SPR",
+      "source": "旅立ち",
+      "translations": {
+        "zh-CN": "启程",
+        "ko-KR": "여행의 시작",
+        "en-US": "Departure"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:02",
+      "file": "TITLE/TITLE02.SPR",
+      "source": "優雅な挑戦者",
+      "translations": {
+        "zh-CN": "优雅的挑战者",
+        "ko-KR": "우아한 도전자",
+        "en-US": "An Elegant Challenger"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:03",
+      "file": "TITLE/TITLE03.SPR",
+      "source": "破局",
+      "translations": {
+        "zh-CN": "破局",
+        "ko-KR": "파국",
+        "en-US": "Catastrophe"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:04",
+      "file": "TITLE/TITLE04.SPR",
+      "source": "憎しみの後に",
+      "translations": {
+        "zh-CN": "憎恨之后",
+        "ko-KR": "증오의 끝에",
+        "en-US": "In the Wake of Hatred"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:05",
+      "file": "TITLE/TITLE05.SPR",
+      "source": "逃亡の日々",
+      "translations": {
+        "zh-CN": "逃亡的岁月",
+        "ko-KR": "도망의 나날",
+        "en-US": "Days of Flight"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:06",
+      "file": "TITLE/TITLE06.SPR",
+      "source": "挑戦者再び",
+      "translations": {
+        "zh-CN": "挑战者再临",
+        "ko-KR": "다시 찾아온 도전자",
+        "en-US": "The Challenger Returns"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:07",
+      "file": "TITLE/TITLE07.SPR",
+      "source": "黒き風",
+      "translations": {
+        "zh-CN": "黑色之风",
+        "ko-KR": "검은 바람",
+        "en-US": "The Black Wind"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:08",
+      "file": "TITLE/TITLE08.SPR",
+      "source": "男の意地",
+      "translations": {
+        "zh-CN": "男人的执着",
+        "ko-KR": "남자의 자존심",
+        "en-US": "A Man's Pride"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:09",
+      "file": "TITLE/TITLE09.SPR",
+      "source": "強敵",
+      "translations": {
+        "zh-CN": "强敌",
+        "ko-KR": "강적",
+        "en-US": "Formidable Foe"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:10",
+      "file": "TITLE/TITLE10.SPR",
+      "source": "策略と裏切り",
+      "translations": {
+        "zh-CN": "谋略与背叛",
+        "ko-KR": "책략과 배신",
+        "en-US": "Schemes and Betrayal"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:11",
+      "file": "TITLE/TITLE11.SPR",
+      "source": "禁呪",
+      "translations": {
+        "zh-CN": "禁咒",
+        "ko-KR": "금주",
+        "en-US": "Forbidden Spell"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:12",
+      "file": "TITLE/TITLE12.SPR",
+      "source": "竜の山",
+      "translations": {
+        "zh-CN": "巨龙之山",
+        "ko-KR": "용의 산",
+        "en-US": "Dragon Mountain"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:13",
+      "file": "TITLE/TITLE13.SPR",
+      "source": "黒翼の炎使い",
+      "translations": {
+        "zh-CN": "黑翼炎术士",
+        "ko-KR": "흑익의 화염술사",
+        "en-US": "Black-Winged Flame Master"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:14",
+      "file": "TITLE/TITLE14.SPR",
+      "source": "湯けむりの旅",
+      "translations": {
+        "zh-CN": "温泉之旅",
+        "ko-KR": "온천 여행",
+        "en-US": "Hot Springs Journey"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:15",
+      "file": "TITLE/TITLE15.SPR",
+      "source": "海へ・・・",
+      "translations": {
+        "zh-CN": "向着大海……",
+        "ko-KR": "바다로...",
+        "en-US": "To the Sea..."
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:16",
+      "file": "TITLE/TITLE16.SPR",
+      "source": "闇に生きる者",
+      "translations": {
+        "zh-CN": "隐于黑暗之人",
+        "ko-KR": "어둠 속에 사는 자",
+        "en-US": "Those Who Live in Darkness"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:17",
+      "file": "TITLE/TITLE17.SPR",
+      "source": "魔の聖地",
+      "translations": {
+        "zh-CN": "魔之圣地",
+        "ko-KR": "마의 성지",
+        "en-US": "Sanctuary of Evil"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:18",
+      "file": "TITLE/TITLE18.SPR",
+      "source": "継がれし者",
+      "translations": {
+        "zh-CN": "传承者",
+        "ko-KR": "계승자",
+        "en-US": "The Successor"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:19",
+      "file": "TITLE/TITLE19.SPR",
+      "source": "古代遺跡へ",
+      "translations": {
+        "zh-CN": "前往古代遗迹",
+        "ko-KR": "고대 유적으로",
+        "en-US": "To the Ancient Ruins"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:20",
+      "file": "TITLE/TITLE20.SPR",
+      "source": "誓い",
+      "translations": {
+        "zh-CN": "誓言",
+        "ko-KR": "맹세",
+        "en-US": "The Vow"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:21",
+      "file": "TITLE/TITLE21.SPR",
+      "source": "引き裂かれた心",
+      "translations": {
+        "zh-CN": "被撕裂的心",
+        "ko-KR": "찢겨진 마음",
+        "en-US": "A Torn Heart"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:22",
+      "file": "TITLE/TITLE22.SPR",
+      "source": "報われぬ想い",
+      "translations": {
+        "zh-CN": "未得回报的思念",
+        "ko-KR": "보답받지 못한 마음",
+        "en-US": "Unrequited Feelings"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:23",
+      "file": "TITLE/TITLE23.SPR",
+      "source": "地下神殿",
+      "translations": {
+        "zh-CN": "地下神殿",
+        "ko-KR": "지하 신전",
+        "en-US": "Underground Temple"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:24",
+      "file": "TITLE/TITLE24.SPR",
+      "source": "己の道を",
+      "translations": {
+        "zh-CN": "遵从己道",
+        "ko-KR": "자신의 길을",
+        "en-US": "One's Own Path"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:25",
+      "file": "TITLE/TITLE25.SPR",
+      "source": "果て",
+      "translations": {
+        "zh-CN": "尽头",
+        "ko-KR": "끝",
+        "en-US": "The End"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:26",
+      "file": "TITLE/TITLE26.SPR",
+      "source": "友と再び",
+      "translations": {
+        "zh-CN": "与友重聚",
+        "ko-KR": "친구와 다시",
+        "en-US": "Reunited with Friends"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:27",
+      "file": "TITLE/TITLE27.SPR",
+      "source": "異形再来",
+      "translations": {
+        "zh-CN": "异形再临",
+        "ko-KR": "이형의 재림",
+        "en-US": "Return of the Aberrations"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:28",
+      "file": "TITLE/TITLE28.SPR",
+      "source": "塔を求めて",
+      "translations": {
+        "zh-CN": "追寻巨塔",
+        "ko-KR": "탑을 찾아서",
+        "en-US": "In Search of the Tower"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:29",
+      "file": "TITLE/TITLE29.SPR",
+      "source": "そして来た者は",
+      "translations": {
+        "zh-CN": "随后而至者",
+        "ko-KR": "그리고 찾아온 자는",
+        "en-US": "And Then Came..."
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:30",
+      "file": "TITLE/TITLE30.SPR",
+      "source": "ヘルズタワー1階",
+      "translations": {
+        "zh-CN": "地狱之塔 1层",
+        "ko-KR": "헬즈 타워 1층",
+        "en-US": "Hell's Tower Floor 1"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:31",
+      "file": "TITLE/TITLE31.SPR",
+      "source": "ヘルズタワー2階",
+      "translations": {
+        "zh-CN": "地狱之塔 2层",
+        "ko-KR": "헬즈 타워 2층",
+        "en-US": "Hell's Tower Floor 2"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:32",
+      "file": "TITLE/TITLE32.SPR",
+      "source": "ヘルズタワー3階",
+      "translations": {
+        "zh-CN": "地狱之塔 3层",
+        "ko-KR": "헬즈 타워 3층",
+        "en-US": "Hell's Tower Floor 3"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:33",
+      "file": "TITLE/TITLE33.SPR",
+      "source": "ヘルズタワー4階",
+      "translations": {
+        "zh-CN": "地狱之塔 4层",
+        "ko-KR": "헬즈 타워 4층",
+        "en-US": "Hell's Tower Floor 4"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:34",
+      "file": "TITLE/TITLE34.SPR",
+      "source": "ヘルズタワー5階",
+      "translations": {
+        "zh-CN": "地狱之塔 5层",
+        "ko-KR": "헬즈 타워 5층",
+        "en-US": "Hell's Tower Floor 5"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:35",
+      "file": "TITLE/TITLE35.SPR",
+      "source": "ヘルズタワー6階",
+      "translations": {
+        "zh-CN": "地狱之塔 6层",
+        "ko-KR": "헬즈 타워 6층",
+        "en-US": "Hell's Tower Floor 6"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:36",
+      "file": "TITLE/TITLE36.SPR",
+      "source": "ヘルズタワー7階",
+      "translations": {
+        "zh-CN": "地狱之塔 7层",
+        "ko-KR": "헬즈 타워 7층",
+        "en-US": "Hell's Tower Floor 7"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:37",
+      "file": "TITLE/TITLE37.SPR",
+      "source": "ヘルズタワー8階",
+      "translations": {
+        "zh-CN": "地狱之塔 8层",
+        "ko-KR": "헬즈 타워 8층",
+        "en-US": "Hell's Tower Floor 8"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:38",
+      "file": "TITLE/TITLE38.SPR",
+      "source": "ヘルズタワー9階",
+      "translations": {
+        "zh-CN": "地狱之塔 9层",
+        "ko-KR": "헬즈 타워 9층",
+        "en-US": "Hell's Tower Floor 9"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:39",
+      "file": "TITLE/TITLE39.SPR",
+      "source": "ヘルズタワー10階",
+      "translations": {
+        "zh-CN": "地狱之塔 10层",
+        "ko-KR": "헬즈 타워 10층",
+        "en-US": "Hell's Tower Floor 10"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:40",
+      "file": "TITLE/TITLE40.SPR",
+      "source": "ヘルズタワー11階",
+      "translations": {
+        "zh-CN": "地狱之塔 11层",
+        "ko-KR": "헬즈 타워 11층",
+        "en-US": "Hell's Tower Floor 11"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:41",
+      "file": "TITLE/TITLE41.SPR",
+      "source": "ヘルズタワー12階",
+      "translations": {
+        "zh-CN": "地狱之塔 12层",
+        "ko-KR": "헬즈 타워 12층",
+        "en-US": "Hell's Tower Floor 12"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:42",
+      "file": "TITLE/TITLE42.SPR",
+      "source": "ヘルズタワー13階",
+      "translations": {
+        "zh-CN": "地狱之塔 13层",
+        "ko-KR": "헬즈 타워 13층",
+        "en-US": "Hell's Tower Floor 13"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:43",
+      "file": "TITLE/TITLE43.SPR",
+      "source": "ヘルズタワー14階",
+      "translations": {
+        "zh-CN": "地狱之塔 14层",
+        "ko-KR": "헬즈 타워 14층",
+        "en-US": "Hell's Tower Floor 14"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:44",
+      "file": "TITLE/TITLE44.SPR",
+      "source": "ヘルズタワー15階",
+      "translations": {
+        "zh-CN": "地狱之塔 15层",
+        "ko-KR": "헬즈 타워 15층",
+        "en-US": "Hell's Tower Floor 15"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:45",
+      "file": "TITLE/TITLE45.SPR",
+      "source": "ヘルズタワー16階",
+      "translations": {
+        "zh-CN": "地狱之塔 16层",
+        "ko-KR": "헬즈 타워 16층",
+        "en-US": "Hell's Tower Floor 16"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:46",
+      "file": "TITLE/TITLE46.SPR",
+      "source": "ヘルズタワー17階",
+      "translations": {
+        "zh-CN": "地狱之塔 17层",
+        "ko-KR": "헬즈 타워 17층",
+        "en-US": "Hell's Tower Floor 17"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:47",
+      "file": "TITLE/TITLE47.SPR",
+      "source": "ヘルズタワー18階",
+      "translations": {
+        "zh-CN": "地狱之塔 18层",
+        "ko-KR": "헬즈 타워 18층",
+        "en-US": "Hell's Tower Floor 18"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:48",
+      "file": "TITLE/TITLE48.SPR",
+      "source": "ヘルズタワー19階",
+      "translations": {
+        "zh-CN": "地狱之塔 19层",
+        "ko-KR": "헬즈 타워 19층",
+        "en-US": "Hell's Tower Floor 19"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:49",
+      "file": "TITLE/TITLE49.SPR",
+      "source": "ヘルズタワー20階",
+      "translations": {
+        "zh-CN": "地狱之塔 20层",
+        "ko-KR": "헬즈 타워 20층",
+        "en-US": "Hell's Tower Floor 20"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "title:50",
+      "file": "TITLE/TITLE50.SPR",
+      "source": "夜明け",
+      "translations": {
+        "zh-CN": "黎明",
+        "ko-KR": "여명",
+        "en-US": "Dawn"
+      },
+      "short_translations": {},
+      "style": {
+        "preferred_size": 22,
+        "minimum_size": 18,
+        "stroke_pixels": 1,
+        "alignment": "center"
+      }
+    }
+  ]
+}

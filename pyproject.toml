@@ -1,0 +1,37 @@
+[project]
+name = "farland-saga-localization-tools"
+version = "0.1.0"
+description = "Local translation, resource analysis, and candidate storage tools"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    "dnfile==0.18.0",
+    "fonttools==4.66.1",
+    "pefile==2024.8.26",
+    "pillow==12.3.0",
+    "UnityPy[ttgen]==1.25.3",
+]
+
+[project.optional-dependencies]
+# IDALib is a proprietary Hex-Rays product; the private workspace installs it
+# from a local wheel. Add this extra only to run the static-analysis tools.
+ida = ["idapro==0.0.9"]
+
+[tool.uv]
+package = false
+python-downloads = "never"
+python-preference = "only-system"
+# Preserve the versions in the working environment during this migration.
+constraint-dependencies = [
+    "archspec==0.2.6",
+    "astc-encoder-py==0.1.12",
+    "attrs==26.1.0",
+    "brotli==1.2.0",
+    "etcpak==0.9.15",
+    "fmod-toolkit==0.1.3",
+    "fsspec==2026.9.0",
+    "lz4==4.4.5",
+    "pyfmodex==0.7.2",
+    "texture2ddecoder==1.0.6",
+    "tpk-ar==0.2.4",
+    "TypeTreeGeneratorAPI==0.0.10",
+]

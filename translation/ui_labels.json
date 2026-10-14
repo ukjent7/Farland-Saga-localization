@@ -1,0 +1,146 @@
+{
+  "status": "Completed",
+  "terrain": [
+    {
+      "source": "地形",
+      "zh-CN": "地形",
+      "ko-KR": "지형",
+      "en-US": "Terrain"
+    },
+    {
+      "source": "効果",
+      "zh-CN": "效果",
+      "ko-KR": "효과",
+      "en-US": "Effect"
+    },
+    {
+      "source": "道床",
+      "zh-CN": "道路",
+      "ko-KR": "도로",
+      "en-US": "Road"
+    },
+    {
+      "source": "平地",
+      "zh-CN": "平地",
+      "ko-KR": "평지",
+      "en-US": "Plains"
+    },
+    {
+      "source": "草地",
+      "zh-CN": "草地",
+      "ko-KR": "초원",
+      "en-US": "Grass"
+    },
+    {
+      "source": "茂み",
+      "zh-CN": "灌木",
+      "ko-KR": "수풀",
+      "en-US": "Bush"
+    },
+    {
+      "source": "荒地",
+      "zh-CN": "荒地",
+      "ko-KR": "황무지",
+      "en-US": "Wasteland"
+    },
+    {
+      "source": "氷上",
+      "zh-CN": "冰面",
+      "ko-KR": "빙판",
+      "en-US": "Ice"
+    }
+  ],
+  "equipment": [
+    {
+      "source": "武器",
+      "code": 796,
+      "map_row": 3,
+      "zh-CN": "武器",
+      "ko-KR": "무기",
+      "en-US": "Wpn"
+    },
+    {
+      "source": "防具",
+      "code": 804,
+      "map_row": 5,
+      "zh-CN": "防具",
+      "ko-KR": "방어구",
+      "en-US": "Armr"
+    },
+    {
+      "source": "装備",
+      "code": 812,
+      "map_row": 7,
+      "zh-CN": "装备",
+      "ko-KR": "장비",
+      "en-US": "Gear"
+    },
+    {
+      "source": "持物",
+      "code": 1668,
+      "map_row": 12,
+      "zh-CN": "道具",
+      "ko-KR": "소지품",
+      "en-US": "Item"
+    }
+  ],
+  "stats": [
+    {
+      "source": "体力",
+      "atlas_x": 128,
+      "zh-CN": "体力",
+      "ko-KR": "체력",
+      "en-US": "HP"
+    },
+    {
+      "source": "魔力",
+      "atlas_x": 0,
+      "zh-CN": "魔力",
+      "ko-KR": "마력",
+      "en-US": "MP"
+    },
+    {
+      "source": "攻撃",
+      "atlas_x": 192,
+      "zh-CN": "攻击",
+      "ko-KR": "공격",
+      "en-US": "ATK"
+    },
+    {
+      "source": "防御",
+      "atlas_x": 224,
+      "zh-CN": "防御",
+      "ko-KR": "방어",
+      "en-US": "DEF"
+    },
+    {
+      "source": "知力",
+      "atlas_x": 160,
+      "zh-CN": "智力",
+      "ko-KR": "지력",
+      "en-US": "INT"
+    },
+    {
+      "source": "魔抗",
+      "atlas_x": 32,
+      "zh-CN": "魔抗",
+      "ko-KR": "마저",
+      "en-US": "RES"
+    },
+    {
+      "source": "敏捷",
+      "atlas_x": 64,
+      "zh-CN": "敏捷",
+      "ko-KR": "민첩",
+      "en-US": "AGI"
+    },
+    {
+      "id": "ui:stats:attribute",
+      "source": "属性",
+      "atlas_x": 96,
+      "zh-CN": "属性",
+      "ko-KR": "속성",
+      "en-US": "Elem"
+    }
+  ]
+}

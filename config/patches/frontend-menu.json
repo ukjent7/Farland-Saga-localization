@@ -1,0 +1,225 @@
+{
+  "schema": 1,
+  "id": "frontend-menu",
+  "languages": {
+    "zh-CN": "zh",
+    "ko-KR": "ko",
+    "en-US": "en"
+  },
+  "report_key": "frontend_menu",
+  "container_atlases": [
+    {
+      "file": "Texture.tex",
+      "source": "assets/sources/Texture.tex",
+      "original_sha256": "dd484f4315a9f79fc63ad3dc746581df8f6394195e05a3c931f162b21613536e",
+      "image_size": [
+        2370,
+        4394
+      ],
+      "part_count": 499,
+      "fonts": {
+        "zh-CN": "simhei.ttf",
+        "ko-KR": "malgun.ttf",
+        "en-US": "arial.ttf"
+      },
+      "labels": [
+        {
+          "part": 404,
+          "box": [
+            1586,
+            4194,
+            1698,
+            4242
+          ],
+          "source": "Rewind",
+          "text": {
+            "zh-CN": "倒带",
+            "ko-KR": "되감기",
+            "en-US": "Rewind"
+          },
+          "font_size": {
+            "zh-CN": 30,
+            "ko-KR": 28,
+            "en-US": 30
+          },
+          "translation_id": "main-rewind"
+        },
+        {
+          "part": 399,
+          "box": [
+            688,
+            4194,
+            936,
+            4242
+          ],
+          "source": "Quick Save/Load",
+          "text": {
+            "zh-CN": "快速存档/读档",
+            "ko-KR": "빠른 저장/불러오기",
+            "en-US": "Quick Save/Load"
+          },
+          "font_size": {
+            "zh-CN": 30,
+            "ko-KR": 24,
+            "en-US": 30
+          },
+          "translation_id": "main-quick-save-load"
+        },
+        {
+          "part": 382,
+          "box": [
+            460,
+            4144,
+            676,
+            4192
+          ],
+          "source": "Extra Options",
+          "text": {
+            "zh-CN": "额外选项",
+            "ko-KR": "추가 옵션",
+            "en-US": "Extra Options"
+          },
+          "font_size": {
+            "zh-CN": 30,
+            "ko-KR": 28,
+            "en-US": 30
+          },
+          "translation_id": "main-extra-options"
+        },
+        {
+          "part": 426,
+          "box": [
+            542,
+            4294,
+            766,
+            4342
+          ],
+          "source": "Screen Settings",
+          "text": {
+            "zh-CN": "画面设置",
+            "ko-KR": "화면 설정",
+            "en-US": "Screen Settings"
+          },
+          "font_size": {
+            "zh-CN": 30,
+            "ko-KR": 28,
+            "en-US": 30
+          },
+          "translation_id": "main-screen-settings"
+        },
+        {
+          "part": 360,
+          "box": [
+            2152,
+            3744,
+            2360,
+            3792
+          ],
+          "source": "Button Config",
+          "text": {
+            "zh-CN": "按键设置",
+            "ko-KR": "버튼 설정",
+            "en-US": "Button Config"
+          },
+          "font_size": {
+            "zh-CN": 30,
+            "ko-KR": 28,
+            "en-US": 30
+          },
+          "translation_id": "main-button-config"
+        },
+        {
+          "part": 398,
+          "box": [
+            486,
+            4194,
+            686,
+            4242
+          ],
+          "source": "Playing Guide",
+          "text": {
+            "zh-CN": "操作指南",
+            "ko-KR": "플레이 가이드",
+            "en-US": "Playing Guide"
+          },
+          "font_size": {
+            "zh-CN": 30,
+            "ko-KR": 28,
+            "en-US": 30
+          },
+          "translation_id": "main-playing-guide"
+        },
+        {
+          "part": 375,
+          "box": [
+            2240,
+            3594,
+            2360,
+            3642
+          ],
+          "source": "Credits",
+          "text": {
+            "zh-CN": "制作人员",
+            "ko-KR": "제작진",
+            "en-US": "Credits"
+          },
+          "font_size": {
+            "zh-CN": 28,
+            "ko-KR": 28,
+            "en-US": 30
+          },
+          "translation_id": "main-credits"
+        },
+        {
+          "part": 386,
+          "box": [
+            1178,
+            4144,
+            1346,
+            4192
+          ],
+          "source": "Quit Game",
+          "text": {
+            "zh-CN": "退出游戏",
+            "ko-KR": "게임 종료",
+            "en-US": "Quit Game"
+          },
+          "font_size": {
+            "zh-CN": 30,
+            "ko-KR": 28,
+            "en-US": 30
+          },
+          "translation_id": "main-quit-game"
+        }
+      ],
+      "panel_parts": [
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110
+      ],
+      "panel_text": {
+        "zh-CN": {
+          "title": "选项",
+          "button": "View 键"
+        },
+        "ko-KR": {
+          "title": "옵션",
+          "button": "View 버튼"
+        },
+        "en-US": {
+          "title": "Options",
+          "button": "View button"
+        }
+      },
+      "translation_source": "translation/frontend_submenus.json",
+      "panel_translation_ids": {
+        "title": "options-panel-title",
+        "button": "view-button-label"
+      }
+    }
+  ]
+}

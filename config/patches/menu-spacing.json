@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "id": "menu-spacing",
+  "languages": {
+    "zh-CN": "zh",
+    "ko-KR": "ko"
+  },
+  "report_key": "menu_spacing",
+  "preview_name": "menu_spacing_preview.png",
+  "fields": [
+    {
+      "file": "1ST.BIN",
+      "offset": "0x12304",
+      "capacity_bytes": 7,
+      "mode": "nul",
+      "source": "装　備",
+      "before": {
+        "zh-CN": "装备",
+        "ko-KR": "장비"
+      },
+      "text": {
+        "zh-CN": "装　备",
+        "ko-KR": "장　비"
+      }
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x1230c",
+      "capacity_bytes": 7,
+      "mode": "nul",
+      "source": "道　具",
+      "before": {
+        "zh-CN": "道具",
+        "ko-KR": "도구"
+      },
+      "text": {
+        "zh-CN": "道　具",
+        "ko-KR": "도　구"
+      }
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x12314",
+      "capacity_bytes": 7,
+      "mode": "nul",
+      "source": "情　報",
+      "before": {
+        "zh-CN": "情报",
+        "ko-KR": "정보"
+      },
+      "text": {
+        "zh-CN": "情　报",
+        "ko-KR": "정　보"
+      }
+    }
+  ],
+  "width_checks": [
+    {
+      "file": "1ST.BIN",
+      "offset": "0x1231c",
+      "capacity_bytes": 7,
+      "glyph_cells": 3
+    },
+    {
+      "file": "1ST.BIN",
+      "offset": "0x12324",
+      "capacity_bytes": 7,
+      "glyph_cells": 3
+    }
+  ]
+}
