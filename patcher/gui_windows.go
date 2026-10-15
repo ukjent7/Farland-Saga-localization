@@ -1,14 +1,15 @@
 // Windows 图形界面：单个可执行文件，补丁编译期内嵌，双击即用。
 //
-// 发布形态是把本程序放进游戏根目录后双击运行，所以界面只做四件事：三个
-// 语言按钮各装一个内嵌补丁，一个还原按钮把游戏文件恢复原版。游戏目录用
-// 程序所在目录推断，不让用户挑路径；文件清单、浏览、拖放这些辅助交互都
-// 去掉了，留给命令行子命令。
+// 发布形态是把本程序放进游戏根目录后双击运行。界面分两屏，文字压到最少：
+// 第一屏选语言（简体中文、韩文、English 三个按钮），选中后进入该语言的
+// 页面，只有「安装」和「还原」两个按钮。游戏目录用程序所在目录推断，不让
+// 用户挑路径；文件清单、浏览、拖放、日志这些辅助交互都去掉了，留给命令行
+// 子命令。
 //
 // 界面线程只跑消息循环。安装、还原放在工作 goroutine，经缓冲 channel 把
 // 闭包投回界面线程，由 50ms 的 WM_TIMER 执行；进度回调每 4 KiB 一次、节流
 // 100ms。忙碌状态用递增令牌管理，被作废的操作也会归还自己的令牌，界面不会
-// 因为一次丢弃的检查而永远禁着——那正是早期版本一打开就卡死的原因。
+// 因为一次丢弃的检查而永远禁着。
 //
 // Win32 全部经 syscall 调用，无 cgo、无第三方依赖，可在 Linux 上交叉编译。
 // 结构体布局用 /tmp/winlayout.c（zig cc 编译）逐字段核对过，文件底部有编译期
@@ -20,8 +21,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
+	"runtime"
 	"sync"
+	"sync/atomic"
 	"syscall"
 	"time"
 	"unsafe"
@@ -57,6 +59,7 @@ var (
 	procMessageBox                    = user32.NewProc("MessageBoxW")
 	procSetTimer                      = user32.NewProc("SetTimer")
 	procKillTimer                     = user32.NewProc("KillTimer")
+	procPostMessage                   = user32.NewProc("PostMessageW")
 	procGetDpiForWindow               = user32.NewProc("GetDpiForWindow")
 	procSetProcessDpiAwarenessContext = user32.NewProc("SetProcessDpiAwarenessContext")
 	procCreateFont                    = gdi32.NewProc("CreateFontW")
@@ -77,10 +80,12 @@ const (
 
 	bsPushButton  = 0x00000000
 	bsMultiline   = 0x00002000
+	ssCenter      = 0x00000001
 	esMultiline   = 0x0004
 	esAutoVScroll = 0x0040
 	esReadOnly    = 0x0800
 
+	swHide = 0
 	swShow = 5
 
 	wmCreate        = 0x0001
@@ -93,24 +98,31 @@ const (
 	wmDpiChanged    = 0x02e0
 	wmGetMinMaxInfo = 0x0024
 
+	// wmAppEvent 是程序自定义的唤醒消息。工作线程回传结果时除了把闭包放进
+	// 队列，还要 PostMessage 一条这个消息，界面线程才会立刻来取。
+	wmAppEvent = 0x8001
+
 	bnClicked = 0
 
 	colorBtnFace = 15
 
-	// 控件 ID，同时是 WM_COMMAND 的低 16 位。前三个是语言按钮，顺序固定为
-	// 中、韩、英；第四个是还原。
-	idGameLabel   = 1001
-	idStatusLabel = 1002
-	idProgress    = 1003
-	idLog         = 1004
-	idActionBase  = 1010
+	// 两屏界面：第一屏选语言，第二屏安装与还原。
+	pageLanguage = 0
+	pageInstall  = 1
+
+	// 控件 ID，同时是 WM_COMMAND 的低 16 位。
+	idTitle    = 1001
+	idStatus   = 1002
+	idProgress = 1003
+	idHint     = 1004
+	idLangBase = 1010
+	idInstall  = 1020
+	idRestore  = 1021
+	idBack     = 1022
 
 	// 通用控件消息。
 	pbmSetRange32   = 0x0406
 	pbmSetPos       = 0x0402
-	emSetSel        = 0x00b1
-	emReplaceSel    = 0x00c2
-	emScrollCaret   = 0x00b7
 	wmGetText       = 0x000d
 	wmGetTextLength = 0x000e
 	wmSetText       = 0x000c
@@ -129,8 +141,6 @@ const (
 
 	// 进度事件合并间隔：差异块每 4 KiB 一次，直接推给 UI 会淹没消息循环。
 	progressInterval = 100 * time.Millisecond
-	// 日志超过这个长度就截断，避免长时间使用后 EDIT 控件变慢。
-	logLimit = 200000
 	// 忙碌状态的上限。安装、还原都有进度回调不断续期；只有真正没有响应的
 	// 操作才会被看门狗解除，让界面恢复可操作。
 	watchdogLimit = 3 * time.Minute
@@ -193,12 +203,20 @@ var (
 	_ = [1]struct{}{}[unsafe.Sizeof(winMsg{})-48]
 	_ = [1]struct{}{}[unsafe.Sizeof(winRect{})-16]
 	_ = [1]struct{}{}[unsafe.Sizeof(winPoint{})-8]
+	_ = [1]struct{}{}[unsafe.Sizeof(initCommonControlsEx{})-8]
 )
 
 // activeApp 是唯一的主窗口；NewCallback 不接受闭包，所以用包级变量转发。
 var activeApp *guiApp
 
 var guiWndProc = syscall.NewCallback(guiWindowProc)
+
+func guiWindowProc(hwnd, msg, wparam, lparam uintptr) uintptr {
+	if activeApp == nil {
+		return defWindowProc(hwnd, msg, wparam, lparam)
+	}
+	return activeApp.wndProc(hwnd, msg, wparam, lparam)
+}
 
 // trace 把启动关键步骤写进临时目录的日志文件，用于定位界面无响应时卡在
 // 哪一步。设了环境变量 FARLAND_PATCHER_TRACE 才写入，正常使用不留文件。
@@ -245,13 +263,6 @@ func traceThrottled(format string, args ...any) {
 	trace(format, args...)
 }
 
-func guiWindowProc(hwnd, msg, wparam, lparam uintptr) uintptr {
-	if activeApp == nil {
-		return defWindowProc(hwnd, msg, wparam, lparam)
-	}
-	return activeApp.wndProc(hwnd, msg, wparam, lparam)
-}
-
 // guiApp 持有窗口句柄、控件句柄与当前状态。除 progressCallback 内部的节流
 // 状态外，所有字段都只在界面线程读写；工作 goroutine 只通过 post 回传结果。
 type guiApp struct {
@@ -261,12 +272,20 @@ type guiApp struct {
 	scale  float64
 	dpi    uint32
 
-	gameLabel   uintptr
+	titleLabel  uintptr
 	statusLabel uintptr
 	progressBar uintptr
-	logEdit     uintptr
-	// actionButtons 前三个是语言按钮（中、韩、英），第四个是还原。
-	actionButtons [4]uintptr
+	hintLabel   uintptr
+	// languageButtons 是三个语言按钮，顺序固定为中、韩、英。
+	languageButtons [3]uintptr
+	installBtn      uintptr
+	restoreBtn      uintptr
+	backBtn         uintptr
+
+	// page 是当前所在屏：pageLanguage 选语言，pageInstall 安装与还原。
+	page int
+	// selected 是第二屏正在操作的语言在 payloads 中的下标。
+	selected int
 
 	game     string
 	payloads []*payload
@@ -292,12 +311,16 @@ type guiApp struct {
 	generation int
 
 	events        chan func()
-	logText       strings.Builder
 	progressTotal int64
+
+	// wakeWindow 存放主窗口句柄，专供工作线程发唤醒消息用。窗口只在界面
+	// 线程创建一次，之后不再改写；用原子读写是为了让 go vet 与竞态检测器
+	// 都认可这种跨线程读法。
+	wakeWindow atomic.Uintptr
 }
 
 func newGUIApp() *guiApp {
-	return &guiApp{scale: 1, dpi: 96, events: make(chan func(), 1024)}
+	return &guiApp{scale: 1, dpi: 96, selected: -1, events: make(chan func(), 1024)}
 }
 
 // guiAvailable 报告当前平台是否带图形界面。Windows 版用 Win32 实现，
@@ -306,6 +329,14 @@ func guiAvailable() bool { return true }
 
 // runGUI 创建主窗口并跑消息循环，窗口建不起来时返回错误让调用方回退到向导。
 func runGUI() error {
+	// Win32 的窗口、定时器、投递的消息全都挂在创建窗口的那个操作系统线程
+	// 的消息队列上。Go 的调度器会在系统调用之间把 goroutine 换到别的线程上，
+	// 一旦换过去，窗口就归原线程，而消息循环在新线程上跑：SetTimer 的
+	// WM_TIMER、PostMessage 的自定义消息全都进原线程的队列，新线程的
+	// GetMessage 永远等不到东西，界面停在初始状态、按钮全禁用，看起来就是
+	// 整个程序卡死。锁住线程才能保证建窗口和跑消息循环的是同一个线程。
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
 	trace("runGUI 开始")
 	if procRegisterClassEx.Find() != nil {
 		return errors.New("无法加载 user32.dll")
@@ -346,7 +377,7 @@ func (a *guiApp) init() error {
 	}
 	a.dpi = 96
 	a.scale = 1
-	width, height := a.s(540), a.s(470)
+	width, height := a.s(440), a.s(360)
 	window, _, lastError := procCreateWindowEx.Call(
 		wsExControlParent,
 		uintptr(unsafe.Pointer(utf16ptr(guiClassName))),
@@ -359,6 +390,7 @@ func (a *guiApp) init() error {
 		return fmt.Errorf("创建窗口失败（错误码 %d）", lastError)
 	}
 	a.window = window
+	a.wakeWindow.Store(window)
 	trace("窗口已创建 hwnd=%d", window)
 	procShowWindow.Call(window, swShow)
 	procUpdateWindow.Call(window)
@@ -379,6 +411,7 @@ func (a *guiApp) messageLoop() {
 		if result == 0 || result == ^uintptr(0) {
 			return
 		}
+		traceThrottled("消息循环迭代 msg=0x%x", message.Message)
 		procTranslateMessage.Call(uintptr(unsafe.Pointer(&message)))
 		procDispatchMessage.Call(uintptr(unsafe.Pointer(&message)))
 	}
@@ -422,14 +455,16 @@ func (a *guiApp) s(value int) int {
 }
 
 func (a *guiApp) createControls() {
-	a.gameLabel = a.create("Static", "", 0, wsChild|wsVisible, idGameLabel)
-	a.statusLabel = a.create("Static", "", 0, wsChild|wsVisible, idStatusLabel)
+	a.titleLabel = a.create("Static", "", 0, wsChild|wsVisible|ssCenter, idTitle)
+	a.statusLabel = a.create("Static", "", 0, wsChild|wsVisible|ssCenter, idStatus)
 	a.progressBar = a.create("msctls_progress32", "", 0, wsChild|wsVisible, idProgress)
-	a.logEdit = a.create("Edit", "", wsExClientEdge,
-		wsChild|wsVisible|wsVScroll|wsBorder|esMultiline|esAutoVScroll|esReadOnly, idLog)
-	for index := range a.actionButtons {
-		a.actionButtons[index] = a.create("Button", "", 0, wsChild|wsVisible|bsMultiline, idActionBase+uintptr(index))
+	a.hintLabel = a.create("Static", "", 0, wsChild|wsVisible|ssCenter, idHint)
+	for index := range a.languageButtons {
+		a.languageButtons[index] = a.create("Button", "", 0, wsChild|wsVisible|bsMultiline, idLangBase+uintptr(index))
 	}
+	a.installBtn = a.create("Button", "", 0, wsChild|wsVisible, idInstall)
+	a.restoreBtn = a.create("Button", "", 0, wsChild|wsVisible, idRestore)
+	a.backBtn = a.create("Button", "", 0, wsChild|wsVisible, idBack)
 }
 
 // create 建一个子控件，扩展样式与普通样式分开传，和 CreateWindowEx 的参数
@@ -445,37 +480,65 @@ func (a *guiApp) create(class, name string, exStyle, style uint32, id uintptr) u
 	return handle
 }
 
+// layout 按当前屏排布控件：第一屏只放语言按钮，第二屏只放安装、还原与返回。
 func (a *guiApp) layout() {
 	rect := winRect{}
 	procGetClientRect.Call(a.window, uintptr(unsafe.Pointer(&rect)))
 	width := int(rect.Right - rect.Left)
 	height := int(rect.Bottom - rect.Top)
-	if width < a.s(360) || height < a.s(320) {
-		width, height = a.s(500), a.s(400)
+	if width < a.s(360) || height < a.s(300) {
+		width, height = a.s(400), a.s(320)
 	}
-	pad := a.s(16)
+	pad := a.s(20)
 	inner := width - pad*2
-	buttonWidth := (inner - pad) / 2
-	buttonHeight := a.s(56)
-	gap := a.s(10)
+	gap := a.s(12)
 
-	y := pad
-	place(a.gameLabel, pad, y, inner, a.s(20))
-	y += a.s(20) + gap
+	setWindowText(a.titleLabel, a.titleText())
+	place(a.titleLabel, pad, pad, inner, a.s(44))
+
+	y := pad + a.s(44) + gap
+	if a.page == pageLanguage {
+		for _, handle := range []uintptr{a.statusLabel, a.progressBar, a.installBtn, a.restoreBtn, a.backBtn} {
+			showWindow(handle, false)
+		}
+		showWindow(a.hintLabel, a.game == "")
+		setWindowText(a.hintLabel, "未检测到游戏目录，请把本程序放到游戏根目录")
+		place(a.hintLabel, pad, y, inner, a.s(20))
+		if a.game == "" {
+			y += a.s(20) + gap
+		}
+		buttonHeight := a.s(52)
+		for index, handle := range a.languageButtons {
+			showWindow(handle, true)
+			place(handle, pad, y+index*(buttonHeight+gap), inner, buttonHeight)
+		}
+		return
+	}
+
+	for _, handle := range a.languageButtons {
+		showWindow(handle, false)
+	}
+	showWindow(a.hintLabel, false)
+	// 第二屏的控件在第一屏被隐藏过，切回来必须重新显示，否则按钮看不见也
+	// 点不到。进度条只在忙碌时出现，空闲时收起来，界面上只剩两个按钮。
+	for _, handle := range []uintptr{a.statusLabel, a.installBtn, a.restoreBtn, a.backBtn} {
+		showWindow(handle, true)
+	}
+	showWindow(a.progressBar, a.busy)
+
 	place(a.statusLabel, pad, y, inner, a.s(20))
 	y += a.s(20) + gap
 
-	for index := range a.actionButtons {
-		row := index / 2
-		column := index % 2
-		x := pad + column*(buttonWidth+pad)
-		place(a.actionButtons[index], x, y+row*(buttonHeight+gap), buttonWidth, buttonHeight)
-	}
-	y += 2*buttonHeight + 2*gap
+	buttonWidth := (inner - gap) / 2
+	buttonHeight := a.s(56)
+	place(a.installBtn, pad, y, buttonWidth, buttonHeight)
+	place(a.restoreBtn, pad+buttonWidth+gap, y, buttonWidth, buttonHeight)
+	y += buttonHeight + gap
 
 	place(a.progressBar, pad, y, inner, a.s(16))
 	y += a.s(16) + gap
-	place(a.logEdit, pad, y, inner, height-y-pad)
+
+	place(a.backBtn, pad, y, inner, a.s(28))
 }
 
 func place(handle uintptr, x, y, width, height int) {
@@ -483,6 +546,18 @@ func place(handle uintptr, x, y, width, height int) {
 		return
 	}
 	procMoveWindow.Call(handle, uintptr(x), uintptr(y), uintptr(width), uintptr(height), 1)
+}
+
+// showWindow 显示或隐藏一个控件，用于两屏之间的切换。
+func showWindow(handle uintptr, visible bool) {
+	if handle == 0 {
+		return
+	}
+	command := uintptr(swHide)
+	if visible {
+		command = swShow
+	}
+	procShowWindow.Call(handle, command)
 }
 
 func (a *guiApp) wndProc(hwnd, msg, wparam, lparam uintptr) uintptr {
@@ -506,6 +581,9 @@ func (a *guiApp) wndProc(hwnd, msg, wparam, lparam uintptr) uintptr {
 	case wmTimer:
 		a.drainEvents()
 		return 0
+	case wmAppEvent:
+		a.drainEvents()
+		return 0
 	case wmClose:
 		if a.busy {
 			messageBox(hwnd, "正在写入文件，请等待当前操作完成后再关闭窗口。", appTitle, mbOk|mbIconInformation)
@@ -522,6 +600,7 @@ func (a *guiApp) wndProc(hwnd, msg, wparam, lparam uintptr) uintptr {
 func (a *guiApp) onCreate(hwnd uintptr) {
 	trace("onCreate 开始")
 	a.window = hwnd
+	a.wakeWindow.Store(hwnd)
 	if procGetDpiForWindow.Find() == nil {
 		if dpi, _, _ := procGetDpiForWindow.Call(hwnd); dpi >= 96 && dpi <= 480 {
 			a.dpi = uint32(dpi)
@@ -531,14 +610,11 @@ func (a *guiApp) onCreate(hwnd uintptr) {
 	a.font = createUIFont(a.dpi)
 	a.createControls()
 	a.layout()
-
-	a.appendLog("欢迎使用 " + appTitle + "。")
-	a.appendLog("本程序已内置简体中文、韩文、英文三个补丁，点对应按钮即可安装。")
-	a.appendLog("安装前请先退出游戏。原版会备份到游戏目录，随时可以还原。")
-
+	a.applyFont()
+	a.applyState()
+	trace("onCreate 结束，排队 bootstrap")
 	// 解析内嵌补丁、定位游戏目录都要做文件与内存操作，放到消息循环跑起来
 	// 之后再做，免得窗口迟迟显示不出来。
-	trace("onCreate 结束，排队 bootstrap")
 	a.post(a.bootstrap)
 }
 
@@ -552,14 +628,10 @@ func (a *guiApp) bootstrap() {
 		payloads, problems := loadEmbedded()
 		trace("loadEmbedded 返回 %d 个补丁 %d 个问题", len(payloads), len(problems))
 		a.post(func() {
-			trace("bootstrap 闭包执行")
 			for _, problem := range problems {
-				a.appendLog("警告：" + problem)
+				a.showError(errors.New(problem))
 			}
 			a.payloads = payloads
-			if len(a.payloads) == 0 {
-				a.appendLog("没有可用的内嵌补丁，程序构建时可能漏打了 payload 目录。")
-			}
 			a.locateGame()
 		})
 	}()
@@ -571,11 +643,10 @@ func (a *guiApp) locateGame() {
 	game, err := detectGame(a.firstManifest())
 	if err != nil {
 		a.game = ""
-		a.appendLog("未检测到游戏文件：" + err.Error())
-		a.appendLog("请把本程序放到游戏根目录（含 FarlandSaga.exe 的文件夹）后再运行。")
+		trace("未检测到游戏目录：%v", err)
 	} else {
 		a.game = game
-		a.appendLog("游戏目录：" + game)
+		trace("游戏目录 %s", game)
 	}
 	a.refresh()
 	trace("locateGame 结束，applyState")
@@ -592,7 +663,7 @@ func (a *guiApp) firstManifest() *manifest {
 }
 
 // detectGame 以程序所在目录为游戏目录。发布形态是单个可执行文件放在游戏
-// 根目录里双击运行，用户不需要挑路径；放错了地方就明确告知。
+// 根目录里双击运行，用户不需要挑路径；放错了地方就在第一屏给出提示。
 func detectGame(info *manifest) (string, error) {
 	executable, err := os.Executable()
 	if err != nil {
@@ -624,8 +695,9 @@ func (a *guiApp) applyFont() {
 	if a.font == 0 {
 		return
 	}
-	handles := []uintptr{a.gameLabel, a.statusLabel, a.progressBar, a.logEdit}
-	handles = append(handles, a.actionButtons[:]...)
+	handles := []uintptr{a.titleLabel, a.statusLabel, a.progressBar, a.hintLabel,
+		a.installBtn, a.restoreBtn, a.backBtn}
+	handles = append(handles, a.languageButtons[:]...)
 	for _, handle := range handles {
 		if handle != 0 {
 			sendMessage(handle, wmSetFont, a.font, 1)
@@ -635,8 +707,8 @@ func (a *guiApp) applyFont() {
 
 func (a *guiApp) onMinMaxInfo(lparam uintptr) {
 	info := (*minMaxInfo)(pointerFromUintptr(lparam))
-	info.MinTrackSize.X = int32(a.s(400))
-	info.MinTrackSize.Y = int32(a.s(360))
+	info.MinTrackSize.X = int32(a.s(380))
+	info.MinTrackSize.Y = int32(a.s(320))
 }
 
 func (a *guiApp) onCommand(wparam uintptr) {
@@ -645,23 +717,48 @@ func (a *guiApp) onCommand(wparam uintptr) {
 	if code != bnClicked {
 		return
 	}
-	switch {
-	case id >= idActionBase && id < idActionBase+4:
-		index := int(id - idActionBase)
-		if index < 3 {
-			a.onLanguage(index)
-			return
-		}
+	switch id {
+	case idInstall:
+		a.onInstall()
+	case idRestore:
 		a.onRestore()
+	case idBack:
+		a.onBack()
+	default:
+		if id >= idLangBase && id < idLangBase+3 {
+			a.onLanguageSelect(int(id - idLangBase))
+		}
 	}
 }
 
-// onLanguage 安装指定语言的内嵌补丁。
-func (a *guiApp) onLanguage(index int) {
+// onLanguageSelect 选中一个语言，进入该语言的安装与还原页面。
+func (a *guiApp) onLanguageSelect(index int) {
 	if a.busy || index < 0 || index >= len(a.payloads) {
 		return
 	}
-	loaded := a.payloads[index]
+	a.selected = index
+	a.page = pageInstall
+	a.layout()
+	a.applyState()
+}
+
+// onBack 返回选语言页面。
+func (a *guiApp) onBack() {
+	if a.busy {
+		return
+	}
+	a.page = pageLanguage
+	a.selected = -1
+	a.layout()
+	a.applyState()
+}
+
+// onInstall 安装当前选中语言的内嵌补丁。
+func (a *guiApp) onInstall() {
+	if a.busy || a.selected < 0 || a.selected >= len(a.payloads) {
+		return
+	}
+	loaded := a.payloads[a.selected]
 	label := languageLabel(loaded.info.Language)
 	if a.installedLanguage() == loaded.info.Language {
 		messageBox(a.window, label+" 补丁已经安装，无需重复操作。", appTitle, mbOk|mbIconInformation)
@@ -671,14 +768,10 @@ func (a *guiApp) onLanguage(index int) {
 		a.showError(errors.New("未检测到游戏目录，请把本程序放到游戏根目录后再运行。"))
 		return
 	}
-	question := fmt.Sprintf("现在安装 %s 补丁吗？\n\n将写入 %d 个文件，原版会备份到游戏目录下的 %s* 文件夹。安装前请先退出游戏。",
-		label, len(loaded.info.Files), backupPrefix)
-	if !confirmDialog(a.window, question, "安装 "+label) {
-		a.appendLog("已取消安装。")
+	if !confirmDialog(a.window, "现在安装 "+label+" 补丁吗？\n\n安装前请先退出游戏。", "安装 "+label) {
 		return
 	}
 	token := a.beginBusy("正在安装 " + label + " 补丁…")
-	a.appendLog(fmt.Sprintf("开始安装 %s（%s）", label, loaded.info.Version))
 	go a.runInstall(a.game, loaded, token, a.generation)
 }
 
@@ -700,13 +793,10 @@ func (a *guiApp) onRestore() {
 		a.showError(errors.New("尚未安装补丁，无需还原。"))
 		return
 	}
-	if !confirmDialog(a.window, fmt.Sprintf("用原版备份覆盖当前已打补丁的文件吗？\n\n将恢复 %s 安装前的原版文件。",
-		languageLabel(record.Language)), "还原原版") {
-		a.appendLog("已取消还原。")
+	if !confirmDialog(a.window, "用原版备份覆盖当前已打补丁的文件吗？", "还原原版") {
 		return
 	}
 	token := a.beginBusy("正在还原原版…")
-	a.appendLog("开始还原原版")
 	go a.runRestore(a.game, token, a.generation)
 }
 
@@ -720,7 +810,6 @@ func (a *guiApp) runInstall(game string, loaded *payload, token, generation int)
 				return
 			}
 			a.setProgress(0, 0)
-			a.appendLog("安装失败：" + err.Error())
 			a.showError(err)
 			a.refresh()
 		})
@@ -736,14 +825,11 @@ func (a *guiApp) runInstall(game string, loaded *payload, token, generation int)
 		a.record = record
 		a.applyState()
 		if result.AlreadyInstalled {
-			a.appendLog("补丁已经安装，无需重复操作。")
 			messageBox(a.window, "补丁已经安装。", appTitle, mbOk|mbIconInformation)
 			return
 		}
-		a.appendLog(fmt.Sprintf("安装完成：%s（%s），共 %d 个文件。原版备份：%s",
-			result.Version, result.Language, len(result.Files), result.BackupDirectory))
-		messageBox(a.window, fmt.Sprintf("已安装 %s 补丁。\n\n原版备份：%s\n需要还原时点「还原原版」。请勿删除备份目录。",
-			languageLabel(result.Language), result.BackupDirectory), appTitle, mbOk|mbIconInformation)
+		messageBox(a.window, fmt.Sprintf("已安装 %s 补丁。\n\n需要还原时点「还原」。",
+			languageLabel(result.Language)), appTitle, mbOk|mbIconInformation)
 	})
 }
 
@@ -756,7 +842,6 @@ func (a *guiApp) runRestore(game string, token, generation int) {
 			if generation != a.generation {
 				return
 			}
-			a.appendLog("还原失败：" + err.Error())
 			a.showError(err)
 			a.refresh()
 		})
@@ -770,9 +855,8 @@ func (a *guiApp) runRestore(game string, token, generation int) {
 		}
 		a.record = record
 		a.applyState()
-		a.appendLog(fmt.Sprintf("已还原原版，共 %d 个文件。回滚副本：%s", len(result.Files), result.Rollback))
-		messageBox(a.window, fmt.Sprintf("已还原原版，共 %d 个文件。\n\n回滚副本：%s\n确认游戏正常后可以删除该目录。",
-			len(result.Files), result.Rollback), appTitle, mbOk|mbIconInformation)
+		messageBox(a.window, fmt.Sprintf("已还原原版，共 %d 个文件。", len(result.Files)),
+			appTitle, mbOk|mbIconInformation)
 	})
 }
 
@@ -786,7 +870,6 @@ func (a *guiApp) refresh() {
 	}
 	record, err := loadRecord(a.game)
 	if err != nil {
-		a.appendLog("读取安装记录失败：" + err.Error())
 		a.record = nil
 		a.applyState()
 		return
@@ -803,6 +886,25 @@ func (a *guiApp) installedLanguage() string {
 	return ""
 }
 
+// titleText 是两屏各自的标题。
+func (a *guiApp) titleText() string {
+	if a.page == pageInstall && a.selected >= 0 && a.selected < len(a.payloads) {
+		return languageLabel(a.payloads[a.selected].info.Language)
+	}
+	return appTitle
+}
+
+// statusText 是第二屏的状态行：忙碌时显示进度，否则显示安装情况。
+func (a *guiApp) statusText() string {
+	if a.busy {
+		return a.busyLabel
+	}
+	if language := a.installedLanguage(); language != "" {
+		return "已安装 " + languageLabel(language)
+	}
+	return "尚未安装"
+}
+
 // languageButtonLabel 生成语言按钮上的文字，已安装的语言带标注。
 func (a *guiApp) languageButtonLabel(index int) string {
 	if index >= len(a.payloads) {
@@ -816,34 +918,30 @@ func (a *guiApp) languageButtonLabel(index int) string {
 	return label
 }
 
-// applyState 依据当前状态刷新状态行与按钮可用性、文字。
+// applyState 依据当前屏与状态刷新标题、状态行、按钮文字与可用性。
 func (a *guiApp) applyState() {
+	setWindowText(a.titleLabel, a.titleText())
 	setWindowText(a.statusLabel, a.statusText())
-	for index := range a.actionButtons {
-		if index < 3 {
-			setWindowText(a.actionButtons[index], a.languageButtonLabel(index))
-			enableWindow(a.actionButtons[index], !a.busy && index < len(a.payloads) && a.game != "")
-			continue
-		}
-		setWindowText(a.actionButtons[index], "还原原版")
-		enableWindow(a.actionButtons[index], !a.busy && a.game != "" && a.installedLanguage() != "")
+	setWindowText(a.installBtn, "安装")
+	setWindowText(a.restoreBtn, "还原")
+	setWindowText(a.backBtn, "返回")
+	for index, handle := range a.languageButtons {
+		setWindowText(handle, a.languageButtonLabel(index))
+		enableWindow(handle, !a.busy && index < len(a.payloads) && a.game != "")
 	}
+	installed := a.installedLanguage() != ""
+	enableWindow(a.installBtn, !a.busy && a.selected >= 0 && a.selected < len(a.payloads) && a.game != "")
+	enableWindow(a.restoreBtn, !a.busy && installed)
+	enableWindow(a.backBtn, !a.busy)
+	// 进度条只在第二屏忙碌时出现，空闲时收起来，界面上只剩两个按钮。
+	showWindow(a.progressBar, a.busy && a.page == pageInstall)
 	if !a.busy {
 		a.setProgress(0, 0)
 	}
-}
-
-func (a *guiApp) statusText() string {
-	if a.busy {
-		return a.busyLabel
-	}
-	if a.game == "" {
-		return "未检测到游戏目录：请把本程序放到游戏根目录（含 FarlandSaga.exe 的文件夹）"
-	}
-	if language := a.installedLanguage(); language != "" {
-		return fmt.Sprintf("已安装 %s 补丁（%s）", languageLabel(language), a.record.Version)
-	}
-	return "尚未安装补丁。点一个语言按钮即可安装，随时可以还原原版。"
+	// 控件的显隐、位置全在 layout 里按当前状态推导，所以状态一变就要重排。
+	// 少了这一步，启动时按"还没找到游戏"排下的提示文字会一直挂在第一屏，
+	// 第二屏的按钮也会停在隐藏状态。
+	a.layout()
 }
 
 // progressCallback 把回放进度节流后送给界面线程。差异块每 4 KiB 一次，
@@ -878,8 +976,7 @@ func (a *guiApp) showProgress(path string, position, total int64) {
 	if total > 0 {
 		percent = int(position * 100 / total)
 	}
-	setWindowText(a.statusLabel, fmt.Sprintf("正在写入 %s %d%%（%s / %s）",
-		path, percent, formatSize(position), formatSize(total)))
+	setWindowText(a.statusLabel, fmt.Sprintf("正在写入 %d%%", percent))
 }
 
 func (a *guiApp) setProgress(position, total int64) {
@@ -898,9 +995,24 @@ func (a *guiApp) setProgress(position, total int64) {
 	sendMessage(a.progressBar, pbmSetPos, uintptr(position), 0)
 }
 
-// post 把闭包送进界面线程执行；队列足够大，写入不会丢事件。
+// post 把闭包送进界面线程执行，并立刻唤醒界面线程来取。
+//
+// 光把闭包塞进队列不够：界面线程停在 GetMessage 里，得有条消息它才会醒。
+// 早先只靠 SetTimer 的 WM_TIMER 当唤醒源，而 WM_TIMER 是系统合成的低优先级
+// 消息，队列一忙就可能迟迟不来，甚至一次都不来，排在队列里的闭包就永远执行
+// 不到——界面停在初始状态，按钮全是禁用的，看起来就是整个程序卡死。
+// PostMessage 放进去的是一条真实排队的消息，GetMessage 一定会取到。
 func (a *guiApp) post(function func()) {
 	a.events <- function
+	a.wake()
+}
+
+// wake 给界面线程发一条唤醒消息。定时器仍然留着，只是退成看门狗的节拍器，
+// 不再承担把事件送达到界面这件事。
+func (a *guiApp) wake() {
+	if window := a.wakeWindow.Load(); window != 0 {
+		procPostMessage.Call(window, wmAppEvent, 0, 0)
+	}
 }
 
 // drainEvents 执行定时器里排队的界面事件。
@@ -927,8 +1039,7 @@ func (a *guiApp) checkWatchdog() {
 	if time.Since(a.busySince) < watchdogLimit {
 		return
 	}
-	a.appendLog(fmt.Sprintf("警告：%s 超过 %s 没有返回，界面已恢复，请重新操作确认文件状态。",
-		a.busyLabel, watchdogLimit))
+	a.showError(errors.New("操作超时，界面已恢复，请重新操作确认文件状态。"))
 	a.endBusy(a.busyToken)
 }
 
@@ -938,14 +1049,14 @@ func (a *guiApp) runSafely(function func()) {
 	defer func() {
 		if recovered := recover(); recovered != nil {
 			a.endBusy(a.busyToken)
-			a.appendLog(fmt.Sprintf("内部错误：%v", recovered))
+			a.showError(fmt.Errorf("内部错误：%v", recovered))
 			a.applyState()
 		}
 	}()
 	function()
 }
 
-// guard 只能用于 defer：把工作线程里的 panic 转成界面上的一条错误，
+// guard 只能用于 defer：把工作线程里的 panic 转成界面上的一个错误框，
 // 避免进程直接消失而看不到任何提示。
 func (a *guiApp) guard() {
 	if recovered := recover(); recovered != nil {
@@ -953,7 +1064,6 @@ func (a *guiApp) guard() {
 		a.post(func() {
 			a.endBusy(a.busyToken)
 			a.setProgress(0, 0)
-			a.appendLog(err.Error())
 			a.showError(err)
 		})
 	}
@@ -984,26 +1094,7 @@ func (a *guiApp) endBusy(token int) {
 	a.applyState()
 }
 
-func (a *guiApp) appendLog(text string) {
-	if a.logEdit == 0 {
-		return
-	}
-	if !strings.HasSuffix(text, "\n") {
-		text += "\n"
-	}
-	if a.logText.Len() > logLimit {
-		a.logText.Reset()
-		a.logText.WriteString("（日志过长，此处之前的内容已省略）\r\n")
-	}
-	a.logText.WriteString(text)
-	length := sendMessage(a.logEdit, wmGetTextLength, 0, 0)
-	sendMessage(a.logEdit, emSetSel, length, length)
-	sendMessage(a.logEdit, emReplaceSel, 0, uintptr(unsafe.Pointer(utf16ptr(text))))
-	sendMessage(a.logEdit, emScrollCaret, 0, 0)
-}
-
 func (a *guiApp) showError(err error) {
-	a.appendLog("错误：" + err.Error())
 	messageBox(a.window, err.Error(), appTitle, mbOk|mbIconError)
 }
 
