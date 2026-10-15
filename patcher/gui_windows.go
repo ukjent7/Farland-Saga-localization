@@ -200,6 +200,51 @@ var activeApp *guiApp
 
 var guiWndProc = syscall.NewCallback(guiWindowProc)
 
+// trace 把启动关键步骤写进临时目录的日志文件，用于定位界面无响应时卡在
+// 哪一步。设了环境变量 FARLAND_PATCHER_TRACE 才写入，正常使用不留文件。
+var (
+	traceOnce  sync.Once
+	traceMutex sync.Mutex
+	traceFile  *os.File
+)
+
+func trace(format string, args ...any) {
+	if os.Getenv("FARLAND_PATCHER_TRACE") == "" {
+		return
+	}
+	traceMutex.Lock()
+	defer traceMutex.Unlock()
+	traceOnce.Do(func() {
+		path := filepath.Join(os.TempDir(), "farland-patcher-trace.log")
+		if file, err := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o644); err == nil {
+			traceFile = file
+		}
+	})
+	if traceFile == nil {
+		return
+	}
+	fmt.Fprintf(traceFile, "%s %s\n", time.Now().Format("15:04:05.000"), fmt.Sprintf(format, args...))
+}
+
+// traceThrottled 是限流版的 trace，用于消息循环这类高频路径：每 500 毫秒
+// 最多记一条，既能看出消息流是否还在走，又不会把日志写爆。
+var traceThrottle struct {
+	sync.Mutex
+	last time.Time
+}
+
+func traceThrottled(format string, args ...any) {
+	traceThrottle.Lock()
+	now := time.Now()
+	if !traceThrottle.last.IsZero() && now.Sub(traceThrottle.last) < 500*time.Millisecond {
+		traceThrottle.Unlock()
+		return
+	}
+	traceThrottle.last = now
+	traceThrottle.Unlock()
+	trace(format, args...)
+}
+
 func guiWindowProc(hwnd, msg, wparam, lparam uintptr) uintptr {
 	if activeApp == nil {
 		return defWindowProc(hwnd, msg, wparam, lparam)
@@ -261,6 +306,7 @@ func guiAvailable() bool { return true }
 
 // runGUI 创建主窗口并跑消息循环，窗口建不起来时返回错误让调用方回退到向导。
 func runGUI() error {
+	trace("runGUI 开始")
 	if procRegisterClassEx.Find() != nil {
 		return errors.New("无法加载 user32.dll")
 	}
@@ -275,6 +321,7 @@ func runGUI() error {
 }
 
 func (a *guiApp) init() error {
+	trace("init 开始")
 	instance, _, _ := procGetModuleHandle.Call(0)
 	a.module = instance
 	// 声明每显示器 DPI 感知；老系统上会失败，此时按 96 DPI 布局，由系统缩放。
@@ -312,12 +359,20 @@ func (a *guiApp) init() error {
 		return fmt.Errorf("创建窗口失败（错误码 %d）", lastError)
 	}
 	a.window = window
+	trace("窗口已创建 hwnd=%d", window)
 	procShowWindow.Call(window, swShow)
 	procUpdateWindow.Call(window)
+	// 定时器必须等 CreateWindowEx 返回后再设。在 WM_CREATE 处理期间（也就是
+	// CreateWindowEx 内部）设置时，Windows 只会投递一次 WM_TIMER 就再也不响，
+	// 排队的事件因此永远执行不到，界面看起来就是卡死。
+	timer, _, _ := procSetTimer.Call(window, 1, 50, 0)
+	trace("SetTimer 返回 %d", timer)
+	trace("init 结束")
 	return nil
 }
 
 func (a *guiApp) messageLoop() {
+	trace("消息循环开始")
 	var message winMsg
 	for {
 		result, _, _ := procGetMessage.Call(uintptr(unsafe.Pointer(&message)), 0, 0, 0)
@@ -431,6 +486,7 @@ func place(handle uintptr, x, y, width, height int) {
 }
 
 func (a *guiApp) wndProc(hwnd, msg, wparam, lparam uintptr) uintptr {
+	traceThrottled("wndProc msg=0x%x", msg)
 	switch uint32(msg) {
 	case wmCreate:
 		a.onCreate(hwnd)
@@ -464,6 +520,7 @@ func (a *guiApp) wndProc(hwnd, msg, wparam, lparam uintptr) uintptr {
 }
 
 func (a *guiApp) onCreate(hwnd uintptr) {
+	trace("onCreate 开始")
 	a.window = hwnd
 	if procGetDpiForWindow.Find() == nil {
 		if dpi, _, _ := procGetDpiForWindow.Call(hwnd); dpi >= 96 && dpi <= 480 {
@@ -474,7 +531,6 @@ func (a *guiApp) onCreate(hwnd uintptr) {
 	a.font = createUIFont(a.dpi)
 	a.createControls()
 	a.layout()
-	procSetTimer.Call(hwnd, 1, 50, 0)
 
 	a.appendLog("欢迎使用 " + appTitle + "。")
 	a.appendLog("本程序已内置简体中文、韩文、英文三个补丁，点对应按钮即可安装。")
@@ -482,19 +538,36 @@ func (a *guiApp) onCreate(hwnd uintptr) {
 
 	// 解析内嵌补丁、定位游戏目录都要做文件与内存操作，放到消息循环跑起来
 	// 之后再做，免得窗口迟迟显示不出来。
+	trace("onCreate 结束，排队 bootstrap")
 	a.post(a.bootstrap)
 }
 
 // bootstrap 加载内嵌补丁、定位游戏目录、读安装记录，完成后刷新界面。
+// 读包涉及七十多兆的解压与清单解析，放在工作线程做；界面线程被占住超过
+// 几秒，Windows 就会把窗口标成"无响应"，用户看到的就是卡死。
 func (a *guiApp) bootstrap() {
-	payloads, problems := loadEmbedded()
-	for _, problem := range problems {
-		a.appendLog("警告：" + problem)
-	}
-	a.payloads = payloads
-	if len(a.payloads) == 0 {
-		a.appendLog("没有可用的内嵌补丁，程序构建时可能漏打了 payload 目录。")
-	}
+	trace("bootstrap 开始")
+	go func() {
+		defer a.guard()
+		payloads, problems := loadEmbedded()
+		trace("loadEmbedded 返回 %d 个补丁 %d 个问题", len(payloads), len(problems))
+		a.post(func() {
+			trace("bootstrap 闭包执行")
+			for _, problem := range problems {
+				a.appendLog("警告：" + problem)
+			}
+			a.payloads = payloads
+			if len(a.payloads) == 0 {
+				a.appendLog("没有可用的内嵌补丁，程序构建时可能漏打了 payload 目录。")
+			}
+			a.locateGame()
+		})
+	}()
+}
+
+// locateGame 定位游戏目录并读安装记录，最后刷新界面。
+func (a *guiApp) locateGame() {
+	trace("locateGame 开始")
 	game, err := detectGame(a.firstManifest())
 	if err != nil {
 		a.game = ""
@@ -505,7 +578,9 @@ func (a *guiApp) bootstrap() {
 		a.appendLog("游戏目录：" + game)
 	}
 	a.refresh()
+	trace("locateGame 结束，applyState")
 	a.applyState()
+	trace("applyState 结束")
 }
 
 // firstManifest 返回第一个内嵌补丁的清单，用于校验游戏目录是否齐全。
@@ -834,6 +909,7 @@ func (a *guiApp) drainEvents() {
 	for {
 		select {
 		case function := <-a.events:
+			trace("执行一个排队事件")
 			a.runSafely(function)
 		default:
 			return
