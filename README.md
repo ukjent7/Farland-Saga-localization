@@ -75,25 +75,27 @@ python tools/localize.py build full --base zh-CN-seed01 --output zh-CN-full01 --
 
 ## 分发发布
 
-终端用户拿到的是一个独立补丁器，不需要 Python 或本仓库。发布链分两段：CI 只编译公开仓库里的补丁器源码，含游戏数据的补丁载荷由维护者在私有工作区生成，两者挂到同一个 GitHub Release。
+终端用户拿到的是一个独立补丁器，不需要 Python 或本仓库。发布形态是**单个可执行文件**：三个语言的补丁在构建时经 `go:embed` 编进程序，用户拿到的 exe 自带全部补丁。
 
 ```bash
-# 1. CI 已把 FarlandSagaPatcher-windows-amd64.exe 上传为 Release 资产；
-#    也可以在本地用 Go 构建（见 patcher/README.md）。
+# 1. 在私有工作区把三个候选各自打包成差异载荷（只需一次）：
+python tools/localize.py package-release --stage zh-CN-unifont08
+python tools/localize.py package-release --stage ko-KR-unifont-full07
+python tools/localize.py package-release --stage en-US-unifont-full07
 
-# 2. 在私有工作区把候选打包成差异载荷，并整合成终端用户压缩包：
-python tools/localize.py package-release --stage zh-CN-unifont08 \
-  --patcher /path/to/FarlandSagaPatcher-windows-amd64.exe
-# 产物在 work/release/：farland-patch-<版本>.zip 与
-# FarlandSagaPatcher-<版本>-win64.zip（补丁器 + 载荷 + 使用说明）
+# 2. 内嵌全部补丁并交叉编译出单文件补丁器：
+python tools/localize.py build-patcher
+# 产物在 work/release/FarlandSagaPatcher-windows-amd64.exe（约 75 MB）
 
 # 3. 挂到 Release：
-gh release upload v1.0.0 work/release/FarlandSagaPatcher-*.zip
+gh release upload v1.0.0 work/release/FarlandSagaPatcher-windows-amd64.exe
 ```
 
-载荷只包含相对原版的 4 KiB 差异块（实测约 23 MiB，而补丁后文件约 375 MiB），按 SHA-256 寻址，与冷存储共享对象。补丁器核对游戏文件身份后备份、回放、原子替换，失败自动回滚，随时可以恢复原版。命令、载荷格式与安全边界见 [patcher/README.md](patcher/README.md)。
+`build-patcher` 会把 `work/release/farland-patch-<候选>.zip` 复制进 `patcher/payload/` 再编译，缺失的候选自动先打包；用 `--stage` 可指定内嵌哪些候选。CI 只编译公开仓库里的补丁器源码，不含补丁数据；带补丁的单文件版本由维护者在私有工作区生成后上传。
 
-Windows 版补丁器带图形界面：双击即开窗口，选游戏目录和语言/版本后点「安装补丁」，恢复与切换语言各一个按钮，写入过程有进度条和日志，补丁包或游戏目录可以直接拖到窗口上。界面直接调用 Win32 API，不引入第三方模块，也不需要 cgo。其他平台保留命令行与交互向导。
+载荷只包含相对原版的 4 KiB 差异块（中文实测约 23 MiB，而补丁后文件约 375 MiB），按 SHA-256 寻址，与冷存储共享对象。补丁器核对游戏文件身份后备份、回放、原子替换，失败自动回滚，随时可以恢复原版。命令、载荷格式与安全边界见 [patcher/README.md](patcher/README.md)。
+
+Windows 版补丁器带图形界面：把程序放进游戏根目录双击运行，窗口里只有简体中文、韩文、English、还原原版四个按钮，点语言按钮安装，点还原恢复原版，写入过程有进度条和日志。游戏目录由程序所在目录推断，放错地方会明确提示缺少哪些文件。界面直接调用 Win32 API，不引入第三方模块，也不需要 cgo。其他平台保留命令行与交互向导。
 
 工作流定义在 `.github/workflows/release.yml`：拉取请求与推送 tag 时执行 `go vet`、单元测试和两个平台的构建；打 tag 或手动确认时创建 Release 并上传可执行文件与 `SHA256SUMS`。
 
@@ -102,7 +104,7 @@ Windows 版补丁器带图形界面：双击即开窗口，选游戏目录和语
 | 目录 | 职责 |
 | --- | --- |
 | `tools/` | 公共处理器与 `localize.py` 统一命令入口 |
-| `patcher/` | 分发给终端用户的独立补丁器（Go，无第三方依赖；Windows 版带 Win32 图形界面） |
+| `patcher/` | 分发给终端用户的独立补丁器（Go，无第三方依赖；Windows 版带 Win32 图形界面，补丁经 `go:embed` 内嵌成单文件） |
 | `tests/` | 入口与工作流回归检查 |
 | `translation/` | 三语译稿 JSON 与译稿说明 |
 | `config/patches/` | 声明式补丁配方 |

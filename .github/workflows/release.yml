@@ -79,22 +79,25 @@ jobs:
             echo
             echo '| 文件 | 说明 |'
             echo '| --- | --- |'
-            echo '| `FarlandSagaPatcher-windows-amd64.exe` | Windows 补丁器，带图形界面，配合 Steam 版游戏使用 |'
+            echo '| `FarlandSagaPatcher-windows-amd64.exe` | Windows 补丁器，带图形界面；此版本不含补丁数据 |'
             echo '| `farland-saga-patcher-linux-amd64` | Linux 补丁器，命令行与交互向导，供维护者在 WSL 中自测 |'
             echo '| `SHA256SUMS` | 上述两个文件的 SHA-256 校验和 |'
             echo
             echo "### 使用方法"
             echo
-            echo 'Windows 版双击 `FarlandSagaPatcher-windows-amd64.exe` 即打开图形界面：'
-            echo '选择游戏目录与语言/版本，点「安装补丁」；想恢复原版点「恢复原版」，'
-            echo '想换语言就换一个版本再点「安装补丁」。补丁包或游戏目录也可以直接拖到窗口上。'
+            echo '面向玩家的单文件版本由维护者在私有工作区用'
+            echo '`localize.py build-patcher` 生成后上传到本 Release：补丁经 `go:embed`'
+            echo '内嵌，一个 exe 自带简体中文、韩文、英文三个补丁。把它放进游戏根目录'
+            echo '（与 `FarlandSaga.exe` 同级）双击运行，窗口里只有四个按钮：简体中文、'
+            echo '韩文、English、还原原版。点语言按钮安装，点「还原原版」恢复，换语言直接'
+            echo '点另一个按钮。'
             echo
-            echo '补丁器需要与补丁载荷 `farland-patch-*.zip` 放在同一目录。载荷由私有工作区用'
-            echo '`localize.py package-release` 生成后上传到本 Release；下载任一'
-            echo '`FarlandSagaPatcher-*.zip` 整合包（含补丁器、载荷与使用说明）即可直接运行。'
+            echo '本 Release 里的 `FarlandSagaPatcher-windows-amd64.exe` 由 CI 直接编译，'
+            echo '不带补丁，供检查与二次打包使用；它的语言按钮会显示「（未提供）」，'
+            echo '命令行子命令仍可用 `--payload` 指定外部补丁包。'
             echo
             echo '```bash'
-            echo 'FarlandSagaPatcher.exe                  # 图形界面（Windows 版默认）'
+            echo 'FarlandSagaPatcher.exe                  # 图形界面：中/韩/英/还原四个按钮'
             echo 'FarlandSagaPatcher.exe wizard           # 控制台向导：安装或恢复'
             echo 'FarlandSagaPatcher.exe install --yes    # 非交互安装'
             echo 'FarlandSagaPatcher.exe restore --yes    # 恢复原版'

@@ -1,11 +1,13 @@
 # 补丁器（patcher）
 
-分发给终端用户的独立可执行程序：读取 `tools/package_release.py` 生成的补丁载荷，核对游戏文件身份后备份、回放差异、原子替换，并可随时恢复原版。不依赖 Python，也不接触私有工作区，游戏数据只来自随程序分发的载荷。
+分发给终端用户的独立可执行程序：核对游戏文件身份后备份、回放差异、原子替换，并可随时恢复原版。不依赖 Python，也不接触私有工作区。
 
 Windows 版带图形界面，双击即用；所有平台都保留命令行与交互向导。
 
+发布形态是**单个可执行文件**：简体中文、韩文、英文三个补丁在构建时经 `go:embed` 编进程序，用户拿到的 exe 自带全部补丁，不需要再分发压缩包，也不需要挑目录。
+
 ```bash
-FarlandSagaPatcher.exe                  # 图形界面（Windows 版默认）
+FarlandSagaPatcher.exe                  # 图形界面：中/韩/英/还原四个按钮
 FarlandSagaPatcher.exe wizard           # 控制台向导：安装或恢复
 FarlandSagaPatcher.exe install --yes    # 非交互安装
 FarlandSagaPatcher.exe restore --yes    # 恢复原版
@@ -25,30 +27,40 @@ go test ./...
 # 本地构建（当前平台）
 go build -o farland-saga-patcher .
 
-# 交叉编译发布目标
+# 交叉编译发布目标（不含内嵌补丁）
 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' -o FarlandSagaPatcher-windows-amd64.exe .
 GOOS=linux   GOARCH=amd64 go build -trimpath -ldflags='-s -w' -o farland-saga-patcher-linux-amd64 .
 ```
 
-Windows 产物加 `-H windowsgui`：声明为 GUI 子系统，双击运行不会弹出控制台窗口；从终端调用子命令时标准输出仍然可用。`.github/workflows/release.yml` 在推送 tag 或手动确认时执行同样的步骤，并把可执行文件与 `SHA256SUMS` 上传为 Release 资产。补丁载荷含游戏数据，由维护者在私有工作区生成后上传到同一个 Release，CI 不接触它。
+上面的命令构建出的程序不带补丁，界面上的语言按钮会显示「（未提供）」。要得到面向用户的单文件版本，用统一入口的 `build-patcher`：
+
+```bash
+bash flow.sh build-patcher                                  # 内嵌中、韩、英三个候选
+bash flow.sh build-patcher --stage zh-CN-unifont08          # 只内嵌指定候选，可重复
+bash flow.sh build-patcher --output release/patcher.exe     # 自定义输出位置
+```
+
+该命令把 `work/release/farland-patch-<候选>.zip` 复制进 `patcher/payload/`（缺失的候选会先自动打包），再执行交叉编译。产物约 75 MB，其中补丁数据约 71 MB。`patcher/payload/*.zip` 属于私有工作区产物，已被 `.gitignore` 忽略，不会进公开仓库。
+
+Windows 产物加 `-H windowsgui`：声明为 GUI 子系统，双击运行不会弹出控制台窗口；从终端调用子命令时标准输出仍然可用。`.github/workflows/release.yml` 在推送 tag 或手动确认时执行同样的步骤，并把可执行文件与 `SHA256SUMS` 上传为 Release 资产。补丁数据已编进程序，CI 不需要接触私有工作区。
 
 ## 图形界面
 
-Windows 版不带参数运行（或 `FarlandSagaPatcher.exe gui`）打开主窗口：
+Windows 版不带参数运行（或 `FarlandSagaPatcher.exe gui`）打开主窗口。界面刻意做得很小，只有四个按钮：
 
 | 区域 | 作用 |
 | --- | --- |
-| 游戏目录 | 首次选择后记住，下次自动填上；也可直接拖游戏目录到窗口 |
-| 补丁文件 | 默认取程序所在目录的 `farland-patch-*.zip`，可浏览指定或拖入 |
-| 语言/版本 | 下拉列出发现到的全部载荷，换一个再点「安装补丁」即可切换语言 |
-| 状态行 | 原版 / 已安装某版本 / 状态不一致，忙碌时显示当前进度 |
-| 文件清单 | 每个目标文件的当前状态与大小 |
-| 按钮 | 安装补丁、恢复原版、校验、使用说明，右侧是写入进度条 |
-| 日志 | 全程操作记录，可选中复制 |
+| 游戏目录 | 显示程序所在目录，即推断出的游戏根目录 |
+| 状态行 | 未检测到游戏目录 / 尚未安装 / 已安装某语言，忙碌时显示当前进度 |
+| 简体中文、韩文、English | 各装一个内嵌补丁；已安装的语言按钮上会标注 |
+| 还原原版 | 用原版备份把游戏文件恢复回去 |
+| 进度条与日志 | 写入进度与全程操作记录，可选中复制 |
 
-安装与恢复在工作线程执行，界面不会卡住；进度每 100 毫秒合并刷新一次，避免每个 4 KiB 差异块都打扰消息循环。写入过程中关闭窗口会被拦下并提示等待，防止临时文件残留。
+使用方式是把程序放进游戏根目录（与 `FarlandSaga.exe` 同级）双击运行。游戏目录由程序所在目录推断，不放对地方时按钮全部禁用，并提示缺少哪些文件。换语言直接点另一个按钮，程序会自动处理好切换，差异始终相对原版备份回放，不会叠在另一版补丁上。
 
-界面只依赖标准库与 `user32` / `comctl32` / `comdlg32` / `shell32` / `gdi32` / `ole32` / `kernel32`，结构体布局按 Win32 SDK 逐字段核对，文件底部有编译期大小断言。非 Windows 平台没有图形界面，`gui` 子命令会给出明确提示并退回到向导。
+安装与还原在工作线程执行，界面不会卡住；进度每 100 毫秒合并刷新一次，避免每个 4 KiB 差异块都打扰消息循环。忙碌状态用递增令牌管理：每次操作领取一个令牌，结束时只归还自己的令牌，被后续操作作废的结果也会归还，因此界面不会因为一次丢弃的检查而永远停在忙碌状态。写入过程中关闭窗口会被拦下并提示等待，另有 3 分钟看门狗兜底解除异常忙碌。
+
+界面只依赖标准库与 `user32` / `comctl32` / `gdi32` / `kernel32`，结构体布局按 Win32 SDK 逐字段核对，文件底部有编译期大小断言。非 Windows 平台没有图形界面，`gui` 子命令会给出明确提示并退回到向导。
 
 ## 命令行
 
@@ -61,9 +73,9 @@ Windows 版不带参数运行（或 `FarlandSagaPatcher.exe gui`）打开主窗�
 | `gui` | 打开图形界面（仅 Windows） |
 | `wizard` | 控制台向导，任何平台可用 |
 
-公共选项：`--game <目录>`（也可用环境变量 `FARLAND_SAGA_GAME`）、`--payload <文件>`（默认取程序所在目录的 `farland-patch-*.zip`）、`--yes`（跳过交互确认）、`--json`（输出 JSON）、`-h`。
+公共选项：`--game <目录>`（也可用环境变量 `FARLAND_SAGA_GAME`）、`--payload <文件>`（默认取程序所在目录的 `farland-patch-*.zip`；内嵌版可指定外部补丁包）、`--yes`（跳过交互确认）、`--json`（输出 JSON）、`-h`。
 
-控制台向导定位游戏目录（首次输入后记住），展示文件清单，已安装时直接提供「恢复原版 / 切换到其他语言 / 退出」，未安装时确认后写入。目录同时存在多个载荷时列出语言与版本供选择。
+命令行面向脚本与排查：可以指定任意外部补丁包与游戏目录，不受界面「程序所在目录即游戏目录」的限制。
 
 ## 补丁载荷格式
 
@@ -127,4 +139,4 @@ objects/<sha256>.gz      差异对象，文件名是补丁后文件的 SHA-256
 
 `patcher_test.go` 覆盖差异回放的往返与各类损坏拒绝（记录乱序、越界、截断、哈希不符、基准不符、头部非法）、manifest 与安装记录的路径校验、安装/恢复/切换/幂等/回滚，以及备份目录被篡改时的拒绝。测试用 Go 侧按同一格式写对象，不依赖私有工作区。
 
-界面共用的判断（`blockedFiles`、`summarizeStates`、`samePath`）与入口分发也有单元测试。Win32 界面代码本身只在 Windows 上编译，无法在 Linux 的 `go test` 中执行，其正确性靠 `GOOS=windows go vet`、结构体编译期大小断言，以及在 Windows 上对真实载荷的安装/恢复往返来保证。
+内嵌补丁的加载放在平台中立的 `embedded.go`，因此 Linux 上也能实测：`TestLoadEmbedded` 校验三个语言包都能解析、顺序固定为中韩英、每个包都声明全部目标文件且哈希合法；`payload/` 为空（刚克隆仓库还没打包）时该测试跳过。界面共用的判断（`blockedFiles`、`summarizeStates`、`samePath`）与入口分发也有单元测试。Win32 界面代码本身只在 Windows 上编译，无法在 Linux 的 `go test` 中执行，其正确性靠 `GOOS=windows go vet`、结构体编译期大小断言，以及在 Windows 上对真实载荷的安装/恢复往返来保证。
