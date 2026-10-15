@@ -792,7 +792,7 @@ func printUsage() {
 	fmt.Println(`FARLAND SAGA I Saturn Tribute 三语本地化补丁器
 
 用法：
-  FarlandSagaPatcher.exe                      图形界面（Windows 版默认）
+  FarlandSagaPatcher.exe                      图形界面：中/韩/英/还原四个按钮
   FarlandSagaPatcher.exe wizard               控制台向导：安装或恢复
   FarlandSagaPatcher.exe install  [选项]     安装补丁
   FarlandSagaPatcher.exe restore [选项]     恢复原版
@@ -805,6 +805,10 @@ func printUsage() {
   --yes             跳过交互确认
   --json            输出 JSON
   -h, --help        显示本帮助
+
+图形界面把简体中文、韩文、英文三个补丁内置在程序里：把本程序放进游戏根目录
+（含 FarlandSaga.exe 的文件夹）双击运行，点语言按钮安装，点「还原原版」恢复。
+命令行用法面向脚本与排查，可另配 --payload 指定外部补丁包。
 
 安装前请先退出游戏。补丁只修改载荷 manifest 中列出的文件，原版会备份到
 游戏目录的 FarlandSagaPatcher-backup-* 目录，随时可以恢复。`)

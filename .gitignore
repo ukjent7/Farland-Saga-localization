@@ -9,3 +9,6 @@ review.json
 review.html
 /patcher/FarlandSagaPatcher*.exe
 /patcher/farland-saga-patcher
+
+# 内嵌补丁由 build-patcher 从 work/release 复制而来，属于私有工作区产物
+/patcher/payload/*.zip

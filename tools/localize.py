@@ -144,6 +144,11 @@ def parser():
     release.add_argument('--stage', required=True, help='候选目录名（work/staging 下）')
     release.add_argument('--output', help='输出目录（相对于 work/），默认 work/release')
     release.add_argument('--patcher', help='补丁器可执行文件；提供时同时生成终端用户整合包')
+    patcher = commands.add_parser('build-patcher', help='Build the self-contained Windows patcher with payloads embedded')
+    patcher.add_argument('--output', default='release/FarlandSagaPatcher-windows-amd64.exe',
+                         help='输出路径（相对于 work/），或绝对路径')
+    patcher.add_argument('--stage', action='append', dest='stages',
+                         help='要内嵌的候选目录名，可重复；默认中、韩、英三个')
     build = commands.add_parser('build', help='Rebuild full text or selected native UI resources')
     build.add_argument('kind', choices=['full','ui','equipment','titles'])
     build.add_argument('--base', required=True)
@@ -287,6 +292,10 @@ def main():
     elif args.command == 'package-release':
         from package_release import package
         result = package(args.stage, args.output, args.patcher)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    elif args.command == 'build-patcher':
+        from build_patcher import build
+        result = build(args.output, args.stages)
         print(json.dumps(result, ensure_ascii=False, indent=2))
     elif args.command == 'build':
         output = stage_path(args.output)

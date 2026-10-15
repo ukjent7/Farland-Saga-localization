@@ -239,7 +239,7 @@ class ReleasePackaging(unittest.TestCase):
         second = Path(package_release.package('release')['payload']).read_bytes()
         self.assertEqual(first, second)
 
-    def test_bundle_contains_patcher_payload_and_readme(self):
+    def test_bundle_contains_patcher_and_readme(self):
         import package_release
         patcher = self.root/'FarlandSagaPatcher.exe'
         patcher.write_bytes(b'fake-patcher-binary')
@@ -249,11 +249,13 @@ class ReleasePackaging(unittest.TestCase):
         with zipfile.ZipFile(bundle) as archive:
             names = set(archive.namelist())
             self.assertIn('FarlandSagaPatcher.exe', names)
-            self.assertIn('farland-patch-zh-CN-release01.zip', names)
+            # 单文件形态：补丁已由 go:embed 编进程序，整合包里不再单独放载荷
+            self.assertNotIn('farland-patch-zh-CN-release01.zip', names)
             self.assertIn('使用说明.txt', names)
             readme = archive.read('使用说明.txt').decode('utf-8')
         self.assertIn('zh-CN-release01', readme)
         self.assertIn('FarlandSaga.bin', readme)
+        self.assertIn('四个按钮', readme)
 
     def test_rejects_escape_and_missing_record(self):
         import package_release

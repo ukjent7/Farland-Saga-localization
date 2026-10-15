@@ -10,6 +10,7 @@ package main
 import (
 	"archive/zip"
 	"bufio"
+	"bytes"
 	"compress/gzip"
 	"crypto/sha256"
 	"encoding/binary"
@@ -67,9 +68,11 @@ type objectHeader struct {
 }
 
 type payload struct {
-	path    string
-	info    *manifest
-	reader  *zip.ReadCloser
+	path string
+	info *manifest
+	// closer 在从磁盘路径打开时关闭底层文件句柄；从内存（go:embed）打开时
+	// 为 nil，没有需要释放的资源。
+	closer  io.Closer
 	objects map[string]*zip.File
 }
 
@@ -146,14 +149,42 @@ func parseManifest(data []byte) (*manifest, error) {
 	return &info, nil
 }
 
-// openPayload 打开载荷 ZIP，解析并校验 manifest，同时确认 manifest 引用的
-// 差异对象都在包内。ZIP 成员的 CRC32 由 archive/zip 在读取时逐块核对。
+// openPayload 从磁盘路径打开载荷 ZIP，解析并校验 manifest，同时确认
+// manifest 引用的差异对象都在包内。ZIP 成员的 CRC32 由 archive/zip 在读取
+// 时逐块核对。
 func openPayload(path string) (*payload, error) {
 	reader, err := zip.OpenReader(path)
 	if err != nil {
 		return nil, fmt.Errorf("无法打开补丁载荷 %s: %w", path, err)
 	}
-	result := &payload{path: path, reader: reader, objects: map[string]*zip.File{}}
+	loaded, err := parsePayload(&reader.Reader)
+	if err != nil {
+		reader.Close()
+		return nil, err
+	}
+	loaded.path = path
+	loaded.closer = reader
+	return loaded, nil
+}
+
+// openPayloadData 从内存中的 ZIP 数据打开载荷，供 go:embed 内嵌的补丁使用。
+// 整包读进内存，省得把几十兆的临时文件写到用户磁盘上。
+func openPayloadData(name string, data []byte) (*payload, error) {
+	reader, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		return nil, fmt.Errorf("无法读取内嵌补丁 %s: %w", name, err)
+	}
+	loaded, err := parsePayload(reader)
+	if err != nil {
+		return nil, err
+	}
+	loaded.path = name
+	return loaded, nil
+}
+
+// parsePayload 解析并校验 manifest，并确认 manifest 引用的差异对象都在包内。
+func parsePayload(reader *zip.Reader) (*payload, error) {
+	result := &payload{objects: map[string]*zip.File{}}
 	var manifestFile *zip.File
 	for _, file := range reader.File {
 		if file.FileInfo().IsDir() {
@@ -167,33 +198,27 @@ func openPayload(path string) (*payload, error) {
 		}
 	}
 	if manifestFile == nil {
-		reader.Close()
 		return nil, fmt.Errorf("补丁载荷缺少 %s", manifestName)
 	}
 	stream, err := manifestFile.Open()
 	if err != nil {
-		reader.Close()
 		return nil, fmt.Errorf("无法读取 %s: %w", manifestName, err)
 	}
 	defer stream.Close()
 	data, err := io.ReadAll(io.LimitReader(stream, maxManifest+1))
 	if err != nil {
-		reader.Close()
 		return nil, fmt.Errorf("无法读取 %s: %w", manifestName, err)
 	}
 	if len(data) > maxManifest {
-		reader.Close()
 		return nil, errors.New("manifest.json 过大")
 	}
 	info, err := parseManifest(data)
 	if err != nil {
-		reader.Close()
 		return nil, err
 	}
 	result.info = info
 	for _, entry := range info.Files {
 		if result.objects[entry.Object] == nil {
-			reader.Close()
 			return nil, fmt.Errorf("补丁载荷缺少差异对象 %s（文件 %s）", entry.Object, entry.Path)
 		}
 	}
@@ -201,7 +226,10 @@ func openPayload(path string) (*payload, error) {
 }
 
 func (p *payload) close() error {
-	return p.reader.Close()
+	if p.closer == nil {
+		return nil
+	}
+	return p.closer.Close()
 }
 
 // readLine 读取一行；调用方负责检查换行结尾，与 version_storage 的头部校验一致。

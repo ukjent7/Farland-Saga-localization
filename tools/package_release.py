@@ -33,24 +33,21 @@ USAGE_TEMPLATE = """FARLAND SAGA I Saturn Tribute 三语本地化补丁
 
 使用方法
 1. 完全退出游戏（Steam 客户端中也请关闭本游戏）。
-2. 双击运行 {program}，打开图形界面。
-3. 点「浏览…」选择游戏安装目录，即 Steam 库中的
-   "FARLAND SAGA I Saturn Tribute" 文件夹；首次选择后会被记住。
-4. 在「语言/版本」里选择 {language}，点「安装补丁」，
-   等待写入与校验完成。
+2. 把 {program} 放进游戏根目录，也就是 Steam 库中的
+   "FARLAND SAGA I Saturn Tribute" 文件夹，与 FarlandSaga.exe 同级。
+3. 双击运行 {program}，窗口里有四个按钮：简体中文、韩文、English、还原原版。
+4. 点想用的语言按钮，确认后等待写入与校验完成。
 
-想换其他语言/版本：把对应的 farland-patch-*.zip 放到本程序所在目录，
-在下拉列表里选好后再点「安装补丁」。
+三个语言的补丁都内置在 {program} 里，换语言直接点另一个按钮即可，
+程序会自动处理好切换，不需要再找别的文件。
 
-恢复原版
-打开 {program}，点「恢复原版」即可。
+还原原版
+打开 {program}，点「还原原版」即可。
 原版文件备份在游戏目录的 FarlandSagaPatcher-backup-* 文件夹中，
 删除备份前请确认不再需要恢复。
 
 本补丁修改以下文件：
 {files}
-
-补丁文件 {payload} 必须与 {program} 放在同一目录。
 
 命令行用法（可选）
   {program} wizard           控制台向导
@@ -126,17 +123,20 @@ def write_payload(manifest, output_dir):
     return path
 
 
-def write_bundle(patcher, payload_path, manifest, output_dir):
-    """Bundle the patcher executable, the payload and an end-user readme."""
+def write_bundle(patcher, manifest, output_dir):
+    """Bundle the self-contained patcher executable and an end-user readme.
+
+    The patcher embeds every language payload at build time, so the bundle is
+    just the one executable plus the readme; users never handle a payload file.
+    """
     windows = patcher.name.lower().endswith('.exe')
     program = 'FarlandSagaPatcher.exe' if windows else 'farland-saga-patcher'
     listing = '\n'.join(f"  {entry['path']}" for entry in manifest['files'])
     usage = USAGE_TEMPLATE.format(version=manifest['version'], language=manifest['language'],
-                                  program=program, payload=payload_path.name, files=listing)
+                                  program=program, files=listing)
     path = output_dir / f"FarlandSagaPatcher-{manifest['version']}-{'win64' if windows else 'linux'}.zip"
     with zipfile.ZipFile(path, 'w', zipfile.ZIP_DEFLATED) as archive:
         zip_member(archive, program, source=patcher)
-        zip_member(archive, payload_path.name, source=payload_path)
         zip_member(archive, '使用说明.txt', data=usage)
     return path
 
@@ -156,7 +156,7 @@ def package(stage, output=None, patcher=None):
               'files': len(manifest['files']), 'payload_bytes': payload.stat().st_size,
               'patched_bytes': sum(entry['patched_size'] for entry in manifest['files'])}
     if patcher:
-        bundle = write_bundle(Path(patcher), payload, manifest, output_dir)
+        bundle = write_bundle(Path(patcher), manifest, output_dir)
         result['bundle'] = str(bundle)
         result['bundle_bytes'] = bundle.stat().st_size
     return result

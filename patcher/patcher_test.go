@@ -875,3 +875,59 @@ func TestRunDispatch(t *testing.T) {
 		t.Fatalf("run(help) = %v，期望正常返回", err)
 	}
 }
+
+// 内嵌补丁：三个语言都要能解析，顺序固定为中、韩、英，且每个包都声明全部
+// 目标文件。payload/ 为空时（比如刚克隆仓库还没打包）跳过，不算失败。
+func TestLoadEmbedded(t *testing.T) {
+	loaded, problems := loadEmbedded()
+	for _, problem := range problems {
+		t.Errorf("内嵌补丁解析失败：%s", problem)
+	}
+	if len(loaded) == 0 {
+		t.Skip("payload/ 下没有内嵌补丁，跳过（打包后此测试会实际校验）")
+	}
+	want := []string{"zh-CN", "ko-KR", "en-US"}
+	if len(loaded) != len(want) {
+		t.Fatalf("内嵌补丁数量 = %d，期望 %d（%v）", len(loaded), len(want), want)
+	}
+	for index, code := range want {
+		info := loaded[index].info
+		if info.Language != code {
+			t.Fatalf("第 %d 个补丁语言 = %s，期望 %s（顺序必须固定）", index, info.Language, code)
+		}
+		if info.Format != payloadFormat || info.Kind != payloadKind {
+			t.Fatalf("%s 的 manifest 格式不符：format=%d kind=%s", code, info.Format, info.Kind)
+		}
+		if len(info.Files) == 0 {
+			t.Fatalf("%s 的 manifest 没有目标文件", code)
+		}
+		for _, entry := range info.Files {
+			if entry.Path == "" || entry.Object == "" {
+				t.Fatalf("%s 的 manifest 有条目缺少路径或对象名", code)
+			}
+			if !validSHA256(entry.OriginalSHA256) || !validSHA256(entry.PatchedSHA256) {
+				t.Fatalf("%s 的 %s 哈希不合法", code, entry.Path)
+			}
+		}
+	}
+}
+
+// 语言代码到按钮文字与固定顺序的映射。
+func TestLanguageLabelAndRank(t *testing.T) {
+	labels := map[string]string{
+		"zh-CN": "简体中文",
+		"ko-KR": "韩文",
+		"en-US": "English",
+		"ja-JP": "ja-JP",
+	}
+	for code, want := range labels {
+		if got := languageLabel(code); got != want {
+			t.Errorf("languageLabel(%s) = %s，期望 %s", code, got, want)
+		}
+	}
+	if languageRank("zh-CN") >= languageRank("ko-KR") ||
+		languageRank("ko-KR") >= languageRank("en-US") ||
+		languageRank("en-US") >= languageRank("fr-FR") {
+		t.Fatal("语言顺序必须为中、韩、英，未知语言排最后")
+	}
+}
