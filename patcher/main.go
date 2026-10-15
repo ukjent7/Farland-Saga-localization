@@ -2,7 +2,8 @@
 //
 // 独立可执行文件，不依赖 Python：读取 tools/package_release.py 生成的补丁
 // 载荷（manifest.json + 相对原版的 4 KiB 差异对象），核对游戏文件身份后备份、
-// 回放、原子替换，并可随时从备份恢复原版。不带参数运行进入交互向导。
+// 回放、原子替换，并可随时从备份恢复原版。Windows 版不带参数运行进入图形界面，
+// 其他平台进入控制台向导；wizard 子命令在任何平台都走控制台向导。
 package main
 
 import (
@@ -36,6 +37,17 @@ func main() {
 
 func run(argv []string) error {
 	if len(argv) == 0 {
+		// Windows 版默认进图形界面；界面起不来时退回控制台向导。
+		if guiAvailable() {
+			if err := runGUI(); err != nil {
+				fmt.Fprintf(os.Stderr, "图形界面启动失败：%v\n", err)
+				if !interactive() {
+					return err
+				}
+				return wizard()
+			}
+			return nil
+		}
 		if !interactive() {
 			printUsage()
 			return errors.New("非交互环境请使用 install / restore / status / verify 子命令")
@@ -45,6 +57,10 @@ func run(argv []string) error {
 	switch argv[0] {
 	case "install", "restore", "status", "verify":
 		return runCommand(argv[0], argv[1:])
+	case "gui":
+		return runGUI()
+	case "wizard", "cli":
+		return wizard()
 	case "help", "--help", "-h":
 		printUsage()
 		return nil
@@ -637,6 +653,48 @@ func printJSON(value any) error {
 	return nil
 }
 
+// summarizeStates 把文件状态汇总成一行结论，供界面状态行与命令行共用。
+func summarizeStates(statuses []fileStatus) string {
+	patched, original, other := 0, 0, 0
+	for _, status := range statuses {
+		switch status.State {
+		case statePatched:
+			patched++
+		case stateOriginal:
+			original++
+		default:
+			other++
+		}
+	}
+	switch {
+	case other > 0:
+		return "游戏文件状态不一致，请查看文件清单"
+	case patched > 0 && original > 0:
+		return "部分文件已是补丁状态"
+	case patched > 0:
+		return "已是补丁状态，但安装记录缺失"
+	default:
+		return "原版，尚未安装补丁"
+	}
+}
+
+// samePath 判断两个路径是否指向同一文件；Windows 路径大小写不敏感，
+// 拖放与浏览得到的路径可能和程序自己解析出来的写法不同。
+func samePath(left, right string) bool {
+	if strings.EqualFold(left, right) {
+		return true
+	}
+	leftAbsolute, err := filepath.Abs(left)
+	if err != nil {
+		return false
+	}
+	rightAbsolute, err := filepath.Abs(right)
+	if err != nil {
+		return false
+	}
+	return strings.EqualFold(filepath.Clean(leftAbsolute), filepath.Clean(rightAbsolute))
+}
+
 func printStatusTable(statuses []fileStatus) {
 	fmt.Printf("  %-44s %-9s %-12s\n", "文件", "状态", "当前大小")
 	for _, status := range statuses {
@@ -734,7 +792,8 @@ func printUsage() {
 	fmt.Println(`FARLAND SAGA I Saturn Tribute 三语本地化补丁器
 
 用法：
-  FarlandSagaPatcher.exe                     交互向导（安装或恢复）
+  FarlandSagaPatcher.exe                      图形界面（Windows 版默认）
+  FarlandSagaPatcher.exe wizard               控制台向导：安装或恢复
   FarlandSagaPatcher.exe install  [选项]     安装补丁
   FarlandSagaPatcher.exe restore [选项]     恢复原版
   FarlandSagaPatcher.exe status  [选项]     查看当前状态

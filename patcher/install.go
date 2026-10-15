@@ -293,6 +293,20 @@ func describeState(status fileStatus) string {
 	}
 }
 
+// blockedFiles 列出既不是原版、也不是本程序安装过的补丁的文件。这些文件
+// 身份不明，安装前必须先由用户自行处理，否则回放出来的结果不可信。
+func blockedFiles(statuses []fileStatus) []string {
+	var blocked []string
+	for _, status := range statuses {
+		switch status.State {
+		case stateOriginal, statePatched, statePrevious:
+		default:
+			blocked = append(blocked, "  "+status.Path+"  "+describeState(status))
+		}
+	}
+	return blocked
+}
+
 // checkWritable 在写入前确认目标文件没有被占用（Windows 上运行中的游戏会锁住
 // 镜像文件），并确认游戏目录可写。
 func checkWritable(game string, info *manifest) error {
@@ -325,15 +339,7 @@ func installPatch(game string, loaded *payload, progress func(fileEntry, int64))
 		return nil, err
 	}
 	statuses := inspectAll(game, info, prior)
-	var blocked []string
-	for _, status := range statuses {
-		switch status.State {
-		case stateOriginal, statePatched, statePrevious:
-		default:
-			blocked = append(blocked, fmt.Sprintf("  %-44s %s", status.Path, describeState(status)))
-		}
-	}
-	if len(blocked) > 0 {
+	if blocked := blockedFiles(statuses); len(blocked) > 0 {
 		return nil, errors.New("以下文件既不是原版也不是本程序安装的补丁，已中止:\n" + strings.Join(blocked, "\n"))
 	}
 	if prior != nil && prior.Version == info.Version && prior.Language == info.Language {

@@ -33,13 +33,17 @@ USAGE_TEMPLATE = """FARLAND SAGA I Saturn Tribute 三语本地化补丁
 
 使用方法
 1. 完全退出游戏（Steam 客户端中也请关闭本游戏）。
-2. 双击运行 {program}。
-3. 按提示选择游戏安装目录，即 Steam 库中的
-   "FARLAND SAGA I Saturn Tribute" 文件夹。
-4. 核对文件清单后输入 y 开始安装，等待写入与校验完成。
+2. 双击运行 {program}，打开图形界面。
+3. 点「浏览…」选择游戏安装目录，即 Steam 库中的
+   "FARLAND SAGA I Saturn Tribute" 文件夹；首次选择后会被记住。
+4. 在「语言/版本」里选择 {language}，点「安装补丁」，
+   等待写入与校验完成。
+
+想换其他语言/版本：把对应的 farland-patch-*.zip 放到本程序所在目录，
+在下拉列表里选好后再点「安装补丁」。
 
 恢复原版
-再次运行 {program}，选择「恢复原版」即可。
+打开 {program}，点「恢复原版」即可。
 原版文件备份在游戏目录的 FarlandSagaPatcher-backup-* 文件夹中，
 删除备份前请确认不再需要恢复。
 
@@ -47,6 +51,12 @@ USAGE_TEMPLATE = """FARLAND SAGA I Saturn Tribute 三语本地化补丁
 {files}
 
 补丁文件 {payload} 必须与 {program} 放在同一目录。
+
+命令行用法（可选）
+  {program} wizard           控制台向导
+  {program} install --yes    非交互安装
+  {program} restore --yes    恢复原版
+  {program} status           查看当前状态
 """
 
 

@@ -142,7 +142,7 @@ bash flow.sh package-release --stage zh-CN-unifont08 --patcher /path/to/FarlandS
 bash flow.sh package-release --stage ko-KR-unifont-full07
 ```
 
-`package-release` 先按候选报告逐文件核对身份，再把每个文件相对原版备份的 4 KiB 差异块写成载荷 ZIP（默认 `work/release/farland-patch-<版本>.zip`），差异对象进入冷存储并与历史归档共享；`--output` 可改输出目录。带 `--patcher` 时同时生成终端用户整合包 `FarlandSagaPatcher-<版本>-win64.zip`（补丁器、载荷与使用说明），挂到 GitHub Release 即可分发。重复打包同一候选得到字节一致的结果。补丁器本身的构建、命令与安全边界见 [../patcher/README.md](../patcher/README.md)。
+`package-release` 先按候选报告逐文件核对身份，再把每个文件相对原版备份的 4 KiB 差异块写成载荷 ZIP（默认 `work/release/farland-patch-<版本>.zip`），差异对象进入冷存储并与历史归档共享；`--output` 可改输出目录。带 `--patcher` 时同时生成终端用户整合包 `FarlandSagaPatcher-<版本>-win64.zip`（补丁器、载荷与使用说明），挂到 GitHub Release 即可分发。重复打包同一候选得到字节一致的结果。整合包里的使用说明按图形界面撰写，同时附上命令行写法。补丁器本身的构建、命令与安全边界见 [../patcher/README.md](../patcher/README.md)。
 
 ## 公共模块
 

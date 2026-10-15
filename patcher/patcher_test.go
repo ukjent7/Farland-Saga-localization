@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -790,5 +791,87 @@ func TestSafeRelativePathAcceptsNestedPosix(t *testing.T) {
 		if _, err := safeRelativePath(name); err == nil {
 			t.Fatalf("%q 应被拒绝", name)
 		}
+	}
+}
+
+// blockedFiles 与 summarizeStates 是图形界面和安装前预检共用的判断，
+// samePath 用于把拖放和浏览得到的路径与已发现的载荷对上。
+func TestBlockedFiles(t *testing.T) {
+	statuses := []fileStatus{
+		{Path: "a.bin", State: stateOriginal},
+		{Path: "b.bin", State: statePatched},
+		{Path: "c.bin", State: statePrevious},
+	}
+	if blocked := blockedFiles(statuses); len(blocked) != 0 {
+		t.Fatalf("原版、本程序装的补丁、其他版本补丁都应放行，得到 %v", blocked)
+	}
+	statuses = append(statuses,
+		fileStatus{Path: "d.bin", State: stateMismatch},
+		fileStatus{Path: "e.bin", State: stateMissing})
+	blocked := blockedFiles(statuses)
+	if len(blocked) != 2 {
+		t.Fatalf("应拦下 2 个文件，得到 %d 个: %v", len(blocked), blocked)
+	}
+	for _, line := range blocked {
+		if !strings.Contains(line, "d.bin") && !strings.Contains(line, "e.bin") {
+			t.Fatalf("拦下信息里应含文件名: %q", line)
+		}
+	}
+}
+
+func TestSummarizeStates(t *testing.T) {
+	cases := []struct {
+		name   string
+		states []string
+		want   string
+	}{
+		{"全部原版", []string{stateOriginal, stateOriginal}, "原版，尚未安装补丁"},
+		{"全部已打补丁", []string{statePatched, statePatched}, "已是补丁状态，但安装记录缺失"},
+		{"混合", []string{statePatched, stateOriginal}, "部分文件已是补丁状态"},
+		{"有异常文件", []string{statePatched, stateMismatch}, "游戏文件状态不一致，请查看文件清单"},
+		{"有缺失文件", []string{stateOriginal, stateMissing}, "游戏文件状态不一致，请查看文件清单"},
+	}
+	for _, testCase := range cases {
+		t.Run(testCase.name, func(t *testing.T) {
+			statuses := make([]fileStatus, 0, len(testCase.states))
+			for index, state := range testCase.states {
+				statuses = append(statuses, fileStatus{Path: fmt.Sprintf("f%d.bin", index), State: state})
+			}
+			if got := summarizeStates(statuses); got != testCase.want {
+				t.Fatalf("summarizeStates = %q，期望 %q", got, testCase.want)
+			}
+		})
+	}
+}
+
+func TestSamePath(t *testing.T) {
+	if !samePath(`C:\Games\Farland`, `c:\games\farland`) {
+		t.Fatal("Windows 路径大小写不敏感，同一路径应判定为相同")
+	}
+	if !samePath("patch.zip", filepath.Join("sub", "..", "patch.zip")) {
+		t.Fatal("清理后相同的相对路径应判定为相同")
+	}
+	if samePath(`C:\Games\Farland`, `C:\Games\Other`) {
+		t.Fatal("不同目录不应判定为相同")
+	}
+	if samePath("a.zip", "b.zip") {
+		t.Fatal("不同文件名不应判定为相同")
+	}
+}
+
+// 入口分发：gui 子命令在非 Windows 平台应给出明确错误，未知命令要报错。
+func TestRunDispatch(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Windows 上 gui 子命令会真的开窗口")
+	}
+	err := run([]string{"gui"})
+	if err == nil || !strings.Contains(err.Error(), "图形界面只在 Windows 版提供") {
+		t.Fatalf("run(gui) = %v，期望提示图形界面只在 Windows 版提供", err)
+	}
+	if err := run([]string{"no-such-command"}); err == nil {
+		t.Fatal("未知命令应报错")
+	}
+	if err := run([]string{"help"}); err != nil {
+		t.Fatalf("run(help) = %v，期望正常返回", err)
 	}
 }

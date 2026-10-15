@@ -67,10 +67,10 @@ type objectHeader struct {
 }
 
 type payload struct {
-	path     string
-	info     *manifest
-	reader   *zip.ReadCloser
-	objects  map[string]*zip.File
+	path    string
+	info    *manifest
+	reader  *zip.ReadCloser
+	objects map[string]*zip.File
 }
 
 // safeRelativePath 只接受 POSIX 相对路径：拒绝绝对路径、盘符、反斜杠、

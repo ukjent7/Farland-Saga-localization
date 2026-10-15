@@ -4,6 +4,19 @@
 
 本页保存整理前的版本进度、格式调查和旧命令，文字中的“当前”对应记录当时。历史命令块按记录保留，不作为当前操作指引；当前只使用 WSL/Linux 的 Bash 与 POSIX 路径。日常操作从 [工作区首页](README.md) 和 [工具流程](tools/README.md) 进入；实际安装状态读取 `install_report.json`，当前候选读取 `config/storage_policy.json`。
 
+## 补丁器图形界面（2026-10-14）
+
+分发给终端用户的补丁器此前只有控制台向导，双击运行看到的是黑底命令行。本次给 Windows 版补上图形界面，安装、恢复、切换语言都变成点按钮：
+
+- 新增 `patcher/gui_windows.go`，直接调用 Win32 API（`user32` / `comctl32` / `comdlg32` / `shell32` / `gdi32` / `ole32` / `kernel32`）实现主窗口：游戏目录与补丁文件两个输入框各带「浏览…」，语言/版本下拉框列出发现到的全部载荷，列表视图展示每个目标文件的状态与大小，按钮行是安装补丁、恢复原版、校验、使用说明，右侧是写入进度条，底部是只读日志。
+- 界面不引入第三方模块，也不需要 cgo，CI 里照样直接交叉编译。窗口类、`LVITEMW`、`LVCOLUMNW`、`BROWSEINFOW`、`OPENFILENAMEW`、`MSG`、`MINMAXINFO` 的布局先用 C 程序逐字段核对（`DWORD` 在 Linux 上是 8 字节，第一轮核对因此失真，改成 `unsigned int` 后重跑），Go 侧再加编译期大小断言兜底。
+- 安装与恢复放到工作 goroutine，界面线程只跑消息循环；进度回调每 4 KiB 一次，节流到 100 毫秒后经定时器合并刷新，否则消息循环会被淹没。写入过程中关闭窗口会被拦下，避免临时文件残留。
+- 入口改为：Windows 版不带参数运行进图形界面，`gui` 子命令强制开窗口，`wizard` / `cli` 子命令走控制台向导；窗口建不起来时自动退回向导。Windows 产物加 `-H windowsgui` 声明 GUI 子系统，双击不再弹出控制台窗口，从终端调用子命令时标准输出仍然可用。
+- `blockedFiles`、`summarizeStates`、`samePath` 从界面代码提到平台中立的 `main.go`，安装前的身份预检与 `installPatch` 复用同一判断，消除重复；三者与入口分发都补了单元测试。
+- 端到端复验：用原版备份构造合成游戏目录，装 `zh-CN-unifont08` 后六个文件与 Python 安装器产物逐字节一致，恢复后全部回到原版哈希；`GOOS=windows go vet` 与 `go test` 均通过，Windows 产物为 PE32+ GUI 子系统。
+
+已知限制：图形界面只在 Windows 版提供，Linux 版仍是命令行与交互向导；Win32 界面代码无法在 Linux 的 `go test` 中执行，其正确性靠 vet、结构体断言与 Windows 上的真实载荷往返保证。
+
 ## 公开仓库引导链（2026-10-14）
 
 公开仓库此前只能作为私有工作区的子目录使用，社区成员拿到一份 Steam 购买的游戏安装也无法复现产物。本次补齐了从安装到首个候选的完整入口，全部只读游戏目录、不启动游戏：

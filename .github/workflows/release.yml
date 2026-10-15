@@ -35,7 +35,9 @@ jobs:
       - name: 构建 Windows 可执行文件
         run: |
           cd patcher
-          GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w' \
+          # -H windowsgui：GUI 子系统，双击运行不会弹出控制台窗口；
+          # 从终端调用子命令时标准输出仍然可用。
+          GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' \
             -o ../FarlandSagaPatcher-windows-amd64.exe .
       - name: 构建 Linux 可执行文件
         run: |
@@ -77,18 +79,23 @@ jobs:
             echo
             echo '| 文件 | 说明 |'
             echo '| --- | --- |'
-            echo '| `FarlandSagaPatcher-windows-amd64.exe` | Windows 补丁器，配合 Steam 版游戏使用 |'
-            echo '| `farland-saga-patcher-linux-amd64` | Linux 补丁器，供维护者在 WSL 中自测 |'
+            echo '| `FarlandSagaPatcher-windows-amd64.exe` | Windows 补丁器，带图形界面，配合 Steam 版游戏使用 |'
+            echo '| `farland-saga-patcher-linux-amd64` | Linux 补丁器，命令行与交互向导，供维护者在 WSL 中自测 |'
             echo '| `SHA256SUMS` | 上述两个文件的 SHA-256 校验和 |'
             echo
             echo "### 使用方法"
+            echo
+            echo 'Windows 版双击 `FarlandSagaPatcher-windows-amd64.exe` 即打开图形界面：'
+            echo '选择游戏目录与语言/版本，点「安装补丁」；想恢复原版点「恢复原版」，'
+            echo '想换语言就换一个版本再点「安装补丁」。补丁包或游戏目录也可以直接拖到窗口上。'
             echo
             echo '补丁器需要与补丁载荷 `farland-patch-*.zip` 放在同一目录。载荷由私有工作区用'
             echo '`localize.py package-release` 生成后上传到本 Release；下载任一'
             echo '`FarlandSagaPatcher-*.zip` 整合包（含补丁器、载荷与使用说明）即可直接运行。'
             echo
             echo '```bash'
-            echo 'FarlandSagaPatcher.exe                  # 交互向导：安装或恢复'
+            echo 'FarlandSagaPatcher.exe                  # 图形界面（Windows 版默认）'
+            echo 'FarlandSagaPatcher.exe wizard           # 控制台向导：安装或恢复'
             echo 'FarlandSagaPatcher.exe install --yes    # 非交互安装'
             echo 'FarlandSagaPatcher.exe restore --yes    # 恢复原版'
             echo 'FarlandSagaPatcher.exe status           # 查看当前状态'

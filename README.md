@@ -93,6 +93,8 @@ gh release upload v1.0.0 work/release/FarlandSagaPatcher-*.zip
 
 载荷只包含相对原版的 4 KiB 差异块（实测约 23 MiB，而补丁后文件约 375 MiB），按 SHA-256 寻址，与冷存储共享对象。补丁器核对游戏文件身份后备份、回放、原子替换，失败自动回滚，随时可以恢复原版。命令、载荷格式与安全边界见 [patcher/README.md](patcher/README.md)。
 
+Windows 版补丁器带图形界面：双击即开窗口，选游戏目录和语言/版本后点「安装补丁」，恢复与切换语言各一个按钮，写入过程有进度条和日志，补丁包或游戏目录可以直接拖到窗口上。界面直接调用 Win32 API，不引入第三方模块，也不需要 cgo。其他平台保留命令行与交互向导。
+
 工作流定义在 `.github/workflows/release.yml`：拉取请求与推送 tag 时执行 `go vet`、单元测试和两个平台的构建；打 tag 或手动确认时创建 Release 并上传可执行文件与 `SHA256SUMS`。
 
 ## 目录职责
@@ -100,7 +102,7 @@ gh release upload v1.0.0 work/release/FarlandSagaPatcher-*.zip
 | 目录 | 职责 |
 | --- | --- |
 | `tools/` | 公共处理器与 `localize.py` 统一命令入口 |
-| `patcher/` | 分发给终端用户的独立补丁器（Go，无第三方依赖） |
+| `patcher/` | 分发给终端用户的独立补丁器（Go，无第三方依赖；Windows 版带 Win32 图形界面） |
 | `tests/` | 入口与工作流回归检查 |
 | `translation/` | 三语译稿 JSON 与译稿说明 |
 | `config/patches/` | 声明式补丁配方 |
