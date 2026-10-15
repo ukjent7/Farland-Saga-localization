@@ -35,14 +35,14 @@ USAGE_TEMPLATE = """FARLAND SAGA I Saturn Tribute 三语本地化补丁
 1. 完全退出游戏（Steam 客户端中也请关闭本游戏）。
 2. 把 {program} 放进游戏根目录，也就是 Steam 库中的
    "FARLAND SAGA I Saturn Tribute" 文件夹，与 FarlandSaga.exe 同级。
-3. 双击运行 {program}，窗口里有四个按钮：简体中文、韩文、English、还原原版。
-4. 点想用的语言按钮，确认后等待写入与校验完成。
+3. 双击运行 {program}，第一屏选语言：简体中文、韩文、English。
+4. 进入该语言页面后点「安装」，确认后等待写入与校验完成。
 
-三个语言的补丁都内置在 {program} 里，换语言直接点另一个按钮即可，
+三个语言的补丁都内置在 {program} 里，换语言先点「返回」回到第一屏再选，
 程序会自动处理好切换，不需要再找别的文件。
 
 还原原版
-打开 {program}，点「还原原版」即可。
+打开 {program}，选好语言后点「还原」即可。
 原版文件备份在游戏目录的 FarlandSagaPatcher-backup-* 文件夹中，
 删除备份前请确认不再需要恢复。
 

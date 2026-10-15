@@ -255,7 +255,7 @@ class ReleasePackaging(unittest.TestCase):
             readme = archive.read('使用说明.txt').decode('utf-8')
         self.assertIn('zh-CN-release01', readme)
         self.assertIn('FarlandSaga.bin', readme)
-        self.assertIn('四个按钮', readme)
+        self.assertIn('第一屏选语言', readme)
 
     def test_rejects_escape_and_missing_record(self):
         import package_release
