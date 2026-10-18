@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml"><img src="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/ci.yml"><img src="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://goreportcard.com/report/github.com/ukjent7/Farland-Saga-localization"><img src="https://goreportcard.com/badge/github.com/ukjent7/Farland-Saga-localization" alt="Go Report Card"></a>
 </p>
 
@@ -18,6 +18,14 @@
 Steam 버전 《**FARLAND SAGA I Saturn Tribute**》를 위한 다국어 현지화 및 자동 인젝션 패치 도구입니다. **한국어**, **간체 중국어 (简体中文)**, **영어 (English)**를 지원합니다.
 
 순수 선언적 패치 엔진을 기반으로 설계되어 상업적 저작권 침해 파일이 없으며, 단일 실행 파일(~16MB)로 즉시 적용 가능합니다.
+
+---
+
+## 인게임 미리보기
+
+| 한국어 | 简体中文 | English |
+| :---: | :---: | :---: |
+| ![한국어 인게임 미리보기](docs/images/preview_ko-KR.png) | ![중국어 인게임 미리보기](docs/images/preview_zh-CN.png) | ![영어 인게임 미리보기](docs/images/preview_en-US.png) |
 
 ---
 

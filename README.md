@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml"><img src="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/ci.yml"><img src="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://goreportcard.com/report/github.com/ukjent7/Farland-Saga-localization"><img src="https://goreportcard.com/badge/github.com/ukjent7/Farland-Saga-localization" alt="Go Report Card"></a>
 </p>
 
@@ -18,6 +18,14 @@
 A lightweight, fully self-contained localization tool and patch engine for Steam's **FARLAND SAGA I Saturn Tribute**, supporting **English**, **Simplified Chinese (简体中文)**, and **Korean (한국어)**.
 
 Built with a declarative in-place injection engine: 100% free of commercial copyright infringement, self-contained repository with zero external binary dependencies, and a single-executable patcher (~16MB).
+
+---
+
+## In-Game Preview
+
+| English | 简体中文 | 한국어 |
+| :---: | :---: | :---: |
+| ![English Preview](docs/images/preview_en-US.png) | ![Chinese Preview](docs/images/preview_zh-CN.png) | ![Korean Preview](docs/images/preview_ko-KR.png) |
 
 ---
 

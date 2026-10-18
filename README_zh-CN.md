@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml"><img src="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/ci.yml"><img src="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://goreportcard.com/report/github.com/ukjent7/Farland-Saga-localization"><img src="https://goreportcard.com/badge/github.com/ukjent7/Farland-Saga-localization" alt="Go Report Card"></a>
 </p>
 
@@ -18,6 +18,14 @@
 Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动化注入补丁工具，支持**简体中文**、**한국어 (韩文)** 与 **English (英文)**。
 
 项目采用纯声明式注入引擎，公开仓库零侵权、完全自包含，补丁器单文件开箱即用。
+
+---
+
+## 实机效果展示
+
+| 简体中文 | 한국어 | English |
+| :---: | :---: | :---: |
+| ![中文实机预览](docs/images/preview_zh-CN.png) | ![韩文实机预览](docs/images/preview_ko-KR.png) | ![英文实机预览](docs/images/preview_en-US.png) |
 
 ---
 
