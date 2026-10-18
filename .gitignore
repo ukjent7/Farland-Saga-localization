@@ -9,8 +9,9 @@ review.json
 HISTORY.md
 # review.html 同样是 flow.sh review 的生成物，但对外可直接当只读审阅页浏览，
 # 故随仓库提交；改译稿后需重新生成。review.json 与它内容重复且更大，继续忽略。
-/patcher/FarlandSagaPatcher*.exe
+FarlandSagaPatcher*.exe
 /patcher/farland-saga-patcher
+SHA256SUMS
 
 # 轻量化 Format 2 声明式载荷随仓库纳管，实现公开仓库完全自包含与 CI 自动构建发布
 
