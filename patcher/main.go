@@ -22,6 +22,25 @@ import (
 
 const gameEnvVar = "FARLAND_SAGA_GAME"
 
+// humanSize 把字节数折算成便于阅读的单位。清扫旧备份动辄几百 MB，用 MiB/GiB
+// 比一串数字更能说明腾出了多少空间。
+func humanSize(size int64) string {
+	units := []struct {
+		divisor float64
+		suffix  string
+	}{
+		{1 << 30, "GiB"},
+		{1 << 20, "MiB"},
+		{1 << 10, "KiB"},
+	}
+	for _, unit := range units {
+		if float64(size) >= unit.divisor {
+			return fmt.Sprintf("%.1f %s", float64(size)/unit.divisor, unit.suffix)
+		}
+	}
+	return fmt.Sprintf("%d B", size)
+}
+
 type payloadChoice struct {
 	path string
 	info *manifest
@@ -140,8 +159,9 @@ func commandInstall(game, payloadPath string, yes, asJSON, allowPrompt bool) err
 	}
 	fmt.Printf("\n已安装 %s（%s），共 %d 个文件。\n", result.Version, result.Language, len(result.Files))
 	fmt.Printf("原版备份：%s\n", result.BackupDirectory)
-	if result.PreviousBackup != "" {
-		fmt.Printf("上一版备份：%s\n", result.PreviousBackup)
+	if len(result.CleanedUp) > 0 {
+		fmt.Printf("已清理残留目录 %d 个，腾出 %s：%s\n",
+			len(result.CleanedUp), humanSize(result.ReclaimedBytes), strings.Join(result.CleanedUp, "、"))
 	}
 	fmt.Println("如需恢复原版，再次运行本程序并选择「恢复原版」。请勿删除备份目录。")
 	return nil
@@ -162,7 +182,16 @@ func commandRestore(game string, yes, asJSON, allowPrompt bool) error {
 	if !asJSON {
 		fmt.Printf("游戏目录：%s\n", game)
 		fmt.Printf("已安装版本：%s（%s）\n", record.Version, record.Language)
-		fmt.Printf("原版备份：%s\n", record.BackupDirectory)
+		// 备份是否可用要在确认之前说清楚，别等用户按了确认才失败。
+		health := inspectBackup(game, backupTargetsFromRecord(record))
+		switch {
+		case !health.Present:
+			fmt.Printf("原版备份：%s 不存在，无法恢复\n", health.Directory)
+		case !health.Complete:
+			fmt.Printf("原版备份：%s 不完整，无法恢复\n%s\n", health.Directory, strings.Join(health.Problems, "\n"))
+		default:
+			fmt.Printf("原版备份：%s（完整）\n", effectiveBackupName(game, backupTargetsFromRecord(record), record.BackupDirectory))
+		}
 	}
 	if !yes && !allowPrompt {
 		return errors.New("非交互环境请加 --yes 确认恢复")
@@ -178,8 +207,7 @@ func commandRestore(game string, yes, asJSON, allowPrompt bool) error {
 		return printJSON(result)
 	}
 	fmt.Printf("\n已恢复原版，共 %d 个文件。\n", len(result.Files))
-	fmt.Printf("回滚副本：%s\n", result.Rollback)
-	fmt.Println("确认游戏正常后，可以删除回滚副本目录。")
+	fmt.Println("需要补丁时再次运行本程序并安装即可，原版备份仍保留着。")
 	return nil
 }
 
@@ -203,9 +231,16 @@ func commandStatus(game, payloadPath string, asJSON, allowPrompt bool) error {
 	if err != nil {
 		return err
 	}
+	var health backupHealth
+	var targets []backupTarget
+	if record != nil {
+		targets = backupTargetsFromRecord(record)
+		health = inspectBackup(game, targets)
+	}
 	if asJSON {
 		return printJSON(map[string]any{
 			"game": game, "payload": payloadSummary(loaded), "record": record, "files": statuses,
+			"backup": health,
 		})
 	}
 	fmt.Printf("游戏目录：%s\n", game)
@@ -215,7 +250,14 @@ func commandStatus(game, payloadPath string, asJSON, allowPrompt bool) error {
 	if record != nil {
 		fmt.Printf("安装记录：%s（%s），状态 %s\n", record.Version, record.Language, record.Status)
 		if record.Status == statusInstalled {
-			fmt.Printf("原版备份：%s\n", record.BackupDirectory)
+			switch {
+			case !health.Present:
+				fmt.Printf("原版备份：%s 不存在，还原前必须先修复\n", health.Directory)
+			case !health.Complete:
+				fmt.Printf("原版备份：%s 不完整，还原前必须先修复\n%s\n", health.Directory, strings.Join(health.Problems, "\n"))
+			default:
+				fmt.Printf("原版备份：%s（完整）\n", health.Directory)
+			}
 		}
 	} else {
 		fmt.Println("安装记录：无")
@@ -338,6 +380,10 @@ func wizard() error {
 	}
 	fmt.Printf("\n已安装 %s（%s），共 %d 个文件。\n", result.Version, result.Language, len(result.Files))
 	fmt.Printf("原版备份：%s\n", result.BackupDirectory)
+	if len(result.CleanedUp) > 0 {
+		fmt.Printf("已清理残留目录 %d 个，腾出 %s：%s\n",
+			len(result.CleanedUp), humanSize(result.ReclaimedBytes), strings.Join(result.CleanedUp, "、"))
+	}
 	fmt.Println("如需恢复原版，再次运行本程序并选择「恢复原版」。请勿删除备份目录。")
 	return nil
 }
@@ -365,8 +411,8 @@ func wizardInstalled(game string, prior *installRecord, choices []payloadChoice)
 		if err != nil {
 			return err
 		}
-		fmt.Printf("\n已恢复原版，共 %d 个文件。\n回滚副本：%s\n", len(result.Files), result.Rollback)
-		fmt.Println("确认游戏正常后，可以删除回滚副本目录。")
+		fmt.Printf("\n已恢复原版，共 %d 个文件。\n", len(result.Files))
+		fmt.Println("需要补丁时再次运行本程序并安装即可，原版备份仍保留着。")
 		return nil
 	case "2":
 		if len(choices) <= 1 {
@@ -792,7 +838,7 @@ func printUsage() {
 	fmt.Println(`FARLAND SAGA I Saturn Tribute 三语本地化补丁器
 
 用法：
-  FarlandSagaPatcher.exe                      图形界面：中/韩/英/还原四个按钮
+  FarlandSagaPatcher.exe                      图形界面：先选语言，再安装或还原
   FarlandSagaPatcher.exe wizard               控制台向导：安装或恢复
   FarlandSagaPatcher.exe install  [选项]     安装补丁
   FarlandSagaPatcher.exe restore [选项]     恢复原版
@@ -806,10 +852,12 @@ func printUsage() {
   --json            输出 JSON
   -h, --help        显示本帮助
 
-图形界面把简体中文、韩文、英文三个补丁内置在程序里：把本程序放进游戏根目录
-（含 FarlandSaga.exe 的文件夹）双击运行，点语言按钮安装，点「还原原版」恢复。
+图形界面把简体中文、한국어、English 三个补丁内置在程序里：把本程序放进游戏根目录
+（含 FarlandSaga.exe 的文件夹）双击运行，点语言按钮安装，点「还原」恢复。
+界面语言跟随所选语言，第一屏的语言按钮各显示自己的名字。
 命令行用法面向脚本与排查，可另配 --payload 指定外部补丁包。
 
 安装前请先退出游戏。补丁只修改载荷 manifest 中列出的文件，原版会备份到
-游戏目录的 FarlandSagaPatcher-backup-* 目录，随时可以恢复。`)
+游戏目录的 FarlandSagaPatcher-backup 目录，随时可以恢复；这个目录只有一个，
+不随安装次数增加，请勿删除。`)
 }

@@ -12,3 +12,11 @@ review.html
 
 # 内嵌补丁由 build-patcher 从 work/release 复制而来，属于私有工作区产物
 /patcher/payload/*.zip
+
+# 只保留 Unifont 的 gzip 字形表与授权文件。未压缩 .hex 与它逐字节一致，
+# 官方 tar.gz 仅作溯源，三者都会进 git 历史让仓库永久变大。
+/fonts/unifont-18.0.01/unifont-18.0.01.hex
+/fonts/unifont-18.0.01/unifont-18.0.01.tar.gz
+
+# 私有工作区约定：游戏数据、候选、备份与存储都放这里，不进入公开仓库
+/work/

@@ -43,8 +43,8 @@ USAGE_TEMPLATE = """FARLAND SAGA I Saturn Tribute 三语本地化补丁
 
 还原原版
 打开 {program}，选好语言后点「还原」即可。
-原版文件备份在游戏目录的 FarlandSagaPatcher-backup-* 文件夹中，
-删除备份前请确认不再需要恢复。
+原版文件备份在游戏目录的 FarlandSagaPatcher-backup 文件夹中（整个生命周期只有
+一个，不随安装次数增加），删除备份前请确认不再需要恢复。
 
 本补丁修改以下文件：
 {files}

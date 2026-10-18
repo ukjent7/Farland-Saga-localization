@@ -105,7 +105,8 @@ jobs:
             echo '```'
             echo
             echo '安装前请先退出游戏。补丁只修改载荷清单中列出的文件，原版备份在游戏目录的'
-            echo '`FarlandSagaPatcher-backup-*` 中，删除备份前请确认不再需要恢复。'
+            echo '`FarlandSagaPatcher-backup` 目录中（整个生命周期只有一个，不随安装次数增加），'
+            echo '删除备份前请确认不再需要恢复。'
             echo
             echo "### 校验和"
             echo

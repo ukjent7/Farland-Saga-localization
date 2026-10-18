@@ -1,7 +1,8 @@
 // Windows 图形界面：单个可执行文件，补丁编译期内嵌，双击即用。
 //
 // 发布形态是把本程序放进游戏根目录后双击运行。界面分两屏，文字压到最少：
-// 第一屏选语言（简体中文、韩文、English 三个按钮），选中后进入该语言的
+// 第一屏选语言（简体中文 / 한국어 / English 三个按钮，各显示自己的名字），
+// 选中后进入该语言的
 // 页面，只有「安装」和「还原」两个按钮。游戏目录用程序所在目录推断，不让
 // 用户挑路径；文件清单、浏览、拖放、日志这些辅助交互都去掉了，留给命令行
 // 子命令。
@@ -29,9 +30,7 @@ import (
 	"unsafe"
 )
 
-const appTitle = "FARLAND SAGA I Saturn Tribute 汉化补丁"
 const guiClassName = "FarlandSagaPatcherWindow"
-const uiFontFace = "MS Shell Dlg 2"
 
 var (
 	kernel32 = syscall.NewLazyDLL("kernel32.dll")
@@ -81,6 +80,7 @@ const (
 	bsPushButton  = 0x00000000
 	bsMultiline   = 0x00002000
 	ssCenter      = 0x00000001
+	ssWordWrap    = 0x0000000c // SS_LEFTNOWORDWRAP：长提示自动折行
 	esMultiline   = 0x0004
 	esAutoVScroll = 0x0040
 	esReadOnly    = 0x0800
@@ -287,6 +287,10 @@ type guiApp struct {
 	// selected 是第二屏正在操作的语言在 payloads 中的下标。
 	selected int
 
+	// ui 是当前界面文字表。启动时取操作系统界面语言，用户选定语言后换成
+	// 那一语言的表——第二屏起，标题、状态行、按钮、提示、确认框全部跟着变。
+	ui uiStrings
+
 	game     string
 	payloads []*payload
 	record   *installRecord
@@ -320,7 +324,29 @@ type guiApp struct {
 }
 
 func newGUIApp() *guiApp {
-	return &guiApp{scale: 1, dpi: 96, selected: -1, events: make(chan func(), 1024)}
+	return &guiApp{
+		scale: 1, dpi: 96, selected: -1,
+		events: make(chan func(), 1024),
+		// 第一屏还没选语言，先用操作系统界面语言；取不到就英文。
+		ui: uiStringsFor(systemUILanguage()),
+	}
+}
+
+// systemUILanguage 读操作系统界面语言，决定第一屏用哪种文字。中文和韩文系统
+// 各自落到自己的表，其余（含取不到 API 的老系统）回落英文。
+func systemUILanguage() string {
+	proc := kernel32.NewProc("GetUserDefaultUILanguage")
+	if proc.Find() != nil {
+		return "en-US"
+	}
+	lang, _, _ := proc.Call()
+	switch lang & 0x3FF {
+	case 0x04: // 中文，简繁都先用简体中文表
+		return "zh-CN"
+	case 0x12: // 韩文
+		return "ko-KR"
+	}
+	return "en-US"
 }
 
 // guiAvailable 报告当前平台是否带图形界面。Windows 版用 Win32 实现，
@@ -458,7 +484,7 @@ func (a *guiApp) createControls() {
 	a.titleLabel = a.create("Static", "", 0, wsChild|wsVisible|ssCenter, idTitle)
 	a.statusLabel = a.create("Static", "", 0, wsChild|wsVisible|ssCenter, idStatus)
 	a.progressBar = a.create("msctls_progress32", "", 0, wsChild|wsVisible, idProgress)
-	a.hintLabel = a.create("Static", "", 0, wsChild|wsVisible|ssCenter, idHint)
+	a.hintLabel = a.create("Static", "", 0, wsChild|wsVisible|ssWordWrap, idHint)
 	for index := range a.languageButtons {
 		a.languageButtons[index] = a.create("Button", "", 0, wsChild|wsVisible|bsMultiline, idLangBase+uintptr(index))
 	}
@@ -494,6 +520,7 @@ func (a *guiApp) layout() {
 	gap := a.s(12)
 
 	setWindowText(a.titleLabel, a.titleText())
+	setWindowText(a.window, appTitle)
 	place(a.titleLabel, pad, pad, inner, a.s(44))
 
 	y := pad + a.s(44) + gap
@@ -502,10 +529,10 @@ func (a *guiApp) layout() {
 			showWindow(handle, false)
 		}
 		showWindow(a.hintLabel, a.game == "")
-		setWindowText(a.hintLabel, "未检测到游戏目录，请把本程序放到游戏根目录")
-		place(a.hintLabel, pad, y, inner, a.s(20))
+		setWindowText(a.hintLabel, a.ui.hintNoGameRoot)
+		place(a.hintLabel, pad, y, inner, a.s(34))
 		if a.game == "" {
-			y += a.s(20) + gap
+			y += a.s(34) + gap
 		}
 		buttonHeight := a.s(52)
 		for index, handle := range a.languageButtons {
@@ -586,7 +613,7 @@ func (a *guiApp) wndProc(hwnd, msg, wparam, lparam uintptr) uintptr {
 		return 0
 	case wmClose:
 		if a.busy {
-			messageBox(hwnd, "正在写入文件，请等待当前操作完成后再关闭窗口。", appTitle, mbOk|mbIconInformation)
+			messageBox(hwnd, a.ui.busyClose, appTitle, mbOk|mbIconInformation)
 			return 0
 		}
 	case wmDestroy:
@@ -607,7 +634,7 @@ func (a *guiApp) onCreate(hwnd uintptr) {
 			a.scale = float64(dpi) / 96.0
 		}
 	}
-	a.font = createUIFont(a.dpi)
+	a.font = createUIFont(a.dpi, a.ui.fontFace)
 	a.createControls()
 	a.layout()
 	a.applyFont()
@@ -682,13 +709,24 @@ func (a *guiApp) onDpiChanged(wparam, lparam uintptr) {
 	if a.font != 0 {
 		procDeleteObject.Call(a.font)
 	}
-	a.font = createUIFont(dpi)
+	a.font = createUIFont(dpi, a.ui.fontFace)
 	a.applyFont()
 	// lparam 指向系统建议的新窗口矩形，直接采用。
 	rect := (*winRect)(pointerFromUintptr(lparam))
 	procMoveWindow.Call(a.window, uintptr(rect.Left), uintptr(rect.Top),
 		uintptr(rect.Right-rect.Left), uintptr(rect.Bottom-rect.Top), 1)
 	a.layout()
+}
+
+// recreateFont 按当前界面语言重建字体并重新套到所有控件上。韩文用 Malgun
+// Gothic，其余用系统对话框字体；切语言时调用一次，旧字体随即删除。
+func (a *guiApp) recreateFont() {
+	if a.font != 0 {
+		procDeleteObject.Call(a.font)
+		a.font = 0
+	}
+	a.font = createUIFont(a.dpi, a.ui.fontFace)
+	a.applyFont()
 }
 
 func (a *guiApp) applyFont() {
@@ -731,18 +769,22 @@ func (a *guiApp) onCommand(wparam uintptr) {
 	}
 }
 
-// onLanguageSelect 选中一个语言，进入该语言的安装与还原页面。
+// onLanguageSelect 选中一个语言，进入该语言的安装与还原页面。界面文字表整体
+// 换成该语言的那一套：从这一步起，标题、状态行、按钮、提示、确认框全是它。
 func (a *guiApp) onLanguageSelect(index int) {
 	if a.busy || index < 0 || index >= len(a.payloads) {
 		return
 	}
 	a.selected = index
 	a.page = pageInstall
+	a.ui = uiStringsFor(a.payloads[index].info.Language)
+	a.recreateFont()
 	a.layout()
 	a.applyState()
 }
 
-// onBack 返回选语言页面。
+// onBack 返回选语言页面。界面文字保留上次选中的语言，不退回系统语言——用户
+// 刚看过什么，回来还是什么，来回切不会闪。
 func (a *guiApp) onBack() {
 	if a.busy {
 		return
@@ -759,19 +801,20 @@ func (a *guiApp) onInstall() {
 		return
 	}
 	loaded := a.payloads[a.selected]
-	label := languageLabel(loaded.info.Language)
+	label := a.ui.name(loaded.info.Language)
 	if a.installedLanguage() == loaded.info.Language {
-		messageBox(a.window, label+" 补丁已经安装，无需重复操作。", appTitle, mbOk|mbIconInformation)
+		messageBox(a.window, fmt.Sprintf(a.ui.alreadyInstalledFormat, label), appTitle, mbOk|mbIconInformation)
 		return
 	}
 	if a.game == "" {
-		a.showError(errors.New("未检测到游戏目录，请把本程序放到游戏根目录后再运行。"))
+		a.showError(errors.New(a.ui.hintNoGameRootLong))
 		return
 	}
-	if !confirmDialog(a.window, "现在安装 "+label+" 补丁吗？\n\n安装前请先退出游戏。", "安装 "+label) {
+	if !confirmDialog(a.window, fmt.Sprintf(a.ui.confirmInstallFormat, label),
+		fmt.Sprintf(a.ui.confirmInstallCaption, label)) {
 		return
 	}
-	token := a.beginBusy("正在安装 " + label + " 补丁…")
+	token := a.beginBusy(fmt.Sprintf(a.ui.busyInstallFormat, label))
 	go a.runInstall(a.game, loaded, token, a.generation)
 }
 
@@ -781,7 +824,7 @@ func (a *guiApp) onRestore() {
 		return
 	}
 	if a.game == "" {
-		a.showError(errors.New("未检测到游戏目录，请把本程序放到游戏根目录后再运行。"))
+		a.showError(errors.New(a.ui.hintNoGameRootLong))
 		return
 	}
 	record, err := loadRecord(a.game)
@@ -790,13 +833,13 @@ func (a *guiApp) onRestore() {
 		return
 	}
 	if record == nil || record.Status != statusInstalled {
-		a.showError(errors.New("尚未安装补丁，无需还原。"))
+		a.showError(errors.New(a.ui.nothingInstalled))
 		return
 	}
-	if !confirmDialog(a.window, "用原版备份覆盖当前已打补丁的文件吗？", "还原原版") {
+	if !confirmDialog(a.window, a.ui.confirmRestore, a.ui.confirmRestoreCaption) {
 		return
 	}
-	token := a.beginBusy("正在还原原版…")
+	token := a.beginBusy(a.ui.busyRestore)
 	go a.runRestore(a.game, token, a.generation)
 }
 
@@ -825,11 +868,11 @@ func (a *guiApp) runInstall(game string, loaded *payload, token, generation int)
 		a.record = record
 		a.applyState()
 		if result.AlreadyInstalled {
-			messageBox(a.window, "补丁已经安装。", appTitle, mbOk|mbIconInformation)
+			messageBox(a.window, a.ui.alreadyInstalled, appTitle, mbOk|mbIconInformation)
 			return
 		}
-		messageBox(a.window, fmt.Sprintf("已安装 %s 补丁。\n\n需要还原时点「还原」。",
-			languageLabel(result.Language)), appTitle, mbOk|mbIconInformation)
+		messageBox(a.window, fmt.Sprintf(a.ui.installedDoneFormat, a.ui.name(result.Language)),
+			appTitle, mbOk|mbIconInformation)
 	})
 }
 
@@ -855,7 +898,7 @@ func (a *guiApp) runRestore(game string, token, generation int) {
 		}
 		a.record = record
 		a.applyState()
-		messageBox(a.window, fmt.Sprintf("已还原原版，共 %d 个文件。", len(result.Files)),
+		messageBox(a.window, fmt.Sprintf(a.ui.restoreDoneFormat, len(result.Files)),
 			appTitle, mbOk|mbIconInformation)
 	})
 }
@@ -889,7 +932,7 @@ func (a *guiApp) installedLanguage() string {
 // titleText 是两屏各自的标题。
 func (a *guiApp) titleText() string {
 	if a.page == pageInstall && a.selected >= 0 && a.selected < len(a.payloads) {
-		return languageLabel(a.payloads[a.selected].info.Language)
+		return fmt.Sprintf(a.ui.pageTitleFormat, a.ui.name(a.payloads[a.selected].info.Language))
 	}
 	return appTitle
 }
@@ -900,20 +943,20 @@ func (a *guiApp) statusText() string {
 		return a.busyLabel
 	}
 	if language := a.installedLanguage(); language != "" {
-		return "已安装 " + languageLabel(language)
+		return fmt.Sprintf(a.ui.statusInstalledFormat, a.ui.name(language))
 	}
-	return "尚未安装"
+	return a.ui.statusNotInstalled
 }
 
 // languageButtonLabel 生成语言按钮上的文字，已安装的语言带标注。
 func (a *guiApp) languageButtonLabel(index int) string {
 	if index >= len(a.payloads) {
-		return "（未提供）"
+		return a.ui.notProvided
 	}
 	info := a.payloads[index].info
-	label := languageLabel(info.Language)
+	label := nativeLanguageName(info.Language)
 	if a.installedLanguage() == info.Language {
-		label += "（已安装）"
+		label += a.ui.installedTag
 	}
 	return label
 }
@@ -922,9 +965,9 @@ func (a *guiApp) languageButtonLabel(index int) string {
 func (a *guiApp) applyState() {
 	setWindowText(a.titleLabel, a.titleText())
 	setWindowText(a.statusLabel, a.statusText())
-	setWindowText(a.installBtn, "安装")
-	setWindowText(a.restoreBtn, "还原")
-	setWindowText(a.backBtn, "返回")
+	setWindowText(a.installBtn, a.ui.buttonInstall)
+	setWindowText(a.restoreBtn, a.ui.buttonRestore)
+	setWindowText(a.backBtn, a.ui.buttonBack)
 	for index, handle := range a.languageButtons {
 		setWindowText(handle, a.languageButtonLabel(index))
 		enableWindow(handle, !a.busy && index < len(a.payloads) && a.game != "")
@@ -976,7 +1019,7 @@ func (a *guiApp) showProgress(path string, position, total int64) {
 	if total > 0 {
 		percent = int(position * 100 / total)
 	}
-	setWindowText(a.statusLabel, fmt.Sprintf("正在写入 %d%%", percent))
+	setWindowText(a.statusLabel, fmt.Sprintf(a.ui.progressFormat, percent))
 }
 
 func (a *guiApp) setProgress(position, total int64) {
@@ -1039,7 +1082,7 @@ func (a *guiApp) checkWatchdog() {
 	if time.Since(a.busySince) < watchdogLimit {
 		return
 	}
-	a.showError(errors.New("操作超时，界面已恢复，请重新操作确认文件状态。"))
+	a.showError(errors.New(a.ui.timeout))
 	a.endBusy(a.busyToken)
 }
 
@@ -1049,7 +1092,7 @@ func (a *guiApp) runSafely(function func()) {
 	defer func() {
 		if recovered := recover(); recovered != nil {
 			a.endBusy(a.busyToken)
-			a.showError(fmt.Errorf("内部错误：%v", recovered))
+			a.showError(fmt.Errorf(a.ui.internalErrorFormat, recovered))
 			a.applyState()
 		}
 	}()
@@ -1060,7 +1103,7 @@ func (a *guiApp) runSafely(function func()) {
 // 避免进程直接消失而看不到任何提示。
 func (a *guiApp) guard() {
 	if recovered := recover(); recovered != nil {
-		err := fmt.Errorf("内部错误：%v", recovered)
+		err := fmt.Errorf(a.ui.internalErrorFormat, recovered)
 		a.post(func() {
 			a.endBusy(a.busyToken)
 			a.setProgress(0, 0)
@@ -1098,7 +1141,7 @@ func (a *guiApp) showError(err error) {
 	messageBox(a.window, err.Error(), appTitle, mbOk|mbIconError)
 }
 
-func createUIFont(dpi uint32) uintptr {
+func createUIFont(dpi uint32, face string) uintptr {
 	height := int32(-9 * int64(dpi) / 72)
 	if height > -11 {
 		height = -11
@@ -1107,7 +1150,7 @@ func createUIFont(dpi uint32) uintptr {
 		uintptr(height), 0, 0, 0,
 		fwNormal, 0, 0, 0,
 		defaultCharset, 0, 0, 0, 0,
-		uintptr(unsafe.Pointer(utf16ptr(uiFontFace))))
+		uintptr(unsafe.Pointer(utf16ptr(face))))
 	return font
 }
 

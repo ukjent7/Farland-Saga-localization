@@ -1,4 +1,5 @@
 """Read original Unifont HEX cells, preserving their 16-row layout."""
+import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -6,13 +7,19 @@ from pathlib import Path
 from path_compat import REPO
 
 FONT_ROOT = REPO/'fonts/unifont-18.0.01'
-FONT_HEX = FONT_ROOT/'unifont-18.0.01.hex'
+# 只保留 gzip 形式。未压缩的 .hex 与它内容逐字节一致（sha256 均可在 source.json
+# 的 hex_sha256 对上），让仓库白背 3.7 MB；官方 tar.gz 同样只作溯源，不读。
+FONT_HEX_GZ = FONT_ROOT/'unifont-18.0.01.hex.gz'
 
 
 class Unifont:
     def __init__(self):
         self.glyphs = {}
-        for line in FONT_HEX.read_text(encoding='ascii').splitlines():
+        with gzip.open(FONT_HEX_GZ, 'rt', encoding='ascii') as handle:
+            text = handle.read()
+        # 哈希仍按解压后的原文计算，与 source.json 的 hex_sha256 同值。
+        self.source_sha256 = hashlib.sha256(text.encode('ascii')).hexdigest()
+        for line in text.splitlines():
             code, encoded = line.split(':')
             raw = bytes.fromhex(encoded)
             assert len(raw) in (16, 32)
@@ -55,7 +62,7 @@ class Unifont:
         (stage/'unifont_subset.hex').write_text(subset, encoding='ascii')
         metadata = {
             'font': 'GNU Unifont', 'version': '18.0.01',
-            'source_sha256': hashlib.sha256(FONT_HEX.read_bytes()).hexdigest(),
+            'source_sha256': self.source_sha256,
             'used_codepoints': len(self.used), 'missing_codepoints': [],
             'preserved_cell_layout': True, 'derivative_name': 'Farland Translation Bitmap Subset',
             'license': 'SIL Open Font License 1.1',

@@ -11,7 +11,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"runtime"
+	"sort"
 	"strings"
 	"testing"
 )
@@ -473,7 +475,7 @@ func TestInstallRestoreRoundTrip(t *testing.T) {
 		t.Fatalf("安装记录内容不符: %+v", record)
 	}
 
-	// 重复安装是幂等的，且不再新建备份。
+	// 重复安装是幂等的，且不新建任何目录。
 	again, err := installPatch(game, loaded, nil)
 	if err != nil {
 		t.Fatalf("重复安装失败: %v", err)
@@ -481,18 +483,9 @@ func TestInstallRestoreRoundTrip(t *testing.T) {
 	if !again.AlreadyInstalled {
 		t.Fatal("重复安装应当识别为已安装")
 	}
-	entries, err := os.ReadDir(game)
-	if err != nil {
-		t.Fatal(err)
-	}
-	backups := 0
-	for _, entry := range entries {
-		if strings.HasPrefix(entry.Name(), backupPrefix) {
-			backups++
-		}
-	}
-	if backups != 1 {
-		t.Fatalf("重复安装新建了备份目录: %d", backups)
+	assertOnlyBackupDir(t, game)
+	if again.BackupDirectory != backupDirName {
+		t.Fatalf("备份目录应为固定名 %s，实际 %s", backupDirName, again.BackupDirectory)
 	}
 
 	restored, err := restoreOriginal(game)
@@ -501,6 +494,9 @@ func TestInstallRestoreRoundTrip(t *testing.T) {
 	}
 	if len(restored.Files) != len(files) {
 		t.Fatalf("恢复文件数不符: %d", len(restored.Files))
+	}
+	if restored.BackupDirectory != backupDirName {
+		t.Fatalf("恢复后备份目录应为固定名 %s，实际 %s", backupDirName, restored.BackupDirectory)
 	}
 	for _, file := range files {
 		data, err := os.ReadFile(filepath.Join(game, filepath.FromSlash(file.name)))
@@ -511,6 +507,8 @@ func TestInstallRestoreRoundTrip(t *testing.T) {
 			t.Fatalf("%s 恢复后不是原版", file.name)
 		}
 	}
+	// 还原不落回滚目录：撤销一次还原等于重装一次，载荷随时可用。
+	assertOnlyBackupDir(t, game)
 	record, err = loadRecord(game)
 	if err != nil {
 		t.Fatal(err)
@@ -520,6 +518,31 @@ func TestInstallRestoreRoundTrip(t *testing.T) {
 	}
 	if _, err := restoreOriginal(game); err == nil {
 		t.Fatal("重复恢复应当被拒绝")
+	}
+}
+
+// assertOnlyBackupDir 断言游戏目录里只有固定备份目录与安装记录，没有任何
+// 带时间戳的残留——这是「备份不随安装次数膨胀」这条性质的直接体现。
+func assertOnlyBackupDir(t *testing.T, game string) {
+	t.Helper()
+	entries, err := os.ReadDir(game)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var patcherEntries []string
+	for _, entry := range entries {
+		if strings.HasPrefix(entry.Name(), "FarlandSagaPatcher") {
+			patcherEntries = append(patcherEntries, entry.Name())
+		}
+	}
+	want := []string{backupDirName, recordName}
+	sort.Strings(want)
+	sort.Strings(patcherEntries)
+	if strings.Join(patcherEntries, ",") != strings.Join(want, ",") {
+		t.Fatalf("游戏目录里的补丁器文件应为 %v，实际 %v", want, patcherEntries)
+	}
+	if _, err := os.Stat(filepath.Join(game, backupDirName)); err != nil {
+		t.Fatalf("固定备份目录不存在: %v", err)
 	}
 }
 
@@ -657,10 +680,21 @@ func TestSwitchBetweenPayloadsAndRestore(t *testing.T) {
 		}
 		_ = index
 	}
-	// 原版备份仍指向第一次安装时建立的目录。
-	if result.BackupDirectory == "" {
-		t.Fatal("切换后没有记录原版备份")
+	// 原版备份始终是同一个固定目录，切语言不新建、不清空、不改写。
+	if result.BackupDirectory != backupDirName {
+		t.Fatalf("切换后备份目录应为固定名 %s，实际 %s", backupDirName, result.BackupDirectory)
 	}
+	firstBackup := filepath.Join(game, backupDirName)
+	for _, file := range files {
+		data, err := os.ReadFile(filepath.Join(firstBackup, filepath.FromSlash(file.name)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(data, file.original) {
+			t.Fatalf("%s 的原版备份被切换语言改动了", file.name)
+		}
+	}
+	assertOnlyBackupDir(t, game)
 	if _, err := restoreOriginal(game); err != nil {
 		t.Fatalf("切换后恢复失败: %v", err)
 	}
@@ -671,6 +705,474 @@ func TestSwitchBetweenPayloadsAndRestore(t *testing.T) {
 		}
 		if !bytes.Equal(data, file.original) {
 			t.Fatalf("%s 恢复后不是原版", file.name)
+		}
+	}
+}
+
+// koreanFiles 造一组与 files 同原版、补丁后内容不同的文件，用来模拟切换语言。
+func koreanFiles(files []testFile) []testFile {
+	out := make([]testFile, len(files))
+	for index, file := range files {
+		patched := append([]byte(nil), file.original...)
+		copy(patched[:min(blockSize, len(patched))], pattern(31, min(blockSize, len(patched))))
+		out[index] = testFile{name: file.name, original: file.original, patched: patched}
+	}
+	return out
+}
+
+// restoreOriginals 把游戏文件写回原版，模拟「Steam 校验完安装文件」之后的状态。
+func restoreOriginals(t *testing.T, game string, files []testFile) {
+	t.Helper()
+	for _, file := range files {
+		target := filepath.Join(game, filepath.FromSlash(file.name))
+		if err := os.WriteFile(target, file.original, 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
+// TestInstallSweepsStaleBackupDirs 覆盖用户实际遇到的现场：游戏目录里堆着旧版
+// 留下的带时间戳备份与还原回滚目录。安装成功后必须一次性清掉，并报告腾出了
+// 多少空间。
+func TestInstallSweepsStaleBackupDirs(t *testing.T) {
+	directory := t.TempDir()
+	files := sampleFiles()
+	chinesePath, _ := buildPayload(t, directory, "zh-CN-sweep", "zh-CN", files)
+	koreanPath, _ := buildPayload(t, directory, "ko-KR-sweep", "ko-KR", koreanFiles(files))
+	game := buildGame(t, files)
+
+	if _, err := installPatch(game, openTestPayload(t, chinesePath), nil); err != nil {
+		t.Fatalf("安装中文补丁失败: %v", err)
+	}
+	stale := []string{"FarlandSagaPatcher-backup-20260101-000000", "FarlandSagaPatcher-restore-rollback-20260101-000000"}
+	for _, name := range stale {
+		if err := os.MkdirAll(filepath.Join(game, name), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(game, name, "junk.bin"), pattern(77, 4096), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	result, err := installPatch(game, openTestPayload(t, koreanPath), nil)
+	if err != nil {
+		t.Fatalf("切换韩语补丁失败: %v", err)
+	}
+	assertOnlyBackupDir(t, game)
+	for _, name := range stale {
+		if !slicesContains(result.CleanedUp, name) {
+			t.Fatalf("应清理 %s，实际 %v", name, result.CleanedUp)
+		}
+	}
+	// 切换语言时暂存回滚副本也会被收掉，所以清理数只多不少。
+	if len(result.CleanedUp) < len(stale) {
+		t.Fatalf("至少应清理 %d 个残留目录，实际 %v", len(stale), result.CleanedUp)
+	}
+	if result.ReclaimedBytes < int64(len(pattern(77, 4096))) {
+		t.Fatalf("腾出空间统计不合理: %d", result.ReclaimedBytes)
+	}
+	if record, err := loadRecord(game); err != nil || record.BackupDirectory != backupDirName {
+		t.Fatalf("记录的备份目录应为固定名: %+v (%v)", record, err)
+	}
+}
+
+func slicesContains(list []string, want string) bool {
+	for _, item := range list {
+		if item == want {
+			return true
+		}
+	}
+	return false
+}
+
+// TestInstallMigratesRecordedTimestampedBackup 覆盖老安装：记录指向带时间戳的
+// 备份目录，而固定目录不存在。此时必须把旧目录原地改名成固定名，而不是再从
+// 游戏文件拷一份——游戏文件已经是补丁态，根本拷不出原版。
+func TestInstallMigratesRecordedTimestampedBackup(t *testing.T) {
+	directory := t.TempDir()
+	files := sampleFiles()
+	chinesePath, _ := buildPayload(t, directory, "zh-CN-migrate", "zh-CN", files)
+	koreanPath, _ := buildPayload(t, directory, "ko-KR-migrate", "ko-KR", koreanFiles(files))
+	game := buildGame(t, files)
+
+	if _, err := installPatch(game, openTestPayload(t, chinesePath), nil); err != nil {
+		t.Fatalf("安装中文补丁失败: %v", err)
+	}
+	// 把固定备份改名成旧式时间戳名，并让记录指向它，模拟上一版补丁器的现场。
+	legacy := "FarlandSagaPatcher-backup-20260101-010203"
+	if err := os.Rename(filepath.Join(game, backupDirName), filepath.Join(game, legacy)); err != nil {
+		t.Fatal(err)
+	}
+	record, err := loadRecord(game)
+	if err != nil {
+		t.Fatal(err)
+	}
+	record.BackupDirectory = legacy
+	if err := writeRecord(game, record); err != nil {
+		t.Fatal(err)
+	}
+
+	result, err := installPatch(game, openTestPayload(t, koreanPath), nil)
+	if err != nil {
+		t.Fatalf("迁移后切换韩语补丁失败: %v", err)
+	}
+	if result.BackupDirectory != backupDirName {
+		t.Fatalf("迁移后备份目录应为固定名 %s，实际 %s", backupDirName, result.BackupDirectory)
+	}
+	assertOnlyBackupDir(t, game)
+	for _, file := range files {
+		data, err := os.ReadFile(filepath.Join(game, backupDirName, filepath.FromSlash(file.name)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(data, file.original) {
+			t.Fatalf("%s 的原版备份内容不符", file.name)
+		}
+	}
+}
+
+// TestInstallRebuildsBackupFromOriginalFiles 覆盖备份目录被用户删掉、但游戏文件
+// 恰好还是原版的情况：应当静默重建，不拿一句「找不到备份」去打扰用户。
+func TestInstallRebuildsBackupFromOriginalFiles(t *testing.T) {
+	directory := t.TempDir()
+	files := sampleFiles()
+	chinesePath, _ := buildPayload(t, directory, "zh-CN-rebuild", "zh-CN", files)
+	koreanPath, _ := buildPayload(t, directory, "ko-KR-rebuild", "ko-KR", koreanFiles(files))
+	game := buildGame(t, files)
+
+	if _, err := installPatch(game, openTestPayload(t, chinesePath), nil); err != nil {
+		t.Fatalf("安装中文补丁失败: %v", err)
+	}
+	if err := os.RemoveAll(filepath.Join(game, backupDirName)); err != nil {
+		t.Fatal(err)
+	}
+	restoreOriginals(t, game, files)
+
+	result, err := installPatch(game, openTestPayload(t, koreanPath), nil)
+	if err != nil {
+		t.Fatalf("备份缺失但游戏是原版时应能重建: %v", err)
+	}
+	if result.BackupDirectory != backupDirName {
+		t.Fatalf("备份目录应为固定名 %s，实际 %s", backupDirName, result.BackupDirectory)
+	}
+	assertOnlyBackupDir(t, game)
+	for _, file := range files {
+		data, err := os.ReadFile(filepath.Join(game, filepath.FromSlash(file.name)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(data, koreanFiles(files)[0].patched) && file.name == files[0].name {
+			t.Fatalf("%s 安装后不是韩语补丁内容", file.name)
+		}
+	}
+}
+
+// TestInstallFailsCleanlyWhenBackupLostAndPatched 是本次修复的核心回归：备份被
+// 删、游戏已是补丁态时，安装必须原样失败——既不改写文件，也不在游戏目录里留下
+// 任何新目录。旧版本会先建一个几百 MB 的备份再报错，那个孤儿目录一直留在盘上。
+func TestInstallFailsCleanlyWhenBackupLostAndPatched(t *testing.T) {
+	directory := t.TempDir()
+	files := sampleFiles()
+	chinesePath, _ := buildPayload(t, directory, "zh-CN-lost", "zh-CN", files)
+	koreanPath, _ := buildPayload(t, directory, "ko-KR-lost", "ko-KR", koreanFiles(files))
+	game := buildGame(t, files)
+
+	if _, err := installPatch(game, openTestPayload(t, chinesePath), nil); err != nil {
+		t.Fatalf("安装中文补丁失败: %v", err)
+	}
+	patched := map[string][]byte{}
+	for _, file := range files {
+		data, err := os.ReadFile(filepath.Join(game, filepath.FromSlash(file.name)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		patched[file.name] = data
+	}
+	if err := os.RemoveAll(filepath.Join(game, backupDirName)); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err := installPatch(game, openTestPayload(t, koreanPath), nil)
+	if err == nil {
+		t.Fatal("备份丢失且游戏已打补丁时应当拒绝安装")
+	}
+	if !strings.Contains(err.Error(), "验证游戏文件的完整性") {
+		t.Fatalf("错误信息应指出取回原版的途径: %v", err)
+	}
+	// 一个字节都不能改，一个目录都不能多。
+	for name, want := range patched {
+		data, err := os.ReadFile(filepath.Join(game, filepath.FromSlash(name)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(data, want) {
+			t.Fatalf("%s 在失败的安装中被改动了", name)
+		}
+	}
+	entries, err := os.ReadDir(game)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range entries {
+		if strings.HasPrefix(entry.Name(), "FarlandSagaPatcher") && entry.Name() != recordName {
+			t.Fatalf("失败的安装留下了 %s", entry.Name())
+		}
+	}
+}
+
+// TestInstallRepairsCorruptBackup 备份里有个文件被改过，但游戏文件还是原版：
+// 应当用当前文件把备份修好，而不是拒绝安装。
+func TestInstallRepairsCorruptBackup(t *testing.T) {
+	directory := t.TempDir()
+	files := sampleFiles()
+	chinesePath, _ := buildPayload(t, directory, "zh-CN-repair", "zh-CN", files)
+	koreanPath, _ := buildPayload(t, directory, "ko-KR-repair", "ko-KR", koreanFiles(files))
+	game := buildGame(t, files)
+
+	if _, err := installPatch(game, openTestPayload(t, chinesePath), nil); err != nil {
+		t.Fatalf("安装中文补丁失败: %v", err)
+	}
+	victim := filepath.Join(game, backupDirName, filepath.FromSlash(files[0].name))
+	if err := os.WriteFile(victim, pattern(88, len(files[0].original)), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	restoreOriginals(t, game, files)
+
+	if _, err := installPatch(game, openTestPayload(t, koreanPath), nil); err != nil {
+		t.Fatalf("备份损坏但游戏是原版时应能修复: %v", err)
+	}
+	assertOnlyBackupDir(t, game)
+	data, err := os.ReadFile(victim)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(data, files[0].original) {
+		t.Fatal("修复后的原版备份内容不符")
+	}
+}
+
+// TestInstallRefusesCorruptBackupWhenPatched 备份损坏且游戏已是补丁态：无法
+// 修复，必须明确指出是哪个文件不对。
+func TestInstallRefusesCorruptBackupWhenPatched(t *testing.T) {
+	directory := t.TempDir()
+	files := sampleFiles()
+	chinesePath, _ := buildPayload(t, directory, "zh-CN-corrupt", "zh-CN", files)
+	koreanPath, _ := buildPayload(t, directory, "ko-KR-corrupt", "ko-KR", koreanFiles(files))
+	game := buildGame(t, files)
+
+	if _, err := installPatch(game, openTestPayload(t, chinesePath), nil); err != nil {
+		t.Fatalf("安装中文补丁失败: %v", err)
+	}
+	victim := filepath.Join(game, backupDirName, filepath.FromSlash(files[0].name))
+	if err := os.WriteFile(victim, pattern(88, len(files[0].original)), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	_, err := installPatch(game, openTestPayload(t, koreanPath), nil)
+	if err == nil {
+		t.Fatal("备份损坏且游戏已打补丁时应当拒绝安装")
+	}
+	if !strings.Contains(err.Error(), files[0].name) {
+		t.Fatalf("错误信息应指出损坏的文件: %v", err)
+	}
+	assertOnlyBackupDir(t, game)
+}
+
+// TestRestoreUsesRecordedTimestampedBackup 还原要认记录里的旧式时间戳目录，
+// 老安装在迁移之前也能还原。
+func TestRestoreUsesRecordedTimestampedBackup(t *testing.T) {
+	directory := t.TempDir()
+	files := sampleFiles()
+	path, _ := buildPayload(t, directory, "zh-CN-legacy", "zh-CN", files)
+	game := buildGame(t, files)
+
+	if _, err := installPatch(game, openTestPayload(t, path), nil); err != nil {
+		t.Fatalf("安装失败: %v", err)
+	}
+	legacy := "FarlandSagaPatcher-backup-20260101-040506"
+	if err := os.Rename(filepath.Join(game, backupDirName), filepath.Join(game, legacy)); err != nil {
+		t.Fatal(err)
+	}
+	record, err := loadRecord(game)
+	if err != nil {
+		t.Fatal(err)
+	}
+	record.BackupDirectory = legacy
+	if err := writeRecord(game, record); err != nil {
+		t.Fatal(err)
+	}
+
+	result, err := restoreOriginal(game)
+	if err != nil {
+		t.Fatalf("从旧式备份还原失败: %v", err)
+	}
+	if result.BackupDirectory != legacy {
+		t.Fatalf("还原应使用记录里的 %s，实际 %s", legacy, result.BackupDirectory)
+	}
+	for _, file := range files {
+		data, err := os.ReadFile(filepath.Join(game, filepath.FromSlash(file.name)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(data, file.original) {
+			t.Fatalf("%s 还原后不是原版", file.name)
+		}
+	}
+}
+
+// TestRestoreReportsUnusableBackup 备份彻底没了的时候，还原要把固定目录和记录
+// 里的目录都点出来，而不是只说一句找不到备份。
+func TestRestoreReportsUnusableBackup(t *testing.T) {
+	directory := t.TempDir()
+	files := sampleFiles()
+	path, _ := buildPayload(t, directory, "zh-CN-nobackup", "zh-CN", files)
+	game := buildGame(t, files)
+
+	if _, err := installPatch(game, openTestPayload(t, path), nil); err != nil {
+		t.Fatalf("安装失败: %v", err)
+	}
+	legacy := "FarlandSagaPatcher-backup-20260101-070809"
+	if err := os.Rename(filepath.Join(game, backupDirName), filepath.Join(game, legacy)); err != nil {
+		t.Fatal(err)
+	}
+	record, err := loadRecord(game)
+	if err != nil {
+		t.Fatal(err)
+	}
+	record.BackupDirectory = legacy
+	if err := writeRecord(game, record); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.RemoveAll(filepath.Join(game, legacy)); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = restoreOriginal(game)
+	if err == nil {
+		t.Fatal("备份缺失时应当拒绝还原")
+	}
+	for _, want := range []string{backupDirName, legacy} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("错误信息应提到 %s: %v", want, err)
+		}
+	}
+}
+
+func TestInspectBackup(t *testing.T) {
+	directory := t.TempDir()
+	files := sampleFiles()
+	path, entries := buildPayload(t, directory, "zh-CN-health", "zh-CN", files)
+	game := buildGame(t, files)
+	loaded := openTestPayload(t, path)
+	targets := backupTargetsFromManifest(loaded.info)
+
+	health := inspectBackup(game, targets)
+	if health.Present || health.Complete {
+		t.Fatalf("目录不存在时应报告缺失: %+v", health)
+	}
+	if health.Directory != backupDirName {
+		t.Fatalf("目录名应为 %s，实际 %s", backupDirName, health.Directory)
+	}
+
+	if _, err := installPatch(game, loaded, nil); err != nil {
+		t.Fatalf("安装失败: %v", err)
+	}
+	health = inspectBackup(game, targets)
+	if !health.Present || !health.Complete || len(health.Problems) != 0 {
+		t.Fatalf("完整备份应报告健康: %+v", health)
+	}
+	if len(entries) != len(files) {
+		t.Fatalf("清单文件数不符: %d", len(entries))
+	}
+
+	victim := filepath.Join(game, backupDirName, filepath.FromSlash(files[1].name))
+	if err := os.WriteFile(victim, pattern(99, len(files[1].original)), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	health = inspectBackup(game, targets)
+	if !health.Present || health.Complete {
+		t.Fatalf("损坏备份不应报告健康: %+v", health)
+	}
+	if len(health.Problems) != 1 || !strings.Contains(health.Problems[0], files[1].name) {
+		t.Fatalf("应指出损坏的文件: %v", health.Problems)
+	}
+}
+
+func TestSweepStaleBackupsKeepsFixedName(t *testing.T) {
+	game := t.TempDir()
+	keep := filepath.Join(game, backupDirName)
+	if err := os.MkdirAll(keep, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(keep, "original.bin"), pattern(1, 128), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	// 与补丁无关的目录不能被扫掉。
+	unrelated := filepath.Join(game, "S-Tribute_Data")
+	if err := os.MkdirAll(unrelated, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	stale := map[string]int64{
+		"FarlandSagaPatcher-backup-20260101-000000":      4096,
+		"FarlandSagaPatcher-backup-20260101-000000-2":    2048,
+		"FarlandSagaPatcher-restore-rollback-20260101-1": 1024,
+		"FarlandSagaPatcher-rollback":                    512,
+	}
+	wantBytes := int64(0)
+	for name, size := range stale {
+		if err := os.MkdirAll(filepath.Join(game, name), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(game, name, "junk.bin"), pattern(3, int(size)), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		wantBytes += size
+	}
+
+	removed, reclaimed, err := sweepStaleBackups(game, backupDirName)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(removed) != len(stale) {
+		t.Fatalf("应清理 %d 个目录，实际 %v", len(stale), removed)
+	}
+	if reclaimed != wantBytes {
+		t.Fatalf("腾出空间应为 %d，实际 %d", wantBytes, reclaimed)
+	}
+	// 固定备份目录与补丁无关的目录必须原样留着，旧式目录一个不剩。
+	for _, name := range keysOf(stale) {
+		if _, err := os.Stat(filepath.Join(game, name)); !os.IsNotExist(err) {
+			t.Fatalf("%s 应被清理: %v", name, err)
+		}
+	}
+	for _, name := range []string{backupDirName, "S-Tribute_Data"} {
+		if _, err := os.Stat(filepath.Join(game, name)); err != nil {
+			t.Fatalf("%s 不应当被清理: %v", name, err)
+		}
+	}
+}
+
+func keysOf(m map[string]int64) []string {
+	out := make([]string, 0, len(m))
+	for key := range m {
+		out = append(out, key)
+	}
+	return out
+}
+
+func TestHumanSize(t *testing.T) {
+	cases := []struct {
+		size int64
+		want string
+	}{
+		{0, "0 B"},
+		{999, "999 B"},
+		{1024, "1.0 KiB"},
+		{301359116, "287.4 MiB"},
+		{3 * (1 << 30), "3.0 GiB"},
+	}
+	for _, item := range cases {
+		if got := humanSize(item.size); got != item.want {
+			t.Fatalf("humanSize(%d) = %s，期望 %s", item.size, got, item.want)
 		}
 	}
 }
@@ -912,22 +1414,98 @@ func TestLoadEmbedded(t *testing.T) {
 	}
 }
 
-// 语言代码到按钮文字与固定顺序的映射。
-func TestLanguageLabelAndRank(t *testing.T) {
-	labels := map[string]string{
+// 语言代码到按钮文字与固定顺序的映射。第一屏按钮用的是语言「自己」的名字，
+// 所以韩文按钮必须是 한국어，不能是中文的「韩文」——韩国人看不懂那个。
+func TestNativeLanguageNameAndRank(t *testing.T) {
+	names := map[string]string{
 		"zh-CN": "简体中文",
-		"ko-KR": "韩文",
+		"ko-KR": "한국어",
 		"en-US": "English",
 		"ja-JP": "ja-JP",
 	}
-	for code, want := range labels {
-		if got := languageLabel(code); got != want {
-			t.Errorf("languageLabel(%s) = %s，期望 %s", code, got, want)
+	for code, want := range names {
+		if got := nativeLanguageName(code); got != want {
+			t.Errorf("nativeLanguageName(%s) = %s，期望 %s", code, got, want)
 		}
 	}
 	if languageRank("zh-CN") >= languageRank("ko-KR") ||
 		languageRank("ko-KR") >= languageRank("en-US") ||
 		languageRank("en-US") >= languageRank("fr-FR") {
 		t.Fatal("语言顺序必须为中、韩、英，未知语言排最后")
+	}
+}
+
+// 三张界面文字表必须逐字段补齐。用反射枚举字段，新增字段忘了翻译会在这里
+// 失败，而不是等到用户在韩文 Windows 上看到一串英文。
+func TestUIStringsComplete(t *testing.T) {
+	tables := map[string]uiStrings{"zh-CN": uiChinese, "ko-KR": uiKorean, "en-US": uiEnglish}
+	if len(tables) != 3 {
+		t.Fatalf("应该有三张表，实际 %d 张", len(tables))
+	}
+	value := reflect.ValueOf(uiChinese)
+	typ := value.Type()
+	for code, table := range tables {
+		v := reflect.ValueOf(table)
+		for i := 0; i < typ.NumField(); i++ {
+			field := typ.Field(i)
+			got := v.Field(i).String()
+			if got == "" {
+				t.Errorf("%s 表的 %s 是空的", code, field.Name)
+			}
+		}
+	}
+	// 三张表必须真的不同：同文字说明复制漏改。appTitle 不参与这个检查——
+	// 它是三语共用的常量，故意不在表里。
+	if uiChinese.pageTitleFormat == uiKorean.pageTitleFormat {
+		t.Error("第二屏标题的中韩文不能相同")
+	}
+	if uiKorean.pageTitleFormat != "%s 패치" {
+		t.Errorf("韩文第二屏标题 = %s，期望 %%s 패치", uiKorean.pageTitleFormat)
+	}
+	if uiChinese.buttonInstall == uiKorean.buttonInstall {
+		t.Error("安装按钮的中韩文字不能相同")
+	}
+	if uiKorean.buttonInstall != "설치" {
+		t.Errorf("韩文安装按钮 = %s，期望 설치", uiKorean.buttonInstall)
+	}
+}
+
+// uiStrings.name 用「当前界面语言」称呼各语言，和第一屏按钮用的
+// nativeLanguageName 是两回事，不能混。
+func TestUIStringsNameUsesUILanguage(t *testing.T) {
+	if got := uiKorean.name("ko-KR"); got != "한국어" {
+		t.Errorf("韩文界面称呼韩语 = %s，期望 한국어", got)
+	}
+	if got := uiKorean.name("zh-CN"); got != "중국어(간체)" {
+		t.Errorf("韩文界面称呼简中 = %s，期望 중국어(간체)", got)
+	}
+	if got := uiEnglish.name("ko-KR"); got != "Korean" {
+		t.Errorf("英文界面称呼韩语 = %s，期望 Korean", got)
+	}
+	if got := uiChinese.name("ko-KR"); got != "韩文" {
+		t.Errorf("中文界面称呼韩语 = %s，期望 韩文", got)
+	}
+	// 未知语言原样返回代码，不猜。
+	if got := uiKorean.name("fr-FR"); got != "fr-FR" {
+		t.Errorf("未知语言 = %s，期望 fr-FR", got)
+	}
+}
+
+// 取不到的语言必须回落英文表，不能返回空表让界面变成一片空白。
+func TestUIStringsForFallsBackToEnglish(t *testing.T) {
+	for _, code := range []string{"ja-JP", "fr-FR", "", "KO-kr"} {
+		got := uiStringsFor(code)
+		if got != uiEnglish {
+			t.Errorf("uiStringsFor(%q) 应回落英文表", code)
+		}
+	}
+	for _, code := range []string{"zh-CN", "ko-KR", "en-US"} {
+		if uiStringsFor(code) == uiEnglish && code != "en-US" {
+			t.Errorf("uiStringsFor(%q) 不应回落英文表", code)
+		}
+	}
+	// 韩文表必须指定带韩文字形的字体，否则中文 Windows 上会是方框。
+	if uiKorean.fontFace != "Malgun Gothic" {
+		t.Errorf("韩文字体 = %s，期望 Malgun Gothic", uiKorean.fontFace)
 	}
 }
