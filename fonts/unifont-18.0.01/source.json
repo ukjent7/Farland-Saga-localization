@@ -21,10 +21,25 @@
     }
   ],
   "hex_sha256": "2ab7801c809b76541a10b25858c1a962bdb650eee56b4c7df1f325b56e3955ee",
+  "vendored_policy": {
+    "kept": [
+      "unifont-18.0.01.hex.gz",
+      "COPYING",
+      "LICENSE.txt",
+      "OFL-1.1.txt",
+      "README"
+    ],
+    "not_vendored": [
+      "unifont-18.0.01.hex",
+      "unifont-18.0.01.tar.gz"
+    ],
+    "reason": "未压缩 .hex 与 .hex.gz 解压后逐字节一致（均可用上面的 hex_sha256 校验），官方 tar.gz 只作溯源；两者都已从 git 历史移除。tools/unifont_bitmap.py 直接读 gzip。需要时按下面的 url 与 sha256 重新取用。"
+  },
   "source_package": {
     "url": "https://unifoundry.com/pub/unifont/unifont-18.0.01/unifont-18.0.01.tar.gz",
     "file": "unifont-18.0.01.tar.gz",
-    "sha256": "eab60847aac34c8768765cecc7821faf50de2636187b452b9b5fa50a12b00bc3"
+    "sha256": "eab60847aac34c8768765cecc7821faf50de2636187b452b9b5fa50a12b00bc3",
+    "note": "仅溯源记录，未随仓库分发"
   },
   "bundled_notice_files": {
     "README": "0c35716b811d92631b60c92c1ab6a650e5da486f82896c1e87aaef931eb9336a",

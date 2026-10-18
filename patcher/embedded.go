@@ -64,15 +64,6 @@ func languageRank(code string) int {
 	return 3
 }
 
-// languageLabel 把 manifest 里的语言代码换成界面上显示的中文名。
-func languageLabel(code string) string {
-	switch code {
-	case "zh-CN":
-		return "简体中文"
-	case "ko-KR":
-		return "韩文"
-	case "en-US":
-		return "English"
-	}
-	return code
-}
+// nativeLanguageName 与 uiStrings.name 在 i18n.go：前者给第一屏的语言按钮
+// 用（每种语言显示自己的名字），后者给选定语言之后的界面用（用当前界面语言
+// 称呼各语言）。
