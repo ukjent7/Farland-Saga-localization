@@ -248,10 +248,12 @@ def build_chinese(seed,stage,resources_only):
     candidate=Candidate(seed,stage,version=stage.name)
     input_dir=stage/'inputs'
     _remove_legacy_input_dumps(input_dir)
+    unity_src = REPO / 'config/unity.json' if (REPO / 'config/unity.json').is_file() else base.WORK / 'assets/sources/unity.json'
+    glyph_src = REPO / 'config/glyph-slots.zh-CN.json' if (REPO / 'config/glyph-slots.zh-CN.json').is_file() else base.WORK / 'assets/sources/glyph-slots.zh-CN.json'
     source_files=[REPO/'translation/corpus.json',REPO/'translation/glossary.json',
                   REPO/'translation/ui_labels.json',REPO/'translation/titles.json',
                   REPO/'translation/frontend_submenus.json',
-                  base.WORK/'assets/sources/unity.json',base.WORK/'assets/sources/glyph-slots.zh-CN.json']
+                  unity_src, glyph_src]
     for source in source_files:
         if source.exists():shutil.copyfile(source,input_dir/source.name)
 

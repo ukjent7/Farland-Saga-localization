@@ -1,0 +1,2874 @@
+{
+  "added": [
+    {
+      "character": "—",
+      "cp932_hex": "eaa2",
+      "slot": 7805
+    },
+    {
+      "character": "业",
+      "cp932_hex": "ea9f",
+      "slot": 7802
+    },
+    {
+      "character": "丝",
+      "cp932_hex": "ea9e",
+      "slot": 7801
+    },
+    {
+      "character": "丢",
+      "cp932_hex": "ea9d",
+      "slot": 7800
+    },
+    {
+      "character": "为",
+      "cp932_hex": "ea9c",
+      "slot": 7799
+    },
+    {
+      "character": "举",
+      "cp932_hex": "ea9a",
+      "slot": 7797
+    },
+    {
+      "character": "么",
+      "cp932_hex": "ea8e",
+      "slot": 7785
+    },
+    {
+      "character": "义",
+      "cp932_hex": "ea8d",
+      "slot": 7784
+    },
+    {
+      "character": "乐",
+      "cp932_hex": "ea8a",
+      "slot": 7781
+    },
+    {
+      "character": "书",
+      "cp932_hex": "ea89",
+      "slot": 7780
+    },
+    {
+      "character": "买",
+      "cp932_hex": "ea86",
+      "slot": 7777
+    },
+    {
+      "character": "亚",
+      "cp932_hex": "ea85",
+      "slot": 7776
+    },
+    {
+      "character": "们",
+      "cp932_hex": "ea84",
+      "slot": 7775
+    },
+    {
+      "character": "伙",
+      "cp932_hex": "ea81",
+      "slot": 7772
+    },
+    {
+      "character": "你",
+      "cp932_hex": "ea80",
+      "slot": 7771
+    },
+    {
+      "character": "俩",
+      "cp932_hex": "ea7a",
+      "slot": 7766
+    },
+    {
+      "character": "兰",
+      "cp932_hex": "ea79",
+      "slot": 7765
+    },
+    {
+      "character": "关",
+      "cp932_hex": "ea77",
+      "slot": 7763
+    },
+    {
+      "character": "冈",
+      "cp932_hex": "ea76",
+      "slot": 7762
+    },
+    {
+      "character": "军",
+      "cp932_hex": "ea75",
+      "slot": 7761
+    },
+    {
+      "character": "凤",
+      "cp932_hex": "ea74",
+      "slot": 7760
+    },
+    {
+      "character": "凯",
+      "cp932_hex": "ea72",
+      "slot": 7758
+    },
+    {
+      "character": "击",
+      "cp932_hex": "ea6f",
+      "slot": 7755
+    },
+    {
+      "character": "别",
+      "cp932_hex": "ea6b",
+      "slot": 7751
+    },
+    {
+      "character": "剂",
+      "cp932_hex": "ea5f",
+      "slot": 7739
+    },
+    {
+      "character": "剑",
+      "cp932_hex": "ea58",
+      "slot": 7732
+    },
+    {
+      "character": "办",
+      "cp932_hex": "ea55",
+      "slot": 7729
+    },
+    {
+      "character": "动",
+      "cp932_hex": "ea53",
+      "slot": 7727
+    },
+    {
+      "character": "劳",
+      "cp932_hex": "ea51",
+      "slot": 7725
+    },
+    {
+      "character": "单",
+      "cp932_hex": "ea4d",
+      "slot": 7721
+    },
+    {
+      "character": "卖",
+      "cp932_hex": "ea49",
+      "slot": 7717
+    },
+    {
+      "character": "卡",
+      "cp932_hex": "ea48",
+      "slot": 7716
+    },
+    {
+      "character": "吓",
+      "cp932_hex": "ea47",
+      "slot": 7715
+    },
+    {
+      "character": "吗",
+      "cp932_hex": "ea41",
+      "slot": 7709
+    },
+    {
+      "character": "吧",
+      "cp932_hex": "e9f6",
+      "slot": 7701
+    },
+    {
+      "character": "启",
+      "cp932_hex": "e9f5",
+      "slot": 7700
+    },
+    {
+      "character": "呜",
+      "cp932_hex": "e9f3",
+      "slot": 7698
+    },
+    {
+      "character": "呢",
+      "cp932_hex": "e9f2",
+      "slot": 7697
+    },
+    {
+      "character": "咦",
+      "cp932_hex": "e9ec",
+      "slot": 7691
+    },
+    {
+      "character": "哎",
+      "cp932_hex": "e9e9",
+      "slot": 7688
+    },
+    {
+      "character": "唤",
+      "cp932_hex": "e9e5",
+      "slot": 7684
+    },
+    {
+      "character": "啊",
+      "cp932_hex": "e9de",
+      "slot": 7677
+    },
+    {
+      "character": "啦",
+      "cp932_hex": "e9dc",
+      "slot": 7675
+    },
+    {
+      "character": "嗯",
+      "cp932_hex": "e9d9",
+      "slot": 7672
+    },
+    {
+      "character": "嘞",
+      "cp932_hex": "e9d6",
+      "slot": 7669
+    },
+    {
+      "character": "团",
+      "cp932_hex": "e9d4",
+      "slot": 7667
+    },
+    {
+      "character": "围",
+      "cp932_hex": "e9d3",
+      "slot": 7666
+    },
+    {
+      "character": "图",
+      "cp932_hex": "e9cf",
+      "slot": 7662
+    },
+    {
+      "character": "圣",
+      "cp932_hex": "e9ce",
+      "slot": 7661
+    },
+    {
+      "character": "处",
+      "cp932_hex": "e9cd",
+      "slot": 7660
+    },
+    {
+      "character": "备",
+      "cp932_hex": "e9ca",
+      "slot": 7657
+    },
+    {
+      "character": "复",
+      "cp932_hex": "e9c9",
+      "slot": 7656
+    },
+    {
+      "character": "头",
+      "cp932_hex": "e9c7",
+      "slot": 7654
+    },
+    {
+      "character": "实",
+      "cp932_hex": "e9c5",
+      "slot": 7652
+    },
+    {
+      "character": "对",
+      "cp932_hex": "e9c4",
+      "slot": 7651
+    },
+    {
+      "character": "导",
+      "cp932_hex": "e9c2",
+      "slot": 7649
+    },
+    {
+      "character": "尔",
+      "cp932_hex": "e9c0",
+      "slot": 7647
+    },
+    {
+      "character": "师",
+      "cp932_hex": "e9bf",
+      "slot": 7646
+    },
+    {
+      "character": "带",
+      "cp932_hex": "e9be",
+      "slot": 7645
+    },
+    {
+      "character": "开",
+      "cp932_hex": "e9bb",
+      "slot": 7642
+    },
+    {
+      "character": "张",
+      "cp932_hex": "e9ba",
+      "slot": 7641
+    },
+    {
+      "character": "强",
+      "cp932_hex": "e9b8",
+      "slot": 7639
+    },
+    {
+      "character": "德",
+      "cp932_hex": "e9b7",
+      "slot": 7638
+    },
+    {
+      "character": "总",
+      "cp932_hex": "e9b5",
+      "slot": 7636
+    },
+    {
+      "character": "恶",
+      "cp932_hex": "e9b4",
+      "slot": 7635
+    },
+    {
+      "character": "懒",
+      "cp932_hex": "e9b3",
+      "slot": 7634
+    },
+    {
+      "character": "戏",
+      "cp932_hex": "e9b2",
+      "slot": 7633
+    },
+    {
+      "character": "战",
+      "cp932_hex": "e9ae",
+      "slot": 7629
+    },
+    {
+      "character": "护",
+      "cp932_hex": "e9ad",
+      "slot": 7628
+    },
+    {
+      "character": "敌",
+      "cp932_hex": "e9ab",
+      "slot": 7626
+    },
+    {
+      "character": "斩",
+      "cp932_hex": "e9aa",
+      "slot": 7625
+    },
+    {
+      "character": "时",
+      "cp932_hex": "e9a9",
+      "slot": 7624
+    },
+    {
+      "character": "晚",
+      "cp932_hex": "e9a8",
+      "slot": 7623
+    },
+    {
+      "character": "术",
+      "cp932_hex": "e9a6",
+      "slot": 7621
+    },
+    {
+      "character": "枪",
+      "cp932_hex": "e9a5",
+      "slot": 7620
+    },
+    {
+      "character": "标",
+      "cp932_hex": "e9a4",
+      "slot": 7619
+    },
+    {
+      "character": "样",
+      "cp932_hex": "e99f",
+      "slot": 7614
+    },
+    {
+      "character": "沉",
+      "cp932_hex": "e99e",
+      "slot": 7613
+    },
+    {
+      "character": "浑",
+      "cp932_hex": "e99c",
+      "slot": 7611
+    },
+    {
+      "character": "满",
+      "cp932_hex": "e99b",
+      "slot": 7610
+    },
+    {
+      "character": "灵",
+      "cp932_hex": "e99a",
+      "slot": 7609
+    },
+    {
+      "character": "炼",
+      "cp932_hex": "e999",
+      "slot": 7608
+    },
+    {
+      "character": "炽",
+      "cp932_hex": "e987",
+      "slot": 7590
+    },
+    {
+      "character": "热",
+      "cp932_hex": "e986",
+      "slot": 7589
+    },
+    {
+      "character": "焰",
+      "cp932_hex": "e985",
+      "slot": 7588
+    },
+    {
+      "character": "爷",
+      "cp932_hex": "e97d",
+      "slot": 7581
+    },
+    {
+      "character": "爹",
+      "cp932_hex": "e97c",
+      "slot": 7580
+    },
+    {
+      "character": "狱",
+      "cp932_hex": "e97a",
+      "slot": 7578
+    },
+    {
+      "character": "猎",
+      "cp932_hex": "e977",
+      "slot": 7575
+    },
+    {
+      "character": "玛",
+      "cp932_hex": "e976",
+      "slot": 7574
+    },
+    {
+      "character": "环",
+      "cp932_hex": "e975",
+      "slot": 7573
+    },
+    {
+      "character": "电",
+      "cp932_hex": "e973",
+      "slot": 7571
+    },
+    {
+      "character": "痹",
+      "cp932_hex": "e972",
+      "slot": 7570
+    },
+    {
+      "character": "碟",
+      "cp932_hex": "e970",
+      "slot": 7568
+    },
+    {
+      "character": "种",
+      "cp932_hex": "e96d",
+      "slot": 7565
+    },
+    {
+      "character": "紧",
+      "cp932_hex": "e96c",
+      "slot": 7564
+    },
+    {
+      "character": "红",
+      "cp932_hex": "e96a",
+      "slot": 7562
+    },
+    {
+      "character": "练",
+      "cp932_hex": "e966",
+      "slot": 7558
+    },
+    {
+      "character": "经",
+      "cp932_hex": "e965",
+      "slot": 7557
+    },
+    {
+      "character": "绒",
+      "cp932_hex": "e95e",
+      "slot": 7550
+    },
+    {
+      "character": "结",
+      "cp932_hex": "e95d",
+      "slot": 7549
+    },
+    {
+      "character": "给",
+      "cp932_hex": "e95b",
+      "slot": 7547
+    },
+    {
+      "character": "统",
+      "cp932_hex": "e959",
+      "slot": 7545
+    },
+    {
+      "character": "继",
+      "cp932_hex": "e958",
+      "slot": 7544
+    },
+    {
+      "character": "续",
+      "cp932_hex": "e956",
+      "slot": 7542
+    },
+    {
+      "character": "绸",
+      "cp932_hex": "e951",
+      "slot": 7537
+    },
+    {
+      "character": "缚",
+      "cp932_hex": "e94e",
+      "slot": 7534
+    },
+    {
+      "character": "罗",
+      "cp932_hex": "e94d",
+      "slot": 7533
+    },
+    {
+      "character": "胜",
+      "cp932_hex": "e94b",
+      "slot": 7531
+    },
+    {
+      "character": "节",
+      "cp932_hex": "e949",
+      "slot": 7529
+    },
+    {
+      "character": "苏",
+      "cp932_hex": "e943",
+      "slot": 7523
+    },
+    {
+      "character": "药",
+      "cp932_hex": "e941",
+      "slot": 7521
+    },
+    {
+      "character": "菇",
+      "cp932_hex": "e8f9",
+      "slot": 7516
+    },
+    {
+      "character": "萨",
+      "cp932_hex": "e8f1",
+      "slot": 7508
+    },
+    {
+      "character": "蓝",
+      "cp932_hex": "e8ef",
+      "slot": 7506
+    },
+    {
+      "character": "蘑",
+      "cp932_hex": "e8ee",
+      "slot": 7505
+    },
+    {
+      "character": "衬",
+      "cp932_hex": "e8eb",
+      "slot": 7502
+    },
+    {
+      "character": "见",
+      "cp932_hex": "e8ea",
+      "slot": 7501
+    },
+    {
+      "character": "让",
+      "cp932_hex": "e8e6",
+      "slot": 7497
+    },
+    {
+      "character": "讪",
+      "cp932_hex": "e8e5",
+      "slot": 7496
+    },
+    {
+      "character": "训",
+      "cp932_hex": "e8df",
+      "slot": 7490
+    },
+    {
+      "character": "设",
+      "cp932_hex": "e8db",
+      "slot": 7486
+    },
+    {
+      "character": "话",
+      "cp932_hex": "e8da",
+      "slot": 7485
+    },
+    {
+      "character": "说",
+      "cp932_hex": "e8d9",
+      "slot": 7484
+    },
+    {
+      "character": "读",
+      "cp932_hex": "e8d7",
+      "slot": 7482
+    },
+    {
+      "character": "谁",
+      "cp932_hex": "e8d6",
+      "slot": 7481
+    },
+    {
+      "character": "贤",
+      "cp932_hex": "e8cf",
+      "slot": 7474
+    },
+    {
+      "character": "货",
+      "cp932_hex": "e8ce",
+      "slot": 7473
+    },
+    {
+      "character": "资",
+      "cp932_hex": "e8cc",
+      "slot": 7471
+    },
+    {
+      "character": "赏",
+      "cp932_hex": "e8ca",
+      "slot": 7469
+    },
+    {
+      "character": "赖",
+      "cp932_hex": "e8c7",
+      "slot": 7466
+    },
+    {
+      "character": "蹭",
+      "cp932_hex": "e8c6",
+      "slot": 7465
+    },
+    {
+      "character": "软",
+      "cp932_hex": "e8c5",
+      "slot": 7464
+    },
+    {
+      "character": "轻",
+      "cp932_hex": "e8c2",
+      "slot": 7461
+    },
+    {
+      "character": "较",
+      "cp932_hex": "e8c1",
+      "slot": 7460
+    },
+    {
+      "character": "边",
+      "cp932_hex": "e8bf",
+      "slot": 7458
+    },
+    {
+      "character": "还",
+      "cp932_hex": "e8bd",
+      "slot": 7456
+    },
+    {
+      "character": "这",
+      "cp932_hex": "e8bc",
+      "slot": 7455
+    },
+    {
+      "character": "进",
+      "cp932_hex": "e8ba",
+      "slot": 7453
+    },
+    {
+      "character": "选",
+      "cp932_hex": "e8b9",
+      "slot": 7452
+    },
+    {
+      "character": "逊",
+      "cp932_hex": "e8b6",
+      "slot": 7449
+    },
+    {
+      "character": "铁",
+      "cp932_hex": "e8b5",
+      "slot": 7448
+    },
+    {
+      "character": "铜",
+      "cp932_hex": "e8b4",
+      "slot": 7447
+    },
+    {
+      "character": "铠",
+      "cp932_hex": "e8b2",
+      "slot": 7445
+    },
+    {
+      "character": "银",
+      "cp932_hex": "e8b1",
+      "slot": 7444
+    },
+    {
+      "character": "链",
+      "cp932_hex": "e8b0",
+      "slot": 7443
+    },
+    {
+      "character": "锁",
+      "cp932_hex": "e8af",
+      "slot": 7442
+    },
+    {
+      "character": "锐",
+      "cp932_hex": "e8ac",
+      "slot": 7439
+    },
+    {
+      "character": "镜",
+      "cp932_hex": "e8ab",
+      "slot": 7438
+    },
+    {
+      "character": "镶",
+      "cp932_hex": "e8aa",
+      "slot": 7437
+    },
+    {
+      "character": "长",
+      "cp932_hex": "e8a8",
+      "slot": 7435
+    },
+    {
+      "character": "闭",
+      "cp932_hex": "e8a7",
+      "slot": 7434
+    },
+    {
+      "character": "阔",
+      "cp932_hex": "e8a6",
+      "slot": 7433
+    },
+    {
+      "character": "项",
+      "cp932_hex": "e8a1",
+      "slot": 7428
+    },
+    {
+      "character": "额",
+      "cp932_hex": "e89f",
+      "slot": 7426
+    },
+    {
+      "character": "风",
+      "cp932_hex": "e89d",
+      "slot": 7424
+    },
+    {
+      "character": "马",
+      "cp932_hex": "e89c",
+      "slot": 7423
+    },
+    {
+      "character": "骑",
+      "cp932_hex": "e89a",
+      "slot": 7421
+    },
+    {
+      "character": "骷",
+      "cp932_hex": "e898",
+      "slot": 7419
+    },
+    {
+      "character": "髅",
+      "cp932_hex": "e892",
+      "slot": 7413
+    },
+    {
+      "character": "鳞",
+      "cp932_hex": "e88e",
+      "slot": 7409
+    },
+    {
+      "character": "鸣",
+      "cp932_hex": "e88b",
+      "slot": 7406
+    },
+    {
+      "character": "鹰",
+      "cp932_hex": "e887",
+      "slot": 7402
+    },
+    {
+      "character": "黑",
+      "cp932_hex": "e886",
+      "slot": 7401
+    },
+    {
+      "character": "龙",
+      "cp932_hex": "e885",
+      "slot": 7400
+    },
+    {
+      "character": "·",
+      "cp932_hex": "e87d",
+      "slot": 7393
+    },
+    {
+      "character": "专",
+      "cp932_hex": "e879",
+      "slot": 7389
+    },
+    {
+      "character": "东",
+      "cp932_hex": "e877",
+      "slot": 7387
+    },
+    {
+      "character": "两",
+      "cp932_hex": "e876",
+      "slot": 7386
+    },
+    {
+      "character": "严",
+      "cp932_hex": "e86d",
+      "slot": 7377
+    },
+    {
+      "character": "丧",
+      "cp932_hex": "e869",
+      "slot": 7373
+    },
+    {
+      "character": "丫",
+      "cp932_hex": "e867",
+      "slot": 7371
+    },
+    {
+      "character": "临",
+      "cp932_hex": "e85e",
+      "slot": 7362
+    },
+    {
+      "character": "丽",
+      "cp932_hex": "e85d",
+      "slot": 7361
+    },
+    {
+      "character": "乌",
+      "cp932_hex": "e85b",
+      "slot": 7359
+    },
+    {
+      "character": "乡",
+      "cp932_hex": "e857",
+      "slot": 7355
+    },
+    {
+      "character": "亏",
+      "cp932_hex": "e84e",
+      "slot": 7346
+    },
+    {
+      "character": "亲",
+      "cp932_hex": "e84d",
+      "slot": 7345
+    },
+    {
+      "character": "仅",
+      "cp932_hex": "e849",
+      "slot": 7341
+    },
+    {
+      "character": "仓",
+      "cp932_hex": "e847",
+      "slot": 7339
+    },
+    {
+      "character": "仪",
+      "cp932_hex": "e846",
+      "slot": 7338
+    },
+    {
+      "character": "份",
+      "cp932_hex": "e7f8",
+      "slot": 7327
+    },
+    {
+      "character": "仿",
+      "cp932_hex": "e7f7",
+      "slot": 7326
+    },
+    {
+      "character": "伟",
+      "cp932_hex": "e7f4",
+      "slot": 7323
+    },
+    {
+      "character": "传",
+      "cp932_hex": "e7f3",
+      "slot": 7322
+    },
+    {
+      "character": "伤",
+      "cp932_hex": "e7f1",
+      "slot": 7320
+    },
+    {
+      "character": "伦",
+      "cp932_hex": "e7ee",
+      "slot": 7317
+    },
+    {
+      "character": "俱",
+      "cp932_hex": "e7ec",
+      "slot": 7315
+    },
+    {
+      "character": "值",
+      "cp932_hex": "e7ea",
+      "slot": 7313
+    },
+    {
+      "character": "偷",
+      "cp932_hex": "e7e9",
+      "slot": 7312
+    },
+    {
+      "character": "偿",
+      "cp932_hex": "e7e7",
+      "slot": 7310
+    },
+    {
+      "character": "储",
+      "cp932_hex": "e7df",
+      "slot": 7302
+    },
+    {
+      "character": "傻",
+      "cp932_hex": "e7de",
+      "slot": 7301
+    },
+    {
+      "character": "兴",
+      "cp932_hex": "e7dd",
+      "slot": 7300
+    },
+    {
+      "character": "养",
+      "cp932_hex": "e7dc",
+      "slot": 7299
+    },
+    {
+      "character": "兽",
+      "cp932_hex": "e7da",
+      "slot": 7297
+    },
+    {
+      "character": "冯",
+      "cp932_hex": "e7d9",
+      "slot": 7296
+    },
+    {
+      "character": "冻",
+      "cp932_hex": "e7d8",
+      "slot": 7295
+    },
+    {
+      "character": "净",
+      "cp932_hex": "e7d6",
+      "slot": 7293
+    },
+    {
+      "character": "凑",
+      "cp932_hex": "e7ce",
+      "slot": 7285
+    },
+    {
+      "character": "划",
+      "cp932_hex": "e7cd",
+      "slot": 7284
+    },
+    {
+      "character": "则",
+      "cp932_hex": "e7cc",
+      "slot": 7283
+    },
+    {
+      "character": "刚",
+      "cp932_hex": "e7ca",
+      "slot": 7281
+    },
+    {
+      "character": "务",
+      "cp932_hex": "e7c7",
+      "slot": 7278
+    },
+    {
+      "character": "劲",
+      "cp932_hex": "e7c6",
+      "slot": 7277
+    },
+    {
+      "character": "势",
+      "cp932_hex": "e7c4",
+      "slot": 7275
+    },
+    {
+      "character": "华",
+      "cp932_hex": "e7c3",
+      "slot": 7274
+    },
+    {
+      "character": "卫",
+      "cp932_hex": "e7be",
+      "slot": 7269
+    },
+    {
+      "character": "历",
+      "cp932_hex": "e7bd",
+      "slot": 7268
+    },
+    {
+      "character": "厉",
+      "cp932_hex": "e7bc",
+      "slot": 7267
+    },
+    {
+      "character": "压",
+      "cp932_hex": "e7ba",
+      "slot": 7265
+    },
+    {
+      "character": "厌",
+      "cp932_hex": "e7b9",
+      "slot": 7264
+    },
+    {
+      "character": "发",
+      "cp932_hex": "e7b8",
+      "slot": 7263
+    },
+    {
+      "character": "变",
+      "cp932_hex": "e7b7",
+      "slot": 7262
+    },
+    {
+      "character": "另",
+      "cp932_hex": "e7b6",
+      "slot": 7261
+    },
+    {
+      "character": "吞",
+      "cp932_hex": "e7b4",
+      "slot": 7259
+    },
+    {
+      "character": "吵",
+      "cp932_hex": "e7b2",
+      "slot": 7257
+    },
+    {
+      "character": "呃",
+      "cp932_hex": "e7af",
+      "slot": 7254
+    },
+    {
+      "character": "呐",
+      "cp932_hex": "e7ae",
+      "slot": 7253
+    },
+    {
+      "character": "呕",
+      "cp932_hex": "e7ad",
+      "slot": 7252
+    },
+    {
+      "character": "员",
+      "cp932_hex": "e7ac",
+      "slot": 7251
+    },
+    {
+      "character": "呣",
+      "cp932_hex": "e7aa",
+      "slot": 7249
+    },
+    {
+      "character": "咱",
+      "cp932_hex": "e7a9",
+      "slot": 7248
+    },
+    {
+      "character": "响",
+      "cp932_hex": "e7a8",
+      "slot": 7247
+    },
+    {
+      "character": "哟",
+      "cp932_hex": "e7a1",
+      "slot": 7240
+    },
+    {
+      "character": "哪",
+      "cp932_hex": "e79f",
+      "slot": 7238
+    },
+    {
+      "character": "哼",
+      "cp932_hex": "e79e",
+      "slot": 7237
+    },
+    {
+      "character": "唉",
+      "cp932_hex": "e79d",
+      "slot": 7236
+    },
+    {
+      "character": "啥",
+      "cp932_hex": "e79a",
+      "slot": 7233
+    },
+    {
+      "character": "喂",
+      "cp932_hex": "e799",
+      "slot": 7232
+    },
+    {
+      "character": "嘿",
+      "cp932_hex": "e798",
+      "slot": 7231
+    },
+    {
+      "character": "噗",
+      "cp932_hex": "e794",
+      "slot": 7227
+    },
+    {
+      "character": "噩",
+      "cp932_hex": "e787",
+      "slot": 7214
+    },
+    {
+      "character": "囊",
+      "cp932_hex": "e786",
+      "slot": 7213
+    },
+    {
+      "character": "场",
+      "cp932_hex": "e784",
+      "slot": 7211
+    },
+    {
+      "character": "块",
+      "cp932_hex": "e77e",
+      "slot": 7206
+    },
+    {
+      "character": "坚",
+      "cp932_hex": "e77d",
+      "slot": 7205
+    },
+    {
+      "character": "坠",
+      "cp932_hex": "e77c",
+      "slot": 7204
+    },
+    {
+      "character": "塌",
+      "cp932_hex": "e779",
+      "slot": 7201
+    },
+    {
+      "character": "增",
+      "cp932_hex": "e776",
+      "slot": 7198
+    },
+    {
+      "character": "够",
+      "cp932_hex": "e773",
+      "slot": 7195
+    },
+    {
+      "character": "夹",
+      "cp932_hex": "e76e",
+      "slot": 7190
+    },
+    {
+      "character": "夺",
+      "cp932_hex": "e76d",
+      "slot": 7189
+    },
+    {
+      "character": "她",
+      "cp932_hex": "e768",
+      "slot": 7184
+    },
+    {
+      "character": "妇",
+      "cp932_hex": "e75f",
+      "slot": 7175
+    },
+    {
+      "character": "妈",
+      "cp932_hex": "e75e",
+      "slot": 7174
+    },
+    {
+      "character": "婴",
+      "cp932_hex": "e75d",
+      "slot": 7173
+    },
+    {
+      "character": "孽",
+      "cp932_hex": "e75c",
+      "slot": 7172
+    },
+    {
+      "character": "宁",
+      "cp932_hex": "e758",
+      "slot": 7168
+    },
+    {
+      "character": "宠",
+      "cp932_hex": "e756",
+      "slot": 7166
+    },
+    {
+      "character": "寻",
+      "cp932_hex": "e754",
+      "slot": 7164
+    },
+    {
+      "character": "尝",
+      "cp932_hex": "e753",
+      "slot": 7163
+    },
+    {
+      "character": "屿",
+      "cp932_hex": "e750",
+      "slot": 7160
+    },
+    {
+      "character": "岁",
+      "cp932_hex": "e74d",
+      "slot": 7157
+    },
+    {
+      "character": "岂",
+      "cp932_hex": "e74c",
+      "slot": 7156
+    },
+    {
+      "character": "岛",
+      "cp932_hex": "e749",
+      "slot": 7153
+    },
+    {
+      "character": "币",
+      "cp932_hex": "e747",
+      "slot": 7151
+    },
+    {
+      "character": "帅",
+      "cp932_hex": "e743",
+      "slot": 7147
+    },
+    {
+      "character": "帮",
+      "cp932_hex": "e6fa",
+      "slot": 7141
+    },
+    {
+      "character": "庆",
+      "cp932_hex": "e6f8",
+      "slot": 7139
+    },
+    {
+      "character": "库",
+      "cp932_hex": "e6f6",
+      "slot": 7137
+    },
+    {
+      "character": "应",
+      "cp932_hex": "e6f5",
+      "slot": 7136
+    },
+    {
+      "character": "异",
+      "cp932_hex": "e6f3",
+      "slot": 7134
+    },
+    {
+      "character": "归",
+      "cp932_hex": "e6f2",
+      "slot": 7133
+    },
+    {
+      "character": "彻",
+      "cp932_hex": "e6f1",
+      "slot": 7132
+    },
+    {
+      "character": "怀",
+      "cp932_hex": "e6ef",
+      "slot": 7130
+    },
+    {
+      "character": "态",
+      "cp932_hex": "e6e6",
+      "slot": 7121
+    },
+    {
+      "character": "恼",
+      "cp932_hex": "e6df",
+      "slot": 7114
+    },
+    {
+      "character": "您",
+      "cp932_hex": "e6cf",
+      "slot": 7098
+    },
+    {
+      "character": "悬",
+      "cp932_hex": "e6cd",
+      "slot": 7096
+    },
+    {
+      "character": "悯",
+      "cp932_hex": "e6cc",
+      "slot": 7095
+    },
+    {
+      "character": "惊",
+      "cp932_hex": "e6c7",
+      "slot": 7090
+    },
+    {
+      "character": "惭",
+      "cp932_hex": "e6c6",
+      "slot": 7089
+    },
+    {
+      "character": "懂",
+      "cp932_hex": "e6c5",
+      "slot": 7088
+    },
+    {
+      "character": "执",
+      "cp932_hex": "e6c2",
+      "slot": 7085
+    },
+    {
+      "character": "扫",
+      "cp932_hex": "e6c1",
+      "slot": 7084
+    },
+    {
+      "character": "扰",
+      "cp932_hex": "e6bf",
+      "slot": 7082
+    },
+    {
+      "character": "抚",
+      "cp932_hex": "e6be",
+      "slot": 7081
+    },
+    {
+      "character": "抢",
+      "cp932_hex": "e6bc",
+      "slot": 7079
+    },
+    {
+      "character": "报",
+      "cp932_hex": "e6bb",
+      "slot": 7078
+    },
+    {
+      "character": "拦",
+      "cp932_hex": "e6ba",
+      "slot": 7077
+    },
+    {
+      "character": "拼",
+      "cp932_hex": "e6b9",
+      "slot": 7076
+    },
+    {
+      "character": "挚",
+      "cp932_hex": "e6b7",
+      "slot": 7074
+    },
+    {
+      "character": "挥",
+      "cp932_hex": "e6b6",
+      "slot": 7073
+    },
+    {
+      "character": "捅",
+      "cp932_hex": "e6b5",
+      "slot": 7072
+    },
+    {
+      "character": "损",
+      "cp932_hex": "e6b4",
+      "slot": 7071
+    },
+    {
+      "character": "换",
+      "cp932_hex": "e6b3",
+      "slot": 7070
+    },
+    {
+      "character": "掺",
+      "cp932_hex": "e6b1",
+      "slot": 7068
+    },
+    {
+      "character": "揍",
+      "cp932_hex": "e6b0",
+      "slot": 7067
+    },
+    {
+      "character": "搞",
+      "cp932_hex": "e6ae",
+      "slot": 7065
+    },
+    {
+      "character": "摆",
+      "cp932_hex": "e6ab",
+      "slot": 7062
+    },
+    {
+      "character": "摇",
+      "cp932_hex": "e6aa",
+      "slot": 7061
+    },
+    {
+      "character": "摔",
+      "cp932_hex": "e6a9",
+      "slot": 7060
+    },
+    {
+      "character": "撑",
+      "cp932_hex": "e6a7",
+      "slot": 7058
+    },
+    {
+      "character": "显",
+      "cp932_hex": "e6a6",
+      "slot": 7057
+    },
+    {
+      "character": "暂",
+      "cp932_hex": "e6a5",
+      "slot": 7056
+    },
+    {
+      "character": "杀",
+      "cp932_hex": "e6a4",
+      "slot": 7055
+    },
+    {
+      "character": "杂",
+      "cp932_hex": "e6a3",
+      "slot": 7054
+    },
+    {
+      "character": "权",
+      "cp932_hex": "e6a1",
+      "slot": 7052
+    },
+    {
+      "character": "极",
+      "cp932_hex": "e69f",
+      "slot": 7050
+    },
+    {
+      "character": "查",
+      "cp932_hex": "e69c",
+      "slot": 7047
+    },
+    {
+      "character": "树",
+      "cp932_hex": "e69b",
+      "slot": 7046
+    },
+    {
+      "character": "桥",
+      "cp932_hex": "e69a",
+      "slot": 7045
+    },
+    {
+      "character": "检",
+      "cp932_hex": "e699",
+      "slot": 7044
+    },
+    {
+      "character": "欢",
+      "cp932_hex": "e694",
+      "slot": 7039
+    },
+    {
+      "character": "步",
+      "cp932_hex": "e693",
+      "slot": 7038
+    },
+    {
+      "character": "毁",
+      "cp932_hex": "e68f",
+      "slot": 7034
+    },
+    {
+      "character": "每",
+      "cp932_hex": "e68b",
+      "slot": 7030
+    },
+    {
+      "character": "毕",
+      "cp932_hex": "e68a",
+      "slot": 7029
+    },
+    {
+      "character": "污",
+      "cp932_hex": "e689",
+      "slot": 7028
+    },
+    {
+      "character": "沟",
+      "cp932_hex": "e686",
+      "slot": 7025
+    },
+    {
+      "character": "济",
+      "cp932_hex": "e685",
+      "slot": 7024
+    },
+    {
+      "character": "涂",
+      "cp932_hex": "e683",
+      "slot": 7022
+    },
+    {
+      "character": "涉",
+      "cp932_hex": "e67b",
+      "slot": 7015
+    },
+    {
+      "character": "溃",
+      "cp932_hex": "e679",
+      "slot": 7013
+    },
+    {
+      "character": "滚",
+      "cp932_hex": "e678",
+      "slot": 7012
+    },
+    {
+      "character": "灭",
+      "cp932_hex": "e672",
+      "slot": 7006
+    },
+    {
+      "character": "灾",
+      "cp932_hex": "e670",
+      "slot": 7004
+    },
+    {
+      "character": "烂",
+      "cp932_hex": "e669",
+      "slot": 6997
+    },
+    {
+      "character": "烛",
+      "cp932_hex": "e65f",
+      "slot": 6987
+    },
+    {
+      "character": "烦",
+      "cp932_hex": "e65e",
+      "slot": 6986
+    },
+    {
+      "character": "烧",
+      "cp932_hex": "e65c",
+      "slot": 6984
+    },
+    {
+      "character": "爱",
+      "cp932_hex": "e659",
+      "slot": 6981
+    },
+    {
+      "character": "爸",
+      "cp932_hex": "e658",
+      "slot": 6980
+    },
+    {
+      "character": "牺",
+      "cp932_hex": "e653",
+      "slot": 6975
+    },
+    {
+      "character": "狈",
+      "cp932_hex": "e64e",
+      "slot": 6970
+    },
+    {
+      "character": "现",
+      "cp932_hex": "e64d",
+      "slot": 6969
+    },
+    {
+      "character": "疯",
+      "cp932_hex": "e64c",
+      "slot": 6968
+    },
+    {
+      "character": "瘪",
+      "cp932_hex": "e649",
+      "slot": 6965
+    },
+    {
+      "character": "监",
+      "cp932_hex": "e647",
+      "slot": 6963
+    },
+    {
+      "character": "瞒",
+      "cp932_hex": "e646",
+      "slot": 6962
+    },
+    {
+      "character": "砍",
+      "cp932_hex": "e644",
+      "slot": 6960
+    },
+    {
+      "character": "确",
+      "cp932_hex": "e5fb",
+      "slot": 6954
+    },
+    {
+      "character": "碰",
+      "cp932_hex": "e5fa",
+      "slot": 6953
+    },
+    {
+      "character": "祸",
+      "cp932_hex": "e5f9",
+      "slot": 6952
+    },
+    {
+      "character": "离",
+      "cp932_hex": "e5f7",
+      "slot": 6950
+    },
+    {
+      "character": "秃",
+      "cp932_hex": "e5f5",
+      "slot": 6948
+    },
+    {
+      "character": "稳",
+      "cp932_hex": "e5f4",
+      "slot": 6947
+    },
+    {
+      "character": "窍",
+      "cp932_hex": "e5f3",
+      "slot": 6946
+    },
+    {
+      "character": "笼",
+      "cp932_hex": "e5f0",
+      "slot": 6943
+    },
+    {
+      "character": "简",
+      "cp932_hex": "e5ef",
+      "slot": 6942
+    },
+    {
+      "character": "篮",
+      "cp932_hex": "e5eb",
+      "slot": 6938
+    },
+    {
+      "character": "类",
+      "cp932_hex": "e5e9",
+      "slot": 6936
+    },
+    {
+      "character": "纠",
+      "cp932_hex": "e5e5",
+      "slot": 6932
+    },
+    {
+      "character": "约",
+      "cp932_hex": "e5e4",
+      "slot": 6931
+    },
+    {
+      "character": "级",
+      "cp932_hex": "e5e3",
+      "slot": 6930
+    },
+    {
+      "character": "纪",
+      "cp932_hex": "e5df",
+      "slot": 6926
+    },
+    {
+      "character": "纯",
+      "cp932_hex": "e5de",
+      "slot": 6925
+    },
+    {
+      "character": "纳",
+      "cp932_hex": "e5dd",
+      "slot": 6924
+    },
+    {
+      "character": "纵",
+      "cp932_hex": "e5d9",
+      "slot": 6920
+    },
+    {
+      "character": "纷",
+      "cp932_hex": "e5d8",
+      "slot": 6919
+    },
+    {
+      "character": "绅",
+      "cp932_hex": "e5d6",
+      "slot": 6917
+    },
+    {
+      "character": "细",
+      "cp932_hex": "e5d5",
+      "slot": 6916
+    },
+    {
+      "character": "终",
+      "cp932_hex": "e5d4",
+      "slot": 6915
+    },
+    {
+      "character": "绊",
+      "cp932_hex": "e5cf",
+      "slot": 6910
+    },
+    {
+      "character": "绍",
+      "cp932_hex": "e5cd",
+      "slot": 6908
+    },
+    {
+      "character": "绑",
+      "cp932_hex": "e5cb",
+      "slot": 6906
+    },
+    {
+      "character": "绕",
+      "cp932_hex": "e5c9",
+      "slot": 6904
+    },
+    {
+      "character": "绝",
+      "cp932_hex": "e5c8",
+      "slot": 6903
+    },
+    {
+      "character": "绞",
+      "cp932_hex": "e5c5",
+      "slot": 6900
+    },
+    {
+      "character": "维",
+      "cp932_hex": "e5c4",
+      "slot": 6899
+    },
+    {
+      "character": "缀",
+      "cp932_hex": "e5c3",
+      "slot": 6898
+    },
+    {
+      "character": "缓",
+      "cp932_hex": "e5c0",
+      "slot": 6895
+    },
+    {
+      "character": "编",
+      "cp932_hex": "e5be",
+      "slot": 6893
+    },
+    {
+      "character": "缘",
+      "cp932_hex": "e5bd",
+      "slot": 6892
+    },
+    {
+      "character": "罢",
+      "cp932_hex": "e5bc",
+      "slot": 6891
+    },
+    {
+      "character": "羁",
+      "cp932_hex": "e5ba",
+      "slot": 6889
+    },
+    {
+      "character": "羡",
+      "cp932_hex": "e5b9",
+      "slot": 6888
+    },
+    {
+      "character": "联",
+      "cp932_hex": "e5b7",
+      "slot": 6886
+    },
+    {
+      "character": "肠",
+      "cp932_hex": "e5b5",
+      "slot": 6884
+    },
+    {
+      "character": "肤",
+      "cp932_hex": "e5b4",
+      "slot": 6883
+    },
+    {
+      "character": "胁",
+      "cp932_hex": "e5b3",
+      "slot": 6882
+    },
+    {
+      "character": "脏",
+      "cp932_hex": "e5b2",
+      "slot": 6881
+    },
+    {
+      "character": "脑",
+      "cp932_hex": "e5b1",
+      "slot": 6880
+    },
+    {
+      "character": "脸",
+      "cp932_hex": "e5ae",
+      "slot": 6877
+    },
+    {
+      "character": "艰",
+      "cp932_hex": "e5ad",
+      "slot": 6876
+    },
+    {
+      "character": "获",
+      "cp932_hex": "e5ac",
+      "slot": 6875
+    },
+    {
+      "character": "营",
+      "cp932_hex": "e5ab",
+      "slot": 6874
+    },
+    {
+      "character": "虑",
+      "cp932_hex": "e5a9",
+      "slot": 6872
+    },
+    {
+      "character": "虽",
+      "cp932_hex": "e5a8",
+      "slot": 6871
+    },
+    {
+      "character": "蟑",
+      "cp932_hex": "e5a7",
+      "slot": 6870
+    },
+    {
+      "character": "补",
+      "cp932_hex": "e5a6",
+      "slot": 6869
+    },
+    {
+      "character": "袭",
+      "cp932_hex": "e5a3",
+      "slot": 6866
+    },
+    {
+      "character": "观",
+      "cp932_hex": "e59e",
+      "slot": 6861
+    },
+    {
+      "character": "规",
+      "cp932_hex": "e59c",
+      "slot": 6859
+    },
+    {
+      "character": "视",
+      "cp932_hex": "e59b",
+      "slot": 6858
+    },
+    {
+      "character": "觉",
+      "cp932_hex": "e598",
+      "slot": 6855
+    },
+    {
+      "character": "觑",
+      "cp932_hex": "e597",
+      "slot": 6854
+    },
+    {
+      "character": "计",
+      "cp932_hex": "e593",
+      "slot": 6850
+    },
+    {
+      "character": "认",
+      "cp932_hex": "e58a",
+      "slot": 6841
+    },
+    {
+      "character": "讨",
+      "cp932_hex": "e587",
+      "slot": 6838
+    },
+    {
+      "character": "议",
+      "cp932_hex": "e586",
+      "slot": 6837
+    },
+    {
+      "character": "记",
+      "cp932_hex": "e57d",
+      "slot": 6829
+    },
+    {
+      "character": "讲",
+      "cp932_hex": "e57b",
+      "slot": 6827
+    },
+    {
+      "character": "许",
+      "cp932_hex": "e57a",
+      "slot": 6826
+    },
+    {
+      "character": "论",
+      "cp932_hex": "e579",
+      "slot": 6825
+    },
+    {
+      "character": "访",
+      "cp932_hex": "e576",
+      "slot": 6822
+    },
+    {
+      "character": "诀",
+      "cp932_hex": "e572",
+      "slot": 6818
+    },
+    {
+      "character": "证",
+      "cp932_hex": "e56f",
+      "slot": 6815
+    },
+    {
+      "character": "识",
+      "cp932_hex": "e56e",
+      "slot": 6814
+    },
+    {
+      "character": "诉",
+      "cp932_hex": "e56c",
+      "slot": 6812
+    },
+    {
+      "character": "词",
+      "cp932_hex": "e56b",
+      "slot": 6811
+    },
+    {
+      "character": "试",
+      "cp932_hex": "e55f",
+      "slot": 6799
+    },
+    {
+      "character": "诚",
+      "cp932_hex": "e55e",
+      "slot": 6798
+    },
+    {
+      "character": "该",
+      "cp932_hex": "e55b",
+      "slot": 6795
+    },
+    {
+      "character": "诬",
+      "cp932_hex": "e559",
+      "slot": 6793
+    },
+    {
+      "character": "语",
+      "cp932_hex": "e558",
+      "slot": 6792
+    },
+    {
+      "character": "误",
+      "cp932_hex": "e54f",
+      "slot": 6783
+    },
+    {
+      "character": "请",
+      "cp932_hex": "e54e",
+      "slot": 6782
+    },
+    {
+      "character": "诸",
+      "cp932_hex": "e54d",
+      "slot": 6781
+    },
+    {
+      "character": "诺",
+      "cp932_hex": "e547",
+      "slot": 6775
+    },
+    {
+      "character": "课",
+      "cp932_hex": "e545",
+      "slot": 6773
+    },
+    {
+      "character": "谅",
+      "cp932_hex": "e544",
+      "slot": 6772
+    },
+    {
+      "character": "谈",
+      "cp932_hex": "e4ea",
+      "slot": 6749
+    },
+    {
+      "character": "谋",
+      "cp932_hex": "e4e5",
+      "slot": 6744
+    },
+    {
+      "character": "谍",
+      "cp932_hex": "e4e4",
+      "slot": 6743
+    },
+    {
+      "character": "谓",
+      "cp932_hex": "e4df",
+      "slot": 6738
+    },
+    {
+      "character": "谢",
+      "cp932_hex": "e4de",
+      "slot": 6737
+    },
+    {
+      "character": "负",
+      "cp932_hex": "e4dd",
+      "slot": 6736
+    },
+    {
+      "character": "责",
+      "cp932_hex": "e4cf",
+      "slot": 6722
+    },
+    {
+      "character": "败",
+      "cp932_hex": "e4ce",
+      "slot": 6721
+    },
+    {
+      "character": "账",
+      "cp932_hex": "e4cd",
+      "slot": 6720
+    },
+    {
+      "character": "质",
+      "cp932_hex": "e4cc",
+      "slot": 6719
+    },
+    {
+      "character": "购",
+      "cp932_hex": "e4ca",
+      "slot": 6717
+    },
+    {
+      "character": "贯",
+      "cp932_hex": "e4c8",
+      "slot": 6715
+    },
+    {
+      "character": "贵",
+      "cp932_hex": "e4c7",
+      "slot": 6714
+    },
+    {
+      "character": "费",
+      "cp932_hex": "e4c6",
+      "slot": 6713
+    },
+    {
+      "character": "赋",
+      "cp932_hex": "e4c4",
+      "slot": 6711
+    },
+    {
+      "character": "赎",
+      "cp932_hex": "e4c3",
+      "slot": 6710
+    },
+    {
+      "character": "赞",
+      "cp932_hex": "e4c2",
+      "slot": 6709
+    },
+    {
+      "character": "赢",
+      "cp932_hex": "e4c1",
+      "slot": 6708
+    },
+    {
+      "character": "赶",
+      "cp932_hex": "e4c0",
+      "slot": 6707
+    },
+    {
+      "character": "趟",
+      "cp932_hex": "e4bd",
+      "slot": 6704
+    },
+    {
+      "character": "趴",
+      "cp932_hex": "e4bc",
+      "slot": 6703
+    },
+    {
+      "character": "跑",
+      "cp932_hex": "e4b9",
+      "slot": 6700
+    },
+    {
+      "character": "蹦",
+      "cp932_hex": "e4b8",
+      "slot": 6699
+    },
+    {
+      "character": "躲",
+      "cp932_hex": "e4b7",
+      "slot": 6698
+    },
+    {
+      "character": "车",
+      "cp932_hex": "e4b6",
+      "slot": 6697
+    },
+    {
+      "character": "转",
+      "cp932_hex": "e4b5",
+      "slot": 6696
+    },
+    {
+      "character": "辆",
+      "cp932_hex": "e4b3",
+      "slot": 6694
+    },
+    {
+      "character": "辈",
+      "cp932_hex": "e4b2",
+      "slot": 6693
+    },
+    {
+      "character": "辉",
+      "cp932_hex": "e4b1",
+      "slot": 6692
+    },
+    {
+      "character": "输",
+      "cp932_hex": "e4af",
+      "slot": 6690
+    },
+    {
+      "character": "达",
+      "cp932_hex": "e4ad",
+      "slot": 6688
+    },
+    {
+      "character": "过",
+      "cp932_hex": "e4ac",
+      "slot": 6687
+    },
+    {
+      "character": "远",
+      "cp932_hex": "e4ab",
+      "slot": 6686
+    },
+    {
+      "character": "连",
+      "cp932_hex": "e4aa",
+      "slot": 6685
+    },
+    {
+      "character": "迟",
+      "cp932_hex": "e4a8",
+      "slot": 6683
+    },
+    {
+      "character": "适",
+      "cp932_hex": "e4a7",
+      "slot": 6682
+    },
+    {
+      "character": "遗",
+      "cp932_hex": "e4a6",
+      "slot": 6681
+    },
+    {
+      "character": "钝",
+      "cp932_hex": "e4a5",
+      "slot": 6680
+    },
+    {
+      "character": "钥",
+      "cp932_hex": "e4a2",
+      "slot": 6677
+    },
+    {
+      "character": "钱",
+      "cp932_hex": "e49f",
+      "slot": 6674
+    },
+    {
+      "character": "锈",
+      "cp932_hex": "e49d",
+      "slot": 6672
+    },
+    {
+      "character": "锋",
+      "cp932_hex": "e49b",
+      "slot": 6670
+    },
+    {
+      "character": "错",
+      "cp932_hex": "e496",
+      "slot": 6665
+    },
+    {
+      "character": "键",
+      "cp932_hex": "e495",
+      "slot": 6664
+    },
+    {
+      "character": "镇",
+      "cp932_hex": "e48f",
+      "slot": 6658
+    },
+    {
+      "character": "门",
+      "cp932_hex": "e48e",
+      "slot": 6657
+    },
+    {
+      "character": "闪",
+      "cp932_hex": "e489",
+      "slot": 6652
+    },
+    {
+      "character": "问",
+      "cp932_hex": "e486",
+      "slot": 6649
+    },
+    {
+      "character": "闯",
+      "cp932_hex": "e485",
+      "slot": 6648
+    },
+    {
+      "character": "闲",
+      "cp932_hex": "e483",
+      "slot": 6646
+    },
+    {
+      "character": "间",
+      "cp932_hex": "e47e",
+      "slot": 6642
+    },
+    {
+      "character": "闹",
+      "cp932_hex": "e47d",
+      "slot": 6641
+    },
+    {
+      "character": "闻",
+      "cp932_hex": "e47b",
+      "slot": 6639
+    },
+    {
+      "character": "阁",
+      "cp932_hex": "e475",
+      "slot": 6633
+    },
+    {
+      "character": "队",
+      "cp932_hex": "e473",
+      "slot": 6631
+    },
+    {
+      "character": "阴",
+      "cp932_hex": "e472",
+      "slot": 6630
+    },
+    {
+      "character": "阵",
+      "cp932_hex": "e46f",
+      "slot": 6627
+    },
+    {
+      "character": "阶",
+      "cp932_hex": "e46d",
+      "slot": 6625
+    },
+    {
+      "character": "际",
+      "cp932_hex": "e45e",
+      "slot": 6610
+    },
+    {
+      "character": "陆",
+      "cp932_hex": "e45c",
+      "slot": 6608
+    },
+    {
+      "character": "险",
+      "cp932_hex": "e45b",
+      "slot": 6607
+    },
+    {
+      "character": "陷",
+      "cp932_hex": "e44f",
+      "slot": 6595
+    },
+    {
+      "character": "隐",
+      "cp932_hex": "e445",
+      "slot": 6585
+    },
+    {
+      "character": "难",
+      "cp932_hex": "e3fb",
+      "slot": 6578
+    },
+    {
+      "character": "雾",
+      "cp932_hex": "e3fa",
+      "slot": 6577
+    },
+    {
+      "character": "靠",
+      "cp932_hex": "e3f8",
+      "slot": 6575
+    },
+    {
+      "character": "韦",
+      "cp932_hex": "e3f6",
+      "slot": 6573
+    },
+    {
+      "character": "顺",
+      "cp932_hex": "e3f1",
+      "slot": 6568
+    },
+    {
+      "character": "须",
+      "cp932_hex": "e3f0",
+      "slot": 6567
+    },
+    {
+      "character": "顽",
+      "cp932_hex": "e3ef",
+      "slot": 6566
+    },
+    {
+      "character": "顾",
+      "cp932_hex": "e3eb",
+      "slot": 6562
+    },
+    {
+      "character": "顿",
+      "cp932_hex": "e3de",
+      "slot": 6549
+    },
+    {
+      "character": "预",
+      "cp932_hex": "e3cf",
+      "slot": 6534
+    },
+    {
+      "character": "频",
+      "cp932_hex": "e3ce",
+      "slot": 6533
+    },
+    {
+      "character": "题",
+      "cp932_hex": "e3cd",
+      "slot": 6532
+    },
+    {
+      "character": "颜",
+      "cp932_hex": "e3cc",
+      "slot": 6531
+    },
+    {
+      "character": "飞",
+      "cp932_hex": "e3ca",
+      "slot": 6529
+    },
+    {
+      "character": "饭",
+      "cp932_hex": "e3c8",
+      "slot": 6527
+    },
+    {
+      "character": "饱",
+      "cp932_hex": "e3c7",
+      "slot": 6526
+    },
+    {
+      "character": "饶",
+      "cp932_hex": "e3c6",
+      "slot": 6525
+    },
+    {
+      "character": "馁",
+      "cp932_hex": "e3c4",
+      "slot": 6523
+    },
+    {
+      "character": "馆",
+      "cp932_hex": "e3c3",
+      "slot": 6522
+    },
+    {
+      "character": "驭",
+      "cp932_hex": "e3c2",
+      "slot": 6521
+    },
+    {
+      "character": "驱",
+      "cp932_hex": "e3c1",
+      "slot": 6520
+    },
+    {
+      "character": "驾",
+      "cp932_hex": "e3be",
+      "slot": 6517
+    },
+    {
+      "character": "验",
+      "cp932_hex": "e3bd",
+      "slot": 6516
+    },
+    {
+      "character": "骗",
+      "cp932_hex": "e3bc",
+      "slot": 6515
+    },
+    {
+      "character": "魇",
+      "cp932_hex": "e3b9",
+      "slot": 6512
+    },
+    {
+      "character": "鱼",
+      "cp932_hex": "e3b7",
+      "slot": 6510
+    },
+    {
+      "character": "鲁",
+      "cp932_hex": "e3b6",
+      "slot": 6509
+    },
+    {
+      "character": "鹫",
+      "cp932_hex": "e3b3",
+      "slot": 6506
+    },
+    {
+      "character": "齐",
+      "cp932_hex": "e3b1",
+      "slot": 6504
+    },
+    {
+      "character": "龄",
+      "cp932_hex": "e3ad",
+      "slot": 6500
+    },
+    {
+      "character": "习",
+      "cp932_hex": "e3ac",
+      "slot": 6499
+    },
+    {
+      "character": "众",
+      "cp932_hex": "e3aa",
+      "slot": 6497
+    },
+    {
+      "character": "侣",
+      "cp932_hex": "e3a7",
+      "slot": 6494
+    },
+    {
+      "character": "侧",
+      "cp932_hex": "e3a6",
+      "slot": 6493
+    },
+    {
+      "character": "减",
+      "cp932_hex": "e3a5",
+      "slot": 6492
+    },
+    {
+      "character": "创",
+      "cp932_hex": "e39b",
+      "slot": 6482
+    },
+    {
+      "character": "删",
+      "cp932_hex": "e399",
+      "slot": 6480
+    },
+    {
+      "character": "剧",
+      "cp932_hex": "e38a",
+      "slot": 6465
+    },
+    {
+      "character": "叠",
+      "cp932_hex": "e389",
+      "slot": 6464
+    },
+    {
+      "character": "啸",
+      "cp932_hex": "e387",
+      "slot": 6462
+    },
+    {
+      "character": "喷",
+      "cp932_hex": "e385",
+      "slot": 6460
+    },
+    {
+      "character": "奋",
+      "cp932_hex": "e384",
+      "slot": 6459
+    },
+    {
+      "character": "宽",
+      "cp932_hex": "e383",
+      "slot": 6458
+    },
+    {
+      "character": "层",
+      "cp932_hex": "e35f",
+      "slot": 6423
+    },
+    {
+      "character": "弹",
+      "cp932_hex": "e34e",
+      "slot": 6406
+    },
+    {
+      "character": "惩",
+      "cp932_hex": "e34d",
+      "slot": 6405
+    },
+    {
+      "character": "惫",
+      "cp932_hex": "e347",
+      "slot": 6399
+    },
+    {
+      "character": "扑",
+      "cp932_hex": "e345",
+      "slot": 6397
+    },
+    {
+      "character": "拥",
+      "cp932_hex": "e343",
+      "slot": 6395
+    },
+    {
+      "character": "择",
+      "cp932_hex": "e2f6",
+      "slot": 6385
+    },
+    {
+      "character": "朵",
+      "cp932_hex": "e2f4",
+      "slot": 6383
+    },
+    {
+      "character": "构",
+      "cp932_hex": "e2f3",
+      "slot": 6382
+    },
+    {
+      "character": "歼",
+      "cp932_hex": "e2f2",
+      "slot": 6381
+    },
+    {
+      "character": "汇",
+      "cp932_hex": "e2f1",
+      "slot": 6380
+    },
+    {
+      "character": "泽",
+      "cp932_hex": "e2ee",
+      "slot": 6377
+    },
+    {
+      "character": "浓",
+      "cp932_hex": "e2df",
+      "slot": 6362
+    },
+    {
+      "character": "烬",
+      "cp932_hex": "e2cf",
+      "slot": 6346
+    },
+    {
+      "character": "獠",
+      "cp932_hex": "e2ce",
+      "slot": 6345
+    },
+    {
+      "character": "瞄",
+      "cp932_hex": "e2ca",
+      "slot": 6341
+    },
+    {
+      "character": "瞪",
+      "cp932_hex": "e2c8",
+      "slot": 6339
+    },
+    {
+      "character": "矿",
+      "cp932_hex": "e2c6",
+      "slot": 6337
+    },
+    {
+      "character": "础",
+      "cp932_hex": "e2c5",
+      "slot": 6336
+    },
+    {
+      "character": "纤",
+      "cp932_hex": "e2c2",
+      "slot": 6333
+    },
+    {
+      "character": "纹",
+      "cp932_hex": "e2c0",
+      "slot": 6331
+    },
+    {
+      "character": "线",
+      "cp932_hex": "e2bf",
+      "slot": 6330
+    },
+    {
+      "character": "组",
+      "cp932_hex": "e2be",
+      "slot": 6329
+    },
+    {
+      "character": "织",
+      "cp932_hex": "e2bd",
+      "slot": 6328
+    },
+    {
+      "character": "绗",
+      "cp932_hex": "e2b9",
+      "slot": 6324
+    },
+    {
+      "character": "绣",
+      "cp932_hex": "e2b8",
+      "slot": 6323
+    },
+    {
+      "character": "绪",
+      "cp932_hex": "e2b7",
+      "slot": 6322
+    },
+    {
+      "character": "缝",
+      "cp932_hex": "e2b6",
+      "slot": 6321
+    },
+    {
+      "character": "缠",
+      "cp932_hex": "e2b4",
+      "slot": 6319
+    },
+    {
+      "character": "缩",
+      "cp932_hex": "e2b3",
+      "slot": 6318
+    },
+    {
+      "character": "罚",
+      "cp932_hex": "e2b2",
+      "slot": 6317
+    },
+    {
+      "character": "翔",
+      "cp932_hex": "e2b1",
+      "slot": 6316
+    },
+    {
+      "character": "翱",
+      "cp932_hex": "e2b0",
+      "slot": 6315
+    },
+    {
+      "character": "艳",
+      "cp932_hex": "e2ae",
+      "slot": 6313
+    },
+    {
+      "character": "艺",
+      "cp932_hex": "e2ad",
+      "slot": 6312
+    },
+    {
+      "character": "蕴",
+      "cp932_hex": "e2ac",
+      "slot": 6311
+    },
+    {
+      "character": "蝙",
+      "cp932_hex": "e2aa",
+      "slot": 6309
+    },
+    {
+      "character": "裹",
+      "cp932_hex": "e2a7",
+      "slot": 6306
+    },
+    {
+      "character": "诡",
+      "cp932_hex": "e2a6",
+      "slot": 6305
+    },
+    {
+      "character": "诱",
+      "cp932_hex": "e2a5",
+      "slot": 6304
+    },
+    {
+      "character": "谜",
+      "cp932_hex": "e2a2",
+      "slot": 6301
+    },
+    {
+      "character": "轰",
+      "cp932_hex": "e29f",
+      "slot": 6298
+    },
+    {
+      "character": "迈",
+      "cp932_hex": "e29b",
+      "slot": 6294
+    },
+    {
+      "character": "运",
+      "cp932_hex": "e299",
+      "slot": 6292
+    },
+    {
+      "character": "释",
+      "cp932_hex": "e297",
+      "slot": 6290
+    },
+    {
+      "character": "钻",
+      "cp932_hex": "e28f",
+      "slot": 6282
+    },
+    {
+      "character": "锥",
+      "cp932_hex": "e28e",
+      "slot": 6281
+    },
+    {
+      "character": "锻",
+      "cp932_hex": "e28d",
+      "slot": 6280
+    },
+    {
+      "character": "顶",
+      "cp932_hex": "e28a",
+      "slot": 6277
+    },
+    {
+      "character": "领",
+      "cp932_hex": "e289",
+      "slot": 6276
+    },
+    {
+      "character": "颇",
+      "cp932_hex": "e287",
+      "slot": 6274
+    },
+    {
+      "character": "饰",
+      "cp932_hex": "e285",
+      "slot": 6272
+    },
+    {
+      "character": "骇",
+      "cp932_hex": "e277",
+      "slot": 6259
+    },
+    {
+      "character": "鸟",
+      "cp932_hex": "e276",
+      "slot": 6258
+    },
+    {
+      "character": "鸵",
+      "cp932_hex": "e273",
+      "slot": 6255
+    }
+  ]
+}

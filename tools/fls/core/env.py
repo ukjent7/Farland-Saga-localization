@@ -11,7 +11,11 @@ ROOT: Path = WORK.parent
 SOURCE: Path = WORK / 'extracted/steam'
 STAGE: Path = WORK / 'staging/alpha'
 EXE: Path = WORK / 'analysis/FarlandSaga.exe'
-GLYPH_SLOTS: Path = WORK / 'assets/sources/glyph-slots.zh-CN.json'
+GLYPH_SLOTS: Path = (
+    REPO / 'config/glyph-slots.zh-CN.json'
+    if (REPO / 'config/glyph-slots.zh-CN.json').is_file()
+    else WORK / 'assets/sources/glyph-slots.zh-CN.json'
+)
 
 GAME_ROOT: Path | None = None
 

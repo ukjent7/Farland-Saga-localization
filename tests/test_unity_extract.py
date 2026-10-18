@@ -19,7 +19,11 @@ import path_compat
 
 WORK = path_compat.WORK
 FROZEN = WORK / 'assets/sources/unity'
-FROZEN_TABLE = WORK / 'assets/sources/unity.json'
+FROZEN_TABLE = (
+    REPO / 'config/unity.json'
+    if (REPO / 'config/unity.json').is_file()
+    else WORK / 'assets/sources/unity.json'
+)
 
 
 def scan_rows():

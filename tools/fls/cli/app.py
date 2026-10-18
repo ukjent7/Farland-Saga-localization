@@ -294,13 +294,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     unity = commands.add_parser(
         'extract-unity',
-        help='Rebuild assets/sources/unity.json from the frozen Unity originals',
+        help='Rebuild config/unity.json from the frozen Unity originals',
     )
     unity.add_argument(
         '--source', help='Frozen Unity original directory; defaults to work/assets/sources/unity'
     )
     unity.add_argument(
-        '--output', help='Row table to write; defaults to work/assets/sources/unity.json'
+        '--output', help='Row table to write; defaults to config/unity.json'
     )
     unity.add_argument('--review', help='Where to write hits the corpus does not cover')
     unity.add_argument(

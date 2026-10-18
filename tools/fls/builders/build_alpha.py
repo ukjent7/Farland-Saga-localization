@@ -28,7 +28,11 @@ ROOT = WORK.parent
 SOURCE = WORK / 'extracted/steam'
 STAGE = WORK / 'staging/alpha'
 EXE = WORK / 'analysis/FarlandSaga.exe'
-GLYPH_SLOTS = WORK / 'assets/sources/glyph-slots.zh-CN.json'
+GLYPH_SLOTS = (
+    REPO / 'config/glyph-slots.zh-CN.json'
+    if (REPO / 'config/glyph-slots.zh-CN.json').is_file()
+    else WORK / 'assets/sources/glyph-slots.zh-CN.json'
+)
 # --game 指向的已购安装根；单独检出仓库时用它解析原版容器，见 original_file。
 GAME_ROOT = None
 

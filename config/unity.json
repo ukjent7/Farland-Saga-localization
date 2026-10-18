@@ -1,0 +1,672 @@
+[
+  {
+    "id": "resources.assets:2002:64",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 64,
+    "capacity_bytes": 34,
+    "source": "コットン ２を開始します",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:268",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 268,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:764",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 764,
+    "capacity_bytes": 46,
+    "source": "コットン ブーメランを開始します",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:940",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 940,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:1436",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 1436,
+    "capacity_bytes": 49,
+    "source": "ガーディアンフォース を開始します",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:1656",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 1656,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:2152",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 2152,
+    "capacity_bytes": 51,
+    "source": "ネットワークランキングを表示します",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:2332",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 2332,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:2828",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 2828,
+    "capacity_bytes": 64,
+    "source": "コットン ブーメランのマニュアルを閲覧します",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:3020",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 3020,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:3516",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 3516,
+    "capacity_bytes": 67,
+    "source": "ガーディアンフォース のマニュアルを閲覧します",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:3672",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 3672,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:4168",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 4168,
+    "capacity_bytes": 39,
+    "source": "メニューの言語を選択します",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:4396",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 4396,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:4872",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 4872,
+    "capacity_bytes": 33,
+    "source": "クレジットを表示します",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:5056",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 5056,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:5532",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 5532,
+    "capacity_bytes": 51,
+    "source": "ネットワークランキングを表示します",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:5712",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 5712,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:6188",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 6188,
+    "capacity_bytes": 66,
+    "source": "スコアの反映には時間がかかることがあります。",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:6380",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 6380,
+    "capacity_bytes": 48,
+    "source": "分數會在經過一定段時間後才會更新",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:6688",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 6688,
+    "capacity_bytes": 130,
+    "source": "<sprite=\"TMP_Buttons\" index=14>ページ切り替え / <sprite=\"TMP_Buttons\" index=1>戻る / <sprite=\"TMP_Buttons\" index=0>表示",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:7568",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 7568,
+    "capacity_bytes": 216,
+    "source": "<sprite=\"TMP_Buttons\" index=14>表示位置変更 / <sprite=\"TMP_Buttons\" index=2>=拡大 / <sprite=\"TMP_Buttons\" index=3>=縮小 / <sprite=\"TMP_Buttons\" index=1>戻る / <sprite=\"TMP_Buttons\" index=0>位置を戻す",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:8424",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 8424,
+    "capacity_bytes": 9,
+    "source": "未使用",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:8484",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 8484,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=1>戻る",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:9416",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 9416,
+    "capacity_bytes": 9,
+    "source": "未使用",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:9476",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 9476,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=1>戻る",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:10348",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 10348,
+    "capacity_bytes": 9,
+    "source": "未使用",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:10408",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 10408,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=1>戻る",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:11348",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 11348,
+    "capacity_bytes": 33,
+    "source": "右のところだけ使います",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:11388",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 11388,
+    "capacity_bytes": 33,
+    "source": "右のところだけ使います",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:11428",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 11428,
+    "capacity_bytes": 33,
+    "source": "右のところだけ使います",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:11468",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 11468,
+    "capacity_bytes": 33,
+    "source": "右のところだけ使います",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:11508",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 11508,
+    "capacity_bytes": 33,
+    "source": "右のところだけ使います",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:11552",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 11552,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=1>戻る",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:11888",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 11888,
+    "capacity_bytes": 66,
+    "source": "スコアの反映には時間がかかることがあります。",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:12080",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 12080,
+    "capacity_bytes": 48,
+    "source": "分數會在經過一定段時間後才會更新",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:12336",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 12336,
+    "capacity_bytes": 51,
+    "source": "サーバにアクセス出来ませんでした。",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:12480",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 12480,
+    "capacity_bytes": 21,
+    "source": "無法訪問服務器",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:12652",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 12652,
+    "capacity_bytes": 9,
+    "source": "未使用",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:12712",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 12712,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=1>戻る",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:13644",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 13644,
+    "capacity_bytes": 9,
+    "source": "未使用",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:13704",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 13704,
+    "capacity_bytes": 36,
+    "source": "<sprite=\"TMP_Buttons\" index=1>戻る",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:14576",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 14576,
+    "capacity_bytes": 39,
+    "source": "効果音の音量を変更できます",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:14764",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 14764,
+    "capacity_bytes": 150,
+    "source": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>設定変更　<sprite=\"TMP_Buttons\" index=1>戻る　<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:15772",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 15772,
+    "capacity_bytes": 39,
+    "source": "ＢＧＭの音量を変更できます",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:15960",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 15960,
+    "capacity_bytes": 150,
+    "source": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>設定変更　<sprite=\"TMP_Buttons\" index=1>戻る　<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:16968",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 16968,
+    "capacity_bytes": 39,
+    "source": "ボイスの音量を変更できます",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:17176",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 17176,
+    "capacity_bytes": 150,
+    "source": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>設定変更　<sprite=\"TMP_Buttons\" index=1>戻る　<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:18184",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 18184,
+    "capacity_bytes": 51,
+    "source": "メッセージ送りの方法を変更できます",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:18404",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 18404,
+    "capacity_bytes": 150,
+    "source": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>設定変更　<sprite=\"TMP_Buttons\" index=1>戻る　<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:19412",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 19412,
+    "capacity_bytes": 45,
+    "source": "セリフの表示速度を変更できます",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:19648",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 19648,
+    "capacity_bytes": 150,
+    "source": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>設定変更　<sprite=\"TMP_Buttons\" index=1>戻る　<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:20240",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 20240,
+    "capacity_bytes": 27,
+    "source": "初期設定に戻します",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:20436",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 20436,
+    "capacity_bytes": 75,
+    "source": "<sprite=\"TMP_Buttons\" index=1>戻る　<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:20952",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 20952,
+    "capacity_bytes": 33,
+    "source": "変更を決定して戻ります",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:21056",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 21056,
+    "capacity_bytes": 75,
+    "source": "<sprite=\"TMP_Buttons\" index=1>戻る　<sprite=\"TMP_Buttons\" index=0>決定",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:22028",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 22028,
+    "capacity_bytes": 9,
+    "source": "未使用",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:22088",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 22088,
+    "capacity_bytes": 157,
+    "source": "<sprite=\"TMP_Buttons\" index=0>=決定 / <sprite=\"TMP_Buttons\" index=1>=戻る / <sprite=\"TMP_Buttons\" index=2>=確認 / <sprite=\"TMP_Buttons\" index=3>=情報",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:23144",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 23144,
+    "capacity_bytes": 9,
+    "source": "未使用",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:23204",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 23204,
+    "capacity_bytes": 157,
+    "source": "<sprite=\"TMP_Buttons\" index=0>=決定 / <sprite=\"TMP_Buttons\" index=1>=戻る / <sprite=\"TMP_Buttons\" index=2>=確認 / <sprite=\"TMP_Buttons\" index=3>=情報",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:24200",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 24200,
+    "capacity_bytes": 9,
+    "source": "未使用",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2002:24260",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2002,
+    "object_offset": 24260,
+    "capacity_bytes": 157,
+    "source": "<sprite=\"TMP_Buttons\" index=0>=決定 / <sprite=\"TMP_Buttons\" index=1>=戻る / <sprite=\"TMP_Buttons\" index=2>=確認 / <sprite=\"TMP_Buttons\" index=3>=情報",
+    "translation": "",
+    "kind": "localization"
+  },
+  {
+    "id": "resources.assets:2127:92",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2127,
+    "object_offset": 92,
+    "capacity_bytes": 90,
+    "source": "<sprite=\"TMP_Buttons\" index=2>ステータス表示　<sprite=\"TMP_Buttons\" index=0>戻る",
+    "translation": "",
+    "kind": "visible_text"
+  },
+  {
+    "id": "resources.assets:2134:92",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2134,
+    "object_offset": 92,
+    "capacity_bytes": 90,
+    "source": "<sprite=\"TMP_Buttons\" index=2>ステータス表示　<sprite=\"TMP_Buttons\" index=0>戻る",
+    "translation": "",
+    "kind": "visible_text"
+  },
+  {
+    "id": "resources.assets:2164:92",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2164,
+    "object_offset": 92,
+    "capacity_bytes": 69,
+    "source": "※スコアの反映には時間がかかることがあります。",
+    "translation": "",
+    "kind": "visible_text"
+  },
+  {
+    "id": "resources.assets:2165:92",
+    "file": "S-Tribute_Data/resources.assets",
+    "path_id": 2165,
+    "object_offset": 92,
+    "capacity_bytes": 69,
+    "source": "※スコアの反映には時間がかかることがあります。",
+    "translation": "",
+    "kind": "visible_text"
+  },
+  {
+    "id": "level0:147:92",
+    "file": "S-Tribute_Data/level0",
+    "path_id": 147,
+    "object_offset": 92,
+    "capacity_bytes": 90,
+    "source": "<sprite=\"TMP_Buttons\" index=2>ステータス表示　<sprite=\"TMP_Buttons\" index=0>戻る",
+    "translation": "",
+    "kind": "visible_text"
+  }
+]
