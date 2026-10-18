@@ -66,6 +66,12 @@ jobs:
       || startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
     steps:
+      # gh release create 要在本地 git 仓库里解析 tag 指向的提交，只下载产物
+      # 不够；fetch-depth: 0 才会把 tag 引用取下来。
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
           name: patcher-binaries
@@ -123,6 +129,7 @@ jobs:
             gh release upload "$tag" binaries/* --clobber
           else
             gh release create "$tag" \
+              --target "${GITHUB_SHA}" \
               --title "FARLAND SAGA I Saturn Tribute 补丁器 ${tag}" \
               --notes-file release-notes.md \
               binaries/*
