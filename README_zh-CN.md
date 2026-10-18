@@ -25,7 +25,7 @@ Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动�
 
 | 简体中文 | 한국어 | English |
 | :---: | :---: | :---: |
-| ![中文实机预览](docs/images/preview_zh-CN.png) | ![韩文实机预览](docs/images/preview_ko-KR.png) | ![英文实机预览](docs/images/preview_en-US.png) |
+| ![中文实机预览](docs/images/preview_zh-CN.webp) | ![韩文实机预览](docs/images/preview_ko-KR.webp) | ![英文实机预览](docs/images/preview_en-US.webp) |
 
 ---
 
