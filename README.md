@@ -4,7 +4,8 @@
   <b>Language / 语言 / 언어:</b><br>
   <a href="#english">English</a> •
   <a href="#-简体中文">简体中文</a> •
-  <a href="#-한국어">한국어</a>
+  <a href="#-한국어">한국어</a> •
+  <a href="#-community--compute-support">🤝 Support / 协助</a>
 </p>
 
 <p align="center">
@@ -170,3 +171,25 @@ bash flow.sh build-patcher
 
 - 본 프로젝트는 유저 커뮤니티에서 연구 및 학습 목적으로 제작한 비공식 패치입니다. 원본 상용 게임 바이너리나 저작권 보호 폰트를 포함하지 않습니다.
 - 본 패치를 사용하려면 Steam에서 정식 구매한 《FARLAND SAGA I Saturn Tribute》 게임이 필요합니다.
+
+---
+
+## 🤝 Community & Compute Support
+
+**中文说明**：  
+本项目为非营利开源业余项目，非常欢迎大家通过任何形式参与贡献（提交 PR、改进翻译、测试反馈或分享技术思路）。  
+> **特别说明与算力协助**：  
+> 本项目涉及老旧主机（Saturn SH-2）反汇编逆向、扇区纠错码重算及 Unity 底层二进制注入，技术链路长且复杂。目前开发中所使用的 AI 模型推理性能有限，在排查深层偶发 Bug 及继续完善项目时效率极低（两天内消耗了约 5~6 亿 Token 依然难以定位某些核心症结）。  
+> 如果您手头有多余的 **ChatGPT Plus / GPT Team** 账号额度、高阶大模型算力或 API 资源愿意提供给项目开发使用/测试，我们将万分感激！无论以何种方式协助，哪怕只是提供排查思路，都对本项目有着莫大的帮助。
+
+**English**:  
+This is a non-profit, hobbyist open-source project. Any form of contribution is warmly welcomed—submitting PRs, refining translations, testing releases, or sharing technical advice.  
+> **A Note on Compute & AI Support**:  
+> The project involves reverse engineering legacy Sega Saturn (SH-2) code, CD-ROM parity recalculation, and Unity binary patching. Currently, resolving intricate edge-case bugs using lightweight AI models has been heavily bottlenecked (burning through 500~600M tokens over two days with little progress on subtle issues).  
+> If anyone has spare **ChatGPT Plus / GPT Team** seats or advanced AI reasoning compute willing to share/lend for project development, it would be immensely appreciated! Any assistance, from debugging insights to compute sharing, makes a huge difference.
+
+**한국어**:  
+본 프로젝트는 비영리 오픈소스 프로젝트로, 코드 기여(PR), 번역 감수, 테스트 피드백, 기술 자문 등 어떠한 형태의 참여도 진심으로 환영합니다.  
+> **AI 연산 지원 및 협력 안내**:  
+> 현재 세가 새턴(SH-2) 어셈블리 역공학, CD-ROM 섹터 패리티 재계산 및 Unity 바이너리 패치 등 복잡한 저수준 작업을 다루고 있습니다. 현재 사용 중인 AI 모델의 한계로 인해 원인 불명의 심층 버그를 추적하고 프로젝트를 개선하는 데 상당한 병목을 겪고 있습니다(이틀간 5~6억 토큰을 소모했음에도 까다로운 이슈 해결에 큰 진전이 없었습니다).  
+> 혹시 여유가 있는 **ChatGPT Plus / GPT Team** 계정이나 고급 추론 모델 자원을 프로젝트 개발 지원용으로 공유/대여해 주실 수 있는 분이 계시다면 진심으로 감사하겠습니다! 어떤 형태의 도움과 조언도 프로젝트에 큰 힘이 됩니다.
