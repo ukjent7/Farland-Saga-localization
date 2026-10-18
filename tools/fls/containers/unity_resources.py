@@ -11,8 +11,13 @@ from candidate import stage_path
 from path_compat import REPO
 
 UNITY_SOURCE = WORK / 'assets/sources/unity'
-UNITY_INPUT = WORK / 'assets/sources/unity.json'
+UNITY_INPUT = (
+    REPO / 'config/unity.json'
+    if (REPO / 'config/unity.json').is_file()
+    else WORK / 'assets/sources/unity.json'
+)
 CORPUS = REPO / 'translation/corpus.json'
+
 BASELINE = UNITY_SOURCE
 FILES = ['S-Tribute_Data/resources.assets', 'S-Tribute_Data/level0']
 

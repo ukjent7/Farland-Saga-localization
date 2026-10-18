@@ -24,7 +24,11 @@ from path_compat import REPO, WORK, inside_workspace
 from translation_data import read_corpus_rows
 
 UNITY_SOURCE = WORK / 'assets/sources/unity'
-UNITY_INPUT = WORK / 'assets/sources/unity.json'
+UNITY_INPUT = (
+    REPO / 'config/unity.json'
+    if (REPO / 'config/unity.json').is_file()
+    else WORK / 'assets/sources/unity.json'
+)
 CORPUS = REPO / 'translation/corpus.json'
 REVIEW_NAME = 'unity_unmatched.json'
 FILES = ['S-Tribute_Data/resources.assets', 'S-Tribute_Data/sharedassets0.assets', 'S-Tribute_Data/level0']
