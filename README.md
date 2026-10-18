@@ -3,6 +3,9 @@
 [![CI](https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml/badge.svg)](https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ukjent7/Farland-Saga-localization)](https://goreportcard.com/report/github.com/ukjent7/Farland-Saga-localization)
 
+> [!WARNING]
+> **当前处于 Alpha 阶段**：本补丁仅供尝鲜体验与测试，不可视为正式版本。遇到问题欢迎提交反馈。
+
 Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动化注入补丁工具，支持**简体中文**、**한국어 (韩文)** 与 **English (英文)**。
 
 项目采用纯声明式注入引擎，公开仓库零侵权、完全自包含，补丁器单文件开箱即用。
