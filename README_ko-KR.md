@@ -52,6 +52,49 @@ Steam 버전 《**FARLAND SAGA I Saturn Tribute**》를 위한 다국어 현지�
 
 ---
 
+## 프로젝트 로드맵 및 진행 상황
+
+```mermaid
+flowchart TD
+    subgraph P1["1단계: 코어 엔진 및 인프라 구축 (완료)"]
+        direction TB
+        p1a["Saturn CD-ROM MODE1 섹터 EDC/ECC 자체 재생성 엔진"]
+        p1b["SSF 컨테이너 암복호화 및 네이티브 아틀라스 인코딩"]
+        p1c["Format 2 가변 길이 스파스 패치 프로토콜 (~16MB 단일 패처)"]
+    end
+
+    subgraph P2["2단계: Alpha 0.5 프리뷰 (현재 마일스톤)"]
+        direction TB
+        p2a["한국어 / 简体中文 / English 3개 국어 인플레이스 주입 지원"]
+        p2b["GitHub Actions CI 자동 검증 (번역 용량 및 ISO 공간 감시)"]
+        p2c["단일 스냅샷 안전 백업/롤백 기능을 갖춘 단일 패처 배포"]
+    end
+
+    subgraph P3["3단계: Beta 품질 개선 및 버그 수정 (진행 중)"]
+        direction TB
+        p3a["한국어판 타이틀 화면 Option 버튼 미표시 문제 해결 (#1)"]
+        p3b["전체 대사 번역 윤문, 용어 통일 및 가독성 개선"]
+        p3c["Steam Deck / Linux 네이티브 패처 크로스 컴파일 지원"]
+    end
+
+    subgraph P4["4단계: v1.0 정식 릴리스"]
+        direction TB
+        p4a["3개 국어 전체 게임 플레이 검증 및 엣지 케이스 안정화"]
+        p4b["정식 안정 버전 멀티 플랫폼 배포"]
+    end
+
+    P1 --> P2 --> P3 --> P4
+```
+
+| 단계 | 마일스톤 | 상태 | 주요 내용 |
+| :--- | :--- | :---: | :--- |
+| **1단계** | 코어 엔진 및 인프라 | ✅ 완료 | Saturn EDC/ECC 재생성, SSF 컨테이너 암호화, Format 2 경량 엔진 |
+| **2단계** | Alpha 0.5 프리뷰 | 🚀 현재 | 3개 국어 로컬라이징, ~16MB 단일 패처, CI 번역 용량/ISO 자동 검증 |
+| **3단계** | Beta 품질 개선 | 🛠️ 진행 중 | Issue #1 버그 해결, 전체 텍스트 윤문, Steam Deck 네이티브 지원 |
+| **4단계** | v1.0 정식 버전 | 🎯 예정 | 전 구간 완주 검증 및 정식 멀티 플랫폼 배포 |
+
+---
+
 ## 개발자 가이드
 
 요구 사항: Linux/WSL2, Python 3.14+ (`uv` 관리), Go 1.23+.

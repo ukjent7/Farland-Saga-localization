@@ -52,6 +52,49 @@ Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动�
 
 ---
 
+## 项目路线图与开发进度
+
+```mermaid
+flowchart TD
+    subgraph P1["第一阶段：底层引擎与架构解耦（已完成）"]
+        direction TB
+        p1a["Saturn 光盘 MODE1 扇区 EDC/ECC 自研重算引擎"]
+        p1b["SSF 容器加解密与原生图集编解码"]
+        p1c["Format 2 变长稀疏增量协议（~16MB 单文件补丁器）"]
+    end
+
+    subgraph P2["第二阶段：Alpha 0.5 尝鲜预览（当前阶段）"]
+        direction TB
+        p2a["中 / 韩 / 英三语声明式原位注入支持"]
+        p2b["GitHub Actions 自动化校验（翻译容量边界与 ISO 空间）"]
+        p2c["独立 GUI 补丁器与单生命周期安全备份还原机制"]
+    end
+
+    subgraph P3["第三阶段：Beta 体验优化与问题排查（进行中）"]
+        direction TB
+        p3a["排查并修复韩语版标题画面 Option 键缺失问题 (#1)"]
+        p3b["全主线与支线对话精校、名词统一与排版润色"]
+        p3c["Steam Deck / Linux 原生补丁器交叉编译支持"]
+    end
+
+    subgraph P4["第四阶段：v1.0 正式发布"]
+        direction TB
+        p4a["三语全流程完整通关实机回归测试与零缺陷验证"]
+        p4b["多平台正式稳定版分发与完整使用说明"]
+    end
+
+    P1 --> P2 --> P3 --> P4
+```
+
+| 阶段 | 里程碑 | 状态 | 关键成果 |
+| :--- | :--- | :---: | :--- |
+| **阶段一** | 核心架构与逆向解密 | ✅ 已完成 | 土星 EDC/ECC 重算、SSF 容器解密、Format 2 轻量增量引擎 |
+| **阶段二** | Alpha 0.5 尝鲜预览 | 🚀 当前版本 | 三语本地化、~16MB 单文件补丁、CI 语料容量/ISO 空间自动测试 |
+| **阶段三** | Beta 润色与缺陷修复 | 🛠️ 进行中 | 排查 Issue #1、剧情文本精校与润色、Steam Deck 原生支持 |
+| **阶段四** | v1.0 正式版 | 🎯 规划目标 | 全流程通关零异常验证、全平台稳定发布 |
+
+---
+
 ## 开发者指南
 
 环境要求：Linux/WSL2、Python 3.14+（由 `uv` 纳管）、Go 1.23+。
