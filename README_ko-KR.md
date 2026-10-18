@@ -25,7 +25,7 @@ Steam 버전 《**FARLAND SAGA I Saturn Tribute**》를 위한 다국어 현지�
 
 | 한국어 | 简体中文 | English |
 | :---: | :---: | :---: |
-| ![한국어 인게임 미리보기](docs/images/preview_ko-KR.png) | ![중국어 인게임 미리보기](docs/images/preview_zh-CN.png) | ![영어 인게임 미리보기](docs/images/preview_en-US.png) |
+| ![한국어 인게임 미리보기](docs/images/preview_ko-KR.webp) | ![중국어 인게임 미리보기](docs/images/preview_zh-CN.webp) | ![영어 인게임 미리보기](docs/images/preview_en-US.webp) |
 
 ---
 

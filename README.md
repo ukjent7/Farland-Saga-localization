@@ -25,7 +25,7 @@ Built with a declarative in-place injection engine: 100% free of commercial copy
 
 | English | 简体中文 | 한국어 |
 | :---: | :---: | :---: |
-| ![English Preview](docs/images/preview_en-US.png) | ![Chinese Preview](docs/images/preview_zh-CN.png) | ![Korean Preview](docs/images/preview_ko-KR.png) |
+| ![English Preview](docs/images/preview_en-US.webp) | ![Chinese Preview](docs/images/preview_zh-CN.webp) | ![Korean Preview](docs/images/preview_ko-KR.webp) |
 
 ---
 
