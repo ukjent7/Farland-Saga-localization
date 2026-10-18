@@ -52,24 +52,14 @@ Built with a declarative in-place injection engine: 100% free of commercial copy
 
 ---
 
-## 🗺️ Localization Progress & Roadmap
+## 📊 Project Progress & Status
 
-### Translation Status
+For this project, progress is not measured by "how many raw lines AI translated" (while 100% of the baseline text is injected, it only represents the initial phase). The real heavy lifting lies in **manual bug fixing, dialogue proofreading, and end-to-end playtesting**.
 
-| Category | Lines | English | 简体中文 | 한국어 | Status |
-| :--- | :---: | :---: | :---: | :---: | :--- |
-| **Story & Event Dialogue** | 1,971 | 100% | 100% | 100% | Draft complete, pending review |
-| **Items, Magic & Skills** | 438 | 100% | 100% | 100% | Complete |
-| **Equipment & Skill Descriptions** | 279 | 100% | 100% | 100% | Complete |
-| **Steam Shell & Menus** | 89 | 100% | 100% | 100% | Injected |
-| **Combat & Status Conditions** | 9 | 100% | 100% | 100% | Complete |
-| **Total** | **2,786** | **100%** | **100%** | **100%** | **Trilingual draft ready** |
-
-### Release Roadmap
-
-- [x] **v0.5.0 Alpha** *(Current)*: Baseline trilingual text injected, standalone GUI patcher preview
-- [ ] **v0.8.0 Beta**: In-game dialogue proofreading, terminology alignment, and UI bug fixing
-- [ ] **v1.0.0 Final**: End-to-end playthrough validation across all chapters, official production release
+| Title | Phase | Est. Progress | Current Status & Breakdown |
+| :--- | :---: | :---: | :--- |
+| **FARLAND SAGA I**<br>(This Project) | **Alpha 0.5 Preview** | **~40%** | • **Ready (~40%)**: In-place injection engine, baseline trilingual text, CI test suite, standalone GUI patcher<br>• **Remaining Core Work (~60%)**: Manual triage of runtime rendering/logic bugs (e.g. Korean Option button issue), dialogue polish, full-game playthrough verification |
+| **FARLAND SAGA II**<br>(Sequel) | **Early Development** | **~15%** | • Disc/container decoding and resource extraction completed<br>• UI, items & description drafts completed (753 strings)<br>• Story script extraction completed (17 banks, 2,660 pages); 3 banks (530 pages) translated, 14 banks in progress |
 
 ---
 
