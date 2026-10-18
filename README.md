@@ -52,6 +52,49 @@ Built with a declarative in-place injection engine: 100% free of commercial copy
 
 ---
 
+## Project Roadmap
+
+```mermaid
+flowchart TD
+    subgraph P1["Phase 1: Core Engine & Infrastructure (Completed)"]
+        direction TB
+        p1a["Saturn CD-ROM MODE1 EDC/ECC Recalculation Engine"]
+        p1b["SSF Container Cryptography & Image Encoding"]
+        p1c["Format 2 Sparse Replay Protocol (~16MB Standalone Patcher)"]
+    end
+
+    subgraph P2["Phase 2: Alpha 0.5 Preview (Current Milestone)"]
+        direction TB
+        p2a["Trilingual In-Place Injection (English, 简体中文, 한국어)"]
+        p2b["Automated CI Verification (Translation Capacity & ISO Extents)"]
+        p2c["Standalone GUI Patcher with Safe Single-Backup System"]
+    end
+
+    subgraph P3["Phase 3: Beta Polish & Quality Assurance (In Progress)"]
+        direction TB
+        p3a["Resolve Korean Title Screen Button Missing Issue (#1)"]
+        p3b["In-Game Dialogue Proofreading & Terminology Tuning"]
+        p3c["Cross-Platform Patcher Support (Steam Deck / Linux)"]
+    end
+
+    subgraph P4["Phase 4: v1.0 Production Release"]
+        direction TB
+        p4a["Full Game Playthrough Verification Across All 3 Languages"]
+        p4b["Stable Multi-Platform Release Distribution"]
+    end
+
+    P1 --> P2 --> P3 --> P4
+```
+
+| Phase | Milestone | Status | Key Deliverables |
+| :--- | :--- | :---: | :--- |
+| **Phase 1** | Core Infrastructure | ✅ Completed | Saturn EDC/ECC calculation, SSF cryptography, Format 2 sparse engine |
+| **Phase 2** | Alpha 0.5 Preview | 🚀 Current | Trilingual patcher, ~16MB single executable, CI capacity checks |
+| **Phase 3** | Beta Refinement | 🛠️ In Progress | Fix Issue #1, dialogue proofreading, Steam Deck native binary |
+| **Phase 4** | v1.0 Production | 🎯 Planned | Zero edge-case issues across full playthrough, stable releases |
+
+---
+
 ## Developer Guide
 
 Requires: Linux/WSL2, Python 3.14+ (via `uv`), Go 1.23+.
