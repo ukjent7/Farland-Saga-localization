@@ -9,6 +9,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -1509,3 +1510,127 @@ func TestUIStringsForFallsBackToEnglish(t *testing.T) {
 		t.Errorf("韩文字体 = %s，期望 Malgun Gothic", uiKorean.fontFace)
 	}
 }
+
+// Format 2 支持任意合法的变长记录，不受 4096 字节固定块限制。
+func TestReplayFormat2VariableLength(t *testing.T) {
+	temp := t.TempDir()
+	originalData := bytes.Repeat([]byte("ORIGINAL"), 2000) // 16000 字节
+	origPath := filepath.Join(temp, "original.bin")
+	if err := os.WriteFile(origPath, originalData, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	patchedData := make([]byte, len(originalData))
+	copy(patchedData, originalData)
+	// 在 offset 1000 处替换一段 8000 字节的连续内容（远超 4096 字节）
+	replacement := bytes.Repeat([]byte("VARIABLE"), 1000) // 8000 字节
+	copy(patchedData[1000:], replacement)
+
+	origHash := sha256Hex(originalData)
+	patchedHash := sha256Hex(patchedData)
+
+	header := objectHeader{
+		Format: 2,
+		SHA256: patchedHash,
+		Size:   int64(len(patchedData)),
+		Base: &struct {
+			Path   string `json:"path"`
+			SHA256 string `json:"sha256"`
+			Size   int64  `json:"size"`
+		}{
+			Path:   "test.bin",
+			SHA256: origHash,
+			Size:   int64(len(originalData)),
+		},
+	}
+	headerBytes, _ := json.Marshal(header)
+	headerLine := append(headerBytes, '\n')
+
+	// 记录: offset 1000, size 8000
+	rec := recordBytes(1000, uint32(len(replacement)), replacement)
+	gzData := gzipParts(t, headerLine, rec)
+
+	objName := "objects/" + patchedHash + ".gz"
+	info := manifest{
+		Format:     payloadFormat,
+		Kind:       payloadKind,
+		Version:    "v-format2",
+		Language:   "zh-CN",
+		CreatedUTC: "2026-10-18T00:00:00Z",
+		Files: []fileEntry{
+			{
+				Path:           "test.bin",
+				OriginalSHA256: origHash,
+				OriginalSize:   int64(len(originalData)),
+				PatchedSHA256:  patchedHash,
+				PatchedSize:    int64(len(patchedData)),
+				Object:         objName,
+			},
+		},
+	}
+
+	zipPath := filepath.Join(temp, "format2-patch.zip")
+	writePayloadZip(t, zipPath, info, map[string][]byte{objName: gzData})
+
+	loaded, err := openPayload(zipPath)
+	if err != nil {
+		t.Fatalf("openPayload 失败: %v", err)
+	}
+	defer loaded.close()
+
+	var output bytes.Buffer
+	if err := loaded.replay(loaded.info.Files[0], origPath, &output, nil); err != nil {
+		t.Fatalf("Format 2 replay 失败: %v", err)
+	}
+
+	if !bytes.Equal(output.Bytes(), patchedData) {
+		t.Fatal("Format 2 重建数据与预期不符")
+	}
+}
+
+// TestEmbeddedRealPayloadReplay 在本地备份存在时，验证所有内嵌 payload 能针对原版正确回放。
+func TestEmbeddedRealPayloadReplay(t *testing.T) {
+	backupDir := filepath.Join("..", "..", "work", "backups", "alpha01-20260930-104848")
+	if _, err := os.Stat(backupDir); err != nil {
+		t.Skip("本地无原版备份，跳过真实载荷端到端测试")
+	}
+
+	payloads, problems := loadEmbedded()
+	if len(problems) > 0 {
+		t.Fatalf("内嵌载荷问题: %v", problems)
+	}
+
+	for _, p := range payloads {
+		t.Run(p.info.Language, func(t *testing.T) {
+			for _, f := range p.info.Files {
+				origPath := filepath.Join(backupDir, filepath.FromSlash(f.Path))
+				if _, err := os.Stat(origPath); err != nil {
+					t.Skipf("原版文件缺失: %s", origPath)
+				}
+				h := sha256.New()
+				var totalWritten int64
+				countingWriter := io.MultiWriter(h, &byteCounter{written: &totalWritten})
+				if err := p.replay(f, origPath, countingWriter, nil); err != nil {
+					t.Fatalf("文件 %s 回放失败: %v", f.Path, err)
+				}
+				gotHash := hex.EncodeToString(h.Sum(nil))
+				if gotHash != f.PatchedSHA256 {
+					t.Errorf("文件 %s 回放哈希不符: 期望 %s, 实际 %s", f.Path, f.PatchedSHA256, gotHash)
+				}
+				if totalWritten != f.PatchedSize {
+					t.Errorf("文件 %s 回放大小不符: 期望 %d, 实际 %d", f.Path, f.PatchedSize, totalWritten)
+				}
+			}
+		})
+	}
+}
+
+type byteCounter struct {
+	written *int64
+}
+
+func (b *byteCounter) Write(p []byte) (n int, err error) {
+	*b.written += int64(len(p))
+	return len(p), nil
+}
+

@@ -60666,7 +60666,7 @@
       "kind": "unity",
       "max_utf8_bytes": 34,
       "translations": {
-        "zh-CN": "正在启动《Cotton ２》",
+        "zh-CN": "正在啟動《Cotton ２》",
         "ko-KR": "게임을 시작합니다",
         "en-US": "Starting game"
       },
@@ -60677,7 +60677,8 @@
         "en-US": {
           "note": "Japanese source is recycled Cotton 2 text; use the generic Farland Saga start caption."
         }
-      }
+      },
+      "translation": "正在啟動《Cotton ２》"
     },
     {
       "id": "resources.assets:2002:268",
@@ -60689,10 +60690,11 @@
       "kind": "unity",
       "max_utf8_bytes": 36,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>OK"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:764",
@@ -60704,10 +60706,11 @@
       "kind": "unity",
       "max_utf8_bytes": 46,
       "translations": {
-        "zh-CN": "正在启动《Cotton Boomerang》",
+        "zh-CN": "正在啟動《Cotton Boomerang》",
         "ko-KR": "Cotton Boomerang을 시작합니다",
         "en-US": "Starting Cotton Boomerang"
-      }
+      },
+      "translation": "正在啟動《Cotton Boomerang》"
     },
     {
       "id": "resources.assets:2002:940",
@@ -60719,10 +60722,11 @@
       "kind": "unity",
       "max_utf8_bytes": 36,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>OK"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:1436",
@@ -60734,10 +60738,11 @@
       "kind": "unity",
       "max_utf8_bytes": 49,
       "translations": {
-        "zh-CN": "正在启动《Guardian Force》",
+        "zh-CN": "正在啟動《Guardian Force》",
         "ko-KR": "Guardian Force를 시작합니다",
         "en-US": "Starting Guardian Force"
-      }
+      },
+      "translation": "正在啟動《Guardian Force》"
     },
     {
       "id": "resources.assets:2002:1656",
@@ -60749,10 +60754,11 @@
       "kind": "unity",
       "max_utf8_bytes": 36,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>OK"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:2152",
@@ -60764,10 +60770,11 @@
       "kind": "unity",
       "max_utf8_bytes": 51,
       "translations": {
-        "zh-CN": "显示网络排行榜",
+        "zh-CN": "顯示网絡排行榜",
         "ko-KR": "네트워크 랭킹을 표시합니다",
         "en-US": "View online rankings"
-      }
+      },
+      "translation": "顯示网絡排行榜"
     },
     {
       "id": "resources.assets:2002:2332",
@@ -60779,10 +60786,11 @@
       "kind": "unity",
       "max_utf8_bytes": 36,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>OK"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:2828",
@@ -60794,10 +60802,11 @@
       "kind": "unity",
       "max_utf8_bytes": 64,
       "translations": {
-        "zh-CN": "查看《Cotton Boomerang》说明书",
+        "zh-CN": "查看《Cotton Boomerang》說明書",
         "ko-KR": "Cotton Boomerang 설명서를 봅니다",
         "en-US": "View Cotton Boomerang manual"
-      }
+      },
+      "translation": "查看《Cotton Boomerang》說明書"
     },
     {
       "id": "resources.assets:2002:3020",
@@ -60809,10 +60818,11 @@
       "kind": "unity",
       "max_utf8_bytes": 36,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>OK"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:3516",
@@ -60824,10 +60834,11 @@
       "kind": "unity",
       "max_utf8_bytes": 67,
       "translations": {
-        "zh-CN": "查看《Guardian Force》说明书",
+        "zh-CN": "查看《Guardian Force》說明書",
         "ko-KR": "Guardian Force 설명서를 봅니다",
         "en-US": "View Guardian Force manual"
-      }
+      },
+      "translation": "查看《Guardian Force》說明書"
     },
     {
       "id": "resources.assets:2002:3672",
@@ -60839,10 +60850,11 @@
       "kind": "unity",
       "max_utf8_bytes": 36,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>OK"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:4168",
@@ -60854,10 +60866,11 @@
       "kind": "unity",
       "max_utf8_bytes": 39,
       "translations": {
-        "zh-CN": "选择菜单语言",
+        "zh-CN": "選擇菜單語言",
         "ko-KR": "메뉴 언어를 선택합니다",
         "en-US": "Choose menu language"
-      }
+      },
+      "translation": "選擇菜單語言"
     },
     {
       "id": "resources.assets:2002:4396",
@@ -60869,10 +60882,11 @@
       "kind": "unity",
       "max_utf8_bytes": 36,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>OK"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:4872",
@@ -60884,10 +60898,11 @@
       "kind": "unity",
       "max_utf8_bytes": 33,
       "translations": {
-        "zh-CN": "显示制作人员名单",
-        "ko-KR": "크레딧을 표시합니다",
+        "zh-CN": "顯示制作人員名單",
+        "ko-KR": "제작진을 표시합니다",
         "en-US": "View credits"
-      }
+      },
+      "translation": "顯示制作人員名單"
     },
     {
       "id": "resources.assets:2002:5056",
@@ -60899,10 +60914,11 @@
       "kind": "unity",
       "max_utf8_bytes": 36,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>OK"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:5532",
@@ -60914,10 +60930,11 @@
       "kind": "unity",
       "max_utf8_bytes": 51,
       "translations": {
-        "zh-CN": "显示网络排行榜",
+        "zh-CN": "顯示网絡排行榜",
         "ko-KR": "네트워크 랭킹을 표시합니다",
         "en-US": "View online rankings"
-      }
+      },
+      "translation": "顯示网絡排行榜"
     },
     {
       "id": "resources.assets:2002:5712",
@@ -60929,10 +60946,11 @@
       "kind": "unity",
       "max_utf8_bytes": 36,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>OK"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:6188",
@@ -60944,10 +60962,11 @@
       "kind": "unity",
       "max_utf8_bytes": 66,
       "translations": {
-        "zh-CN": "排行榜成绩可能需要一段时间才会更新。",
+        "zh-CN": "排行榜成績可能需要一段時間才会更新。",
         "ko-KR": "점수 반영까지 시간이 걸릴 수 있습니다.",
         "en-US": "Scores may take time to update."
-      }
+      },
+      "translation": "排行榜成績可能需要一段時間才会更新。"
     },
     {
       "id": "resources.assets:2002:6380",
@@ -60959,10 +60978,11 @@
       "kind": "unity",
       "max_utf8_bytes": 48,
       "translations": {
-        "zh-CN": "分数可能需要一段时间才会更新",
-        "ko-KR": "점수 갱신이 늦어질 수 있습니다.",
+        "zh-CN": "分数可能需要一段時間才会更新",
+        "ko-KR": "점수 반영이 늦어질 수 있습니다.",
         "en-US": "Scores may update late."
-      }
+      },
+      "translation": "分数可能需要一段時間才会更新"
     },
     {
       "id": "resources.assets:2002:6688",
@@ -60974,10 +60994,11 @@
       "kind": "unity",
       "max_utf8_bytes": 130,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=14>翻页 / <sprite=\"TMP_Buttons\" index=1>返回 / <sprite=\"TMP_Buttons\" index=0>显示",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=14>翻頁 / <sprite=\"TMP_Buttons\" index=1>返回 / <sprite=\"TMP_Buttons\" index=0>顯示",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=14>페이지 전환 / <sprite=\"TMP_Buttons\" index=1>뒤로 / <sprite=\"TMP_Buttons\" index=0>표시",
         "en-US": "<sprite=\"TMP_Buttons\" index=14>Pages / <sprite=\"TMP_Buttons\" index=1>Back / <sprite=\"TMP_Buttons\" index=0>View"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=14>翻頁 / <sprite=\"TMP_Buttons\" index=1>返回 / <sprite=\"TMP_Buttons\" index=0>顯示"
     },
     {
       "id": "resources.assets:2002:7568",
@@ -60989,10 +61010,11 @@
       "kind": "unity",
       "max_utf8_bytes": 216,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=14>更改显示位置 / <sprite=\"TMP_Buttons\" index=2>=放大 / <sprite=\"TMP_Buttons\" index=3>=缩小 / <sprite=\"TMP_Buttons\" index=1>返回 / <sprite=\"TMP_Buttons\" index=0>恢复位置",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=14>更改顯示位置 / <sprite=\"TMP_Buttons\" index=2>=放大 / <sprite=\"TMP_Buttons\" index=3>=縮小 / <sprite=\"TMP_Buttons\" index=1>返回 / <sprite=\"TMP_Buttons\" index=0>恢復位置",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=14>표시 위치 변경 / <sprite=\"TMP_Buttons\" index=2>=확대 / <sprite=\"TMP_Buttons\" index=3>=축소 / <sprite=\"TMP_Buttons\" index=1>뒤로 / <sprite=\"TMP_Buttons\" index=0>원위치",
         "en-US": "<sprite=\"TMP_Buttons\" index=14>Move view / <sprite=\"TMP_Buttons\" index=2>=Zoom in / <sprite=\"TMP_Buttons\" index=3>=Zoom out / <sprite=\"TMP_Buttons\" index=1>Back / <sprite=\"TMP_Buttons\" index=0>Reset position"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=14>更改顯示位置 / <sprite=\"TMP_Buttons\" index=2>=放大 / <sprite=\"TMP_Buttons\" index=3>=縮小 / <sprite=\"TMP_Buttons\" index=1>返回 / <sprite=\"TMP_Buttons\" index=0>恢復位置"
     },
     {
       "id": "resources.assets:2002:8424",
@@ -61007,7 +61029,8 @@
         "zh-CN": "未使用",
         "ko-KR": "미사용",
         "en-US": "Unused"
-      }
+      },
+      "translation": "未使用"
     },
     {
       "id": "resources.assets:2002:8484",
@@ -61022,7 +61045,8 @@
         "zh-CN": "<sprite=\"TMP_Buttons\" index=1>返回",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=1>뒤로",
         "en-US": "<sprite=\"TMP_Buttons\" index=1>Back"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=1>返回"
     },
     {
       "id": "resources.assets:2002:9416",
@@ -61037,7 +61061,8 @@
         "zh-CN": "未使用",
         "ko-KR": "미사용",
         "en-US": "Unused"
-      }
+      },
+      "translation": "未使用"
     },
     {
       "id": "resources.assets:2002:9476",
@@ -61052,7 +61077,8 @@
         "zh-CN": "<sprite=\"TMP_Buttons\" index=1>返回",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=1>뒤로",
         "en-US": "<sprite=\"TMP_Buttons\" index=1>Back"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=1>返回"
     },
     {
       "id": "resources.assets:2002:10348",
@@ -61067,7 +61093,8 @@
         "zh-CN": "未使用",
         "ko-KR": "미사용",
         "en-US": "Unused"
-      }
+      },
+      "translation": "未使用"
     },
     {
       "id": "resources.assets:2002:10408",
@@ -61082,7 +61109,8 @@
         "zh-CN": "<sprite=\"TMP_Buttons\" index=1>返回",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=1>뒤로",
         "en-US": "<sprite=\"TMP_Buttons\" index=1>Back"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=1>返回"
     },
     {
       "id": "resources.assets:2002:11348",
@@ -61094,10 +61122,11 @@
       "kind": "unity",
       "max_utf8_bytes": 33,
       "translations": {
-        "zh-CN": "仅使用右侧区域",
+        "zh-CN": "僅使用右側區域",
         "ko-KR": "오른쪽만 사용합니다",
         "en-US": "Uses right side only"
-      }
+      },
+      "translation": "僅使用右側區域"
     },
     {
       "id": "resources.assets:2002:11388",
@@ -61109,10 +61138,11 @@
       "kind": "unity",
       "max_utf8_bytes": 33,
       "translations": {
-        "zh-CN": "仅使用右侧区域",
+        "zh-CN": "僅使用右側區域",
         "ko-KR": "오른쪽만 사용합니다",
         "en-US": "Uses right side only"
-      }
+      },
+      "translation": "僅使用右側區域"
     },
     {
       "id": "resources.assets:2002:11428",
@@ -61124,10 +61154,11 @@
       "kind": "unity",
       "max_utf8_bytes": 33,
       "translations": {
-        "zh-CN": "仅使用右侧区域",
+        "zh-CN": "僅使用右側區域",
         "ko-KR": "오른쪽만 사용합니다",
         "en-US": "Uses right side only"
-      }
+      },
+      "translation": "僅使用右側區域"
     },
     {
       "id": "resources.assets:2002:11468",
@@ -61139,10 +61170,11 @@
       "kind": "unity",
       "max_utf8_bytes": 33,
       "translations": {
-        "zh-CN": "仅使用右侧区域",
+        "zh-CN": "僅使用右側區域",
         "ko-KR": "오른쪽만 사용합니다",
         "en-US": "Uses right side only"
-      }
+      },
+      "translation": "僅使用右側區域"
     },
     {
       "id": "resources.assets:2002:11508",
@@ -61154,10 +61186,11 @@
       "kind": "unity",
       "max_utf8_bytes": 33,
       "translations": {
-        "zh-CN": "仅使用右侧区域",
+        "zh-CN": "僅使用右側區域",
         "ko-KR": "오른쪽만 사용합니다",
         "en-US": "Uses right side only"
-      }
+      },
+      "translation": "僅使用右側區域"
     },
     {
       "id": "resources.assets:2002:11552",
@@ -61172,7 +61205,8 @@
         "zh-CN": "<sprite=\"TMP_Buttons\" index=1>返回",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=1>뒤로",
         "en-US": "<sprite=\"TMP_Buttons\" index=1>Back"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=1>返回"
     },
     {
       "id": "resources.assets:2002:11888",
@@ -61184,10 +61218,11 @@
       "kind": "unity",
       "max_utf8_bytes": 66,
       "translations": {
-        "zh-CN": "排行榜成绩可能需要一段时间才会更新。",
+        "zh-CN": "排行榜成績可能需要一段時間才会更新。",
         "ko-KR": "점수 반영까지 시간이 걸릴 수 있습니다.",
         "en-US": "Scores may take time to update."
-      }
+      },
+      "translation": "排行榜成績可能需要一段時間才会更新。"
     },
     {
       "id": "resources.assets:2002:12080",
@@ -61199,10 +61234,11 @@
       "kind": "unity",
       "max_utf8_bytes": 48,
       "translations": {
-        "zh-CN": "分数可能需要一段时间才会更新",
-        "ko-KR": "점수 갱신이 늦어질 수 있습니다.",
+        "zh-CN": "分数可能需要一段時間才会更新",
+        "ko-KR": "점수 반영이 늦어질 수 있습니다.",
         "en-US": "Scores may update late."
-      }
+      },
+      "translation": "分数可能需要一段時間才会更新"
     },
     {
       "id": "resources.assets:2002:12336",
@@ -61214,10 +61250,11 @@
       "kind": "unity",
       "max_utf8_bytes": 51,
       "translations": {
-        "zh-CN": "无法连接服务器。",
+        "zh-CN": "无法連接服務器。",
         "ko-KR": "서버에 접속할 수 없습니다.",
         "en-US": "Could not reach the server."
-      }
+      },
+      "translation": "无法連接服務器。"
     },
     {
       "id": "resources.assets:2002:12480",
@@ -61229,10 +61266,11 @@
       "kind": "unity",
       "max_utf8_bytes": 21,
       "translations": {
-        "zh-CN": "无法访问服务器",
+        "zh-CN": "无法訪問服務器",
         "ko-KR": "서버 연결 실패",
         "en-US": "Server unavailable"
-      }
+      },
+      "translation": "无法訪問服務器"
     },
     {
       "id": "resources.assets:2002:12652",
@@ -61247,7 +61285,8 @@
         "zh-CN": "未使用",
         "ko-KR": "미사용",
         "en-US": "Unused"
-      }
+      },
+      "translation": "未使用"
     },
     {
       "id": "resources.assets:2002:12712",
@@ -61262,7 +61301,8 @@
         "zh-CN": "<sprite=\"TMP_Buttons\" index=1>返回",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=1>뒤로",
         "en-US": "<sprite=\"TMP_Buttons\" index=1>Back"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=1>返回"
     },
     {
       "id": "resources.assets:2002:13644",
@@ -61277,7 +61317,8 @@
         "zh-CN": "未使用",
         "ko-KR": "미사용",
         "en-US": "Unused"
-      }
+      },
+      "translation": "未使用"
     },
     {
       "id": "resources.assets:2002:13704",
@@ -61292,7 +61333,8 @@
         "zh-CN": "<sprite=\"TMP_Buttons\" index=1>返回",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=1>뒤로",
         "en-US": "<sprite=\"TMP_Buttons\" index=1>Back"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=1>返回"
     },
     {
       "id": "resources.assets:2002:14576",
@@ -61304,10 +61346,11 @@
       "kind": "unity",
       "max_utf8_bytes": 39,
       "translations": {
-        "zh-CN": "可调整音效音量",
+        "zh-CN": "可調整音效音量",
         "ko-KR": "효과음 음량을 조절합니다",
         "en-US": "Adjust sound effects volume"
-      }
+      },
+      "translation": "可調整音效音量"
     },
     {
       "id": "resources.assets:2002:14764",
@@ -61319,10 +61362,11 @@
       "kind": "unity",
       "max_utf8_bytes": 150,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改设置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改設置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>설정 변경 <sprite=\"TMP_Buttons\" index=1>뒤로 <sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>Change <sprite=\"TMP_Buttons\" index=1>Back <sprite=\"TMP_Buttons\" index=0>Confirm"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改設置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:15772",
@@ -61334,10 +61378,11 @@
       "kind": "unity",
       "max_utf8_bytes": 39,
       "translations": {
-        "zh-CN": "可调整背景音乐音量",
+        "zh-CN": "可調整背景音樂音量",
         "ko-KR": "BGM 음량을 조절합니다",
         "en-US": "Adjust BGM volume"
-      }
+      },
+      "translation": "可調整背景音樂音量"
     },
     {
       "id": "resources.assets:2002:15960",
@@ -61349,10 +61394,11 @@
       "kind": "unity",
       "max_utf8_bytes": 150,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改设置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改設置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>설정 변경 <sprite=\"TMP_Buttons\" index=1>뒤로 <sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>Change <sprite=\"TMP_Buttons\" index=1>Back <sprite=\"TMP_Buttons\" index=0>Confirm"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改設置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:16968",
@@ -61364,10 +61410,11 @@
       "kind": "unity",
       "max_utf8_bytes": 39,
       "translations": {
-        "zh-CN": "可调整语音音量",
+        "zh-CN": "可調整語音音量",
         "ko-KR": "음성 음량을 조절합니다",
         "en-US": "Adjust voice volume"
-      }
+      },
+      "translation": "可調整語音音量"
     },
     {
       "id": "resources.assets:2002:17176",
@@ -61379,10 +61426,11 @@
       "kind": "unity",
       "max_utf8_bytes": 150,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改设置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改設置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>설정 변경 <sprite=\"TMP_Buttons\" index=1>뒤로 <sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>Change <sprite=\"TMP_Buttons\" index=1>Back <sprite=\"TMP_Buttons\" index=0>Confirm"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改設置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:18184",
@@ -61394,10 +61442,11 @@
       "kind": "unity",
       "max_utf8_bytes": 51,
       "translations": {
-        "zh-CN": "可更改文本推进方式",
+        "zh-CN": "可更改文本推進方式",
         "ko-KR": "메시지 넘김 방식을 변경합니다",
         "en-US": "Change message advance mode"
-      }
+      },
+      "translation": "可更改文本推進方式"
     },
     {
       "id": "resources.assets:2002:18404",
@@ -61409,10 +61458,11 @@
       "kind": "unity",
       "max_utf8_bytes": 150,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改设置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改設置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>설정 변경 <sprite=\"TMP_Buttons\" index=1>뒤로 <sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>Change <sprite=\"TMP_Buttons\" index=1>Back <sprite=\"TMP_Buttons\" index=0>Confirm"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改設置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:19412",
@@ -61424,10 +61474,11 @@
       "kind": "unity",
       "max_utf8_bytes": 45,
       "translations": {
-        "zh-CN": "可调整台词显示速度",
+        "zh-CN": "可調整台詞顯示速度",
         "ko-KR": "대사 표시 속도를 조절합니다",
         "en-US": "Adjust dialogue speed"
-      }
+      },
+      "translation": "可調整台詞顯示速度"
     },
     {
       "id": "resources.assets:2002:19648",
@@ -61439,10 +61490,11 @@
       "kind": "unity",
       "max_utf8_bytes": 150,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改设置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改設置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>설정 변경 <sprite=\"TMP_Buttons\" index=1>뒤로 <sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>Change <sprite=\"TMP_Buttons\" index=1>Back <sprite=\"TMP_Buttons\" index=0>Confirm"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=7><sprite=\"TMP_Buttons\" index=6>更改設置　<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:20240",
@@ -61454,10 +61506,11 @@
       "kind": "unity",
       "max_utf8_bytes": 27,
       "translations": {
-        "zh-CN": "恢复默认设置",
+        "zh-CN": "恢復默認設置",
         "ko-KR": "초기 설정 복원",
         "en-US": "Restore defaults"
-      }
+      },
+      "translation": "恢復默認設置"
     },
     {
       "id": "resources.assets:2002:20436",
@@ -61469,10 +61522,11 @@
       "kind": "unity",
       "max_utf8_bytes": 75,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=1>뒤로 <sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=1>Back <sprite=\"TMP_Buttons\" index=0>Confirm"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:20952",
@@ -61484,10 +61538,11 @@
       "kind": "unity",
       "max_utf8_bytes": 33,
       "translations": {
-        "zh-CN": "确认更改并返回",
+        "zh-CN": "確認更改并返回",
         "ko-KR": "변경 적용 후 복귀",
         "en-US": "Apply and return"
-      }
+      },
+      "translation": "確認更改并返回"
     },
     {
       "id": "resources.assets:2002:21056",
@@ -61499,10 +61554,11 @@
       "kind": "unity",
       "max_utf8_bytes": 75,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>确定",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=1>뒤로 <sprite=\"TMP_Buttons\" index=0>결정",
         "en-US": "<sprite=\"TMP_Buttons\" index=1>Back <sprite=\"TMP_Buttons\" index=0>Confirm"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=1>返回　<sprite=\"TMP_Buttons\" index=0>確定"
     },
     {
       "id": "resources.assets:2002:22028",
@@ -61517,7 +61573,8 @@
         "zh-CN": "未使用",
         "ko-KR": "미사용",
         "en-US": "Unused"
-      }
+      },
+      "translation": "未使用"
     },
     {
       "id": "resources.assets:2002:22088",
@@ -61529,10 +61586,11 @@
       "kind": "unity",
       "max_utf8_bytes": 157,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>=确定 / <sprite=\"TMP_Buttons\" index=1>=返回 / <sprite=\"TMP_Buttons\" index=2>=确认 / <sprite=\"TMP_Buttons\" index=3>=信息",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>=確定 / <sprite=\"TMP_Buttons\" index=1>=返回 / <sprite=\"TMP_Buttons\" index=2>=確認 / <sprite=\"TMP_Buttons\" index=3>=信息",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>=결정 / <sprite=\"TMP_Buttons\" index=1>=뒤로 / <sprite=\"TMP_Buttons\" index=2>=확인 / <sprite=\"TMP_Buttons\" index=3>=정보",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>=Confirm / <sprite=\"TMP_Buttons\" index=1>=Back / <sprite=\"TMP_Buttons\" index=2>=Check / <sprite=\"TMP_Buttons\" index=3>=Info"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>=確定 / <sprite=\"TMP_Buttons\" index=1>=返回 / <sprite=\"TMP_Buttons\" index=2>=確認 / <sprite=\"TMP_Buttons\" index=3>=信息"
     },
     {
       "id": "resources.assets:2002:23144",
@@ -61547,7 +61605,8 @@
         "zh-CN": "未使用",
         "ko-KR": "미사용",
         "en-US": "Unused"
-      }
+      },
+      "translation": "未使用"
     },
     {
       "id": "resources.assets:2002:23204",
@@ -61559,10 +61618,11 @@
       "kind": "unity",
       "max_utf8_bytes": 157,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>=确定 / <sprite=\"TMP_Buttons\" index=1>=返回 / <sprite=\"TMP_Buttons\" index=2>=确认 / <sprite=\"TMP_Buttons\" index=3>=信息",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>=確定 / <sprite=\"TMP_Buttons\" index=1>=返回 / <sprite=\"TMP_Buttons\" index=2>=確認 / <sprite=\"TMP_Buttons\" index=3>=信息",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>=결정 / <sprite=\"TMP_Buttons\" index=1>=뒤로 / <sprite=\"TMP_Buttons\" index=2>=확인 / <sprite=\"TMP_Buttons\" index=3>=정보",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>=Confirm / <sprite=\"TMP_Buttons\" index=1>=Back / <sprite=\"TMP_Buttons\" index=2>=Check / <sprite=\"TMP_Buttons\" index=3>=Info"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>=確定 / <sprite=\"TMP_Buttons\" index=1>=返回 / <sprite=\"TMP_Buttons\" index=2>=確認 / <sprite=\"TMP_Buttons\" index=3>=信息"
     },
     {
       "id": "resources.assets:2002:24200",
@@ -61577,7 +61637,8 @@
         "zh-CN": "未使用",
         "ko-KR": "미사용",
         "en-US": "Unused"
-      }
+      },
+      "translation": "未使用"
     },
     {
       "id": "resources.assets:2002:24260",
@@ -61589,10 +61650,11 @@
       "kind": "unity",
       "max_utf8_bytes": 157,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>=确定 / <sprite=\"TMP_Buttons\" index=1>=返回 / <sprite=\"TMP_Buttons\" index=2>=确认 / <sprite=\"TMP_Buttons\" index=3>=信息",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=0>=確定 / <sprite=\"TMP_Buttons\" index=1>=返回 / <sprite=\"TMP_Buttons\" index=2>=確認 / <sprite=\"TMP_Buttons\" index=3>=信息",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=0>=결정 / <sprite=\"TMP_Buttons\" index=1>=뒤로 / <sprite=\"TMP_Buttons\" index=2>=확인 / <sprite=\"TMP_Buttons\" index=3>=정보",
         "en-US": "<sprite=\"TMP_Buttons\" index=0>=Confirm / <sprite=\"TMP_Buttons\" index=1>=Back / <sprite=\"TMP_Buttons\" index=2>=Check / <sprite=\"TMP_Buttons\" index=3>=Info"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=0>=確定 / <sprite=\"TMP_Buttons\" index=1>=返回 / <sprite=\"TMP_Buttons\" index=2>=確認 / <sprite=\"TMP_Buttons\" index=3>=信息"
     },
     {
       "id": "resources.assets:2127:92",
@@ -61604,10 +61666,11 @@
       "kind": "unity",
       "max_utf8_bytes": 90,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=2>显示状态　<sprite=\"TMP_Buttons\" index=0>返回",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=2>顯示状態　<sprite=\"TMP_Buttons\" index=0>返回",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=2>상태 표시 <sprite=\"TMP_Buttons\" index=0>뒤로",
         "en-US": "<sprite=\"TMP_Buttons\" index=2>Status <sprite=\"TMP_Buttons\" index=0>Back"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=2>顯示状態　<sprite=\"TMP_Buttons\" index=0>返回"
     },
     {
       "id": "resources.assets:2134:92",
@@ -61619,10 +61682,11 @@
       "kind": "unity",
       "max_utf8_bytes": 90,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=2>显示状态　<sprite=\"TMP_Buttons\" index=0>返回",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=2>顯示状態　<sprite=\"TMP_Buttons\" index=0>返回",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=2>상태 표시 <sprite=\"TMP_Buttons\" index=0>뒤로",
         "en-US": "<sprite=\"TMP_Buttons\" index=2>Status <sprite=\"TMP_Buttons\" index=0>Back"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=2>顯示状態　<sprite=\"TMP_Buttons\" index=0>返回"
     },
     {
       "id": "resources.assets:2164:92",
@@ -61634,10 +61698,11 @@
       "kind": "unity",
       "max_utf8_bytes": 69,
       "translations": {
-        "zh-CN": "※排行榜成绩可能需要一段时间才会更新。",
+        "zh-CN": "※排行榜成績可能需要一段時間才会更新。",
         "ko-KR": "※점수 반영까지 시간이 걸릴 수 있습니다.",
         "en-US": "*Scores may take time to update."
-      }
+      },
+      "translation": "※排行榜成績可能需要一段時間才会更新。"
     },
     {
       "id": "resources.assets:2165:92",
@@ -61649,10 +61714,11 @@
       "kind": "unity",
       "max_utf8_bytes": 69,
       "translations": {
-        "zh-CN": "※排行榜成绩可能需要一段时间才会更新。",
+        "zh-CN": "※排行榜成績可能需要一段時間才会更新。",
         "ko-KR": "※점수 반영까지 시간이 걸릴 수 있습니다.",
         "en-US": "*Scores may take time to update."
-      }
+      },
+      "translation": "※排行榜成績可能需要一段時間才会更新。"
     },
     {
       "id": "level0:147:92",
@@ -61664,10 +61730,11 @@
       "kind": "unity",
       "max_utf8_bytes": 90,
       "translations": {
-        "zh-CN": "<sprite=\"TMP_Buttons\" index=2>显示状态　<sprite=\"TMP_Buttons\" index=0>返回",
+        "zh-CN": "<sprite=\"TMP_Buttons\" index=2>顯示状態　<sprite=\"TMP_Buttons\" index=0>返回",
         "ko-KR": "<sprite=\"TMP_Buttons\" index=2>상태 표시 <sprite=\"TMP_Buttons\" index=0>뒤로",
         "en-US": "<sprite=\"TMP_Buttons\" index=2>Status <sprite=\"TMP_Buttons\" index=0>Back"
-      }
+      },
+      "translation": "<sprite=\"TMP_Buttons\" index=2>顯示状態　<sprite=\"TMP_Buttons\" index=0>返回"
     },
     {
       "id": "1ST.BIN:0x75378",

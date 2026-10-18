@@ -275,7 +275,7 @@ func (p *payload) replay(entry fileEntry, basePath string, output io.Writer, pro
 	if err := json.Unmarshal([]byte(line), &header); err != nil {
 		return fmt.Errorf("差异对象 %s 头部解析失败: %w", entry.Object, err)
 	}
-	if header.Format != payloadFormat || header.SHA256 != entry.PatchedSHA256 || header.Size != entry.PatchedSize || header.Size < 0 {
+	if (header.Format != payloadFormat && header.Format != 2) || header.SHA256 != entry.PatchedSHA256 || header.Size != entry.PatchedSize || header.Size < 0 {
 		return fmt.Errorf("差异对象 %s 的身份与 manifest 不一致", entry.Object)
 	}
 	if header.Base != nil && (header.Base.SHA256 != entry.OriginalSHA256 || header.Base.Size != entry.OriginalSize) {
@@ -352,18 +352,27 @@ func (p *payload) replay(entry fileEntry, basePath string, output io.Writer, pro
 		}
 		offset := int64(binary.LittleEndian.Uint64(record[0:8]))
 		size := binary.LittleEndian.Uint32(record[8:12])
-		if offset < position || size == 0 || size > blockSize || offset+int64(size) > header.Size {
+		maxRecordSize := uint32(blockSize)
+		if header.Format == 2 {
+			maxRecordSize = 64 * 1024 * 1024
+		}
+		if offset < position || size == 0 || size > maxRecordSize || offset+int64(size) > header.Size {
 			return fmt.Errorf("差异对象 %s 的记录范围非法", entry.Object)
 		}
 		if err := gap(offset); err != nil {
 			return err
 		}
-		block := make([]byte, size)
-		if _, err := io.ReadFull(reader, block); err != nil {
-			return fmt.Errorf("差异对象 %s 的数据块被截断", entry.Object)
-		}
-		if err := write(block); err != nil {
-			return err
+		remaining := int64(size)
+		for remaining > 0 {
+			chunkSize := int(min(readChunk, remaining))
+			block := make([]byte, chunkSize)
+			if _, err := io.ReadFull(reader, block); err != nil {
+				return fmt.Errorf("差异对象 %s 的数据块被截断: %w", entry.Object, err)
+			}
+			if err := write(block); err != nil {
+				return err
+			}
+			remaining -= int64(chunkSize)
 		}
 	}
 	if err := gap(header.Size); err != nil {
