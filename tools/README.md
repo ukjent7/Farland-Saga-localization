@@ -1,8 +1,8 @@
-# 工具与统一流程
+# Tools and the Unified Workflow
 
-默认入口 `bash flow.sh` 就在仓库根下，从自身位置定位项目，并通过 `uv.sh run --locked` 运行仓库内的 `tools/localize.py`。逆向产物写在仓库同级的私有工作区 `work/`（`FARLAND_WORK` 可改）。命令、路径和环境均使用 WSL/Linux。三语共用处理器和译稿；历史脚本仅供恢复与追溯。
+The default entry point is `bash flow.sh` in the repository root. It locates the project from its own path and runs the in-repo `tools/localize.py` through `uv.sh run --locked`. Reverse-engineering output goes to the private workspace `work/` next to the repository (`FARLAND_WORK` can change it). Commands, paths, and environments are WSL/Linux throughout. All three languages share the processors and translation tables; historical scripts are kept only for recovery and traceability.
 
-## 状态与环境
+## Status and Environment
 
 ```bash
 bash flow.sh status
@@ -11,23 +11,23 @@ bash flow.sh --help
 bash uv.sh sync --locked
 ```
 
-`status` 只读取实际安装和候选元数据；`doctor` 核对锁定依赖、候选可用性、当前安装与原版备份哈希。安装记录以私有工作区的 `install_report.json` 为准，当前候选以私有工作区的 `config/storage_policy.json` 为准。
+`status` only reads the actual install and candidate metadata; `doctor` checks the locked dependencies, candidate availability, the current install, and the original backup hashes. The install record is authoritative from `install_report.json` in the private workspace, and the current candidate from `config/storage_policy.json` in the private workspace.
 
-使用 Python 3.14。私有工作区的 `pyproject.toml`、`uv.lock` 与 `.venv` 构成运行环境（含专有 IDALib wheel）；公开仓库自带一份只含公开依赖的 `pyproject.toml`，IDALib 列为可选 extra `ida`，两份清单版本一致。`uv.sh` 在私有工作区工程存在时优先使用它，单独检出仓库时用仓库自己的清单。环境与缓存为 `work/.venv`、`.uv-cache`、`.pycache` 和 `.tmp`。单独运行工具使用 `bash uv.sh run --locked python tools/工具.py`。依赖维护使用 `uv.sh add/lock/sync --locked`，不使用全局 pip。
+Python 3.14 is required. The private workspace's `pyproject.toml`, `uv.lock`, and `.venv` form the runtime environment (including the proprietary IDALib wheel). The public repository ships its own `pyproject.toml` containing only public dependencies, with IDALib listed as the optional `ida` extra; both manifests are version-aligned. `uv.sh` prefers the private workspace project when it exists and falls back to the repository's own manifest for a standalone checkout. The environment and caches are `work/.venv`, `.uv-cache`, `.pycache`, and `.tmp`. Run an individual tool with `bash uv.sh run --locked python tools/<tool>.py`. Maintain dependencies with `uv.sh add/lock/sync --locked`; global pip is not used.
 
-IDALib 来自 `/home/kk/ida-pro-9.4`；wheel 与来源哈希在私有工作区 `vendor/idalib/`。静态反汇编使用该 IDALib，未经用户允许不得引入 Capstone。旧 PowerShell 包装与 Win32 内存探针仅保存在历史归档中。
+IDALib comes from `/home/kk/ida-pro-9.4`; the wheel and its source hash live in the private workspace's `vendor/idalib/`. Static disassembly uses that IDALib; Capstone must not be introduced without the user's permission. The old PowerShell wrappers and Win32 memory probes survive only in the historical archive.
 
-## 译稿修改与审阅
+## Editing and Reviewing Translations
 
-[译稿说明](../translation/README.md)列出当前主题表。普通文字只编辑 `translation/corpus.json`，按 ID 合并三语译文；旧批次和候选 `inputs/` 保留为冻结记录。原文提取器只用于新空白工作区，禁止用提取结果覆盖已有译稿。
+The [translation notes](../translation/README.md) list the current topical tables. Ordinary text is edited only in `translation/corpus.json`, merging the three languages' translations by ID; older batches and candidate `inputs/` are preserved as frozen records. The original-text extractor is only for new blank workspaces — never use its output to overwrite existing translations.
 
-合并批次放在 `work/` 内，示例：
+Merge batches live inside `work/`, for example:
 
 ```json
 {
   "translator": "reviewer",
   "translations": [
-    {"id": "EVE/EVE01_1.EVT:0001", "translation": "久等了！", "status": "reviewed", "notes": "审校记录"}
+    {"id": "EVE/EVE01_1.EVT:0001", "translation": "久等了！", "status": "reviewed", "notes": "review notes"}
   ]
 }
 ```
@@ -40,35 +40,35 @@ bash flow.sh merge
 bash flow.sh review
 ```
 
-`--overwrite` 允许明确替换已有译文；没有此参数时拒绝覆盖不同文本。合并核对未知和重复 ID、容量、控制字符与语言编码；只更新指定语言的译文及审校意见。无参数 `merge` 校验现有统一译稿，不从历史批次回写。统一审阅页在 [review.html](../review.html)，包含日文与三语对照。
+`--overwrite` explicitly permits replacing an existing translation; without it, a merge refuses to overwrite differing text. Merging checks unknown and duplicate IDs, capacity, control characters, and language encoding, and updates only the named language's translations and review notes. The parameterless `merge` validates the current unified tables and does not write back from historical batches. The unified review page is [review.html](../review.html), with Japanese alongside all three languages.
 
-图片标题、界面标签和外层菜单分别使用浅层三语主题表。图集配置声明边界、字体、布局和保护区域；修改文字后须构建并检查容量报告。
+Image titles, UI labels, and the front-end menu each use a shallow three-language topical table. The atlas configuration declares bounds, font, layout, and protected regions; after editing text you must build and check the capacity report.
 
-## 从游戏安装引导工作区
+## Bootstrapping the Workspace from a Game Install
 
-持有一份通过 Steam 购买的游戏安装即可从零建出私有工作区。整条链只读游戏目录，不启动游戏，也不修改安装文件。`--game` 缺省为私有工作区同级的安装根；`FARLAND_WORK` 指向别处时必须显式传 `--game`。
+Holding one Steam-purchased game install is enough to build the private workspace from scratch. The whole chain only reads the game directory: it never launches the game and never modifies the install. `--game` defaults to the install root next to the private workspace; when `FARLAND_WORK` points elsewhere, `--game` must be passed explicitly.
 
 ```bash
-python tools/localize.py unpack --game <游戏根目录>
-python tools/localize.py assets freeze --game <游戏根目录>
+python tools/localize.py unpack --game <game root>
+python tools/localize.py assets freeze --game <game root>
 python tools/localize.py extract-unity
-python tools/localize.py build-first --output zh-CN-seed01 --game <游戏根目录>
+python tools/localize.py build-first --output zh-CN-seed01 --game <game root>
 python tools/localize.py verify --stage zh-CN-seed01
 ```
 
-`unpack` 依次解出四个 SSF 容器（`FarlandSaga.cue`、`FarlandSaga_Steam.ini`、`FarlandSaga.bin`、`Texture.tex`）到 `decoded/`，还原数据轨得到 `FarlandSaga_track1.bin`，再按 ISO9660 解出 `extracted/steam/`，并把分析用可执行文件放到 `analysis/FarlandSaga.exe`。重复运行幂等；目标 exe 与游戏不一致时需 `--force`。
+`unpack` extracts the four SSF containers (`FarlandSaga.cue`, `FarlandSaga_Steam.ini`, `FarlandSaga.bin`, `Texture.tex`) into `decoded/`, restores the data track to `FarlandSaga_track1.bin`, extracts `extracted/steam/` per ISO9660, and places the analysis executable at `analysis/FarlandSaga.exe`. Re-runs are idempotent; a target exe that differs from the game's requires `--force`.
 
-`assets freeze` 冻结构建要校验身份的原版：`Texture.tex` 按 SSF 容器原样复制（图集解码需要 2048 字节头，补丁配方钉的也是容器哈希），五个 Unity 原版文件复制到 `assets/sources/unity/S-Tribute_Data/`，`S-Tribute_Data/Managed/*.dll` 打成字节可复现的 `unity-managed.zip`（固定时间戳与 deflate 级别），并写 `unity_original_files.json` 清单。
+`assets freeze` freezes the originals whose identity the build must verify: `Texture.tex` is copied verbatim as an SSF container (atlas decoding needs the 2048-byte header, and the patch recipes pin the container hash), the five Unity originals are copied to `assets/sources/unity/S-Tribute_Data/`, `S-Tribute_Data/Managed/*.dll` is packed into a byte-reproducible `unity-managed.zip` (fixed timestamp and deflate level), and a `unity_original_files.json` manifest is written.
 
-`unpack` 与 `assets freeze` 都带原版守卫：检测到游戏目录安装过补丁时拒绝执行，提示先 `restore-original`、用 `--game` 指向干净安装，或显式 `--force`。已打补丁的安装解包出来的是补丁后的资源，候选会建立在错误的基础上。
+Both `unpack` and `assets freeze` carry an original guard: if the game directory has a patch installed they refuse to run, pointing you to `restore-original`, to a clean install via `--game`, or to an explicit `--force`. Unpacking a patched install yields patched resources, and the candidate would be built on the wrong foundation.
 
-`extract-unity` 从冻结的 Unity 原版重建 `assets/sources/unity.json`。扫描规则是在 MonoBehaviour 原始数据上滑动读取定长 UTF-8 段，按文字系统保留日文与繁体中文槽，排除谚文、其他拉丁语言槽、声音列表元数据与含换行的编辑器备注；命中行按 id 与 `translation/corpus.json` 的 `kind == "unity"` 行对齐，未被收录的写入 `unity_unmatched.json` 待人工确认。语料库有而扫描未命中的行直接报错，表示冻结原版与译稿已经漂移。`--check` 只校验不写文件。行序保持扫描顺序，重建结果与历史冻结表字节级一致。
+`extract-unity` rebuilds `assets/sources/unity.json` from the frozen Unity originals. The scan rule slides a window over raw MonoBehaviour data reading fixed-length UTF-8 segments, keeping Japanese and Traditional Chinese slots by script, excluding Hangul, other Latin slots, sound-list metadata, and editor notes containing newlines. Hits are aligned by id with the `kind == "unity"` rows of `translation/corpus.json`; anything not covered is written to `unity_unmatched.json` for manual confirmation. Rows present in the corpus but not hit by the scan raise an error, meaning the frozen originals and the translations have drifted. `--check` only validates and writes nothing. Row order follows scan order, and the rebuild matches the historical frozen table byte for byte.
 
-`build-first` 从 `extracted/steam` 直接构建首个候选，不依赖任何既有候选，因此可以在 `build full --base` 之前跑通。它只构建 Saturn 光盘侧；要得到含 Steam 外壳（Unity 文字）的完整候选，在首个候选之上继续 `build full`。镜像编码的 CD parity 自检优先用私有工作区的原版光盘裸镜像 `reference_original.bin`，缺失时退回仓库内的已知答案向量（Steam 版不带原始压制盘的 EDC/ECC，已实测），报告里的 `cd_parity_reference` 记的是实际用了哪一种。
+`build-first` builds the first candidate directly from `extracted/steam`, depending on no existing candidate, so it can run before `build full --base`. It builds only the Saturn disc side; to get a full candidate including the Steam shell (Unity text), continue with `build full` on top of the first candidate. The image-encoding CD parity self-check prefers the private workspace's raw original disc image `reference_original.bin` and falls back to the repository's known-answer vectors when it is missing (the Steam edition ships without an original pressing's EDC/ECC, verified by measurement); the report's `cd_parity_reference` records which was actually used.
 
-## 构建与补丁
+## Building and Patching
 
-基础候选按当前存储策略选择，输出必须是新目录。以下命令只准备资源，不生成可安装成品：
+The base candidate is chosen by the current storage policy, and the output must be a new directory. The following commands only prepare resources; they do not produce an installable artifact:
 
 ```bash
 bash flow.sh build full --base zh-CN-unifont07 --output zh-text-review --language zh-CN --resources-only
@@ -76,20 +76,20 @@ bash flow.sh build full --base ko-KR-unifont-full07 --output ko-text-review --la
 bash flow.sh build full --base en-US-unifont-full07 --output en-text-review --language en-US --resources-only
 ```
 
-去掉 `--resources-only` 才构建完整候选。成功的完整 `build/patch` 更新当前候选并整理历史文件；资源构建不更新候选，也不能安装。完整文字重建保留基础候选的图块、字距、状态标签、运行时存档标题与外层图集修正。
+Drop `--resources-only` to build a full candidate. A successful full `build/patch` updates the current candidate and tidies the historical files; a resource build does not update the candidate and cannot be installed. A full text rebuild preserves the base candidate's tiles, letter spacing, status labels, runtime save titles, and front-end atlas fixes.
 
-当前中文稿的 `EVE/EVE09_1.EVT` 字表与脚本超过原镜像的 8192 字节分配，准确长度见构建输出的 `event_capacity.json`。资源模式保留准确译文并在容量报告中标明不可打包；完整构建明确拒绝超限。原镜像没有足够的未占用全零扇区可安全搬移，审计记录在私有工作区 `work/maintenance/iso-free-extents.json`。这不影响已安装的 07 版本。继续修改该事件时，需结合容量报告审阅字表总容量，不能只看单行字数。
+The current Chinese draft's `EVE/EVE09_1.EVT` glyph table and script exceed the original image's 8192-byte allocation; the exact length is in the build output's `event_capacity.json`. Resource mode keeps the exact translation and marks it as unpackable in the capacity report; a full build rejects the overflow outright. The original image does not have enough unused all-zero sectors to relocate safely, and the audit is recorded in the private workspace's `work/maintenance/iso-free-extents.json`. This does not affect the installed 07 builds. When continuing to edit that event, review the glyph table's total capacity alongside the capacity report rather than judging by per-line length alone.
 
-要重跑这份容量审计，用 `tools/iso_extents.py` 只读扫描数据轨，它会复现审计记录里的全部关键数值：
+To re-run this capacity audit, use `tools/iso_extents.py` for a read-only scan of the data track; it reproduces every key figure in the audit record:
 
 ```bash
 bash uv.sh run --locked python tools/iso_extents.py work/decoded/FarlandSaga_track1.bin
-bash uv.sh run --locked python tools/iso_extents.py work/decoded/FarlandSaga_track1.bin --expected-sha256 <轨道哈希> --min-run 5
+bash uv.sh run --locked python tools/iso_extents.py work/decoded/FarlandSaga_track1.bin --expected-sha256 <track hash> --min-run 5
 ```
 
-`free_zero_mode1.runs` 为空即表示没有可安全搬移的连续空闲零扇区。`plan_relocations` 只在目录记录相互一致、且与冻结资源清单吻合时才允许搬移，扫描不完整时直接拒绝。
+An empty `free_zero_mode1.runs` means there are no contiguous free zero sectors that can be relocated safely. `plan_relocations` only permits relocation when the directory records agree with each other and match the frozen asset manifest; an incomplete scan is rejected outright.
 
-图片主题通过同一入口单独构建，沿用基础候选的其他资源：
+Image topicals are built separately through the same entry point, reusing the base candidate's other resources:
 
 ```bash
 bash flow.sh build titles --base zh-CN-unifont07 --output zh-title-review --language zh-CN --resources-only
@@ -97,7 +97,7 @@ bash flow.sh build ui --base ko-KR-unifont-full07 --output ko-ui-review --langua
 bash flow.sh build equipment --base en-US-unifont-full07 --output en-equipment-review --language en-US --resources-only
 ```
 
-新修正优先使用 [config/patches/](../config/patches/README.md)，由公共处理器执行。新编码格式才增加处理器，避免每个版本复制脚本。
+Prefer [config/patches/](../config/patches/README.md) for new fixes, executed by the shared processors. Add a processor only for a genuinely new encoding format, rather than copying scripts per version.
 
 ```bash
 bash flow.sh patch --base en-US-unifont-full07 --output en-menu-review --language en-US --recipe frontend-submenus
@@ -105,9 +105,9 @@ bash flow.sh patch --base zh-CN-unifont07 --output zh-price-review --language zh
 bash flow.sh verify --stage en-menu-review
 ```
 
-图集从 `assets/sources/Texture.tex` 冻结原版生成，该冻结原版位于私有工作区；候选保存输入快照与回读报告。当前累计菜单覆盖 371 个文字块及 7 个提示面板；存档标题补丁保护指令、编号和存读档逻辑，商品名称只写前 18 字节并保护价格与属性。
+Atlases are generated from the frozen original at `assets/sources/Texture.tex`, which lives in the private workspace; candidates keep an input snapshot and a read-back report. The accumulated menu coverage is currently 371 text blocks and 7 hint panels. The save-title patch protects instructions, numbering, and the save/load logic; shop names write only the first 18 bytes and protect prices and attributes.
 
-## 回归与整理
+## Regression and Tidy-up
 
 ```bash
 bash flow.sh test --cli-only
@@ -119,13 +119,13 @@ bash flow.sh clean
 bash flow.sh storage compact
 ```
 
-入口修改使用 `test --cli-only`，公共资源修改使用 `test`，涉及最终镜像编码再加 `--pack`。测试仅写 `work/` 内临时文件，可能按需展开历史候选。结束后用存储工具重新归档。
+Use `test --cli-only` for entry-point changes, `test` for shared resource changes, and add `--pack` when final image encoding is involved. Tests write only temporary files inside `work/` and may expand historical candidates as needed; re-archive them with the storage tools afterwards.
 
-`clean --apply` 只移除独立校验通过的可重建打包中间镜像；`storage compact --apply` 归档历史大文件；`assets cleanup --apply` 核对后去重预览。历史小文件包的盘点、整理与恢复由私有工作区 `work/storage/` 承担，使用 `flow.sh storage` 管理。不得手动删除恢复链中的备份、对象或版本清单。
+`clean --apply` removes only independently verifiable, rebuildable packaged intermediate images; `storage compact --apply` archives large historical files; `assets cleanup --apply` deduplicates previews after verification. The inventory, tidying, and restoration of historical small-file bundles are handled by the private workspace's `work/storage/` via `flow.sh storage`. Never manually delete backups, objects, or version manifests in the recovery chain.
 
-## 安装与恢复
+## Install and Restore
 
-只有收到用户明确安装或恢复指令才使用本节。先从 Windows 退出游戏，然后预检；预检不会修改游戏或安装记录。
+Use this section only on an explicit install or restore instruction from the user. Exit the game from Windows first, then pre-flight; the pre-flight modifies neither the game nor the install record.
 
 ```bash
 bash flow.sh install --language ko-KR --check-only
@@ -133,26 +133,26 @@ bash flow.sh install --language ko-KR --game-is-closed
 bash flow.sh restore-original --game-is-closed
 ```
 
-`--stage` 与 `--language` 二选一。实际写入须显式传入 `--game-is-closed`，安装工具验证候选、备份原版并支持失败回滚。WSL 无法检查 Windows 原生游戏进程。工作流不会自动启动游戏，资源构建也不会安装。
+`--stage` and `--language` are mutually exclusive. An actual write requires an explicit `--game-is-closed`; the installer verifies the candidate, backs up the originals, and supports rollback on failure. WSL cannot inspect native Windows game processes. The workflow never launches the game automatically, and a resource build never installs.
 
-## 发布打包
+## Release Packaging
 
 ```bash
-# 1. 把候选打包成差异载荷（每个语言一次）
+# 1. Package the candidate into a diff payload (once per language)
 bash flow.sh package-release --stage zh-CN-unifont08
 bash flow.sh package-release --stage ko-KR-unifont-full07
 bash flow.sh package-release --stage en-US-unifont-full07
 
-# 2. 内嵌全部补丁，交叉编译出单文件补丁器
+# 2. Embed all patches and cross-compile the single-file patcher
 bash flow.sh build-patcher
 ```
 
-`package-release` 先按候选报告逐文件核对身份，再把每个文件相对原版备份的 4 KiB 差异块写成载荷 ZIP（默认 `work/release/farland-patch-<版本>.zip`），差异对象进入冷存储并与历史归档共享；`--output` 可改输出目录。带 `--patcher` 时同时生成终端用户整合包 `FarlandSagaPatcher-<版本>-win64.zip`（补丁器与使用说明），挂到 GitHub Release 即可分发。重复打包同一候选得到字节一致的结果。整合包里的使用说明按图形界面撰写，同时附上命令行写法。
+`package-release` first verifies identity file by file against the candidate report, then writes each file's 4 KiB diff blocks against the original backup into a payload ZIP (default `work/release/farland-patch-<version>.zip`); diff objects enter the cold store and are shared with the historical archive. `--output` changes the output directory. With `--patcher` it also produces the end-user bundle `FarlandSagaPatcher-<version>-win64.zip` (patcher plus usage notes), ready to attach to a GitHub release. Repeated packaging of the same candidate is byte-identical. The bundle's usage notes are written for the GUI, with the command-line forms included.
 
-`build-patcher` 是面向终端用户的最终形态：把各语言的载荷 ZIP 复制进 `patcher/payload/`，由补丁器的 `go:embed` 编进程序，再交叉编译 Windows 版，产出单个可执行文件（约 75 MB，其中补丁数据约 71 MB）。默认内嵌中、韩、英三个候选，`--stage` 可重复指定要内嵌哪些，`--output` 可改输出位置。缺失的载荷会自动先打包。`patcher/payload/*.zip` 是私有工作区产物，已被 `.gitignore` 忽略。补丁器本身的构建、命令与安全边界见 [../patcher/README.md](../patcher/README.md)。
+`build-patcher` is the final form for end users: it copies each language's payload ZIP into `patcher/payload/`, embeds them via the patcher's `go:embed`, and cross-compiles the Windows build, producing a single executable (about 75 MB, of which about 71 MB is patch data). It embeds the zh-CN, ko-KR, and en-US candidates by default; `--stage` can be repeated to choose which to embed, and `--output` changes the output location. Missing payloads are packaged automatically first. `patcher/payload/*.zip` is a private-workspace artifact and is already gitignored. The patcher's own build, commands, and security boundary are in [../patcher/README.md](../patcher/README.md).
 
-## 公共模块
+## Shared Modules
 
-`localize.py` 分发命令；`translation_data.py` 提供三语数据视图与校验；`candidate.py` 管理候选复制、资源校验、字库同步和打包；`native_patches.py` 处理声明式补丁；`container_atlases.py` 负责加密图集；`build_alpha.py` 与镜像模块负责原生文字及 Saturn 镜像编码；`unity_resources.py` 负责 Unity 文字；`bootstrap.py` 从已购游戏安装解包并冻结原版素材；`extract_unity_text.py` 从冻结 Unity 原版重建 `unity.json` 文字行表（`--check` 只校验）；`cd_parity.py` 提供 CD 扇区校验的已知答案向量与压制盘参考；`iso_extents.py` 只读扫描 ISO9660 数据轨的空闲零扇区扩展区并规划安全搬移；`version_storage.py` 管理大小文件归档与恢复；`package_release.py` 把候选打包成终端用户差异载荷；`build_patcher.py` 内嵌补丁并交叉编译单文件补丁器；`workspace_assets.py` 维护共享预览与历史别名；`path_compat.py` 提供 REPO/WORK 双根与路径兼容。
+`localize.py` dispatches commands; `translation_data.py` provides the three-language data view and validation; `candidate.py` manages candidate copying, resource verification, glyph-table sync, and packaging; `native_patches.py` applies declarative patches; `container_atlases.py` handles the encrypted atlases; `build_alpha.py` and the image modules handle native text and Saturn image encoding; `unity_resources.py` handles Unity text; `bootstrap.py` unpacks and freezes the original assets from a purchased game install; `extract_unity_text.py` rebuilds the `unity.json` text-line table from the frozen Unity originals (`--check` only validates); `cd_parity.py` provides the known-answer vectors and pressing reference for CD sector verification; `iso_extents.py` read-only scans the ISO9660 data track for free zero-sector extents and plans safe relocations; `version_storage.py` manages large- and small-file archiving and restoration; `package_release.py` packages candidates into end-user diff payloads; `build_patcher.py` embeds patches and cross-compiles the single-file patcher; `workspace_assets.py` maintains shared previews and historical aliases; `path_compat.py` provides the REPO/WORK dual root and path compatibility.
 
-各资源处理器保留独立职责。带版本号的一次性构建和旧翻译任务工具已归档，不作为新工作入口。
+Each resource processor keeps its own responsibility. Versioned one-off builds and legacy translation-task tools are archived and are not entry points for new work.

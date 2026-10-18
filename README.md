@@ -1,124 +1,132 @@
-# FARLAND SAGA I Saturn Tribute 三语本地化（公开仓库）
-
-本仓库存放 FARLAND SAGA I Saturn Tribute（世嘉 Saturn 光盘镜像 + Steam 外壳）中、韩、英三语本地化中不涉及版权的部分：工具代码、三语译稿、声明式补丁配方与字体，用于补丁的打包、迭代与分发。游戏原版数据、候选镜像、原版备份等版权相关内容留在私有工作区，不在本仓库。
-
-本仓库是项目的主工作目录，入口脚本 `flow.sh` 与 `uv.sh` 就在仓库根下，所有命令从仓库内发起。逆向产物（解包资源、解码镜像、候选、原版备份与归档）全部写在仓库同级的私有工作区 `work/` 中，由 `tools/path_compat.py` 的 `WORK` 指向；设置环境变量 `FARLAND_WORK` 可以改到别处。仓库单独克隆到任何位置都复现同一套目录布局：
-
-```
-<任意位置>/
-  <本仓库>/      工具、译稿、补丁配方与字体
-  work/          私有工作区：解包、解码、候选、备份与归档
-```
-
-```bash
-uv run --locked python tools/localize.py --help
-```
-
-或安装为可编辑包后使用：
-
-```bash
-pip install -e .
-```
+# FARLAND SAGA I Saturn Tribute 三语本地化
 
 ## 快速开始
 
-需要 Python 3.14，依赖声明在 `pyproject.toml`。公开仓库只含公开依赖；静态反汇编所需的 IDALib 为 Hex-Rays 专有产品，列为可选 extra `ida`，仅在私有工作区从本地 wheel 安装。仓库根、私有工作区根与安装根由 `tools/path_compat.py` 的 `REPO`、`WORK`、`WORKSPACE` 约定，公有数据（`translation/`、`config/patches/`、`fonts/`）走 `REPO`，游戏数据走 `WORK`；`WORK` 默认为仓库同级的 `work/` 目录。
+**玩家**：下载 Release 里的 `FarlandSagaPatcher-windows-amd64.exe`，放到游戏根目录与 `FarlandSaga.exe` 同级，双击运行，选语言后点「安装」。还原点「还原」。
 
-## 从已购游戏安装开始
+**贡献者**：`bash flow.sh test --cli-only` 跑通后，改 `translation/` 下的 JSON 参与翻译，行为改动改 `config/patches/` 下的配方。
 
-社区成员持有一份通过 Steam 购买的游戏安装即可从零复现全部产物。整条链只读游戏目录，不启动游戏，也不修改安装文件；解包与冻结产物全部落在私有工作区。
+**维护者**：命令见 [tools/README.md](tools/README.md)，打包见 [patcher/README.md](patcher/README.md)。
 
-```bash
-export FARLAND_WORK=/path/to/your/work                        # 私有工作区根，默认为仓库同级的 work/ 目录
-GAME=/path/to/FARLAND\ SAGA\ I\ Saturn\ Tribute                # 游戏安装根
+## 文件职责
 
-python tools/localize.py status                                          # 确认尚未初始化
-python tools/localize.py unpack --game "$GAME"                           # 解出 decoded/ 与 extracted/steam
-python tools/localize.py assets freeze --game "$GAME"                    # 冻结原版图集与 Unity 资源
-python tools/localize.py extract-unity                                   # 重建 assets/sources/unity.json
-python tools/localize.py build-first --output zh-CN-seed01 --game "$GAME" # 首个候选
-python tools/localize.py verify --stage zh-CN-seed01
-```
+### 仓库根
 
-各步骤的职责与产物：
-
-| 命令 | 读取 | 写入 |
-| --- | --- | --- |
-| `unpack` | 游戏安装的 SSF 容器与主程序 | `decoded/`（含 `FarlandSaga_track1.bin`）、`extracted/steam/`、`analysis/FarlandSaga.exe` |
-| `assets freeze` | 游戏安装的 `Texture.tex` 与 `S-Tribute_Data/` | `assets/sources/Texture.tex`、`assets/sources/unity/`、`assets/sources/unity-managed.zip` |
-| `extract-unity` | `assets/sources/unity/` 与 `translation/corpus.json` | `assets/sources/unity.json`；未被语料库收录的命中写入 `unity_unmatched.json` 待人工确认 |
-| `build-first` | `extracted/steam/` 与 `translation/corpus.json` | `staging/<输出>/` 首个候选（Saturn 侧，含加密镜像） |
-
-`unpack` 与 `assets freeze` 在检测到游戏目录已安装过补丁时拒绝执行，提示先恢复原版、用 `--game` 指向干净安装，或显式加 `--force`。已打补丁的安装解包出来的是补丁后的资源，后续候选会建立在错误的基础上。
-
-`build-first` 只构建 Saturn 光盘侧。要得到含 Steam 外壳（Unity 文字）的完整候选，在首个候选之上继续：
-
-```bash
-python tools/localize.py build full --base zh-CN-seed01 --output zh-CN-full01 --language zh-CN
-```
-
-完整候选的 Unity 文字需要 Windows 字体（`C:/Windows/Fonts` 下的 SimHei、Malgun Gothic、Arial）；Saturn 侧使用仓库内的 GNU Unifont，不依赖外部字体。纯 Linux 环境目前只能构建 Saturn 侧。
-
-## 修改从这里开始
-
-| 需要修改的内容 | 统一来源 |
+| 文件 | 职责 |
 | --- | --- |
-| 剧情、菜单、名称、说明、Steam 普通文字 | [translation/corpus.json](translation/corpus.json)，按稳定 ID 保存三语译文 |
-| 专名、术语与审校意见 | [translation/glossary.json](translation/glossary.json) |
-| 50 张图片关卡标题 | [translation/titles.json](translation/titles.json) |
-| 地形、装备与图片界面标签 | [translation/ui_labels.json](translation/ui_labels.json) |
-| 外层菜单与提示面板 | [translation/frontend_submenus.json](translation/frontend_submenus.json) |
-| 字距、状态、存档标题、商店价格等行为 | [config/patches/](config/patches/README.md) |
-| 查阅译稿 | [统一审阅页](review.html)，由 `flow.sh review` 生成，已被 .gitignore 忽略 |
-
-普通文字以当前各语言译稿逐 ID 合并；旧对齐表中的中文快照不能回写覆盖当前中文。继续翻译请编辑统一表或合并 ID 批次，保留源文、偏移、容量、字位和复核记录。构建候选的 `inputs/` 是冻结输入，不能作为新的编辑来源。
-
-## 分发发布
-
-终端用户拿到的是一个独立补丁器，不需要 Python 或本仓库。发布形态是**单个可执行文件**：三个语言的补丁在构建时经 `go:embed` 编进程序，用户拿到的 exe 自带全部补丁。
-
-```bash
-# 1. 在私有工作区把三个候选各自打包成差异载荷（只需一次）：
-python tools/localize.py package-release --stage zh-CN-unifont08
-python tools/localize.py package-release --stage ko-KR-unifont-full07
-python tools/localize.py package-release --stage en-US-unifont-full07
-
-# 2. 内嵌全部补丁并交叉编译出单文件补丁器：
-python tools/localize.py build-patcher
-# 产物在 work/release/FarlandSagaPatcher-windows-amd64.exe（约 75 MB）
-
-# 3. 挂到 Release：
-gh release upload v1.0.0 work/release/FarlandSagaPatcher-windows-amd64.exe
-```
-
-`build-patcher` 会把 `work/release/farland-patch-<候选>.zip` 复制进 `patcher/payload/` 再编译，缺失的候选自动先打包；用 `--stage` 可指定内嵌哪些候选。CI 只编译公开仓库里的补丁器源码，不含补丁数据；带补丁的单文件版本由维护者在私有工作区生成后上传。
-
-载荷只包含相对原版的 4 KiB 差异块（中文实测约 23 MiB，而补丁后文件约 375 MiB），按 SHA-256 寻址，与冷存储共享对象。补丁器核对游戏文件身份后备份、回放、原子替换，失败自动回滚，随时可以恢复原版。命令、载荷格式与安全边界见 [patcher/README.md](patcher/README.md)。
-
-Windows 版补丁器带图形界面：把程序放进游戏根目录双击运行，先选语言，再进入该语言的安装与还原页面，写入过程有进度条。游戏目录由程序所在目录推断，放错地方会明确提示缺少哪些文件。界面直接调用 Win32 API，不引入第三方模块，也不需要 cgo。其他平台保留命令行与交互向导。
-
-工作流定义在 `.github/workflows/release.yml`：拉取请求与推送 tag 时执行 `go vet`、单元测试和两个平台的构建；打 tag 或手动确认时创建 Release 并上传可执行文件与 `SHA256SUMS`。
-
-## 目录职责
-
-| 目录 | 职责 |
-| --- | --- |
-| `tools/` | 公共处理器与 `localize.py` 统一命令入口 |
-| `patcher/` | 分发给终端用户的独立补丁器（Go，无第三方依赖；Windows 版带 Win32 图形界面，补丁经 `go:embed` 内嵌成单文件） |
-| `tests/` | 入口与工作流回归检查 |
-| `translation/` | 三语译稿 JSON 与译稿说明 |
-| `config/patches/` | 声明式补丁配方 |
-| `fonts/unifont-18.0.01/` | GNU Unifont 字体与许可证 |
+| `flow.sh` | 统一入口，转调 `uv.sh run --locked python tools/localize.py` |
+| `uv.sh` | uv 运行包装，锁定依赖 |
+| `pyproject.toml` | Python 依赖与 `ida` 可选 extra（Hex-Rays 专有产品，仅私有工作区装） |
+| `uv.lock` | 锁定的依赖版本 |
+| `.python-version` | 固定 Python 3.14 |
+| `.gitignore` | 排除私有工作区、构建产物与内嵌补丁 |
+| `.gitattributes` | 文本行尾与二进制类型声明 |
+| `.editorconfig` | 编辑器缩进与行尾约定 |
+| `README.md` | 本文件 |
 | `HISTORY.md` | 历史版本进度与格式调查记录 |
 
-私有工作区保存游戏数据与私有记录：`extracted/`、`decoded/`、`staging/`（三语候选与历史版本报告）、`analysis/`、`backups/`（原版备份）、`storage/`（归档）、`assets/`（冻结原版素材与预览）、`maintenance/`、`vendor/`（IDA idalib wheel）、`install_report.json`、`config/storage_policy.json`、`config/cleanup.json`，以及私有运行环境 `pyproject.toml`、`uv.lock`、`.venv`、`.uv-cache`、`.pycache`、`.tmp`。实际安装以 `install_report.json` 为准，当前候选以 `config/storage_policy.json` 为准。恢复链（原版备份、共享归档对象与各版本清单）完整位于私有工作区，迁移时须连同 `storage/`、`backups/` 与候选清单整体搬迁，不能只复制本仓库。
+### `tools/`
 
-## 流程说明
+统一入口是 `localize.py`，其余按职责分组。
 
-日常合并、构建、校验、环境维护和安装边界集中在 [tools/README.md](tools/README.md)。历史版本与格式调查集中在 [HISTORY.md](HISTORY.md)，补丁配置格式见 [config/patches/README.md](config/patches/README.md)，译稿字段与合并规则见 [translation/README.md](translation/README.md)。
+| 文件 | 职责 |
+| --- | --- |
+| `localize.py` | **统一命令入口**，所有子命令都从这里发起 |
+| `bootstrap.py` | 从已购游戏安装引导出私有工作区 |
+| `build_alpha.py` | 不依赖私有工作区，从零构建简体中文可玩候选 |
+| `build_full_languages.py` | 从三语译稿构建完整的中/韩/英候选 |
+| `build_title_images.py` | 把三语标题渲染进原始索引 SPR |
+| `build_ui_labels.py` | 本地化原生地形精灵与共享状态砖 |
+| `build_equipment_labels.py` | 翻译各图集与 tilemap 里的装备标题 |
+| `build_review.py` | 生成可检索的三语统一审阅页 |
+| `build_patcher.py` | 构建内嵌全部语言补丁的独立补丁器 |
+| `disc_decode.py` | 撤销 Steam Saturn 镜像的扇区置换与加密 |
+| `disc_extract.py` | 从 MODE1/2352 数据轨读 ISO9660 文件 |
+| `iso_extents.py` | 数据轨空闲扩展区扫描与搬移规划 |
+| `iso_layout.py` | Saturn 数据轨的 ISO9660 布局与未占用区 |
+| `cd_parity.py` | CD MODE1 扇区 EDC/ECC 的已知答案向量 |
+| `steam_container.py` | SSF Steam 容器（Texture.tex 等）的读写 |
+| `container_atlases.py` | 在 SSF Texture/Parts PNG 容器里补声明的文字区域 |
+| `extract_text.py` | 导出索引事件字符串，保留原偏移 |
+| `extract_catalog.py` | 导出菜单字面量与定长的物品/法术/单位记录 |
+| `extract_unity_text.py` | 从冻结的 Unity 原版重建 Steam 外壳文字行表 |
+| `title_sprites.py` | 解码每个 `TITLE*.SPR` 里的三张索引图 |
+| `native_patches.py` | 应用声明式定长文本与位图字形配方 |
+| `runtime_text.py` | 本地化主程序里的固定原生字写入 |
+| `overlay_font.py` | 补 Steam 物品说明字体，同时保留原有字符 |
+| `unity_resources.py` | 补剩余 Steam 文本字段并启用 CJK 字体 |
+| `translation_data.py` | 读写 ID 稳定的多语共享译稿 |
+| `merge_full_translations.py` | 校验共享语料库，按 ID 合并各语言草稿 |
+| `merge_translation_json.py` | 把单份 ID 键草稿合并进共享语料库 |
+| `language_encoding.py` | 原生日语字符串的 token 与字形槽助手 |
+| `unifont_bitmap.py` | 读 Unifont HEX 字形（读 gzip，保留 16 行单元格布局） |
+| `package_release.py` | 把校验过的候选打包成可分发补丁载荷 |
+| `candidate.py` | 候选克隆、资源校验与打包 |
+| `install_alpha.py` | 安装 alpha 并校验原版备份 |
+| `restore_original.py` | 仅用 Linux/WSL 从受保护备份还原原版文件 |
+| `version_storage.py` | 历史候选与安装记录的无损冷存储 |
+| `workspace_assets.py` | 按内容去重存储预览，解析历史版本 |
+| `workspace_status.py` | 不重建、不还原地读取工作区状态 |
+| `path_compat.py` | `REPO` / `WORK` / `WORKSPACE` 三个根的路径约定 |
+| `file_hash.py` | 流式文件哈希 |
+| `process_guard.py` | Linux 侧检查 Windows 安装上的游戏进程 |
+| `ida_inspect.py` | 静态检查；数据库与报告全部留在 `work/` |
+| `ida_sh2.py` | 经 IDALib 调查 SH2 二进制 |
+| `audit_remaining_text.py` | 只读清点剩余字面文本及其 SH2 指针 |
+| `test_shards.py` | 工作流回归脚本的分片调度 |
+| `README.md` | 日常流程与各工具详细说明 |
 
-三语 07 候选包括 371 个外层图集文字块、7 个 View 提示面板、存档文件夹标题与商店价格修复。操作指南正文、独立按键指南和制作人员页仍待后续处理。离线回归可核对编码、边界和哈希，游戏内显示与流程需用户自行检查。
+### `patcher/` — 补丁器（Go，仅标准库）
 
-## 许可
+| 文件 | 职责 |
+| --- | --- |
+| `main.go` | 入口、子命令分发与命令行输出 |
+| `install.go` | 安装、还原与状态核对；原版备份的解析、校验与清扫 |
+| `gui_windows.go` | Win32 图形界面（仅 Windows 编译） |
+| `i18n.go` | 三张界面文字表，与平台无关，Linux 上也能测 |
+| `embedded.go` | 编译期内嵌的补丁载荷 |
+| `payload.go` | 载荷 ZIP 与差异对象的解析、回放 |
+| `patcher_test.go` | 单元测试：差异回放、安装/还原往返、备份策略 |
+| `console_windows.go` / `console_other.go` | 控制台编码的平台分支 |
+| `gui_other.go` | 非 Windows 上 `gui` 子命令的提示 |
+| `go.mod` | 模块声明，无第三方依赖 |
+| `README.md` | 命令、载荷格式与安全边界 |
 
-代码按现状提供。`fonts/unifont-18.0.01/` 为 GNU Unifont，依据 GPL 与 SIL OFL 1.1 许可分发，许可证文件见该目录。
+### `tests/`
+
+| 文件 | 职责 |
+| --- | --- |
+| `test_workflows.py` | 针对冻结产物的集成回归 |
+| `test_unity_extract.py` | Unity 文字行表提取器 |
+| `test_bootstrap.py` | 引导命令；固件不出仓库 |
+| `test_storage_bundles.py` | 历史版本存储的安全性与往返 |
+| `test_cli.py` | 入口分发与安装预检 |
+| `test_resources.py` | 可编辑资源的快速隔离回归 |
+| `test_iso_extents.py` | ISO9660 空闲扩展区扫描器 |
+| `test_cd_parity.py` | CD MODE1 EDC/ECC 的交叉核对 |
+| `test_chinese_rebuild.py` | 全新中文文本段是否完整替换 |
+| `test_translation_merge.py` | 译稿合并的语言隔离安全性 |
+
+### `translation/` — 三语译稿
+
+| 文件 | 职责 |
+| --- | --- |
+| `corpus.json` | 剧情、菜单、名称、说明等普通文字主表，按稳定 ID 存三语译文 |
+| `glossary.json` | 专名、术语与审校意见 |
+| `titles.json` | 50 张图片关卡标题 |
+| `ui_labels.json` | 地形、装备与图片界面标签 |
+| `frontend_submenus.json` | 外层菜单与提示面板 |
+| `README.md` | 字段含义与合并规则 |
+
+### `config/patches/` — 声明式补丁配方
+
+| 文件 | 职责 |
+| --- | --- |
+| `frontend-submenus.json` | 外层菜单与提示面板（最大的一份） |
+| `frontend-menu.json` | 外层主菜单 |
+| `condition-labels.json` | 状态标签 |
+| `item-prices.json` | 商店价格 |
+| `save-folder.json` | 存档文件夹标题 |
+| `menu-spacing.json` | 菜单字距 |
+| `dash-center.json` | 破折号居中 |
+| `README.md` | 配方格式 |

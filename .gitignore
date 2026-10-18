@@ -6,7 +6,8 @@ __pycache__/
 .tmp/
 .ruff_cache/
 review.json
-review.html
+# review.html 同样是 flow.sh review 的生成物，但对外可直接当只读审阅页浏览，
+# 故随仓库提交；改译稿后需重新生成。review.json 与它内容重复且更大，继续忽略。
 /patcher/FarlandSagaPatcher*.exe
 /patcher/farland-saga-patcher
 
