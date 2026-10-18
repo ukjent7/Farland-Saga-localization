@@ -19,7 +19,7 @@
 | `pyproject.toml` | Python 依赖与 `ida` 可选 extra（Hex-Rays 专有产品，仅私有工作区装） |
 | `uv.lock` | 锁定的依赖版本 |
 | `.python-version` | 固定 Python 3.14 |
-| `.gitignore` | 排除私有工作区、构建产物与内嵌补丁 |
+| `.gitignore` | 排除私有工作区与临时构建产物；轻量声明式载荷随仓库纳管 |
 | `.gitattributes` | 文本行尾与二进制类型声明 |
 | `.editorconfig` | 编辑器缩进与行尾约定 |
 | `README.md` | 本文件 |
@@ -27,7 +27,7 @@
 
 ### `tools/`
 
-统一入口是 `localize.py`，其余按职责分组。
+统一入口是 `localize.py`。工具链核心已全面重构为领域分层包 `tools/fls/`（含 `core`, `disc`, `containers`, `text`, `builders`, `storage`, `cli`），`tools/` 根目录各文件保留为 100% 兼容的导入垫片，既可直接作为模块导入，也可供原有命令行与测试无缝调用。
 
 | 文件 | 职责 |
 | --- | --- |
@@ -85,8 +85,11 @@
 | `gui_windows.go` | Win32 图形界面（仅 Windows 编译） |
 | `i18n.go` | 三张界面文字表，与平台无关，Linux 上也能测 |
 | `embedded.go` | 编译期内嵌的补丁载荷 |
-| `payload.go` | 载荷 ZIP 与差异对象的解析、回放 |
-| `patcher_test.go` | 单元测试：差异回放、安装/还原往返、备份策略 |
+| `payload.go` | 载荷 ZIP 与 Format 1/Format 2 稀疏差异对象的解析、回放 |
+| `cdrom.go` | Saturn CD-ROM MODE1 扇区 EDC/ECC 校验与扇区变换引擎 |
+| `ssf.go` | SSF Steam 容器加解密与参数解析引擎 |
+| `overlay.go` | Steam 物品说明 RGBA 字体生成与 LZSS 压缩引擎 |
+| `patcher_test.go` | 单元测试：差异回放、安装/还原往返、备份策略、算法 KAT |
 | `console_windows.go` / `console_other.go` | 控制台编码的平台分支 |
 | `gui_other.go` | 非 Windows 上 `gui` 子命令的提示 |
 | `go.mod` | 模块声明，无第三方依赖 |

@@ -74,24 +74,14 @@ jobs:
           {
             echo "## FARLAND SAGA I Saturn Tribute 三语本地化补丁器 ${GITHUB_REF_NAME}"
             echo
-            echo '本 Release 由 CI 创建，`FarlandSagaPatcher-windows-amd64.exe` 是直接编译的产物，'
-            echo '不含补丁数据，供检查与二次打包使用。'
+            echo '本 Release 由 CI 自动构建。补丁器为单文件自包含执行程序，'
+            echo '内置简体中文、한국어、English 三语本地化资源，放进游戏根目录双击即可直接安装或还原。'
             echo
-            echo '面向玩家的单文件版本由维护者在私有工作区用 `build-patcher` 生成后上传到本'
-            echo 'Release：补丁经 `go:embed` 内嵌，一个 exe 自带简体中文、한국어、English'
-            echo '三个补丁，放进游戏根目录双击即用。上传后维护者会一并改写本说明。'
-            echo
-            echo '### 校验和'
-            echo
-            echo '```'
-            cat binaries/SHA256SUMS
-            echo '```'
-          } > release-notes.md
-            echo '安装前请先退出游戏。补丁只修改载荷清单中列出的文件，原版备份在游戏目录的'
+            echo '安装前请先退出游戏。补丁只修改目标文件，原版备份在游戏目录的'
             echo '`FarlandSagaPatcher-backup` 目录中（整个生命周期只有一个，不随安装次数增加），'
             echo '删除备份前请确认不再需要恢复。'
             echo
-            echo "### 校验和"
+            echo '### 校验和'
             echo
             echo '```'
             cat binaries/SHA256SUMS
