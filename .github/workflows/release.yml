@@ -72,16 +72,23 @@ jobs:
       - name: 生成 Release 说明
         run: |
           {
-            echo "## FARLAND SAGA I Saturn Tribute 三语本地化补丁器 ${GITHUB_REF_NAME}"
+            echo "## FARLAND SAGA I Saturn Tribute Trilingual Patcher ${GITHUB_REF_NAME}"
             echo
-            echo '本 Release 由 CI 自动构建。补丁器为单文件自包含执行程序，'
-            echo '内置简体中文、한국어、English 三语本地化资源，放进游戏根目录双击即可直接安装或还原。'
+            echo "> [!WARNING]"
+            echo "> **Alpha Preview Stage**: This release is an early preview build for testing purposes only."
             echo
-            echo '安装前请先退出游戏。补丁只修改目标文件，原版备份在游戏目录的'
-            echo '`FarlandSagaPatcher-backup` 目录中（整个生命周期只有一个，不随安装次数增加），'
-            echo '删除备份前请确认不再需要恢复。'
+            echo "A lightweight, standalone single-executable patcher embedding English, Simplified Chinese (简体中文), and Korean (한국어) localizations."
             echo
-            echo '### 校验和'
+            echo "### Quick Start"
+            echo "1. Download \`FarlandSagaPatcher-windows-amd64.exe\` below."
+            echo "2. Place it into your Steam game directory (alongside \`FarlandSaga.exe\`)."
+            echo "3. Run the executable, choose your language, and click **Install**."
+            echo "4. Click **Restore** anytime to return completely to the pristine original game."
+            echo
+            echo "> [!NOTE]"
+            echo "> Please exit the game before installing or restoring."
+            echo
+            echo "### Checksums"
             echo
             echo '```'
             cat binaries/SHA256SUMS
@@ -96,8 +103,9 @@ jobs:
             gh release upload "$tag" binaries/* --clobber
           else
             gh release create "$tag" \
+              --prerelease \
               --target "${GITHUB_SHA}" \
-              --title "FARLAND SAGA I Saturn Tribute 补丁器 ${tag}" \
+              --title "FARLAND SAGA I Saturn Tribute Patcher ${tag}" \
               --notes-file release-notes.md \
               binaries/*
           fi
