@@ -39,15 +39,9 @@ jobs:
           # 从终端调用子命令时标准输出仍然可用。
           GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' \
             -o ../FarlandSagaPatcher-windows-amd64.exe .
-      - name: 构建 Linux 可执行文件
-        run: |
-          cd patcher
-          GOOS=linux GOARCH=amd64 go build -trimpath -ldflags='-s -w' \
-            -o ../farland-saga-patcher-linux-amd64 .
       - name: 记录校验和
         run: |
-          sha256sum FarlandSagaPatcher-windows-amd64.exe \
-                    farland-saga-patcher-linux-amd64 > SHA256SUMS
+          sha256sum FarlandSagaPatcher-windows-amd64.exe > SHA256SUMS
           cat SHA256SUMS
       - uses: actions/upload-artifact@v4
         with:
@@ -55,7 +49,6 @@ jobs:
           if-no-files-found: error
           path: |
             FarlandSagaPatcher-windows-amd64.exe
-            farland-saga-patcher-linux-amd64
             SHA256SUMS
 
   publish:
@@ -81,35 +74,19 @@ jobs:
           {
             echo "## FARLAND SAGA I Saturn Tribute 三语本地化补丁器 ${GITHUB_REF_NAME}"
             echo
-            echo "### 文件"
+            echo '本 Release 由 CI 创建，`FarlandSagaPatcher-windows-amd64.exe` 是直接编译的产物，'
+            echo '不含补丁数据，供检查与二次打包使用。'
             echo
-            echo '| 文件 | 说明 |'
-            echo '| --- | --- |'
-            echo '| `FarlandSagaPatcher-windows-amd64.exe` | Windows 补丁器，带图形界面；此版本不含补丁数据 |'
-            echo '| `farland-saga-patcher-linux-amd64` | Linux 补丁器，命令行与交互向导，供维护者在 WSL 中自测 |'
-            echo '| `SHA256SUMS` | 上述两个文件的 SHA-256 校验和 |'
+            echo '面向玩家的单文件版本由维护者在私有工作区用 `build-patcher` 生成后上传到本'
+            echo 'Release：补丁经 `go:embed` 内嵌，一个 exe 自带简体中文、한국어、English'
+            echo '三个补丁，放进游戏根目录双击即用。上传后维护者会一并改写本说明。'
             echo
-            echo "### 使用方法"
+            echo '### 校验和'
             echo
-            echo '面向玩家的单文件版本由维护者在私有工作区用'
-            echo '`localize.py build-patcher` 生成后上传到本 Release：补丁经 `go:embed`'
-            echo '内嵌，一个 exe 自带简体中文、韩文、英文三个补丁。把它放进游戏根目录'
-            echo '（与 `FarlandSaga.exe` 同级）双击运行，第一屏选语言，第二屏只有'
-            echo '「安装」和「还原」两个按钮。点安装并确认后等待写入与校验完成，'
-            echo '换语言先点返回回到第一屏再选。'
-            echo
-            echo '本 Release 里的 `FarlandSagaPatcher-windows-amd64.exe` 由 CI 直接编译，'
-            echo '不带补丁，供检查与二次打包使用；它的语言按钮会显示「（未提供）」，'
-            echo '命令行子命令仍可用 `--payload` 指定外部补丁包。'
-            echo
-            echo '```bash'
-            echo 'FarlandSagaPatcher.exe                  # 图形界面：先选语言，再安装或还原'
-            echo 'FarlandSagaPatcher.exe wizard           # 控制台向导：安装或恢复'
-            echo 'FarlandSagaPatcher.exe install --yes    # 非交互安装'
-            echo 'FarlandSagaPatcher.exe restore --yes    # 恢复原版'
-            echo 'FarlandSagaPatcher.exe status           # 查看当前状态'
             echo '```'
-            echo
+            cat binaries/SHA256SUMS
+            echo '```'
+          } > release-notes.md
             echo '安装前请先退出游戏。补丁只修改载荷清单中列出的文件，原版备份在游戏目录的'
             echo '`FarlandSagaPatcher-backup` 目录中（整个生命周期只有一个，不随安装次数增加），'
             echo '删除备份前请确认不再需要恢复。'
