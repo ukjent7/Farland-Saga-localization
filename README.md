@@ -1,7 +1,73 @@
-# FARLAND SAGA I Saturn Tribute 本地化项目
+# FARLAND SAGA I Saturn Tribute Localization
 
-[![CI](https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml/badge.svg)](https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/ukjent7/Farland-Saga-localization)](https://goreportcard.com/report/github.com/ukjent7/Farland-Saga-localization)
+<p align="center">
+  <b>Language / 语言 / 언어:</b><br>
+  <a href="#english">English</a> •
+  <a href="#-简体中文">简体中文</a> •
+  <a href="#-한국어">한국어</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml"><img src="https://github.com/ukjent7/Farland-Saga-localization/actions/workflows/release.yml/badge.svg" alt="CI"></a>
+  <a href="https://goreportcard.com/report/github.com/ukjent7/Farland-Saga-localization"><img src="https://goreportcard.com/badge/github.com/ukjent7/Farland-Saga-localization" alt="Go Report Card"></a>
+</p>
+
+---
+
+## English
+
+> [!WARNING]
+> **Alpha Preview Stage**: This patch is currently in early testing for preview purposes only and should not be considered a final release. Please report any issues you encounter.
+
+A lightweight, fully self-contained localization tool and patch engine for Steam's **FARLAND SAGA I Saturn Tribute**, supporting **English**, **Simplified Chinese (简体中文)**, and **Korean (한국어)**.
+
+Built with a declarative in-place injection engine: 100% free of commercial copyright infringement, self-contained repository with zero external binary dependencies, and a single-executable patcher (~16MB).
+
+### Quick Start (Player Guide)
+
+1. Download the latest `FarlandSagaPatcher.exe` (or zip bundle) from [Releases](https://github.com/ukjent7/Farland-Saga-localization/releases).
+2. Place the executable into your Steam game directory (alongside `FarlandSaga.exe`).
+3. Launch the patcher:
+   - **Install**: Select your language and click **Install**;
+   - **Switch**: Click **Back** to select another language;
+   - **Restore**: Click **Restore** anytime to return to the pristine, unmodified game.
+
+> [!NOTE]
+> Please completely exit the game before patching. The patcher automatically creates a protected backup on first run.
+
+### Key Features
+
+- **Native Injection Engine**: Built-in Saturn CD-ROM MODE1 EDC/ECC recalculation, SSF Steam container cryptography, and RGBA overlay font stream compressor.
+- **Format 2 Sparse Compression**: Eliminates bloating and proprietary font embedding; the single executable embeds all 3 languages in just ~16MB.
+- **Safe Single-Snapshot Backup**: Atomically verifies SHA-256 hashes before and after writing, rolling back instantly on any mismatch.
+- **CI Ready & 100% Compliant**: GitHub Actions automatically builds release binaries in the cloud without proprietary assets.
+
+### Developer Guide
+
+Requires: Linux/WSL2, Python 3.14+ (via `uv`), Go 1.23+.
+
+```bash
+# Run unit & regression test suites
+bash flow.sh test --cli-only
+bash flow.sh test --quick
+
+# Check translation & review page
+bash flow.sh merge
+bash flow.sh review
+
+# Verify candidates & build standalone Windows patcher
+bash flow.sh status
+bash flow.sh build-patcher
+```
+
+### Disclaimer
+
+- This fan localization is independently developed for educational and research purposes. It contains no proprietary commercial game binaries or copyrighted fonts.
+- A legitimate, purchased copy of *FARLAND SAGA I Saturn Tribute* on Steam is required.
+
+---
+
+## 简体中文
 
 > [!WARNING]
 > **当前处于 Alpha 阶段**：本补丁仅供尝鲜体验与测试，不可视为正式版本。遇到问题欢迎提交反馈。
@@ -10,9 +76,7 @@ Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动�
 
 项目采用纯声明式注入引擎，公开仓库零侵权、完全自包含，补丁器单文件开箱即用。
 
----
-
-## 快速上手（玩家指南）
+### 快速上手（玩家指南）
 
 1. 从 [Releases 页面](https://github.com/ukjent7/Farland-Saga-localization/releases) 下载最新的 `FarlandSagaPatcher.exe`（或 zip 整合包）。
 2. 将可执行文件放置在 Steam 游戏根目录（与 `FarlandSaga.exe` 处于同级）。
@@ -24,28 +88,16 @@ Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动�
 > [!NOTE]
 > 安装前请确保已完全退出游戏。程序首次安装时会自动建立只读原版备份目录，绝不污染系统环境。
 
----
+### 项目特性
 
-## 项目特性
-
-- **原生级注入**：内置自研 CD-ROM MODE1 扇区 ECC/EDC 重算引擎与 SSF 容器加解密，无需繁重第三方重型工具。
+- **原生级注入**：内置自研 CD-ROM MODE1 扇区 ECC/EDC 重算引擎与 SSF 容器加解密，无需繁重第三方工具。
 - **高密度压缩**：采用 Format 2 变长稀疏回放协议，消除虚假膨胀与商业字体依赖，全三语载荷内嵌单文件仅 ~16MB。
 - **安全备份体系**：单生命周期备份机制，安装前后进行 SHA-256 校验，任何环节校验不符即刻原子回滚。
 - **仓库完全自包含**：云端 GitHub Actions CI 无需依赖任何未公开二进制，秒级全自动构建并发布全功能补丁。
 
----
+### 开发者指南
 
-## 开发者与贡献者指南
-
-### 环境要求
-
-- **OS**：Linux / WSL2 (Ubuntu 22.04+)
-- **Python**：3.14+（由 `uv` 自动纳管）
-- **Go**：1.23+
-
-### 常用命令
-
-所有日常维护与验证统一由 `flow.sh` 入口驱动：
+环境要求：Linux/WSL2、Python 3.14+（由 `uv` 纳管）、Go 1.23+。
 
 ```bash
 # 运行单元与集成测试套件
@@ -56,43 +108,65 @@ bash flow.sh test --quick
 bash flow.sh merge
 bash flow.sh review
 
-# 校验当前构建候选与工作区状态
+# 校验当前构建候选与编译独立补丁器
 bash flow.sh status
-bash flow.sh verify --stage zh-CN-unifont08
-
-# 编译独立 Windows 补丁器
 bash flow.sh build-patcher
 ```
 
-### 目录结构
-
-```text
-├── config/patches/         # 声明式补丁配方（UI 布局、字距、价格等）
-├── fonts/                  # 开源点阵字库（GNU Unifont）
-├── patcher/                # Go 原生跨平台单文件补丁器源码与内嵌载荷
-│   ├── payload/            # 预生成的轻量化 Format 2 三语载荷
-│   ├── cdrom.go            # Saturn 光盘扇区 EDC/ECC 引擎
-│   ├── ssf.go              # SSF 容器加解密引擎
-│   └── overlay.go          # Steam 物品说明 RGBA 字体生成与 LZSS 压缩
-├── tools/                  # 核心本地化与构建工具链
-│   ├── fls/                # 领域分层包（core, disc, containers, text, builders, storage）
-│   └── localize.py         # 统一 CLI 入口
-├── translation/            # 核心翻译语料（三语对齐 JSON 与术语表）
-└── flow.sh                 # 工程流水线总调度脚本
-```
-
----
-
-## 参与翻译
-
-翻译数据集中管理于 `translation/` 目录下：
-- [`corpus.json`](translation/corpus.json)：主语料库（剧情剧本、菜单、道具与魔法说明）；
-- [`glossary.json`](translation/glossary.json)：术语表与统一校对规范；
-- 修改译稿后运行 `bash flow.sh review` 即可在本地生成网页端对照审阅页。
-
----
-
-## 鸣谢与免责声明
+### 免责声明
 
 - 本项目由玩家社区独立开发维护，仅供游戏交流学习使用，不包含原版商业游戏代码或受版权保护的商业字体；
 - 运行补丁需持有合法已购的 Steam 正版《FARLAND SAGA I Saturn Tribute》游戏。
+
+---
+
+## 한국어
+
+> [!WARNING]
+> **현재 알파(Alpha) 테스트 단계입니다**: 본 패치는 테스트 및 사전 체험 목적으로 제공되며, 정식 버전이 아닙니다. 문제 발생 시 이슈로 제보해 주시기 바랍니다.
+
+Steam 버전 《**FARLAND SAGA I Saturn Tribute**》를 위한 다국어 현지화 및 자동 인젝션 패치 도구입니다. **한국어**, **간체 중국어 (简体中文)**, **영어 (English)**를 지원합니다.
+
+순수 선언적 패치 엔진을 기반으로 설계되어 상업적 저작권 침해 파일이 없으며, 단일 실행 파일(~16MB)로 즉시 적용 가능합니다.
+
+### 빠른 시작 (사용자 가이드)
+
+1. [Releases 페이지](https://github.com/ukjent7/Farland-Saga-localization/releases)에서 최신 `FarlandSagaPatcher.exe`(또는 zip 압축 파일)를 다운로드합니다.
+2. 실행 파일을 Steam 게임 설치 폴더(`FarlandSaga.exe`가 있는 위치)에 넣습니다.
+3. 패처를 실행합니다:
+   - **설치**: 원하는 언어(한국어 / 简体中文 / English)를 선택한 후 「설치」를 클릭합니다.
+   - **언어 변경**: 「뒤로」를 눌러 다른 언어를 선택하여 다시 설치합니다.
+   - **원상 복구**: 언제든지 「원래대로 복구」를 클릭하여 원본 파일로 100% 되돌릴 수 있습니다.
+
+> [!NOTE]
+> 패치를 진행하기 전에 게임을 완전히 종료해 주십시오. 첫 설치 시 자동으로 안전한 원본 백업이 생성됩니다.
+
+### 주요 특징
+
+- **자체 네이티브 인젝션**: Saturn CD-ROM MODE1 섹터 ECC/EDC 재생성 및 SSF 컨테이너 암호화/복호화 엔진 내장.
+- **Format 2 가변 길이 압축**: 불필요한 용량 낭비와 상용 폰트 의존성을 제거하여, 3개 국어 전체를 내장한 단일 실행 파일 용량이 약 16MB에 불과합니다.
+- **안전한 백업 및 롤백**: 설치 전후 SHA-256 해시를 검증하며, 오류 발생 시 즉시 원상태로 원자적 롤백을 수행합니다.
+- **완전 자립형 CI 빌드**: 외부 바이너리 없이 GitHub Actions 클라우드에서 자동 빌드 및 릴리스를 수행합니다.
+
+### 개발자 가이드
+
+요구 사항: Linux/WSL2, Python 3.14+ (`uv` 관리), Go 1.23+.
+
+```bash
+# 단위 및 통합 테스트 실행
+bash flow.sh test --cli-only
+bash flow.sh test --quick
+
+# 번역 병합 및 리뷰 페이지 생성
+bash flow.sh merge
+bash flow.sh review
+
+# 빌드 상태 확인 및 독립형 패처 빌드
+bash flow.sh status
+bash flow.sh build-patcher
+```
+
+### 면책 조항
+
+- 본 프로젝트는 유저 커뮤니티에서 연구 및 학습 목적으로 제작한 비공식 패치입니다. 원본 상용 게임 바이너리나 저작권 보호 폰트를 포함하지 않습니다.
+- 본 패치를 사용하려면 Steam에서 정식 구매한 《FARLAND SAGA I Saturn Tribute》 게임이 필요합니다.
