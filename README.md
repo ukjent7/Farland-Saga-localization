@@ -54,8 +54,6 @@ Built with a declarative in-place injection engine: 100% free of commercial copy
 
 ## 📊 Project Progress & Status
 
-For this project, progress is not measured by "how many raw lines AI translated" (while 100% of the baseline text is injected, it only represents the initial phase). The real heavy lifting lies in **manual bug fixing, dialogue proofreading, and end-to-end playtesting**.
-
 | Title | Phase | Est. Progress | Current Status & Breakdown |
 | :--- | :---: | :---: | :--- |
 | **FARLAND SAGA I**<br>(This Project) | **Alpha 0.5 Preview** | **~40%** | • **Ready (~40%)**: In-place injection engine, baseline trilingual text, CI test suite, standalone GUI patcher<br>• **Remaining Core Work (~60%)**: Manual triage of runtime rendering/logic bugs (e.g. Korean Option button issue), dialogue polish, full-game playthrough verification |
