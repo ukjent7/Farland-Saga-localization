@@ -7,12 +7,12 @@ work="${FARLAND_WORK:-$repo/../work}"
 if [[ -d "$work" ]]; then
     work="$(cd -- "$work" && pwd -P)"
 fi
-export UV_PROJECT_ENVIRONMENT="$work/.venv"
-export UV_CACHE_DIR="$work/.uv-cache"
-export UV_PYTHON_INSTALL_DIR="$work/.uv-python"
-export UV_PYTHON_DOWNLOADS=never
-export PYTHONPYCACHEPREFIX="$work/.pycache"
-export TMPDIR="$work/.tmp"
+export UV_PROJECT_ENVIRONMENT="${UV_PROJECT_ENVIRONMENT:-$work/.venv}"
+export UV_CACHE_DIR="${UV_CACHE_DIR:-$work/.uv-cache}"
+export UV_PYTHON_INSTALL_DIR="${UV_PYTHON_INSTALL_DIR:-$work/.uv-python}"
+export UV_PYTHON_DOWNLOADS="${UV_PYTHON_DOWNLOADS:-never}"
+export PYTHONPYCACHEPREFIX="${PYTHONPYCACHEPREFIX:-$work/.pycache}"
+export TMPDIR="${TMPDIR:-$work/.tmp}"
 mkdir -p -- "$TMPDIR"
 # The private workspace carries its own project file with the proprietary IDALib
 # wheel; a standalone checkout uses this repository's public dependency list.
