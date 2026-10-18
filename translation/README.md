@@ -1,16 +1,16 @@
-# 三语译稿
+# Three-Language Translation Tables
 
-当前译稿按主题保存在本目录，日文定位与中、韩、英译文共用稳定 ID。旧提取表、AI 批次、交叉审校和冻结副本归入历史包；恢复旧记录不会自动覆盖当前译稿。
+The current translations are kept in this directory by topic, sharing stable IDs across the Japanese source and the Chinese, Korean, and English translations. Older extracted tables, AI batches, cross-reviews, and frozen copies are folded into historical bundles; restoring an old record never automatically overwrites the current translations.
 
-| 当前来源 | 内容 |
+| Current source | Contents |
 | --- | --- |
-| `corpus.json` | 2,777 条原有普通文字与 9 条状态标签，共 2,786 个稳定 ID |
-| `glossary.json` | 90 条术语、分类与审校意见，已有 17 条韩英术语按日文联表 |
-| `titles.json` | 50 张图片关卡标题的三语文字与布局 |
-| `ui_labels.json` | 地形、装备、界面与属性图片标签 |
-| `frontend_submenus.json` | 外层菜单与提示面板的三语主题文字 |
+| `corpus.json` | 2,777 original ordinary-text rows plus 9 status labels, 2,786 stable IDs in total |
+| `glossary.json` | 90 terms, categories, and review notes; 17 Korean and English terms are already aligned to the Japanese |
+| `titles.json` | Three-language text and layout for 50 image level titles |
+| `ui_labels.json` | Terrain, equipment, interface, and attribute image labels |
+| `frontend_submenus.json` | Three-language topical text for the front-end menu and hint panels |
 
-普通文字行的 `translations` 保存 `zh-CN`、`ko-KR`、`en-US`；`reviews` 保存各语言与共同复核记录。源文、文件、偏移、容量、字位、Unity 对象位置等字段用于构建和校验，禁止当作译文编辑。缺少的术语译文留空，不根据旧中文快照或原文自动补写。
+An ordinary text row's `translations` holds `zh-CN`, `ko-KR`, and `en-US`; `reviews` holds each language's and the shared review records. The source text, file, offset, capacity, glyph slots, and Unity object location are for building and verification and must not be edited as if they were translations. A missing term translation is left empty; never auto-fill it from an older Chinese snapshot or from the source.
 
 ```json
 {
@@ -21,15 +21,15 @@
     "en-US": "Sorry!"
   },
   "reviews": {
-    "zh-CN": {"status": "draft", "notes": "审校记录"}
+    "zh-CN": {"status": "draft", "notes": "review notes"}
   }
 }
 ```
 
-以上仅展示可编辑字段，实际行还包含完整源文和定位元数据。各图片主题沿用自身编码器要求的行结构；无需强行改变稳定的图片布局格式。
+Only the editable fields are shown above; real rows also carry the full source text and locating metadata. Each image topical follows its own encoder's row structure; there is no need to force a change to the stable image layout format.
 
-中文虚拟 `events/catalog` 视图与韩英构建视图都从 `corpus.json` 读取，不维护重复可编辑副本。旧对齐输入有 1,714 条中文与当前中文不同，迁移时使用当前中文逐 ID 回填；韩英保持已审校完整译稿。原始行与历史意见保存在维护快照和历史译稿包内。
+Both the Chinese virtual `events/catalog` view and the Korean and English build views read from `corpus.json`; no duplicate editable copies are maintained. Of the older alignment inputs, 1,714 Chinese entries differ from the current Chinese; during migration the current Chinese is backfilled per ID, while Korean and English keep the already-reviewed complete translations. The original rows and historical notes live in the maintenance snapshot and the historical translation bundles.
 
-继续翻译时把临时 ID 键译稿放在仓库内 `translation/draft.json`，使用 `bash flow.sh merge --language ko-KR --draft translation/draft.json` 合并；需明确替换已有译文时加 `--overwrite`。无参数 `merge` 只校验当前表。`flow.sh review` 生成[统一审阅页](../review.html)。具体合并、构建和容量规则见 [tools/README.md](../tools/README.md)。
+When continuing a translation, put the temporary ID-keyed draft at `translation/draft.json` in the repository and merge it with `bash flow.sh merge --language ko-KR --draft translation/draft.json`; add `--overwrite` when you explicitly need to replace an existing translation. A parameterless `merge` only validates the current tables. `flow.sh review` generates the [unified review page](../review.html). The detailed merge, build, and capacity rules are in [tools/README.md](../tools/README.md).
 
-图片、图集、字位与 Unity 的冻结输入在私有工作区的 `assets/sources/`；候选 `inputs/` 保存当次完整输入快照。历史批次由私有工作区的 `flow.sh storage` 命令按原路径恢复，恢复后只作查阅或显式合并，不能重新运行原文提取来覆盖译稿。
+The frozen inputs for images, atlases, glyph slots, and Unity live in the private workspace's `assets/sources/`; a candidate's `inputs/` holds that run's complete input snapshot. Historical batches are restored to their original paths by the private workspace's `flow.sh storage` command, and once restored are for reading or explicit merging only — never re-run the original-text extraction to overwrite the translations.
