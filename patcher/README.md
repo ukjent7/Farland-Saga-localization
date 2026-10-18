@@ -24,13 +24,14 @@ cd patcher
 go vet ./...
 go test ./...
 
-# Local build (current platform)
+# Local build (current platform — Linux is only for go vet / go test / round trips)
 go build -o farland-saga-patcher .
 
 # Cross-compile the release target (without embedded patches)
 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' -o FarlandSagaPatcher-windows-amd64.exe .
-GOOS=linux   GOARCH=amd64 go build -trimpath -ldflags='-s -w' -o farland-saga-patcher-linux-amd64 .
 ```
+
+Windows is the only release target: the game is a Windows-only Steam build, so a Linux binary has no player to serve. Linux is still where `go vet`, `go test`, and the synthetic-game round trip run, which is why `console_other.go` and `gui_other.go` exist — but nothing ships a Linux executable.
 
 The commands above produce a program without patches; the language buttons show "(not provided)". For the single-file version aimed at users, use the unified entry point's `build-patcher`:
 

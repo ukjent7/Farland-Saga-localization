@@ -48,12 +48,6 @@ USAGE_TEMPLATE = """FARLAND SAGA I Saturn Tribute 三语本地化补丁
 
 本补丁修改以下文件：
 {files}
-
-命令行用法（可选）
-  {program} wizard           控制台向导
-  {program} install --yes    非交互安装
-  {program} restore --yes    恢复原版
-  {program} status           查看当前状态
 """
 
 
@@ -128,13 +122,14 @@ def write_bundle(patcher, manifest, output_dir):
 
     The patcher embeds every language payload at build time, so the bundle is
     just the one executable plus the readme; users never handle a payload file.
+    Windows is the only target: the game is a Windows-only Steam build, so no
+    Linux bundle is produced.
     """
-    windows = patcher.name.lower().endswith('.exe')
-    program = 'FarlandSagaPatcher.exe' if windows else 'farland-saga-patcher'
+    program = 'FarlandSagaPatcher.exe'
     listing = '\n'.join(f"  {entry['path']}" for entry in manifest['files'])
     usage = USAGE_TEMPLATE.format(version=manifest['version'], language=manifest['language'],
                                   program=program, files=listing)
-    path = output_dir / f"FarlandSagaPatcher-{manifest['version']}-{'win64' if windows else 'linux'}.zip"
+    path = output_dir / f"FarlandSagaPatcher-{manifest['version']}-win64.zip"
     with zipfile.ZipFile(path, 'w', zipfile.ZIP_DEFLATED) as archive:
         zip_member(archive, program, source=patcher)
         zip_member(archive, '使用说明.txt', data=usage)
