@@ -952,6 +952,67 @@ func TestInstallRepairsCorruptBackup(t *testing.T) {
 	}
 }
 
+// TestInstallSupplementsBackupWhenNewTargetAdded 覆盖补丁升级场景：
+// 旧版补丁只修改了部分文件，备份里也只有这部分文件。
+// 新版补丁新增了对新文件（如可执行文件）的修改。
+// 此时游戏已处于部分补丁态，但新纳入的文件在游戏根目录下是未经修改的原版。
+// 安装新版补丁时，应当自动将原版新文件补入固定备份中并顺利完成安装与后续还原。
+func TestInstallSupplementsBackupWhenNewTargetAdded(t *testing.T) {
+	directory := t.TempDir()
+	allFiles := sampleFiles()
+	v1Files := allFiles[:2]
+	v1Path, _ := buildPayload(t, directory, "v1", "zh-CN", v1Files)
+	v2Files := allFiles
+	v2Path, _ := buildPayload(t, directory, "v2", "ko-KR", v2Files)
+
+	game := buildGame(t, allFiles)
+
+	if _, err := installPatch(game, openTestPayload(t, v1Path), nil); err != nil {
+		t.Fatalf("安装 v1 失败: %v", err)
+	}
+
+	backupVictim := filepath.Join(game, backupDirName, filepath.FromSlash(allFiles[2].name))
+	if _, err := os.Stat(backupVictim); !os.IsNotExist(err) {
+		t.Fatalf("v1 安装后备份不应包含 %s", allFiles[2].name)
+	}
+
+	result, err := installPatch(game, openTestPayload(t, v2Path), nil)
+	if err != nil {
+		t.Fatalf("升级安装 v2 失败: %v", err)
+	}
+	if result.Language != "ko-KR" {
+		t.Fatalf("安装后语言应为 ko-KR，实际 %s", result.Language)
+	}
+
+	for _, file := range allFiles {
+		targetInBackup := filepath.Join(game, backupDirName, filepath.FromSlash(file.name))
+		data, err := os.ReadFile(targetInBackup)
+		if err != nil {
+			t.Fatalf("备份中缺少 %s: %v", file.name, err)
+		}
+		if !bytes.Equal(data, file.original) {
+			t.Fatalf("备份中 %s 的内容不是原版", file.name)
+		}
+	}
+
+	restoreRes, err := restoreOriginal(game)
+	if err != nil {
+		t.Fatalf("还原失败: %v", err)
+	}
+	if len(restoreRes.Files) != len(allFiles) {
+		t.Fatalf("应还原 %d 个文件，实际 %d", len(allFiles), len(restoreRes.Files))
+	}
+	for _, file := range allFiles {
+		cur, err := os.ReadFile(filepath.Join(game, filepath.FromSlash(file.name)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(cur, file.original) {
+			t.Fatalf("%s 还原后不是原版内容", file.name)
+		}
+	}
+}
+
 // TestInstallRefusesCorruptBackupWhenPatched 备份损坏且游戏已是补丁态：无法
 // 修复，必须明确指出是哪个文件不对。
 func TestInstallRefusesCorruptBackupWhenPatched(t *testing.T) {

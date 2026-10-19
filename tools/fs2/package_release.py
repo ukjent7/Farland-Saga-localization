@@ -17,9 +17,48 @@ import zipfile
 import os
 
 REPO = Path(__file__).resolve().parents[2]
-WORK = Path(os.environ.get('FARLAND_FS2_WORK', '/mnt/e/Steam/steamapps/common/FARLAND SAGA II Saturn Tribute/work'))
+
+def get_work_dir():
+    if 'FARLAND_FS2_WORK' in os.environ:
+        return Path(os.environ['FARLAND_FS2_WORK'])
+    test_work = Path('/mnt/e/Steam/steamapps/common/FARLAND SAGA II Saturn Tribute test/work')
+    if test_work.exists():
+        return test_work
+    prod_work = Path('/mnt/e/Steam/steamapps/common/FARLAND SAGA II Saturn Tribute/work')
+    if prod_work.exists():
+        return prod_work
+    return test_work
+
+WORK = get_work_dir()
 
 ZIP_TIMESTAMP = (2020, 1, 1, 0, 0, 0)
+
+
+def make_exe_diff_object():
+    orig_sha256 = '741b9f8da6dbf35a8794af2de28bd2c8ac808ab48657e0df723b85225ed35fc3'
+    patched_sha256 = 'c8b54f254e2a90d94ae29c433f323bdca2aa154a56a9896d71faf14ef5b1da60'
+    size = 19223552
+    header = {
+        'format': 1,
+        'sha256': patched_sha256,
+        'size': size,
+        'base': {
+            'path': 'FarlandSaga2.exe',
+            'sha256': orig_sha256,
+            'size': size
+        }
+    }
+    header_line = json.dumps(header, separators=(',', ':')).encode('utf-8') + b'\n'
+    # File offset 0xE12F1: patch 74 32 (jz) to eb 32 (jmp) to skip destructive second decryption on modified sector checksum mismatch
+    record = struct.pack('<QI', 0xE12F1, 2)
+    chunk = b'\xeb\x32'
+
+    gz_buf = io.BytesIO()
+    with gzip.GzipFile(filename='', fileobj=gz_buf, mode='wb', compresslevel=9, mtime=0) as gz:
+        gz.write(header_line)
+        gz.write(record)
+        gz.write(chunk)
+    return orig_sha256, patched_sha256, size, gz_buf.getvalue()
 
 
 def create_patch_payload(candidate_dir, output_zip, game_root=None):
@@ -89,6 +128,9 @@ def create_patch_payload(candidate_dir, output_zip, game_root=None):
 
     gz_bytes = gz_buf.getvalue()
 
+    exe_orig_sha256, exe_patched_sha256, exe_size, exe_diff_gz = make_exe_diff_object()
+    exe_obj_name = f'objects/{exe_patched_sha256}.gz'
+
     manifest_obj = {
         'format': 3,
         'kind': 'farland-saga-patch',
@@ -104,6 +146,14 @@ def create_patch_payload(candidate_dir, output_zip, game_root=None):
                 'patched_size': cand_size,
                 'sectors_object': 'sectors.bin.gz',
                 'sector_count': sector_count,
+            },
+            {
+                'path': 'FarlandSaga2.exe',
+                'original_sha256': exe_orig_sha256,
+                'original_size': exe_size,
+                'patched_sha256': exe_patched_sha256,
+                'patched_size': exe_size,
+                'object': exe_obj_name,
             }
         ]
     }
@@ -118,6 +168,10 @@ def create_patch_payload(candidate_dir, output_zip, game_root=None):
         zi_sectors = zipfile.ZipInfo('sectors.bin.gz', date_time=ZIP_TIMESTAMP)
         zi_sectors.compress_type = zipfile.ZIP_STORED
         zf.writestr(zi_sectors, gz_bytes)
+
+        zi_exe = zipfile.ZipInfo(exe_obj_name, date_time=ZIP_TIMESTAMP)
+        zi_exe.compress_type = zipfile.ZIP_STORED
+        zf.writestr(zi_exe, exe_diff_gz)
 
     print(f"Created Format 3 payload: {output_zip} ({output_zip.stat().st_size // 1024} KiB, {sector_count} sectors)")
 
