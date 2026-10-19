@@ -188,7 +188,7 @@ def main():
     else:
         # Build all three
         targets = [
-            ('zh-CN-candidate02', 'zh-CN', REPO / 'patcher2/payload/farland-patch-zh-CN.zip'),
+            ('zh-CN-candidate03', 'zh-CN', REPO / 'patcher2/payload/farland-patch-zh-CN.zip'),
             ('ko-KR-candidate03', 'ko-KR', REPO / 'patcher2/payload/farland-patch-ko-KR.zip'),
             ('en-US-candidate03', 'en-US', REPO / 'patcher2/payload/farland-patch-en-US.zip'),
         ]
