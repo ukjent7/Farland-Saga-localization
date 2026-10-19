@@ -1,23 +1,24 @@
-"""Package candidate into distributable sparse patch payload zip archives.
+"""Package candidate into distributable Format 3 sector patch payload zip archives.
 
-Format 1 farland-saga-patch:
-manifest.json + objects/<sha256>.gz (gzip stream: json header line + binary <QI> records).
-Contains ONLY the modified 4KB blocks; 100% free of proprietary game assets.
+Format 3 farland-saga-patch:
+manifest.json + sectors.bin.gz (gzip stream: sequence of <lba uint32, len uint32, payload 2048 bytes>).
+Contains ONLY the modified plain sector payloads (100% free of proprietary game code/assets).
+The standalone patcher reconstructs the Steam container cipher and EDC/ECC in place at runtime,
+achieving ~4MB per language (~13.5MB total executable) instead of ~96MB uncompressible ciphertext diffs.
 """
 import argparse
 import gzip
-import hashlib
+import io
 import json
 from pathlib import Path
 import struct
 import zipfile
 
-REPO = Path(__file__).resolve().parents[1]
-WORK = Path(__file__).resolve().parents[2]
+import os
 
-BLOCK = 4096
-RECORD = struct.Struct('<QI')
-READ_SIZE = 1024 * 1024
+REPO = Path(__file__).resolve().parents[2]
+WORK = Path(os.environ.get('FARLAND_FS2_WORK', '/mnt/e/Steam/steamapps/common/FARLAND SAGA II Saturn Tribute/work'))
+
 ZIP_TIMESTAMP = (2020, 1, 1, 0, 0, 0)
 
 
@@ -29,7 +30,7 @@ def create_patch_payload(candidate_dir, output_zip, game_root=None):
     else:
         game_root = Path(game_root)
 
-    source_manifest = json.loads((REPO / 'config/source_manifest.json').read_text(encoding='utf-8'))
+    source_manifest = json.loads((REPO / 'config/fs2/source_manifest.json').read_text(encoding='utf-8'))
     baseline = source_manifest['files']
 
     disc_report = json.loads((candidate_dir / 'disc_report.json').read_text(encoding='utf-8'))
@@ -46,63 +47,50 @@ def create_patch_payload(candidate_dir, output_zip, game_root=None):
     elif 'en-US' in candidate_dir.name:
         lang = 'en-US'
 
-    # Target file is FarlandSaga2.bin
-    orig_file = game_root / 'FarlandSaga2.bin'
-    cand_file = candidate_dir / 'FarlandSaga2.bin'
-
-    if not orig_file.exists():
-        raise FileNotFoundError(f"Original FarlandSaga2.bin not found at {orig_file}")
-    if not cand_file.exists():
-        raise FileNotFoundError(f"Candidate FarlandSaga2.bin not found at {cand_file}")
-
     orig_sha256 = baseline['FarlandSaga2.bin']['sha256']
     orig_size = baseline['FarlandSaga2.bin']['bytes']
-
-    cand_size = cand_file.stat().st_size
+    cand_size = disc_report['bytes']
     cand_sha256 = disc_report['candidate_sha256']
 
-    header = {
-        'format': 1,
-        'sha256': cand_sha256,
-        'size': cand_size,
-        'base': {
-            'path': 'FarlandSaga2.bin',
-            'sha256': orig_sha256,
-            'size': orig_size,
-        }
-    }
+    # Collect all changed allocations
+    archive_manifest = json.loads((WORK / 'extracted/resources/_manifest.json').read_text(encoding='utf-8'))
+    resource_index = {r['id']: r for r in archive_manifest['resources']}
 
-    object_rel = f'objects/{cand_sha256}.gz'
-    temp_gz = output_zip.parent / f'.temp_{cand_sha256}.gz'
-    temp_gz.parent.mkdir(parents=True, exist_ok=True)
+    res_input_name = disc_report.get('resource_input', '')
+    blocks = []
+    if res_input_name:
+        res_dir = WORK / 'staging' / res_input_name / 'resources'
+        if not res_dir.exists():
+            res_dir = candidate_dir / 'input_records' / res_input_name / 'resources'
+        for p in sorted(res_dir.glob('*.bin')):
+            blocks.append({'path': p, 'archive_offset': resource_index[p.stem]['archive_offset']})
 
-    diff_blocks = 0
-    diff_bytes = 0
+    if story_input_name:
+        story_dir = WORK / 'staging' / story_input_name
+        if not (story_dir / 'story_report.json').exists():
+            story_dir = candidate_dir / 'input_records' / story_input_name
+        s_rep = json.loads((story_dir / 'story_report.json').read_text(encoding='utf-8'))
+        for r in s_rep['patches']:
+            blocks.append({'path': story_dir / r['block'], 'archive_offset': r['archive_offset']})
 
-    print(f"Diffing candidate {candidate_dir.name} against baseline...")
-    with open(orig_file, 'rb') as f_orig, open(cand_file, 'rb') as f_cand, gzip.open(temp_gz, 'wb', compresslevel=9) as dst:
-        dst.write(json.dumps(header).encode('utf-8') + b'\n')
-        offset = 0
-        while True:
-            c_chunk = f_cand.read(READ_SIZE)
-            if not c_chunk:
-                break
-            o_chunk = f_orig.read(len(c_chunk))
-            if c_chunk != o_chunk:
-                for start in range(0, len(c_chunk), BLOCK):
-                    sub_c = c_chunk[start:start + BLOCK]
-                    sub_o = o_chunk[start:start + BLOCK]
-                    if sub_c != sub_o:
-                        dst.write(RECORD.pack(offset + start, len(sub_c)))
-                        dst.write(sub_c)
-                        diff_blocks += 1
-                        diff_bytes += len(sub_c)
-            offset += len(c_chunk)
+    # Write sectors.bin.gz
+    gz_buf = io.BytesIO()
+    with gzip.GzipFile(fileobj=gz_buf, mode='wb', compresslevel=9) as gz:
+        sector_count = 0
+        for b in blocks:
+            data = b['path'].read_bytes()
+            offset = b['archive_offset']
+            for pos in range(0, len(data), 2048):
+                lba = 178 + (offset + pos) // 2048
+                chunk = data[pos:pos+2048]
+                gz.write(struct.pack('<II', lba, len(chunk)))
+                gz.write(chunk)
+                sector_count += 1
 
-    print(f"Diff complete: {diff_blocks} blocks ({diff_bytes // 1024} KiB). Compressed object: {temp_gz.stat().st_size // 1024} KiB.")
+    gz_bytes = gz_buf.getvalue()
 
     manifest_obj = {
-        'format': 1,
+        'format': 3,
         'kind': 'farland-saga-patch',
         'game': 'FARLAND SAGA II Saturn Tribute',
         'version': candidate_dir.name,
@@ -114,7 +102,8 @@ def create_patch_payload(candidate_dir, output_zip, game_root=None):
                 'original_size': orig_size,
                 'patched_sha256': cand_sha256,
                 'patched_size': cand_size,
-                'object': object_rel,
+                'sectors_object': 'sectors.bin.gz',
+                'sector_count': sector_count,
             }
         ]
     }
@@ -126,14 +115,11 @@ def create_patch_payload(candidate_dir, output_zip, game_root=None):
         zi_manifest.compress_type = zipfile.ZIP_DEFLATED
         zf.writestr(zi_manifest, manifest_data)
 
-        gz_data = temp_gz.read_bytes()
-        zi_obj = zipfile.ZipInfo(object_rel, date_time=ZIP_TIMESTAMP)
-        # The object is already gzip compressed, store without recompressing
-        zi_obj.compress_type = zipfile.ZIP_STORED
-        zf.writestr(zi_obj, gz_data)
+        zi_sectors = zipfile.ZipInfo('sectors.bin.gz', date_time=ZIP_TIMESTAMP)
+        zi_sectors.compress_type = zipfile.ZIP_STORED
+        zf.writestr(zi_sectors, gz_bytes)
 
-    temp_gz.unlink(missing_ok=True)
-    print(f"Created payload zip: {output_zip} ({output_zip.stat().st_size // 1024} KiB)")
+    print(f"Created Format 3 payload: {output_zip} ({output_zip.stat().st_size // 1024} KiB, {sector_count} sectors)")
 
 
 def main():

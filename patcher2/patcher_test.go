@@ -1398,14 +1398,14 @@ func TestLoadEmbedded(t *testing.T) {
 		if info.Language != code {
 			t.Fatalf("第 %d 个补丁语言 = %s，期望 %s（顺序必须固定）", index, info.Language, code)
 		}
-		if info.Format != payloadFormat || info.Kind != payloadKind {
+		if (info.Format != payloadFormat && info.Format != 3) || info.Kind != payloadKind {
 			t.Fatalf("%s 的 manifest 格式不符：format=%d kind=%s", code, info.Format, info.Kind)
 		}
 		if len(info.Files) == 0 {
 			t.Fatalf("%s 的 manifest 没有目标文件", code)
 		}
 		for _, entry := range info.Files {
-			if entry.Path == "" || entry.Object == "" {
+			if entry.Path == "" || (entry.Object == "" && entry.SectorsObject == "") {
 				t.Fatalf("%s 的 manifest 有条目缺少路径或对象名", code)
 			}
 			if !validSHA256(entry.OriginalSHA256) || !validSHA256(entry.PatchedSHA256) {
@@ -1605,13 +1605,25 @@ func TestEmbeddedRealPayloadReplay(t *testing.T) {
 			for _, f := range p.info.Files {
 				origPath := filepath.Join(backupDir, filepath.FromSlash(f.Path))
 				if _, err := os.Stat(origPath); err != nil {
-					t.Skipf("原版文件缺失: %s", origPath)
+					altPath := filepath.Join("/mnt/e/Steam/steamapps/common/FARLAND SAGA II Saturn Tribute", filepath.FromSlash(f.Path))
+					if _, err := os.Stat(altPath); err == nil {
+						origPath = altPath
+					} else {
+						t.Skipf("原版文件缺失: %s", origPath)
+					}
 				}
 				h := sha256.New()
 				var totalWritten int64
 				countingWriter := io.MultiWriter(h, &byteCounter{written: &totalWritten})
-				if err := p.replay(f, origPath, countingWriter, nil); err != nil {
-					t.Fatalf("文件 %s 回放失败: %v", f.Path, err)
+				var replayErr error
+				if f.SectorsObject != "" {
+					exePath := filepath.Join("/mnt/e/Steam/steamapps/common/FARLAND SAGA II Saturn Tribute", "FarlandSaga2.exe")
+					replayErr = p.replaySectors(f, origPath, exePath, countingWriter, nil)
+				} else {
+					replayErr = p.replay(f, origPath, countingWriter, nil)
+				}
+				if replayErr != nil {
+					t.Fatalf("文件 %s 回放失败: %v", f.Path, replayErr)
 				}
 				gotHash := hex.EncodeToString(h.Sum(nil))
 				if gotHash != f.PatchedSHA256 {
