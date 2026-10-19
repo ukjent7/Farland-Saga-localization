@@ -132,56 +132,45 @@ def wrap_text_pass(font, text: str, size: int, max_width: int = 195, lang: str =
 
 def render_dialogue(font, text: str, lang: str = 'zh-CN'):
     """Render dialogue text with shadow into 196x48 2bpp layout."""
-    candidates = []
-
-    # Two text variants: 1) original text with explicit '\n'; 2) collapsed text with '\n' as space
+    # Text variants: 1) original text with explicit '\n'; 2) collapsed text with '\n' removed/spaced
     variants = [text]
-    if '\n' in text and lang.startswith(('en', 'ko')):
-        collapsed = ' '.join(p.strip() for p in text.split('\n') if p.strip())
+    if '\n' in text:
+        if lang.startswith(('en', 'ko')):
+            collapsed = ' '.join(p.strip() for p in text.split('\n') if p.strip())
+        else:
+            collapsed = ''.join(p.strip() for p in text.split('\n') if p.strip())
         variants.append(collapsed)
 
-    for txt in variants:
-        for size in (16, 14, 12):
-            for compact in (False, True):
+    for size in (16, 14, 12):
+        for compact in (False, True):
+            for txt in variants:
                 lines = wrap_text_pass(font, txt, size, max_width=195, lang=lang, compact_space=compact)
-                if len(lines) > 3:
-                    continue
+                if len(lines) <= 3:
+                    mask = Image.new('1', (196, 48))
+                    for n, line in enumerate(lines):
+                        x = 0
+                        for glyph in line:
+                            mask.paste(glyph, (x, n * 16))
+                            x += glyph.width
 
-                mask = Image.new('1', (196, 48))
-                for n, line in enumerate(lines):
-                    x = 0
-                    for glyph in line:
-                        mask.paste(glyph, (x, n * 16))
-                        x += glyph.width
+                    shadow = Image.new('1', mask.size)
+                    shadow.paste(mask, (1, 1))
+                    shadow.paste(0, (0, 16, 196, 17))
+                    shadow.paste(0, (0, 32, 196, 33))
 
-                shadow = Image.new('1', mask.size)
-                shadow.paste(mask, (1, 1))
-                shadow.paste(0, (0, 16, 196, 17))
-                shadow.paste(0, (0, 32, 196, 33))
+                    image = Image.new('L', mask.size)
+                    image.paste(85, (0, 0), shadow)
+                    image.paste(170, (0, 0), mask)
 
-                image = Image.new('L', mask.size)
-                image.paste(85, (0, 0), shadow)
-                image.paste(170, (0, 0), mask)
-
-                span = max((y // 16 * 196 + x + 1 for y in range(48) for x in range(196)
-                            if image.getpixel((x, y))), default=0)
-                last_width = sum(g.width for g in lines[-1]) if lines else 0
-                candidates.append((image, {
-                    'font_pixels': size,
-                    'lines': len(lines),
-                    'timing_characters': math.ceil(span / 14),
-                    'foreground_index': 2,
-                    'shadow_index': 1,
-                    'scaled': size != 16,
-                }, last_width))
-
-        if candidates:
-            break
-
-    if candidates:
-        chosen = candidates[0]
-        if chosen[1]['lines'] > 1 and chosen[2] < 48:
-            chosen = next((c for c in candidates[1:] if c[1]['lines'] < chosen[1]['lines']), chosen)
-        return chosen[:2]
+                    span = max((y // 16 * 196 + x + 1 for y in range(48) for x in range(196)
+                                if image.getpixel((x, y))), default=0)
+                    return image, {
+                        'font_pixels': size,
+                        'lines': len(lines),
+                        'timing_characters': math.ceil(span / 14),
+                        'foreground_index': 2,
+                        'shadow_index': 1,
+                        'scaled': size != 16,
+                    }
 
     raise ValueError(f'Text does not fit three lines at 12 pixels or larger [{lang}]: {text!r}')
