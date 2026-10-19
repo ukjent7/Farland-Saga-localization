@@ -605,11 +605,20 @@ func installPatch(game string, loaded *payload, progress func(fileEntry, int64))
 			return nil, rollback(fmt.Errorf("无法写入 %s: %w", entry.Path, err))
 		}
 		// 差异对象相对原版回放，基准取原版备份而不是游戏目录里的当前文件。
-		replayErr := loaded.replay(entry, gameFilePath(originalBackup, entry.Path), out, func(position int64) {
-			if progress != nil {
-				progress(entry, position)
-			}
-		})
+		var replayErr error
+		if entry.SectorsObject != "" {
+			replayErr = loaded.replaySectors(entry, gameFilePath(originalBackup, entry.Path), filepath.Join(game, "FarlandSaga2.exe"), out, func(position int64) {
+				if progress != nil {
+					progress(entry, position)
+				}
+			})
+		} else {
+			replayErr = loaded.replay(entry, gameFilePath(originalBackup, entry.Path), out, func(position int64) {
+				if progress != nil {
+					progress(entry, position)
+				}
+			})
+		}
 		closeErr := out.Close()
 		if replayErr != nil {
 			return nil, rollback(fmt.Errorf("重建 %s 失败: %w", entry.Path, replayErr))
