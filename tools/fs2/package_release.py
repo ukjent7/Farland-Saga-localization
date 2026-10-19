@@ -188,9 +188,9 @@ def main():
     else:
         # Build all three
         targets = [
-            ('zh-CN-candidate01', 'zh-CN', REPO / 'patcher2/payload/farland-patch-zh-CN.zip'),
-            ('ko-KR-candidate02', 'ko-KR', REPO / 'patcher2/payload/farland-patch-ko-KR.zip'),
-            ('en-US-candidate02', 'en-US', REPO / 'patcher2/payload/farland-patch-en-US.zip'),
+            ('zh-CN-candidate02', 'zh-CN', REPO / 'patcher2/payload/farland-patch-zh-CN.zip'),
+            ('ko-KR-candidate03', 'ko-KR', REPO / 'patcher2/payload/farland-patch-ko-KR.zip'),
+            ('en-US-candidate03', 'en-US', REPO / 'patcher2/payload/farland-patch-en-US.zip'),
         ]
         for stage_name, lang, out_zip in targets:
             cand_path = WORK / 'staging' / stage_name

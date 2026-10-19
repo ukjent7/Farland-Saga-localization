@@ -136,7 +136,7 @@
       "blank": false,
       "source": "それじゃ、ちょっとの間だけお\n願いね",
       "translations": {
-        "zh-CN": "那就麻烦你，暂时照看一下。",
+        "zh-CN": "那就麻烦你，\n暂时照看一下。",
         "ko-KR": "그럼 잠시 동안만 부탁해요.",
         "en-US": "Then please look after him\nfor just a little while."
       }
