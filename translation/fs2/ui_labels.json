@@ -1,0 +1,3113 @@
+{
+  "count": 518,
+  "labels": [
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "攻撃力",
+      "translation": "攻击力"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "防御力",
+      "translation": "防御力"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "知力",
+      "translation": "智力"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "魔抗力",
+      "translation": "魔抗力"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "敏捷さ",
+      "translation": "敏捷度"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "火の属性",
+      "translation": "火属性"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "水の属性",
+      "translation": "水属性"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "風の属性",
+      "translation": "风属性"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "土の属性",
+      "translation": "土属性"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "光の属性",
+      "translation": "光属性"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "闇の属性",
+      "translation": "暗属性"
+    },
+    {
+      "id": "",
+      "category": "attributes",
+      "source": "移動力",
+      "translation": "移动力"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "カリン",
+      "translation": "卡琳"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "アル",
+      "translation": "阿尔"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "アリス",
+      "translation": "爱丽丝"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "サーラ",
+      "translation": "莎拉"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "ラディッシュ",
+      "translation": "莱迪修"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "ソフィア",
+      "translation": "索菲亚"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "ルル",
+      "translation": "露露"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "ソーン",
+      "translation": "索恩"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "ジャン",
+      "translation": "让"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "全員",
+      "translation": "全员"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "女性のみ",
+      "translation": "仅限女性"
+    },
+    {
+      "id": "",
+      "category": "equip_restrictions",
+      "source": "魔術師以外",
+      "translation": "魔术师除外"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "フレイムバースト",
+      "translation": "烈焰爆发"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "メルト",
+      "translation": "熔化"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ヒートブレード",
+      "translation": "炽热之刃"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "エクスプロージョン",
+      "translation": "爆裂"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "フラッシュ",
+      "translation": "闪光"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "イフリート",
+      "translation": "伊芙利特"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ピュリファイ",
+      "translation": "净化"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "フリーズ",
+      "translation": "冰冻"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ブリザード",
+      "translation": "暴风雪"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "レストア",
+      "translation": "恢复"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "マカブルダンス",
+      "translation": "死亡之舞"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "スノードラゴン",
+      "translation": "雪龙"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ライトニング",
+      "translation": "闪电"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ヘイスト",
+      "translation": "加速"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "エイド",
+      "translation": "急救"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ミュート",
+      "translation": "静音"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ララバイ",
+      "translation": "摇篮曲"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "チアリング",
+      "translation": "鼓舞"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "サンダードラゴン",
+      "translation": "雷龙"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "サイレンス",
+      "translation": "沉默"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "バニッシュ",
+      "translation": "放逐"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ストーンエッジ",
+      "translation": "尖石攻击"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "オーダー",
+      "translation": "命令"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "アース",
+      "translation": "大地"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "プロテクション",
+      "translation": "保护"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ガスクラウド",
+      "translation": "毒气云"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "レビテート",
+      "translation": "浮空"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "メテオ",
+      "translation": "陨石"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ヒーリング",
+      "translation": "治疗"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "リザレクション",
+      "translation": "复活"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "マジックシールド",
+      "translation": "魔法护盾"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "リカバリー",
+      "translation": "全愈"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ペトロクラウド",
+      "translation": "石化云"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ホールド",
+      "translation": "束缚"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "パペット",
+      "translation": "傀儡"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ダークフォース",
+      "translation": "暗黑力量"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "滅神乱舞",
+      "translation": "灭神乱舞"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "ライフスティール",
+      "translation": "生命汲取"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "デス・モーメント",
+      "translation": "死亡时刻"
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "skills_magic",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "levelup_subjects",
+      "source": "カリンは",
+      "translation": "卡琳"
+    },
+    {
+      "id": "",
+      "category": "levelup_subjects",
+      "source": "アルは",
+      "translation": "阿尔"
+    },
+    {
+      "id": "",
+      "category": "levelup_subjects",
+      "source": "アリスは",
+      "translation": "爱丽丝"
+    },
+    {
+      "id": "",
+      "category": "levelup_subjects",
+      "source": "サーラは",
+      "translation": "莎拉"
+    },
+    {
+      "id": "",
+      "category": "levelup_subjects",
+      "source": "ラディッシュは",
+      "translation": "莱迪修"
+    },
+    {
+      "id": "",
+      "category": "levelup_subjects",
+      "source": "ソフィアは",
+      "translation": "索菲亚"
+    },
+    {
+      "id": "",
+      "category": "levelup_subjects",
+      "source": "ルルは",
+      "translation": "露露"
+    },
+    {
+      "id": "",
+      "category": "levelup_subjects",
+      "source": "ソーンは",
+      "translation": "索恩"
+    },
+    {
+      "id": "",
+      "category": "levelup_subjects",
+      "source": "ジャンは",
+      "translation": "让"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "カリン",
+      "translation": "卡琳"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "アル",
+      "translation": "阿尔"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "アリス",
+      "translation": "爱丽丝"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "サーラ",
+      "translation": "莎拉"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ラディッシュ",
+      "translation": "莱迪修"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ソフィア",
+      "translation": "索菲亚"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ルル",
+      "translation": "露露"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "???",
+      "translation": "???"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "Ｔ．Ｔ．",
+      "translation": "Ｔ．Ｔ．"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ソーン",
+      "translation": "索恩"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "マクドガル",
+      "translation": "麦克杜格尔"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ガストン",
+      "translation": "加斯顿"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "マスター",
+      "translation": "会长"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "まっする親父",
+      "translation": "肌肉大叔"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ショップ姉ちゃん",
+      "translation": "商店大姐"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "怒りのカリン",
+      "translation": "愤怒的卡琳"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "困ったアリス",
+      "translation": "困扰的爱丽丝"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "カトリーヌ",
+      "translation": "卡特琳娜"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ベヒモス",
+      "translation": "贝希摩斯"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "デュマ",
+      "translation": "大仲马"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ジャン",
+      "translation": "让"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ドッペルゲンガー",
+      "translation": "分身怪"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "アルヴィース",
+      "translation": "阿尔维斯"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ソーン・ヴァイス",
+      "translation": "索恩·怀斯"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ヒーちゃん",
+      "translation": "小希"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "コカちゃん",
+      "translation": "小可"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "ギルドマスター",
+      "translation": "公会会长"
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "character_names",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "魔法使い",
+      "translation": "魔法师"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "剣士",
+      "translation": "剑士"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ヒーラー",
+      "translation": "治疗师"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "シャーマン",
+      "translation": "萨满"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "セイレーン",
+      "translation": "塞壬"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "盗賊",
+      "translation": "盗贼"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "精霊使い",
+      "translation": "精灵使"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ＮＰＣ",
+      "translation": "ＮＰＣ"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "宝箱",
+      "translation": "宝箱"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "金",
+      "translation": "金币"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ブルースライム",
+      "translation": "蓝色史莱姆"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "グリーンスライム",
+      "translation": "绿色史莱姆"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "アシッドスライム",
+      "translation": "酸性史莱姆"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "グレイウーズ",
+      "translation": "灰泥怪"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "マッドジェリー",
+      "translation": "泥浆水母"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "白猫",
+      "translation": "白猫"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "黒猫",
+      "translation": "黑猫"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "三毛猫",
+      "translation": "三花猫"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "コンドロ",
+      "translation": "秃鹰兽"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ゴロツキ",
+      "translation": "无赖"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "虎猫",
+      "translation": "虎斑猫"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ヒドラ",
+      "translation": "九头蛇"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ハーピー",
+      "translation": "鹰身女妖"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ベヒモス",
+      "translation": "贝希摩斯"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "アーマゴーレム",
+      "translation": "装甲魔像"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ロックゴーレム",
+      "translation": "岩石魔像"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ストーンゴーレム",
+      "translation": "石魔像"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ゴースト",
+      "translation": "幽灵"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "スペクター",
+      "translation": "怨灵"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "フェアリー",
+      "translation": "妖精"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ピクシー",
+      "translation": "小精灵"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ネクロマンサー",
+      "translation": "死灵法师"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "デスウォリアー",
+      "translation": "死亡战士"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "グール",
+      "translation": "食尸鬼"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "迷子の子供",
+      "translation": "迷路的孩子"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "かじ屋見習い",
+      "translation": "铁匠学徒"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "囚人",
+      "translation": "囚犯"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "インプ",
+      "translation": "小鬼"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "グレムリン",
+      "translation": "小恶魔"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "囚人",
+      "translation": "囚犯"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "デーモン",
+      "translation": "恶魔"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ハーピー",
+      "translation": "鹰身女妖"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "レッドクラブ",
+      "translation": "红蟹"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ギルドマスター",
+      "translation": "公会会长"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "コカトリス",
+      "translation": "鸡蛇兽"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ソーサラー",
+      "translation": "巫师"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "アルケミスト",
+      "translation": "炼金术士"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "スプライト",
+      "translation": "精灵"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "チンピラ",
+      "translation": "混混"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ウィザード",
+      "translation": "魔导士"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ペイルクラブ",
+      "translation": "苍白蟹"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ウォーロック",
+      "translation": "术士"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "デブ猫",
+      "translation": "胖猫"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "サッキュバス",
+      "translation": "魅魔"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ストレンジャー",
+      "translation": "异乡人"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "ドッペルゲンガー",
+      "translation": "分身怪"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "アークデーモン",
+      "translation": "大恶魔"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "エンジェル",
+      "translation": "天使"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "アークエンジェル",
+      "translation": "大天使"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "堕天使",
+      "translation": "堕天使"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "デーモンロード",
+      "translation": "恶魔领主"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "パイレーツ",
+      "translation": "海盗"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "バイキング",
+      "translation": "维京人"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "セラフ",
+      "translation": "炽天使"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "セラフ",
+      "translation": "炽天使"
+    },
+    {
+      "id": "",
+      "category": "classes_units",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "正常",
+      "translation": "正常"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "気絶",
+      "translation": "气绝"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "毒化",
+      "translation": "中毒"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "眠り",
+      "translation": "睡眠"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "石化",
+      "translation": "石化"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "凍結",
+      "translation": "冻结"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "沈黙",
+      "translation": "沉默"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "魅了",
+      "translation": "魅惑"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "マヒ",
+      "translation": "麻痹"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "透明",
+      "translation": "透明"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "俊敏",
+      "translation": "敏捷"
+    },
+    {
+      "id": "",
+      "category": "status_effects",
+      "source": "浮遊",
+      "translation": "浮游"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "薬草",
+      "translation": "药草"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "毒消し",
+      "translation": "解毒剂"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "妖精の涙",
+      "translation": "妖精之泪"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "カボチャの種",
+      "translation": "南瓜种子"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "回復薬",
+      "translation": "回复药"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "癒しの花",
+      "translation": "治愈之花"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "気付け薬",
+      "translation": "醒神药"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ウォッカ",
+      "translation": "伏特加"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ブランデー",
+      "translation": "白兰地"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ロングソード",
+      "translation": "长剑"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ブロードソード",
+      "translation": "阔剑"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "バスタードソード",
+      "translation": "手半剑"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "クレイモアー",
+      "translation": "双手大剑"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "フランベルジュ",
+      "translation": "焰形剑"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "グレートソード",
+      "translation": "巨剑"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "アイスブレード",
+      "translation": "寒冰之刃"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "フレイムソード",
+      "translation": "烈焰之剑"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "サンダーブレード",
+      "translation": "雷霆之刃"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ゴッドスレイヤー",
+      "translation": "弑神之剑"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "パワーリスト",
+      "translation": "力量护腕"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ブラスナックル",
+      "translation": "黄铜指虎"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "バグナグ",
+      "translation": "虎爪拳刃"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "アイアンフィスト",
+      "translation": "铁拳"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "シルバーファング",
+      "translation": "银牙"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ドラゴンクロー",
+      "translation": "龙爪"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "明鏡止水の拳",
+      "translation": "明镜止水之拳"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "アースバインダー",
+      "translation": "大地束缚者"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "スタングラブ",
+      "translation": "震击手套"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "魔人の手袋",
+      "translation": "魔人手套"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "魔法使いの杖",
+      "translation": "魔法师之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "魔術師の杖",
+      "translation": "术士之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "炎術士の杖",
+      "translation": "炎术士之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "アルケミストの杖",
+      "translation": "炼金师之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "緋炎の杖",
+      "translation": "绯炎之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "賢者の杖",
+      "translation": "贤者之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "深紅の杖",
+      "translation": "深红之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "エルシェーラの杖",
+      "translation": "艾尔谢拉之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "チェーンウィップ",
+      "translation": "链鞭"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "金槌",
+      "translation": "铁锤"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "パイク",
+      "translation": "长枪"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ジャベリン",
+      "translation": "标枪"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "トライデント",
+      "translation": "三叉戟"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "バトルフォーク",
+      "translation": "战叉"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ヴージ",
+      "translation": "钩镰枪"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "バトルランス",
+      "translation": "战斗骑枪"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ハルバード",
+      "translation": "戟"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "トリトーン",
+      "translation": "海神之枪"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ヴァルキリア",
+      "translation": "女武神之枪"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "グングニル",
+      "translation": "冈格尼尔"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "手袋",
+      "translation": "手套"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ミトン",
+      "translation": "连指手套"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "手首丈グラブ",
+      "translation": "长腕手套"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "イブニンググラブ",
+      "translation": "晚宴手套"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ゴーントレット",
+      "translation": "护手甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ロイヤルグラブ",
+      "translation": "皇家手套"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ミスリルショーティ",
+      "translation": "秘银短衣"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "フェザーコート",
+      "translation": "羽毛外套"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "堕天使の指輪",
+      "translation": "堕天使戒指"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ブロンズメイル",
+      "translation": "铜铠"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "おもちゃの杖",
+      "translation": "玩具杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ステッキ",
+      "translation": "手杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "夢見る杖",
+      "translation": "梦境之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "妖精さんの杖",
+      "translation": "妖精之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "無口な杖",
+      "translation": "沉默之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "真っ黒な杖",
+      "translation": "漆黑之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "変な色の杖",
+      "translation": "怪色之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "お友達の杖",
+      "translation": "朋友之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "鳥になる杖",
+      "translation": "化鸟之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "すごい杖",
+      "translation": "神奇之杖"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ダガー",
+      "translation": "匕首"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "シルバーダガー",
+      "translation": "银匕首"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "グラディウス",
+      "translation": "罗马短剑"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ポイズンダガー",
+      "translation": "毒匕首"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ドリームナイフ",
+      "translation": "梦境之刃"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "フライングダガー",
+      "translation": "飞行匕首"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ツインダガー",
+      "translation": "双匕首"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "小鉄",
+      "translation": "小铁"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ソウルバスター",
+      "translation": "碎魂之刃"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "クロスアーマー",
+      "translation": "布甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ソフトレザー",
+      "translation": "软皮甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ハードレザー",
+      "translation": "硬皮甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "リングメイル",
+      "translation": "环甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "スケールアーマー",
+      "translation": "鳞甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ブレストアーマー",
+      "translation": "胸甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "スプリントメイル",
+      "translation": "条片甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "チェインメイル",
+      "translation": "锁子甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "バンデッドメイル",
+      "translation": "带甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "プレートメイル",
+      "translation": "板甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "コールドチェイン",
+      "translation": "寒冰锁甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ミスリルチェイン",
+      "translation": "秘银锁甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ドラゴンスケール",
+      "translation": "龙鳞甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ホーリープレート",
+      "translation": "神圣板甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ゴッズメイル",
+      "translation": "众神铠甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "レオタード",
+      "translation": "紧身衣"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ハンドジャケット",
+      "translation": "护手外套"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "シェイド",
+      "translation": "暗影衣"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "シルクローブ",
+      "translation": "丝绸长袍"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ファインローブ",
+      "translation": "精制长袍"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "アーミングコート",
+      "translation": "衬甲衣"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "武道着",
+      "translation": "武道服"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "龍の道着",
+      "translation": "龙之道服"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "シンの衣",
+      "translation": "辛之衣"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "バトルスーツ",
+      "translation": "战斗服"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ワンピース",
+      "translation": "连衣裙"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ドレス",
+      "translation": "礼服"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "パーティドレス",
+      "translation": "派对礼服"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "チャイナドレス",
+      "translation": "旗袍"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "天使の羽衣",
+      "translation": "天使羽衣"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "子供服",
+      "translation": "童装"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "チョッキ",
+      "translation": "马甲"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "魔法使いの服",
+      "translation": "魔法师之服"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "魔術師の服",
+      "translation": "术士之服"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "達人の服",
+      "translation": "达人之服"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "炎のローブ",
+      "translation": "火焰长袍"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "大魔導師の服",
+      "translation": "大魔导师之服"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "賢者のローブ",
+      "translation": "贤者长袍"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "レジストリング",
+      "translation": "抵抗戒指"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "プロテクトリング",
+      "translation": "守护戒指"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "灼熱の指輪",
+      "translation": "灼热戒指"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "氷雪の指輪",
+      "translation": "冰雪戒指"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "疾風の指輪",
+      "translation": "疾风戒指"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "大地の指輪",
+      "translation": "大地戒指"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "降魔の指輪",
+      "translation": "降魔戒指"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "慈愛の指輪",
+      "translation": "慈爱戒指"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "シンの腕輪",
+      "translation": "辛之腕轮"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "破魔の腕輪",
+      "translation": "破魔手环"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "凍結の腕輪",
+      "translation": "冻结手环"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "時空の腕輪",
+      "translation": "时空手环"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "敵剣A",
+      "translation": "敌剑A"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "敵剣B",
+      "translation": "敌剑B"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "敵剣C",
+      "translation": "敌剑C"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "敵剣D",
+      "translation": "敌剑D"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "敵剣E",
+      "translation": "敌剑E"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "敵槍A",
+      "translation": "敌枪A"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "敵槍B",
+      "translation": "敌枪B"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "敵槍C",
+      "translation": "敌枪C"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "敵槍D",
+      "translation": "敌枪D"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "敵槍E",
+      "translation": "敌枪E"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "予備",
+      "translation": "备用"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "マッシュルーム",
+      "translation": "蘑菇"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "魔導書",
+      "translation": "魔导书"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "力の実",
+      "translation": "力量之果"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "守護石",
+      "translation": "守护石"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "百科事典",
+      "translation": "百科全书"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "タリスマン",
+      "translation": "护符"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "魔力回復剤",
+      "translation": "魔力回复剂"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "ワーマの花",
+      "translation": "瓦玛之花"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "エリクサー",
+      "translation": "灵药"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "何か（体験版用）",
+      "translation": "某物（体验版用）"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "焦熱の首飾り",
+      "translation": "焦热项链"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "水晶の首飾り",
+      "translation": "水晶项链"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "稲妻の首飾り",
+      "translation": "雷电项链"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "地脈の首飾り",
+      "translation": "地脉项链"
+    },
+    {
+      "id": "",
+      "category": "item_names",
+      "source": "祝福の首飾り",
+      "translation": "祝福项链"
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"1日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/040D.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"2日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/040E.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"3日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/040F.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"3日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/0410.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"4日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/0411.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"5日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/0412.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"6日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/0413.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"7日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/0414.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"8日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/0415.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"9日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/0416.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"10日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/0417.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"11日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/0418.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"12日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/0419.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"13日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/041A.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"14日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/041B.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"15日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/041C.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"16日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/041D.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "chapter_title_card",
+      "source": "\"17日目",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "assets/labels/chapters/041E.png",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "仕事をください",
+      "translation": "请给我工作"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "初仕事",
+      "translation": "第一份工作"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "夜は更けて",
+      "translation": "夜色渐深"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ギルドマスター",
+      "translation": "公会会长"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "パパは心配性",
+      "translation": "爸爸爱操心"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "家出娘はいずこ",
+      "translation": "出走少女在何方"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "アリス誘拐！？",
+      "translation": "爱丽丝被绑架！？"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "倉庫での戦闘",
+      "translation": "仓库之战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "街は眠る",
+      "translation": "沉睡之街"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "家出お嬢様参戦",
+      "translation": "离家千金参战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "泥だらけの戦い",
+      "translation": "泥泞中的战斗"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "乙女の怒り",
+      "translation": "少女之怒"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "私お嫁に行くわ",
+      "translation": "我要去当新娘"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "押し掛け爆弾娘参戦",
+      "translation": "硬闯炸药娘参战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ストーカーにご用心",
+      "translation": "小心跟踪狂"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ガストンの災難",
+      "translation": "加斯顿的灾难"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "愛しのカトリーヌ",
+      "translation": "亲爱的卡特琳娜"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "カトリーヌ安静",
+      "translation": "卡特琳娜静养"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "カリン、スカウトに行く",
+      "translation": "卡琳去挖角"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "想いを歌に",
+      "translation": "将思念化为歌"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ホールでの戦い",
+      "translation": "大厅之战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "屋根の上の戦い",
+      "translation": "屋顶之战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "アリス奪還作戦！",
+      "translation": "爱丽丝夺还作战！"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ボートハウスの死闘",
+      "translation": "船坞死斗"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "アリス救出の夜",
+      "translation": "救出爱丽丝之夜"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "お気楽羽娘参戦",
+      "translation": "乐天羽翼娘参战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "水着が欲しい",
+      "translation": "好想要泳衣"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "カトリーヌ逆襲！",
+      "translation": "卡特琳娜逆袭！"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "今夜見る夢は・・・？",
+      "translation": "今夜入梦何方……？"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "心の傷",
+      "translation": "心中的伤痕"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "鉱山の魔獣",
+      "translation": "矿山魔兽"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "地底の支配者",
+      "translation": "地底统治者"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "光を求めて",
+      "translation": "追寻光芒"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "トロッコでＧＯ！",
+      "translation": "矿车冲冲冲！"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "二日ぶりの帰還",
+      "translation": "隔两天的归来"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "祭の朝",
+      "translation": "祭典之晨"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "栄冠は誰の手に",
+      "translation": "桂冠花落谁家"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "カニが来た",
+      "translation": "螃蟹来了"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "宴の後",
+      "translation": "宴会之后"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ある親方の死",
+      "translation": "某位工头的死亡"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "サウナで汗を流そう",
+      "translation": "去桑拿房流汗吧"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "男は強く逞しく",
+      "translation": "男儿当自强"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ジャンの凱旋",
+      "translation": "让的凯旋"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "朝風呂で爽やか",
+      "translation": "晨浴神清气爽"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "あなたはだあれ？",
+      "translation": "你是哪一位？"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "闘いすんで日が暮れて",
+      "translation": "战斗结束夕阳西下"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "遠い日の約束",
+      "translation": "遥远之日的约定"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ゴーストバスターズ出動",
+      "translation": "幽灵克星出动"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "堕天使v.s.堕天使",
+      "translation": "堕天使v.s.堕天使"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "嵐の前夜",
+      "translation": "风暴前夜"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "最後の休日",
+      "translation": "最后的假日"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "出港直前",
+      "translation": "出港在即"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "灯台１階の戦闘",
+      "translation": "灯塔１楼之战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "灯火再び",
+      "translation": "重燃灯火"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "灯台２階の戦闘",
+      "translation": "灯塔２楼之战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "灯台３階の戦闘",
+      "translation": "灯塔３楼之战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "海上の決戦",
+      "translation": "海上决战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ギルドの人さらい？",
+      "translation": "公会的人贩子？"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "アリス危機一髪！",
+      "translation": "爱丽丝千钧一发！"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "暗黒街",
+      "translation": "暗黑街"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "地下牢を目指せ",
+      "translation": "目标地下牢房"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "炊事場でバトル",
+      "translation": "炊事房大战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "二階突入！",
+      "translation": "突入二楼！"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "低血圧な人々",
+      "translation": "低血压的人们"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ギルド大決戦！",
+      "translation": "公会大决战！"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "ただ一つの真実",
+      "translation": "唯一之真实"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "裁きを下す者",
+      "translation": "降下制裁之人"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "時を視る者",
+      "translation": "凝视时光之人"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "アルのいない朝",
+      "translation": "失去阿尔的清晨"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "仲間と共に",
+      "translation": "与同伴同行"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "天空へと駆ける",
+      "translation": "奔向天空"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "長き彷徨の果てに",
+      "translation": "漫长徬徨的尽头"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "復讐の天使",
+      "translation": "复仇天使"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "アルの戦い",
+      "translation": "阿尔之战"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "時と空間の狭間で",
+      "translation": "时空狭缝之中"
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "",
+      "translation": ""
+    },
+    {
+      "id": "",
+      "category": "save_scene_title",
+      "source": "",
+      "translation": ""
+    }
+  ]
+}

@@ -61,9 +61,23 @@ jobs:
           echo "=== 正在运行 ISO 扇区占用、CD 校验与 CLI 单元测试 ==="
           bash flow.sh test --cli-only
 
+      - name: FARLAND SAGA II 自动化测试套件
+        env:
+          FARLAND_WORK: ${{ runner.temp }}/work
+          UV_PYTHON_DOWNLOADS: automatic
+          UV_PYTHON_PREFERENCE: managed
+        run: |
+          echo "=== 正在运行 FS2 翻译完整性、CD-ROM MODE1 与多语言排版测试 ==="
+          uv run python3 -m unittest discover -s tests -p "test_fs2_*.py"
+
       - name: 补丁引擎单元测试
         run: |
-          echo "=== 正在运行 Go 补丁器单元测试 ==="
+          echo "=== 正在运行 Go 补丁器（一代）单元测试 ==="
           cd patcher
+          go vet ./...
+          go test -v ./...
+          cd ..
+          echo "=== 正在运行 Go 补丁器（二代）单元测试 ==="
+          cd patcher2
           go vet ./...
           go test -v ./...

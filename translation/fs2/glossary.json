@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "game": "FARLAND SAGA II Saturn Tribute",
+  "characters": {
+    "カリン": {
+      "zh-CN": "卡琳",
+      "ko-KR": "카린",
+      "en-US": "Karin",
+      "role": "女主角，火焰魔法师"
+    },
+    "アル": {
+      "zh-CN": "阿尔",
+      "ko-KR": "알",
+      "en-US": "Al",
+      "role": "男主角，失忆少年"
+    },
+    "アルヴィース": {
+      "zh-CN": "阿尔维斯",
+      "ko-KR": "알비스",
+      "en-US": "Alviss",
+      "role": "时之守护天使"
+    },
+    "サーラ": {
+      "zh-CN": "莎拉",
+      "ko-KR": "사라",
+      "en-US": "Sarah",
+      "role": "格斗家 / 咒术师家系"
+    },
+    "ラディッシュ": {
+      "zh-CN": "拉蒂修",
+      "ko-KR": "라디쉬",
+      "en-US": "Radish",
+      "role": "枪骑士 / 见习修女"
+    },
+    "アリス": {
+      "zh-CN": "爱丽丝",
+      "ko-KR": "앨리스",
+      "en-US": "Alice",
+      "role": "大小姐，治愈之歌"
+    },
+    "ソフィア": {
+      "zh-CN": "索菲亚",
+      "ko-KR": "소피아",
+      "en-US": "Sophia",
+      "role": "神官，露露之母"
+    },
+    "ルル": {
+      "zh-CN": "露露",
+      "ko-KR": "루루",
+      "en-US": "Lulu",
+      "role": "小妖精，悬浮术"
+    },
+    "ガストン": {
+      "zh-CN": "加斯顿",
+      "ko-KR": "가스통",
+      "en-US": "Gaston",
+      "role": "公会接待负责人"
+    },
+    "デュマ": {
+      "zh-CN": "杜马",
+      "ko-KR": "듀마",
+      "en-US": "Dumas",
+      "role": "海盗王 / 堕落天使"
+    },
+    "ソーン": {
+      "zh-CN": "索恩",
+      "ko-KR": "손",
+      "en-US": "Sohn",
+      "role": "神秘剑士 / 堕落天使"
+    },
+    "バイパー": {
+      "zh-CN": "拜帕",
+      "ko-KR": "바이퍼",
+      "en-US": "Viper",
+      "role": "索恩昔日义妹"
+    },
+    "Ｔ．Ｔ．": {
+      "zh-CN": "Ｔ．Ｔ．",
+      "ko-KR": "T.T.",
+      "en-US": "T.T.",
+      "role": "公会长，原法师"
+    },
+    "マクドガル": {
+      "zh-CN": "麦克杜格尔",
+      "ko-KR": "맥도걸",
+      "en-US": "MacDougal",
+      "role": "豪商，爱丽丝之父"
+    },
+    "ジャン": {
+      "zh-CN": "让",
+      "ko-KR": "쟝",
+      "en-US": "Jean",
+      "role": "铁匠铺学徒孙子"
+    }
+  },
+  "locations": {
+    "アトラクタ": {
+      "zh-CN": "阿特拉克塔",
+      "ko-KR": "아틀락타",
+      "en-US": "Attracta"
+    },
+    "エントリヒ": {
+      "zh-CN": "恩特里希",
+      "ko-KR": "엔트리히",
+      "en-US": "Entrich"
+    },
+    "時の神殿": {
+      "zh-CN": "时之神殿",
+      "ko-KR": "시간의 신전",
+      "en-US": "Temple of Time"
+    },
+    "ギルド": {
+      "zh-CN": "公会",
+      "ko-KR": "길드",
+      "en-US": "Guild"
+    }
+  },
+  "terms": {
+    "鍵": {
+      "zh-CN": "钥匙",
+      "ko-KR": "열쇠",
+      "en-US": "Key"
+    },
+    "扉": {
+      "zh-CN": "门",
+      "ko-KR": "문",
+      "en-US": "Gate"
+    },
+    "守護天使": {
+      "zh-CN": "守护天使",
+      "ko-KR": "수호천사",
+      "en-US": "Guardian Angel"
+    },
+    "天上界": {
+      "zh-CN": "天界",
+      "ko-KR": "천상계",
+      "en-US": "Heavenly Realm"
+    }
+  }
+}
