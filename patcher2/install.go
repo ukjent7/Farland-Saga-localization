@@ -215,6 +215,31 @@ func backupUnusableError(game string, targets []backupTarget, prior *installReco
 	return errors.New(strings.Join(parts, "\n"))
 }
 
+// supplementBackupWithOriginals 检查固定备份目录是否只是缺少部分目标文件，
+// 若缺失的目标在游戏当前目录中恰好是未经修改的原版，则安全补入固定备份目录中。
+// 这保证了补丁升级（例如新版补丁新增了对可执行文件的修改）时，已安装上一版补丁的
+// 用户无需重新验证游戏完整性即可无缝平滑升级。
+func supplementBackupWithOriginals(game string, dirName string, targets []backupTarget, statuses []fileStatus) bool {
+	destDir := gameFilePath(game, dirName)
+	if _, err := os.Stat(destDir); err != nil {
+		return false
+	}
+	repaired := false
+	for _, target := range targets {
+		backupFile := gameFilePath(destDir, target.path)
+		if _, err := os.Stat(backupFile); os.IsNotExist(err) {
+			if stateOf(statuses, target.path) == stateOriginal {
+				if err := os.MkdirAll(filepath.Dir(backupFile), 0o755); err == nil {
+					if err := copyFile(gameFilePath(game, target.path), backupFile); err == nil {
+						repaired = true
+					}
+				}
+			}
+		}
+	}
+	return repaired
+}
+
 // resolveBackup 确定这次安装使用的原版备份目录，返回相对游戏目录的单段名称。
 // 依次尝试：固定目录完整就直接沿用（一个字节都不拷）；记录里的旧式时间戳目录
 // 完整就原地改名成固定名，同卷 rename 瞬间完成；游戏文件恰好全是原版就从当前
@@ -222,16 +247,30 @@ func backupUnusableError(game string, targets []backupTarget, prior *installReco
 func resolveBackup(game string, info *manifest, statuses []fileStatus, prior *installRecord) (string, error) {
 	targets := backupTargetsFromManifest(info)
 	fixedProblems := verifyBackup(game, backupDirName, targets)
+	if len(fixedProblems) != 0 {
+		if supplementBackupWithOriginals(game, backupDirName, targets, statuses) {
+			fixedProblems = verifyBackup(game, backupDirName, targets)
+		}
+	}
 	if len(fixedProblems) == 0 {
 		return backupDirName, nil
 	}
 	if prior != nil && prior.BackupDirectory != "" && prior.BackupDirectory != backupDirName {
-		if len(verifyBackup(game, prior.BackupDirectory, targets)) == 0 {
-			old := gameFilePath(game, prior.BackupDirectory)
-			if err := os.Rename(old, filepath.Join(game, backupDirName)); err != nil {
-				return "", fmt.Errorf("迁移原版备份 %s 到 %s 失败: %w", prior.BackupDirectory, backupDirName, err)
+		old := gameFilePath(game, prior.BackupDirectory)
+		if _, err := os.Stat(old); err == nil {
+			if len(verifyBackup(game, prior.BackupDirectory, targets)) == 0 {
+				if err := os.Rename(old, filepath.Join(game, backupDirName)); err != nil {
+					return "", fmt.Errorf("迁移原版备份 %s 到 %s 失败: %w", prior.BackupDirectory, backupDirName, err)
+				}
+				return backupDirName, nil
 			}
-			return backupDirName, nil
+			if err := os.Rename(old, filepath.Join(game, backupDirName)); err == nil {
+				if supplementBackupWithOriginals(game, backupDirName, targets, statuses) {
+					if len(verifyBackup(game, backupDirName, targets)) == 0 {
+						return backupDirName, nil
+					}
+				}
+			}
 		}
 	}
 	if allOriginal(statuses) {
@@ -607,7 +646,11 @@ func installPatch(game string, loaded *payload, progress func(fileEntry, int64))
 		// 差异对象相对原版回放，基准取原版备份而不是游戏目录里的当前文件。
 		var replayErr error
 		if entry.SectorsObject != "" {
-			replayErr = loaded.replaySectors(entry, gameFilePath(originalBackup, entry.Path), filepath.Join(game, "FarlandSaga2.exe"), out, func(position int64) {
+			exeBase := gameFilePath(originalBackup, "FarlandSaga2.exe")
+			if _, err := os.Stat(exeBase); err != nil {
+				exeBase = filepath.Join(game, "FarlandSaga2.exe")
+			}
+			replayErr = loaded.replaySectors(entry, gameFilePath(originalBackup, entry.Path), exeBase, out, func(position int64) {
 				if progress != nil {
 					progress(entry, position)
 				}
