@@ -1,4 +1,4 @@
-# 파랜드 사가 I 새턴 트리뷰트 한국어 패치 프로젝트
+# 파랜드 사가 시리즈 새턴 트리뷰트 한국어 패치 프로젝트
 
 <p align="center">
   <b>언어:</b>
@@ -15,9 +15,9 @@
 > [!WARNING]
 > **현재 알파(Alpha) 테스트 단계입니다**: 본 패치는 테스트 및 사전 체험 목적으로 제공되며, 정식 버전이 아닙니다. 문제 발생 시 이슈로 제보해 주시기 바랍니다.
 
-Steam 버전 《**FARLAND SAGA I Saturn Tribute**》를 위한 다국어 현지화 및 자동 인젝션 패치 도구입니다. **한국어**, **간체 중국어 (简体中文)**, **영어 (English)**를 지원합니다.
+Steam 버전 《**FARLAND SAGA I Saturn Tribute**》(파랜드 택틱스 1) 및 《**FARLAND SAGA II Saturn Tribute**》(파랜드 택틱스 2: 시간의 이정표)를 위한 다국어 현지화 및 자동 인젝션 패치 도구입니다. **한국어**, **간체 중국어 (简体中文)**, **영어 (English)**를 지원합니다.
 
-순수 선언적 패치 엔진을 기반으로 설계되어 상업적 저작권 침해 파일이 없으며, 단일 실행 파일(~16MB)로 즉시 적용 가능합니다.
+순수 선언적 패치 엔진을 기반으로 설계되어 상업적 저작권 침해 파일이 없으며, 단 한 번의 릴리스로 1편과 2편 각각의 독립형 단일 실행 패처를 제공합니다.
 
 ---
 
@@ -31,11 +31,12 @@ Steam 버전 《**FARLAND SAGA I Saturn Tribute**》를 위한 다국어 현지�
 
 ## 빠른 시작 (사용자 가이드)
 
-1. [Releases 페이지](https://github.com/ukjent7/Farland-Saga-localization/releases)에서 최신 `FarlandSagaPatcher.exe`(또는 zip 압축 파일)를 다운로드합니다.
-2. 실행 파일을 Steam 게임 설치 폴더(`FarlandSaga.exe`가 있는 위치)에 넣습니다.
-3. 패처를 실행합니다:
-   - **설치**: 원하는 언어(한국어 / 简体中文 / English)를 선택한 후 「설치」를 클릭합니다.
-   - **언어 변경**: 「뒤로」를 눌러 다른 언어를 선택하여 다시 설치합니다.
+1. [Releases 페이지](https://github.com/ukjent7/Farland-Saga-localization/releases)에서 플레이할 게임에 맞는 패처를 다운로드합니다:
+   - **파랜드 사가 I (1편)**: `FarlandSagaPatcher-windows-amd64.exe` 다운로드 후 게임 폴더(`FarlandSaga.exe`와 같은 위치)에 배치;
+   - **파랜드 사가 II (2편)**: `FarlandSaga2Patcher-windows-amd64.exe` 다운로드 후 게임 폴더(`FarlandSaga2.exe`와 같은 위치)에 배치.
+2. 패처를 실행합니다:
+   - **설치**: 원하는 언어(한국어 / 简体中文 / English)를 선택한 후 「설치」를 클릭합니다;
+   - **언어 변경**: 「뒤로」를 눌러 다른 언어를 선택하여 다시 설치합니다;
    - **원상 복구**: 언제든지 「원래대로 복구」를 클릭하여 원본 파일로 100% 되돌릴 수 있습니다.
 
 > [!NOTE]
@@ -46,9 +47,9 @@ Steam 버전 《**FARLAND SAGA I Saturn Tribute**》를 위한 다국어 현지�
 ## 주요 특징
 
 - **자체 네이티브 인젝션**: Saturn CD-ROM MODE1 섹터 ECC/EDC 재생성 및 SSF 컨테이너 암호화/복호화 엔진 내장.
-- **Format 2 가변 길이 압축**: 불필요한 용량 낭비와 상용 폰트 의존성을 제거하여, 3개 국어 전체를 내장한 단일 실행 파일 용량이 약 16MB에 불과합니다.
+- **고효율 압축**: 불필요한 용량 낭비와 상용 폰트 의존성을 제거하여, 3개 국어 전체를 내장한 단일 실행 파일로 즉시 사용 가능합니다.
 - **안전한 백업 및 롤백**: 설치 전후 SHA-256 해시를 검증하며, 오류 발생 시 즉시 원상태로 원자적 롤백을 수행합니다.
-- **완전 자립형 CI 빌드**: 외부 바이너리 없이 GitHub Actions 클라우드에서 자동 빌드 및 릴리스를 수행합니다.
+- **완전 자립형 CI 빌드**: 외부 바이너리 없이 GitHub Actions 클라우드에서 1편과 2편 패처를 동시 자동 빌드 및 릴리스합니다.
 
 ---
 
@@ -56,8 +57,8 @@ Steam 버전 《**FARLAND SAGA I Saturn Tribute**》를 위한 다국어 현지�
 
 | 타이틀 | 개발 단계 | 예상 전체 진행도 | 현황 및 핵심 작업 내역 |
 | :--- | :---: | :---: | :--- |
-| **FARLAND SAGA I**<br>(1편, 본 프로젝트) | **Alpha 0.5 프리뷰** | **~40%** | • **완료 항목 (~40%)**: 인플레이스 주입 엔진, 3개 국어 기초 텍스트 주입, CI 자동화 파이프라인, 단일 파일 패처<br>• **향후 핵심 과제 (~60%)**: 런타임 렌더링/로직 버그 디버깅(예: 한국어 버전 Option 키 소실 등), 대사 감수 및 교열, 전 챕터 클리어 실기 검증 |
-| **FARLAND SAGA II**<br>(2편) | **초기 개발** | **~15%** | • 디스크 컨테이너 디코딩 및 리소스 분할 완료<br>• UI, 설명 및 아이템 명칭 753개 초안 완료<br>• 스토리 대사(총 17개 뱅크, 2,660페이지) 추출 완료, 3개 뱅크(530페이지) 번역 완료 (나머지 14개 뱅크 및 그래픽 리소스 작업 진행 중) |
+| **FARLAND SAGA I**<br>(1편) | **Alpha 0.5 프리뷰** | **~40%** | • **완료 항목 (~40%)**: 인플레이스 주입 엔진, 3개 국어 기초 텍스트 주입, CI 자동화 파이프라인, 단일 파일 패처<br>• **향후 핵심 과제 (~60%)**: 런타임 렌더링/로직 버그 디버깅(예: 한국어 버전 Option 키 소실 등), 대사 감수 및 교열, 전 챕터 클리어 실기 검증 |
+| **FARLAND SAGA II**<br>(2편) | **Alpha 프리뷰** | **~60%** | • **전체 시나리오 및 라벨 완비**: 17개 스토리 뱅크 전체(2,660페이지 대사) 한/중/영 3개 국어 전량 정렬 완료; 518개 UI/장비 라벨 완비;<br>• **독립형 패처 제공**: 전용 단일 실행 패처 `FarlandSaga2Patcher-windows-amd64.exe` 제공; 외부 의존성 없음, 듀얼 윈도우 GUI, 원클릭 설치/복구 지원;<br>• **리뷰 도구**: 인터랙티브 3개 국어 대사 검토 페이지 `review_fs2.html` 내장;<br>• **향후 집중 과제**: 전 챕터 실기 플레이 검증 및 대사 윤문/교열 |
 
 ---
 
@@ -66,17 +67,18 @@ Steam 버전 《**FARLAND SAGA I Saturn Tribute**》를 위한 다국어 현지�
 요구 사항: Linux/WSL2, Python 3.14+ (`uv` 관리), Go 1.23+.
 
 ```bash
-# 단위 및 통합 테스트 실행
+# FARLAND SAGA I 테스트 및 빌드
 bash flow.sh test --cli-only
 bash flow.sh test --quick
-
-# 번역 병합 및 리뷰 페이지 생성
 bash flow.sh merge
 bash flow.sh review
-
-# 빌드 상태 확인 및 독립형 패처 빌드
 bash flow.sh status
 bash flow.sh build-patcher
+
+# FARLAND SAGA II 테스트 및 빌드
+uv run python3 -m unittest discover -s tests -p "test_fs2_*.py"
+cd patcher2 && go test ./...
+GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' -o ../FarlandSaga2Patcher-windows-amd64.exe .
 ```
 
 ---
@@ -84,7 +86,7 @@ bash flow.sh build-patcher
 ## 면책 조항
 
 - 본 프로젝트는 유저 커뮤니티에서 연구 및 학습 목적으로 제작한 비공식 패치입니다. 원본 상용 게임 바이너리나 저작권 보호 폰트를 포함하지 않습니다.
-- 본 패치를 사용하려면 Steam에서 정식 구매한 《FARLAND SAGA I Saturn Tribute》 게임이 필요합니다.
+- 본 패치를 사용하려면 Steam에서 정식 구매한 《FARLAND SAGA I Saturn Tribute》 또는 《FARLAND SAGA II Saturn Tribute》 게임이 필요합니다.
 
 ---
 

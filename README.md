@@ -1,4 +1,4 @@
-# FARLAND SAGA I Saturn Tribute Localization
+# FARLAND SAGA Series Saturn Tribute Localization
 
 <p align="center">
   <b>Language:</b>
@@ -15,9 +15,9 @@
 > [!WARNING]
 > **Alpha Preview Stage**: This patch is currently in early testing for preview purposes only and should not be considered a final release. Please report any issues you encounter.
 
-A lightweight, fully self-contained localization tool and patch engine for Steam's **FARLAND SAGA I Saturn Tribute**, supporting **English**, **Simplified Chinese (简体中文)**, and **Korean (한국어)**.
+A lightweight, fully self-contained localization tool and patch engine for Steam's **FARLAND SAGA I Saturn Tribute** and **FARLAND SAGA II Saturn Tribute**, supporting **English**, **Simplified Chinese (简体中文)**, and **Korean (한국어)**.
 
-Built with a declarative in-place injection engine: 100% free of commercial copyright infringement, self-contained repository with zero external binary dependencies, and a single-executable patcher (~16MB).
+Built with declarative in-place injection engines: 100% free of commercial copyright infringement, self-contained repository with zero external binary dependencies, and standalone single-executable patchers for both games generated in a single release.
 
 ---
 
@@ -31,12 +31,13 @@ Built with a declarative in-place injection engine: 100% free of commercial copy
 
 ## Quick Start (Player Guide)
 
-1. Download the latest `FarlandSagaPatcher.exe` (or zip bundle) from [Releases](https://github.com/ukjent7/Farland-Saga-localization/releases).
-2. Place the executable into your Steam game directory (alongside `FarlandSaga.exe`).
-3. Launch the patcher:
-   - **Install**: Select your language and click **Install**;
+1. Download the appropriate patcher from [Releases](https://github.com/ukjent7/Farland-Saga-localization/releases) according to your game:
+   - **For FARLAND SAGA I**: Download `FarlandSagaPatcher-windows-amd64.exe` and place it in your game root (alongside `FarlandSaga.exe`).
+   - **For FARLAND SAGA II**: Download `FarlandSaga2Patcher-windows-amd64.exe` and place it in your game root (alongside `FarlandSaga2.exe`).
+2. Launch the patcher:
+   - **Install**: Select your language (English / 简体中文 / 한국어) and click **Install**;
    - **Switch**: Click **Back** to select another language;
-   - **Restore**: Click **Restore** anytime to return to the pristine, unmodified game.
+   - **Restore**: Click **Restore** anytime to return 100% to the pristine, unmodified game.
 
 > [!NOTE]
 > Please completely exit the game before patching. The patcher automatically creates a protected backup on first run.
@@ -46,9 +47,9 @@ Built with a declarative in-place injection engine: 100% free of commercial copy
 ## Key Features
 
 - **Native Injection Engine**: Built-in Saturn CD-ROM MODE1 EDC/ECC recalculation, SSF Steam container cryptography, and RGBA overlay font stream compressor.
-- **Format 2 Sparse Compression**: Eliminates bloating and proprietary font embedding; the single executable embeds all 3 languages in just ~16MB.
+- **Sparse Compression**: Eliminates bloating and proprietary font embedding; standalone executables embed all 3 languages ready for out-of-the-box use.
 - **Safe Single-Snapshot Backup**: Atomically verifies SHA-256 hashes before and after writing, rolling back instantly on any mismatch.
-- **CI Ready & 100% Compliant**: GitHub Actions automatically builds release binaries in the cloud without proprietary assets.
+- **CI Ready & 100% Compliant**: GitHub Actions automatically builds and releases both patchers in the cloud without proprietary assets.
 
 ---
 
@@ -56,8 +57,8 @@ Built with a declarative in-place injection engine: 100% free of commercial copy
 
 | Title | Phase | Est. Progress | Current Status & Breakdown |
 | :--- | :---: | :---: | :--- |
-| **FARLAND SAGA I**<br>(This Project) | **Alpha 0.5 Preview** | **~40%** | • **Ready (~40%)**: In-place injection engine, baseline trilingual text, CI test suite, standalone GUI patcher<br>• **Remaining Core Work (~60%)**: Manual triage of runtime rendering/logic bugs (e.g. Korean Option button issue), dialogue polish, full-game playthrough verification |
-| **FARLAND SAGA II**<br>(Sequel) | **Early Development** | **~15%** | • Disc/container decoding and resource extraction completed<br>• UI, items & description drafts completed (753 strings)<br>• Story script extraction completed (17 banks, 2,660 pages); 3 banks (530 pages) translated, 14 banks in progress |
+| **FARLAND SAGA I**<br>(First Game) | **Alpha 0.5 Preview** | **~40%** | • **Ready (~40%)**: In-place injection engine, baseline trilingual text, CI test suite, standalone GUI patcher<br>• **Remaining Core Work (~60%)**: Manual triage of runtime rendering/logic bugs (e.g. Korean Option button issue), dialogue polish, full-game playthrough verification |
+| **FARLAND SAGA II**<br>(Sequel) | **Alpha Preview** | **~60%** | • **Complete Script & Label Alignment**: All 17 story banks (2,660 dialogue pages) fully aligned in EN/ZH/KO; 518 UI/equipment labels ready;<br>• **Dedicated Standalone Patcher**: `FarlandSaga2Patcher-windows-amd64.exe` ready; zero external dependencies, trilingual GUI with one-click install/restore;<br>• **Review Tool**: Interactive trilingual review page `review_fs2.html` included;<br>• **Next Milestones**: Full-game playthrough regressions and dialogue polishing |
 
 ---
 
@@ -66,17 +67,18 @@ Built with a declarative in-place injection engine: 100% free of commercial copy
 Requires: Linux/WSL2, Python 3.14+ (via `uv`), Go 1.23+.
 
 ```bash
-# Run unit & regression test suites
+# FARLAND SAGA I testing & building
 bash flow.sh test --cli-only
 bash flow.sh test --quick
-
-# Check translation & review page
 bash flow.sh merge
 bash flow.sh review
-
-# Verify candidates & build standalone Windows patcher
 bash flow.sh status
 bash flow.sh build-patcher
+
+# FARLAND SAGA II testing & building
+uv run python3 -m unittest discover -s tests -p "test_fs2_*.py"
+cd patcher2 && go test ./...
+GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' -o ../FarlandSaga2Patcher-windows-amd64.exe .
 ```
 
 ---
@@ -84,7 +86,7 @@ bash flow.sh build-patcher
 ## Disclaimer
 
 - This fan localization is independently developed for educational and research purposes. It contains no proprietary commercial game binaries or copyrighted fonts.
-- A legitimate, purchased copy of *FARLAND SAGA I Saturn Tribute* on Steam is required.
+- A legitimate, purchased copy of *FARLAND SAGA I Saturn Tribute* or *FARLAND SAGA II Saturn Tribute* on Steam is required.
 
 ---
 

@@ -1,4 +1,4 @@
-# FARLAND SAGA I Saturn Tribute 本地化项目
+# FARLAND SAGA 系列 Saturn Tribute 本地化项目
 
 <p align="center">
   <b>语言:</b>
@@ -15,9 +15,9 @@
 > [!WARNING]
 > **当前处于 Alpha 阶段**：本补丁仅供尝鲜体验与测试，不可视为正式版本。遇到问题欢迎提交反馈。
 
-Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动化注入补丁工具，支持**简体中文**、**한국어 (韩文)** 与 **English (英文)**。
+Steam 版《**FARLAND SAGA I Saturn Tribute**》（神奇传说 / 破晓之誓）与《**FARLAND SAGA II Saturn Tribute**》（时空道标）的多语言本地化与自动化注入补丁工具，支持**简体中文**、**한국어 (韩文)** 与 **English (英文)**。
 
-项目采用纯声明式注入引擎，公开仓库零侵权、完全自包含，补丁器单文件开箱即用。
+项目采用纯声明式注入引擎，公开仓库零侵权、完全自包含，双作品独立单文件补丁器开箱即用，单次 Release 即可一站式获取两款游戏的补丁。
 
 ---
 
@@ -31,9 +31,10 @@ Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动�
 
 ## 快速上手（玩家指南）
 
-1. 从 [Releases 页面](https://github.com/ukjent7/Farland-Saga-localization/releases) 下载最新的 `FarlandSagaPatcher.exe`（或 zip 整合包）。
-2. 将可执行文件放置在 Steam 游戏根目录（与 `FarlandSaga.exe` 处于同级）。
-3. 双击运行补丁器：
+1. 从 [Releases 页面](https://github.com/ukjent7/Farland-Saga-localization/releases) 根据所玩游戏下载对应的补丁器：
+   - **一代（破晓之誓 / 神奇传说）**：下载 `FarlandSagaPatcher-windows-amd64.exe`，放置于 Steam 游戏根目录（与 `FarlandSaga.exe` 同级）；
+   - **二代（时空道标）**：下载 `FarlandSaga2Patcher-windows-amd64.exe`，放置于 Steam 游戏根目录（与 `FarlandSaga2.exe` 同级）。
+2. 双击运行补丁器：
    - **安装**：选择目标语言（简体中文 / 한국어 / English），点击「安装」；
    - **切换**：点击「返回」切换其他语言重新安装，程序会自动处理变更；
    - **还原**：随时点击「还原」，即可 100% 恢复为原始原版游戏文件。
@@ -46,9 +47,9 @@ Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动�
 ## 项目特性
 
 - **原生级注入**：内置自研 CD-ROM MODE1 扇区 ECC/EDC 重算引擎与 SSF 容器加解密，无需繁重第三方工具。
-- **高密度压缩**：采用 Format 2 变长稀疏回放协议，消除虚假膨胀与商业字体依赖，全三语载荷内嵌单文件仅 ~16MB。
+- **高密度压缩**：采用变长稀疏回放协议，消除虚假膨胀与商业字体依赖，全三语载荷内嵌单文件开箱即用。
 - **安全备份体系**：单生命周期备份机制，安装前后进行 SHA-256 校验，任何环节校验不符即刻原子回滚。
-- **仓库完全自包含**：云端 GitHub Actions CI 无需依赖任何未公开二进制，秒级全自动构建并发布全功能补丁。
+- **仓库完全自包含**：云端 GitHub Actions CI 无需依赖任何未公开二进制，秒级全自动构建并发布一代与二代双补丁器。
 
 ---
 
@@ -56,8 +57,8 @@ Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动�
 
 | 作品 | 阶段 | 总体预估进度 | 现状与核心工作划分 |
 | :--- | :---: | :---: | :--- |
-| **FARLAND SAGA I**<br>（一代，本项目） | **Alpha 0.5 尝鲜** | **~40%** | • **已就绪 (~40%)**：底层注入引擎、三语全文本初译注入、CI 自动化门禁、单文件补丁器<br>• **核心深水区 (~60%)**：人工排查运行期渲染与逻辑 BUG（如韩版 Option 键等问题）、语境精校润色、全章节通关实机测试 |
-| **FARLAND SAGA II**<br>（二代） | **开发早期** | **~15%** | • 容器解码与编号资源拆分已完成<br>• UI、说明与物品名称 753 条初稿完成<br>• 剧情对白（共 17 库 2,660 页）已导出，已完成 3 库（530 页），剩余 14 库与图片回写推进中 |
+| **FARLAND SAGA I**<br>（一代，破晓之誓） | **Alpha 0.5 尝鲜** | **~40%** | • **已就绪 (~40%)**：底层注入引擎、三语全文本初译注入、CI 自动化门禁、单文件补丁器<br>• **核心深水区 (~60%)**：人工排查运行期渲染与逻辑 BUG（如韩版 Option 键等问题）、语境精校润色、全章节通关实机测试 |
+| **FARLAND SAGA II**<br>（二代，时空道标） | **Alpha 尝鲜** | **~60%** | • **全剧情与标签闭环**：全部 17 个剧情库 2,660 条对白（中/韩/英）三语全量对齐；518 条 UI/装备标签三语就绪；<br>• **单文件补丁器就绪**：专用补丁器 `FarlandSaga2Patcher-windows-amd64.exe` 就绪；零外部依赖、双屏 GUI、支持一键安装/还原与三语切换；<br>• **审阅工具**：内置全量三语交互审阅页 `review_fs2.html`；<br>• **后续重心**：全章节实机流程回归测试与文本精修润色 |
 
 ---
 
@@ -66,17 +67,18 @@ Steam 版《**FARLAND SAGA I Saturn Tribute**》的多语言本地化与自动�
 环境要求：Linux/WSL2、Python 3.14+（由 `uv` 纳管）、Go 1.23+。
 
 ```bash
-# 运行单元与集成测试套件
+# FARLAND SAGA I 测试与构建
 bash flow.sh test --cli-only
 bash flow.sh test --quick
-
-# 翻译合并与审阅页生成
 bash flow.sh merge
 bash flow.sh review
-
-# 校验当前构建候选与编译独立补丁器
 bash flow.sh status
 bash flow.sh build-patcher
+
+# FARLAND SAGA II 自动化测试与补丁器构建
+uv run python3 -m unittest discover -s tests -p "test_fs2_*.py"
+cd patcher2 && go test ./...
+GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' -o ../FarlandSaga2Patcher-windows-amd64.exe .
 ```
 
 ---
@@ -84,7 +86,7 @@ bash flow.sh build-patcher
 ## 免责声明
 
 - 本项目由玩家社区独立开发维护，仅供游戏交流学习使用，不包含原版商业游戏代码或受版权保护的商业字体；
-- 运行补丁需持有合法已购的 Steam 正版《FARLAND SAGA I Saturn Tribute》游戏。
+- 运行补丁需持有合法已购的 Steam 正版《FARLAND SAGA I Saturn Tribute》或《FARLAND SAGA II Saturn Tribute》游戏。
 
 ---
 

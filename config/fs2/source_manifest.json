@@ -1,0 +1,59 @@
+{
+  "project": "FARLAND SAGA II Saturn Tribute",
+  "created": "2026-10-08T08:16:15.596477+00:00",
+  "purpose": "Read-only source baseline at project start; no install performed",
+  "files": {
+    "FARLAND SAGA II Saturn Tribute Yumeiro Tsushin Extra issue ver.FS2.pdf": {
+      "bytes": 18358811,
+      "sha256": "69b9a86ec1b3b3936d7bb16c04381ab3dd9a5e6564278427caf1891a91284d91"
+    },
+    "FarlandSaga2.bin": {
+      "bytes": 516463628,
+      "sha256": "62b2da954a02c2b714921d3012c4a07ad880db0edf7f3e745b777fbc395ce02f"
+    },
+    "FarlandSaga2.cdda": {
+      "bytes": 188155,
+      "sha256": "e290d2338be9c299ef66f703efca4ec4a57078a1e35d61839c6892a8a39d3136"
+    },
+    "FarlandSaga2.cue": {
+      "bytes": 2206,
+      "sha256": "c64197bcf76a946543af6a551feadbaf152a7eaa61246bc4835699242062bc52"
+    },
+    "FarlandSaga2.exe": {
+      "bytes": 19223552,
+      "sha256": "741b9f8da6dbf35a8794af2de28bd2c8ac808ab48657e0df723b85225ed35fc3"
+    },
+    "FarlandSaga2_Steam.ini": {
+      "bytes": 14197,
+      "sha256": "b524eb47eb54bad891dad9407d8e135c057f0b411acef25bc3982ed2e2100957"
+    },
+    "S-Tribute.exe": {
+      "bytes": 666624,
+      "sha256": "717c72c95ae002eba33d54a176a459e9298efaa2ac7fd307bf082082060f4cde"
+    },
+    "Texture.tex": {
+      "bytes": 1392384,
+      "sha256": "bdabbe4f78220d1470276737d203ab03e681e125f0ca5a8ae2f61b8a2c7c1fe6"
+    },
+    "UnityCrashHandler64.exe": {
+      "bytes": 1185464,
+      "sha256": "9aea614da6eaa74d85b27c5419d0124158d6cb72ffcc54c89bd20fb595255034"
+    },
+    "UnityPlayer.dll": {
+      "bytes": 31046840,
+      "sha256": "c8e833da27d7fe5c47fc99eb77cd6a0b9947b74e35e0f0549e52d736adb8463d"
+    },
+    "steam_api.dll": {
+      "bytes": 268136,
+      "sha256": "e0ccfcdde7bbba55dba4c19007299018a2cf86f92c7bc1df4af134c65dbf8003"
+    },
+    "steam_api64.dll": {
+      "bytes": 301928,
+      "sha256": "dcfaa13aa419a0641917205957dbe15aa472e7cf09a28cf8d3cf429598e67799"
+    },
+    "thumbnail_nodata.tex": {
+      "bytes": 4999,
+      "sha256": "fd47cd8f826518988ad7fec114b1c4ba657065c36c10b153a48ff08f7a2b4ff9"
+    }
+  }
+}
