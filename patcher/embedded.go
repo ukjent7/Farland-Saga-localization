@@ -1,29 +1,27 @@
 // 编译期内嵌的补丁载荷。
 //
 // 发布形态是单个可执行文件：打包脚本把各语言的 farland-patch-*.zip 放进
-// payload/ 再执行 go build，用户拿到的 exe 自带全部补丁，不需要再分发压缩包。
+// 当前作品的载荷目录（payload/saga1 或 payload/saga2，见 embedded_saga*.go）
+// 再执行 go build，用户拿到的 exe 自带全部补丁，不需要再分发压缩包。
 // 这段代码放在平台中立文件里，Linux 上也能跑测试验证内嵌补丁可解析。
 package main
 
 import (
-	"embed"
 	"io/fs"
 	"path/filepath"
 	"sort"
 	"strings"
 )
 
-// embeddedPayloads 内嵌 payload/ 下的全部补丁。用 all: 前缀是为了让只放了
-// 占位文件的空目录也能编译通过。
-//
-//go:embed all:payload
-var embeddedPayloads embed.FS
+// embeddedPayloads 内嵌当前作品的载荷目录，声明在 embedded_saga1.go /
+// embedded_saga2.go 里，由构建标签二选一；embed 指令要求路径是字面量，
+// 所以不能只留一个变量由常量拼接。
 
 // loadEmbedded 读取编译期内嵌的全部补丁载荷。整包读进内存，按中、韩、英
 // 的固定顺序返回，按钮位置才稳定。解析失败的包作为问题返回，不让一个坏包
 // 拖垮整个程序。
 func loadEmbedded() ([]*payload, []string) {
-	entries, err := fs.ReadDir(embeddedPayloads, "payload")
+	entries, err := fs.ReadDir(embeddedPayloads, payloadDir)
 	if err != nil {
 		return nil, []string{err.Error()}
 	}
@@ -33,7 +31,7 @@ func loadEmbedded() ([]*payload, []string) {
 		if entry.IsDir() || !strings.EqualFold(filepath.Ext(entry.Name()), ".zip") {
 			continue
 		}
-		data, err := fs.ReadFile(embeddedPayloads, "payload/"+entry.Name())
+		data, err := fs.ReadFile(embeddedPayloads, payloadDir+"/"+entry.Name())
 		if err != nil {
 			problems = append(problems, entry.Name()+": "+err.Error())
 			continue

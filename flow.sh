@@ -7,4 +7,4 @@ cd -- "$repo"
 if (( $# == 0 )); then
     set -- --help
 fi
-exec bash "$repo/uv.sh" run --locked python "$repo/tools/localize.py" "$@"
+exec bash "$repo/uv.sh" run --locked python -m fls "$@"

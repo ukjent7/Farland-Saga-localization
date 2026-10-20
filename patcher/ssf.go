@@ -88,7 +88,7 @@ func ReadPEVirtualAddress(file *pe.File, va uint64, count int) ([]byte, error) {
 	return nil, fmt.Errorf("未找到包含 VA 0x%X 的节区", va)
 }
 
-// ExtractSSFTables 从 FarlandSaga.exe 提取 SSF 加密参数表。
+// ExtractSSFTables 从当前作品的可执行文件提取 SSF 加密参数表。
 func ExtractSSFTables(exePath string) (table []byte, raw []byte, perm []byte, key uint64, err error) {
 	f, err := pe.Open(exePath)
 	if err != nil {
@@ -96,11 +96,11 @@ func ExtractSSFTables(exePath string) (table []byte, raw []byte, perm []byte, ke
 	}
 	defer f.Close()
 
-	table, err = ReadPEVirtualAddress(f, 0x1410B9B90, 1024)
+	table, err = ReadPEVirtualAddress(f, ssfTableVA, 1024)
 	if err != nil {
 		return nil, nil, nil, 0, fmt.Errorf("读取 SSF table 失败: %w", err)
 	}
-	raw, err = ReadPEVirtualAddress(f, 0x1410B9F90, 1024)
+	raw, err = ReadPEVirtualAddress(f, ssfRawVA, 1024)
 	if err != nil {
 		return nil, nil, nil, 0, fmt.Errorf("读取 SSF raw 失败: %w", err)
 	}
@@ -131,7 +131,7 @@ func ExtractSSFTables(exePath string) (table []byte, raw []byte, perm []byte, ke
 	return table, raw, perm, key, nil
 }
 
-// LoadSSFParameters 解析指定 SSF 容器文件（如 Texture.tex, FarlandSaga.bin）的加密参数。
+// LoadSSFParameters 解析指定 SSF 容器文件（如 Texture.tex、光盘镜像）的加密参数。
 func LoadSSFParameters(sourcePath, exePath, logicalName string) (*SSFParameters, error) {
 	table, raw, perm, key, err := ExtractSSFTables(exePath)
 	if err != nil {

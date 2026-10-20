@@ -12,10 +12,10 @@ from pathlib import Path
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / 'tools'))
+sys.path.insert(0, str(REPO))
 
-import extract_unity_text
-import path_compat
+import fls.text.extract_unity_text as extract_unity_text
+import fls.core.path_compat as path_compat
 
 WORK = path_compat.WORK
 FROZEN = WORK / 'assets/sources/unity'
@@ -344,7 +344,7 @@ class FrozenReplay(unittest.TestCase):
 
     def test_command_line_check_against_the_frozen_workspace(self):
         environment = dict(os.environ, FARLAND_WORK=str(WORK))
-        result = subprocess.run([sys.executable, str(REPO / 'tools/extract_unity_text.py'), '--check'],
+        result = subprocess.run([sys.executable, '-m', 'fls.text.extract_unity_text', '--check'],
                                 capture_output=True, text=True, env=environment, cwd=REPO)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(json.loads(result.stdout)['status'], 'passed')

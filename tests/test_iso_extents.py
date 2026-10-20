@@ -14,9 +14,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO/'tools'))
-import iso_extents
-import path_compat
+sys.path.insert(0, str(REPO))
+import fls.disc.iso_extents as iso_extents
+import fls.core.path_compat as path_compat
 
 WORK = path_compat.WORK
 SECTOR = iso_extents.SECTOR_SIZE

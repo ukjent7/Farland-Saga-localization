@@ -162,7 +162,7 @@ func buildPayload(t *testing.T, directory, version, language string, files []tes
 		})
 	}
 	info := manifest{Format: payloadFormat, Kind: payloadKind, Version: version, Language: language,
-		Game: "FARLAND SAGA I Saturn Tribute", CreatedUTC: "2026-10-14T00:00:00Z", Files: entries}
+		Game: appTitle, CreatedUTC: "2026-10-14T00:00:00Z", Files: entries}
 	path := filepath.Join(directory, fmt.Sprintf("farland-patch-%s.zip", version))
 	return writePayloadZip(t, path, info, objects), entries
 }
@@ -200,7 +200,7 @@ func sampleFiles() []testFile {
 	copy(patched[5*blockSize:5*blockSize+17], pattern(3, 17))
 	patched = append(patched, pattern(7, blockSize+50)...)
 	return []testFile{
-		{name: "FarlandSaga.bin", original: original, patched: patched},
+		{name: gameDiscImage, original: original, patched: patched},
 		{name: "S-Tribute_Data/level0", original: pattern(2, 5000), patched: pattern(4, 5000)},
 		{name: "Texture.tex", original: pattern(5, 3000), patched: pattern(5, 3000)},
 	}
@@ -532,7 +532,7 @@ func assertOnlyBackupDir(t *testing.T, game string) {
 	}
 	var patcherEntries []string
 	for _, entry := range entries {
-		if strings.HasPrefix(entry.Name(), "FarlandSagaPatcher") {
+		if strings.HasPrefix(entry.Name(), patcherStem) {
 			patcherEntries = append(patcherEntries, entry.Name())
 		}
 	}
@@ -583,7 +583,7 @@ func TestInstallRefusesUnexpectedState(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(game, "Texture.tex"), files[2].original, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.Remove(filepath.Join(game, "FarlandSaga.bin")); err != nil {
+	if err := os.Remove(filepath.Join(game, gameDiscImage)); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := installPatch(game, loaded, nil); err == nil {
@@ -745,7 +745,7 @@ func TestInstallSweepsStaleBackupDirs(t *testing.T) {
 	if _, err := installPatch(game, openTestPayload(t, chinesePath), nil); err != nil {
 		t.Fatalf("安装中文补丁失败: %v", err)
 	}
-	stale := []string{"FarlandSagaPatcher-backup-20260101-000000", "FarlandSagaPatcher-restore-rollback-20260101-000000"}
+	stale := []string{stalePrefix + "20260101-000000", rollbackPrefix + "20260101-000000"}
 	for _, name := range stale {
 		if err := os.MkdirAll(filepath.Join(game, name), 0o755); err != nil {
 			t.Fatal(err)
@@ -800,7 +800,7 @@ func TestInstallMigratesRecordedTimestampedBackup(t *testing.T) {
 		t.Fatalf("安装中文补丁失败: %v", err)
 	}
 	// 把固定备份改名成旧式时间戳名，并让记录指向它，模拟上一版补丁器的现场。
-	legacy := "FarlandSagaPatcher-backup-20260101-010203"
+	legacy := stalePrefix + "20260101-010203"
 	if err := os.Rename(filepath.Join(game, backupDirName), filepath.Join(game, legacy)); err != nil {
 		t.Fatal(err)
 	}
@@ -915,7 +915,7 @@ func TestInstallFailsCleanlyWhenBackupLostAndPatched(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, entry := range entries {
-		if strings.HasPrefix(entry.Name(), "FarlandSagaPatcher") && entry.Name() != recordName {
+		if strings.HasPrefix(entry.Name(), patcherStem) && entry.Name() != recordName {
 			t.Fatalf("失败的安装留下了 %s", entry.Name())
 		}
 	}
@@ -949,6 +949,67 @@ func TestInstallRepairsCorruptBackup(t *testing.T) {
 	}
 	if !bytes.Equal(data, files[0].original) {
 		t.Fatal("修复后的原版备份内容不符")
+	}
+}
+
+// TestInstallSupplementsBackupWhenNewTargetAdded 覆盖补丁升级场景：
+// 旧版补丁只修改了部分文件，备份里也只有这部分文件。
+// 新版补丁新增了对新文件（如可执行文件）的修改。
+// 此时游戏已处于部分补丁态，但新纳入的文件在游戏根目录下是未经修改的原版。
+// 安装新版补丁时，应当自动将原版新文件补入固定备份中并顺利完成安装与后续还原。
+func TestInstallSupplementsBackupWhenNewTargetAdded(t *testing.T) {
+	directory := t.TempDir()
+	allFiles := sampleFiles()
+	v1Files := allFiles[:2]
+	v1Path, _ := buildPayload(t, directory, "v1", "zh-CN", v1Files)
+	v2Files := allFiles
+	v2Path, _ := buildPayload(t, directory, "v2", "ko-KR", v2Files)
+
+	game := buildGame(t, allFiles)
+
+	if _, err := installPatch(game, openTestPayload(t, v1Path), nil); err != nil {
+		t.Fatalf("安装 v1 失败: %v", err)
+	}
+
+	backupVictim := filepath.Join(game, backupDirName, filepath.FromSlash(allFiles[2].name))
+	if _, err := os.Stat(backupVictim); !os.IsNotExist(err) {
+		t.Fatalf("v1 安装后备份不应包含 %s", allFiles[2].name)
+	}
+
+	result, err := installPatch(game, openTestPayload(t, v2Path), nil)
+	if err != nil {
+		t.Fatalf("升级安装 v2 失败: %v", err)
+	}
+	if result.Language != "ko-KR" {
+		t.Fatalf("安装后语言应为 ko-KR，实际 %s", result.Language)
+	}
+
+	for _, file := range allFiles {
+		targetInBackup := filepath.Join(game, backupDirName, filepath.FromSlash(file.name))
+		data, err := os.ReadFile(targetInBackup)
+		if err != nil {
+			t.Fatalf("备份中缺少 %s: %v", file.name, err)
+		}
+		if !bytes.Equal(data, file.original) {
+			t.Fatalf("备份中 %s 的内容不是原版", file.name)
+		}
+	}
+
+	restoreRes, err := restoreOriginal(game)
+	if err != nil {
+		t.Fatalf("还原失败: %v", err)
+	}
+	if len(restoreRes.Files) != len(allFiles) {
+		t.Fatalf("应还原 %d 个文件，实际 %d", len(allFiles), len(restoreRes.Files))
+	}
+	for _, file := range allFiles {
+		cur, err := os.ReadFile(filepath.Join(game, filepath.FromSlash(file.name)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(cur, file.original) {
+			t.Fatalf("%s 还原后不是原版内容", file.name)
+		}
 	}
 }
 
@@ -989,7 +1050,7 @@ func TestRestoreUsesRecordedTimestampedBackup(t *testing.T) {
 	if _, err := installPatch(game, openTestPayload(t, path), nil); err != nil {
 		t.Fatalf("安装失败: %v", err)
 	}
-	legacy := "FarlandSagaPatcher-backup-20260101-040506"
+	legacy := stalePrefix + "20260101-040506"
 	if err := os.Rename(filepath.Join(game, backupDirName), filepath.Join(game, legacy)); err != nil {
 		t.Fatal(err)
 	}
@@ -1031,7 +1092,7 @@ func TestRestoreReportsUnusableBackup(t *testing.T) {
 	if _, err := installPatch(game, openTestPayload(t, path), nil); err != nil {
 		t.Fatalf("安装失败: %v", err)
 	}
-	legacy := "FarlandSagaPatcher-backup-20260101-070809"
+	legacy := stalePrefix + "20260101-070809"
 	if err := os.Rename(filepath.Join(game, backupDirName), filepath.Join(game, legacy)); err != nil {
 		t.Fatal(err)
 	}
@@ -1113,10 +1174,10 @@ func TestSweepStaleBackupsKeepsFixedName(t *testing.T) {
 		t.Fatal(err)
 	}
 	stale := map[string]int64{
-		"FarlandSagaPatcher-backup-20260101-000000":      4096,
-		"FarlandSagaPatcher-backup-20260101-000000-2":    2048,
-		"FarlandSagaPatcher-restore-rollback-20260101-1": 1024,
-		"FarlandSagaPatcher-rollback":                    512,
+		stalePrefix + "20260101-000000":   4096,
+		stalePrefix + "20260101-000000-2": 2048,
+		rollbackPrefix + "20260101-1":     1024,
+		rollbackDirName:                   512,
 	}
 	wantBytes := int64(0)
 	for name, size := range stale {
@@ -1398,14 +1459,14 @@ func TestLoadEmbedded(t *testing.T) {
 		if info.Language != code {
 			t.Fatalf("第 %d 个补丁语言 = %s，期望 %s（顺序必须固定）", index, info.Language, code)
 		}
-		if info.Format != payloadFormat || info.Kind != payloadKind {
+		if !supportedPayloadFormat(info.Format) || info.Kind != payloadKind {
 			t.Fatalf("%s 的 manifest 格式不符：format=%d kind=%s", code, info.Format, info.Kind)
 		}
 		if len(info.Files) == 0 {
 			t.Fatalf("%s 的 manifest 没有目标文件", code)
 		}
 		for _, entry := range info.Files {
-			if entry.Path == "" || entry.Object == "" {
+			if entry.Path == "" || (entry.Object == "" && entry.SectorsObject == "") {
 				t.Fatalf("%s 的 manifest 有条目缺少路径或对象名", code)
 			}
 			if !validSHA256(entry.OriginalSHA256) || !validSHA256(entry.PatchedSHA256) {
@@ -1590,9 +1651,12 @@ func TestReplayFormat2VariableLength(t *testing.T) {
 
 // TestEmbeddedRealPayloadReplay 在本地备份存在时，验证所有内嵌 payload 能针对原版正确回放。
 func TestEmbeddedRealPayloadReplay(t *testing.T) {
-	backupDir := filepath.Join("..", "..", "work", "backups", "alpha01-20260930-104848")
+	backupDir := filepath.Join("..", "..", "work", "backups", referenceBackup)
+	if referenceBackup == "" {
+		backupDir = referenceGameDir
+	}
 	if _, err := os.Stat(backupDir); err != nil {
-		t.Skip("本地无原版备份，跳过真实载荷端到端测试")
+		t.Skip("本地无原版文件，跳过真实载荷端到端测试")
 	}
 
 	payloads, problems := loadEmbedded()
@@ -1610,8 +1674,9 @@ func TestEmbeddedRealPayloadReplay(t *testing.T) {
 				h := sha256.New()
 				var totalWritten int64
 				countingWriter := io.MultiWriter(h, &byteCounter{written: &totalWritten})
-				if err := p.replay(f, origPath, countingWriter, nil); err != nil {
-					t.Fatalf("文件 %s 回放失败: %v", f.Path, err)
+				replayErr := p.replayEntry(f, origPath, referenceExecutable(), countingWriter, nil)
+				if replayErr != nil {
+					t.Fatalf("文件 %s 回放失败: %v", f.Path, replayErr)
 				}
 				gotHash := hex.EncodeToString(h.Sum(nil))
 				if gotHash != f.PatchedSHA256 {
@@ -1633,4 +1698,3 @@ func (b *byteCounter) Write(p []byte) (n int, err error) {
 	*b.written += int64(len(p))
 	return len(p), nil
 }
-

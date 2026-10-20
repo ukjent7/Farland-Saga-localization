@@ -13,12 +13,12 @@ import zipfile
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO/'tools'))
-import bootstrap
-import disc_decode
-import disc_extract
-import path_compat
-import steam_container
+sys.path.insert(0, str(REPO))
+import fls.storage.bootstrap as bootstrap
+import fls.disc.disc_decode as disc_decode
+import fls.disc.disc_extract as disc_extract
+import fls.core.path_compat as path_compat
+import fls.containers.steam_container as steam_container
 
 WORK = path_compat.WORK
 GAME_EXE = path_compat.WORKSPACE/'FarlandSaga.exe'
@@ -306,7 +306,7 @@ class GameReplay(unittest.TestCase):
 
     def run_bootstrap(self, *arguments):
         environment = dict(os.environ, FARLAND_WORK=str(self.scratch))
-        return subprocess.run([sys.executable, str(REPO/'tools/bootstrap.py'), *arguments],
+        return subprocess.run([sys.executable, '-m', 'fls.storage.bootstrap', *arguments],
                               capture_output=True, text=True, env=environment, cwd=REPO)
 
     def test_unpack_and_freeze_replay(self):

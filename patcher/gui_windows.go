@@ -30,8 +30,6 @@ import (
 	"unsafe"
 )
 
-const guiClassName = "FarlandSagaPatcherWindow"
-
 var (
 	kernel32 = syscall.NewLazyDLL("kernel32.dll")
 	user32   = syscall.NewLazyDLL("user32.dll")
@@ -233,7 +231,7 @@ func trace(format string, args ...any) {
 	traceMutex.Lock()
 	defer traceMutex.Unlock()
 	traceOnce.Do(func() {
-		path := filepath.Join(os.TempDir(), "farland-patcher-trace.log")
+		path := filepath.Join(os.TempDir(), traceFileName)
 		if file, err := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o644); err == nil {
 			traceFile = file
 		}

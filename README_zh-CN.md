@@ -58,7 +58,7 @@ Steam 版《**FARLAND SAGA I Saturn Tribute**》（神奇传说 / 破晓之誓�
 | 作品 | 阶段 | 总体预估进度 | 现状与核心工作划分 |
 | :--- | :---: | :---: | :--- |
 | **FARLAND SAGA I**<br>（一代，破晓之誓） | **Alpha 0.5 尝鲜** | **~40%** | • **已就绪 (~40%)**：底层注入引擎、三语全文本初译注入、CI 自动化门禁、单文件补丁器<br>• **核心深水区 (~60%)**：人工排查运行期渲染与逻辑 BUG（如韩版 Option 键等问题）、语境精校润色、全章节通关实机测试 |
-| **FARLAND SAGA II**<br>（二代，时空道标） | **Alpha 尝鲜** | **~60%** | • **全剧情与标签闭环**：全部 17 个剧情库 2,660 条对白（中/韩/英）三语全量对齐；518 条 UI/装备标签三语就绪；<br>• **单文件补丁器就绪**：专用补丁器 `FarlandSaga2Patcher-windows-amd64.exe` 就绪；零外部依赖、双屏 GUI、支持一键安装/还原与三语切换；<br>• **审阅工具**：内置全量三语交互审阅页 `review_fs2.html`；<br>• **后续重心**：全章节实机流程回归测试与文本精修润色 |
+| **FARLAND SAGA II**<br>（二代，时空道标） | **Alpha 尝鲜** | **~60%** | • **全剧情与标签闭环**：全部 17 个剧情库 2,660 条对白（中/韩/英）三语全量对齐；518 条 UI/装备标签三语就绪；<br>• **单文件补丁器就绪**：专用补丁器 `FarlandSaga2Patcher-windows-amd64.exe` 就绪；零外部依赖、双屏 GUI、支持一键安装/还原与三语切换；<br>• **后续重心**：全章节实机流程回归测试与文本精修润色 |
 
 ---
 
@@ -66,20 +66,25 @@ Steam 版《**FARLAND SAGA I Saturn Tribute**》（神奇传说 / 破晓之誓�
 
 环境要求：Linux/WSL2、Python 3.14+（由 `uv` 纳管）、Go 1.23+。
 
+所有工具都在 `fls` 包内，`flow.sh` 以 `python -m fls` 调用。
+
 ```bash
-# FARLAND SAGA I 测试与构建
+# 两代通用：按改动范围选测试，或跑快速入口与安全检查
+bash flow.sh test --changed
 bash flow.sh test --cli-only
-bash flow.sh test --quick
+
+# FARLAND SAGA I：合并、状态与单文件补丁器
 bash flow.sh merge
-bash flow.sh review
 bash flow.sh status
 bash flow.sh build-patcher
 
-# FARLAND SAGA II 自动化测试与补丁器构建
-uv run python3 -m unittest discover -s tests -p "test_fs2_*.py"
-cd patcher2 && go test ./...
-GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' -o ../FarlandSaga2Patcher-windows-amd64.exe .
+# FARLAND SAGA II：测试与补丁器构建（同一模块，加 -tags saga2）
+cd patcher
+go test -tags saga2 ./...
+GOOS=windows GOARCH=amd64 go build -tags saga2 -trimpath -ldflags='-s -w -H windowsgui' -o ../FarlandSaga2Patcher-windows-amd64.exe .
 ```
+
+包结构与完整命令说明见 [docs/tools.md](docs/tools.md)。
 
 ---
 

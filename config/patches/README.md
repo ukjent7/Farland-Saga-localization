@@ -19,7 +19,7 @@ The built-in condition-label configuration references `translation/corpus.json` 
 
 The target still uses the original 16×16 cells. English fits at most two ASCII characters per cell; Korean and Chinese fit one character per cell. Exceeding capacity, a mismatched base field, an unsupported language, or an unsupported glyph stops the build immediately; nothing is auto-truncated and no program pointers are relocated.
 
-A configuration never installs anything on its own. The unified workflow and commands are in the [tools notes](../tools/README.md).
+A configuration never installs anything on its own. The unified workflow and commands are in the [tools notes](../docs/tools.md).
 
 `original_ranges` restores original values that an older patch overwrote in fixed records. Each group declares `file/source_sha256/offset/stride/count/field_offset/size/before_hex`; a record is accepted only when it holds the declared old bytes or the original bytes, after checking the frozen asset identity and boundaries. Fields may be declared in only some languages' `text`; the other languages are skipped.
 

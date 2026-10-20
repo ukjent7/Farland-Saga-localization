@@ -6,11 +6,11 @@ import tempfile
 import unittest
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / 'tools'))
+sys.path.insert(0, str(REPO))
 
-import merge_full_translations as merger
-import path_compat
-from translation_data import read_corpus
+import fls.text.merge_full_translations as merger
+import fls.core.path_compat as path_compat
+from fls.text.translation_data import read_corpus
 
 WORK = path_compat.WORK
 

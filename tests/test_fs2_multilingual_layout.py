@@ -4,11 +4,10 @@ import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / 'tools/fs2'))
-sys.path.insert(0, str(REPO / 'tools'))
+sys.path.insert(0, str(REPO))
 
-from unifont_bitmap import Unifont
-from multilingual_layout import render_dialogue
+from fls.containers.unifont_bitmap import Unifont
+from fls.containers.multilingual_layout import render_dialogue
 
 
 class TestFS2MultilingualLayout(unittest.TestCase):

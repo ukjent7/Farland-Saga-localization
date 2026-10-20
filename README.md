@@ -58,7 +58,7 @@ Built with declarative in-place injection engines: 100% free of commercial copyr
 | Title | Phase | Est. Progress | Current Status & Breakdown |
 | :--- | :---: | :---: | :--- |
 | **FARLAND SAGA I**<br>(First Game) | **Alpha 0.5 Preview** | **~40%** | • **Ready (~40%)**: In-place injection engine, baseline trilingual text, CI test suite, standalone GUI patcher<br>• **Remaining Core Work (~60%)**: Manual triage of runtime rendering/logic bugs (e.g. Korean Option button issue), dialogue polish, full-game playthrough verification |
-| **FARLAND SAGA II**<br>(Sequel) | **Alpha Preview** | **~60%** | • **Complete Script & Label Alignment**: All 17 story banks (2,660 dialogue pages) fully aligned in EN/ZH/KO; 518 UI/equipment labels ready;<br>• **Dedicated Standalone Patcher**: `FarlandSaga2Patcher-windows-amd64.exe` ready; zero external dependencies, trilingual GUI with one-click install/restore;<br>• **Review Tool**: Interactive trilingual review page `review_fs2.html` included;<br>• **Next Milestones**: Full-game playthrough regressions and dialogue polishing |
+| **FARLAND SAGA II**<br>(Sequel) | **Alpha Preview** | **~60%** | • **Complete Script & Label Alignment**: All 17 story banks (2,660 dialogue pages) fully aligned in EN/ZH/KO; 518 UI/equipment labels ready;<br>• **Dedicated Standalone Patcher**: `FarlandSaga2Patcher-windows-amd64.exe` ready; zero external dependencies, trilingual GUI with one-click install/restore;<br>• **Next Milestones**: Full-game playthrough regressions and dialogue polishing |
 
 ---
 
@@ -66,20 +66,25 @@ Built with declarative in-place injection engines: 100% free of commercial copyr
 
 Requires: Linux/WSL2, Python 3.14+ (via `uv`), Go 1.23+.
 
+All tooling lives in the `fls` package; `flow.sh` runs it as `python -m fls`.
+
 ```bash
-# FARLAND SAGA I testing & building
+# Both games: run what the working tree touches, or the fast safety checks
+bash flow.sh test --changed
 bash flow.sh test --cli-only
-bash flow.sh test --quick
+
+# FARLAND SAGA I: builds, merges, and the standalone patcher
 bash flow.sh merge
-bash flow.sh review
 bash flow.sh status
 bash flow.sh build-patcher
 
-# FARLAND SAGA II testing & building
-uv run python3 -m unittest discover -s tests -p "test_fs2_*.py"
-cd patcher2 && go test ./...
-GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' -o ../FarlandSaga2Patcher-windows-amd64.exe .
+# FARLAND SAGA II: tests and patcher build (same module, -tags saga2)
+cd patcher
+go test -tags saga2 ./...
+GOOS=windows GOARCH=amd64 go build -tags saga2 -trimpath -ldflags='-s -w -H windowsgui' -o ../FarlandSaga2Patcher-windows-amd64.exe .
 ```
+
+Package layout, command reference, and the private-workspace conventions are in [docs/tools.md](docs/tools.md).
 
 ---
 
