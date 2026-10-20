@@ -11,9 +11,9 @@ import unittest
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / 'tools'))
-import version_storage as storage
-import path_compat
+sys.path.insert(0, str(REPO))
+import fls.storage.version_storage as storage
+import fls.core.path_compat as path_compat
 
 WORK = path_compat.WORK
 

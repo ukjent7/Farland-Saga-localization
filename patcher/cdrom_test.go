@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/hex"
 	"os"
 	"path/filepath"
@@ -39,24 +38,5 @@ func TestCDROMEDCAndECC(t *testing.T) {
 	eccQHex := hex.EncodeToString(sector[2248:2252])
 	if eccQHex != "ed969eae" {
 		t.Errorf("ECC Q 不符: 期望 ed969eae, 实际 %s", eccQHex)
-	}
-}
-
-func TestSectorTransformRoundtrip(t *testing.T) {
-	dwords := make([]uint32, 1024)
-	qwords := make([]uint64, 512)
-	for i := range dwords {
-		dwords[i] = uint32(i*101 + 37)
-	}
-	for i := range qwords {
-		qwords[i] = uint64(i*997 + 1013)
-	}
-
-	original := bytes.Repeat([]byte("SEGA SEGASATURN MODE1 SECTOR TEST VECTOR"), 60)[:2352]
-	encoded := SectorTransform(original, 0, dwords, qwords, true)
-	decoded := SectorTransform(encoded, 0, dwords, qwords, false)
-
-	if !bytes.Equal(original, decoded) {
-		t.Fatal("SectorTransform 编解码未能无损还原")
 	}
 }

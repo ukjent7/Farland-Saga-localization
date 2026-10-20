@@ -2,8 +2,6 @@
 import copy
 import json
 from pathlib import Path
-import runpy
-import shutil
 import sys
 import tempfile
 import unittest
@@ -11,11 +9,12 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / 'tools'))
+sys.path.insert(0, str(REPO))
 
-import extract_text
-import native_patches
-import path_compat
+import fls.core.path_compat as path_compat
+import fls.text.extract_catalog as extract_catalog
+import fls.text.extract_text as extract_text
+import fls.text.native_patches as native_patches
 
 WORK = path_compat.WORK
 
@@ -110,13 +109,9 @@ class CorpusExtractionProtection(unittest.TestCase):
         self.assertFalse(output.exists())
 
     def test_catalog_export_refuses_to_create_a_detached_copy(self):
-        tools = self.root / 'tools'
-        tools.mkdir()
-        script = tools / 'extract_catalog.py'
-        shutil.copyfile(REPO / 'tools/extract_catalog.py', script)
-        with patch.object(path_compat, 'REPO', self.root):
+        with patch.object(extract_catalog, 'REPO', self.root):
             with self.assertRaisesRegex(RuntimeError, 'authoritative translation corpus exists'):
-                runpy.run_path(str(script))
+                extract_catalog.export()
         self.assertFalse((self.root / 'translation/catalog.json').exists())
 
 

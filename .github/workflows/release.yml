@@ -28,28 +28,25 @@ jobs:
           cache: false
       - name: 静态检查与单元测试
         run: |
-          echo "=== 正在校验一代补丁器 ==="
           cd patcher
+          echo "=== 正在校验一代补丁器（默认构建）==="
           go vet ./...
           go test ./...
-          cd ../patcher2
-          echo "=== 正在校验二代补丁器 ==="
-          go vet ./...
-          go test ./...
-          cd ..
+          echo "=== 正在校验二代补丁器（-tags saga2）==="
+          go vet -tags saga2 ./...
+          go test -tags saga2 ./...
       - name: 构建 Windows 可执行文件
         run: |
-          echo "=== 正在编译一代补丁器 ==="
+          # 两代共用一个模块，只有 game_saga*.go / payload_saga*.go 等少数
+          # 文件按构建标签二选一。-H windowsgui：GUI 子系统，双击运行不会
+          # 弹出控制台窗口；从终端调用子命令时标准输出仍然可用。
           cd patcher
-          # -H windowsgui：GUI 子系统，双击运行不会弹出控制台窗口；
-          # 从终端调用子命令时标准输出仍然可用。
+          echo "=== 正在编译一代补丁器 ==="
           GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' \
             -o ../FarlandSagaPatcher-windows-amd64.exe .
-          cd ../patcher2
           echo "=== 正在编译二代补丁器 ==="
-          GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' \
+          GOOS=windows GOARCH=amd64 go build -tags saga2 -trimpath -ldflags='-s -w -H windowsgui' \
             -o ../FarlandSaga2Patcher-windows-amd64.exe .
-          cd ..
       - name: 记录校验和
         run: |
           sha256sum FarlandSagaPatcher-windows-amd64.exe FarlandSaga2Patcher-windows-amd64.exe > SHA256SUMS

@@ -58,7 +58,7 @@ Steam 버전 《**FARLAND SAGA I Saturn Tribute**》(파랜드 택틱스 1) 및 
 | 타이틀 | 개발 단계 | 예상 전체 진행도 | 현황 및 핵심 작업 내역 |
 | :--- | :---: | :---: | :--- |
 | **FARLAND SAGA I**<br>(1편) | **Alpha 0.5 프리뷰** | **~40%** | • **완료 항목 (~40%)**: 인플레이스 주입 엔진, 3개 국어 기초 텍스트 주입, CI 자동화 파이프라인, 단일 파일 패처<br>• **향후 핵심 과제 (~60%)**: 런타임 렌더링/로직 버그 디버깅(예: 한국어 버전 Option 키 소실 등), 대사 감수 및 교열, 전 챕터 클리어 실기 검증 |
-| **FARLAND SAGA II**<br>(2편) | **Alpha 프리뷰** | **~60%** | • **전체 시나리오 및 라벨 완비**: 17개 스토리 뱅크 전체(2,660페이지 대사) 한/중/영 3개 국어 전량 정렬 완료; 518개 UI/장비 라벨 완비;<br>• **독립형 패처 제공**: 전용 단일 실행 패처 `FarlandSaga2Patcher-windows-amd64.exe` 제공; 외부 의존성 없음, 듀얼 윈도우 GUI, 원클릭 설치/복구 지원;<br>• **리뷰 도구**: 인터랙티브 3개 국어 대사 검토 페이지 `review_fs2.html` 내장;<br>• **향후 집중 과제**: 전 챕터 실기 플레이 검증 및 대사 윤문/교열 |
+| **FARLAND SAGA II**<br>(2편) | **Alpha 프리뷰** | **~60%** | • **전체 시나리오 및 라벨 완비**: 17개 스토리 뱅크 전체(2,660페이지 대사) 한/중/영 3개 국어 전량 정렬 완료; 518개 UI/장비 라벨 완비;<br>• **독립형 패처 제공**: 전용 단일 실행 패처 `FarlandSaga2Patcher-windows-amd64.exe` 제공; 외부 의존성 없음, 듀얼 윈도우 GUI, 원클릭 설치/복구 지원;<br>• **향후 집중 과제**: 전 챕터 실기 플레이 검증 및 대사 윤문/교열 |
 
 ---
 
@@ -66,20 +66,25 @@ Steam 버전 《**FARLAND SAGA I Saturn Tribute**》(파랜드 택틱스 1) 및 
 
 요구 사항: Linux/WSL2, Python 3.14+ (`uv` 관리), Go 1.23+.
 
+모든 도구는 `fls` 패키지에 있으며, `flow.sh`가 `python -m fls`로 실행합니다.
+
 ```bash
-# FARLAND SAGA I 테스트 및 빌드
+# 두 작품 공통: 변경 범위에 해당하는 테스트만 실행, 또는 빠른 안전 검사
+bash flow.sh test --changed
 bash flow.sh test --cli-only
-bash flow.sh test --quick
+
+# FARLAND SAGA I: 병합, 상태, 단일 파일 패처
 bash flow.sh merge
-bash flow.sh review
 bash flow.sh status
 bash flow.sh build-patcher
 
-# FARLAND SAGA II 테스트 및 빌드
-uv run python3 -m unittest discover -s tests -p "test_fs2_*.py"
-cd patcher2 && go test ./...
-GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' -o ../FarlandSaga2Patcher-windows-amd64.exe .
+# FARLAND SAGA II: 테스트 및 패처 빌드 (같은 모듈, -tags saga2)
+cd patcher
+go test -tags saga2 ./...
+GOOS=windows GOARCH=amd64 go build -tags saga2 -trimpath -ldflags='-s -w -H windowsgui' -o ../FarlandSaga2Patcher-windows-amd64.exe .
 ```
+
+패키지 구조와 전체 명령 설명은 [docs/tools.md](docs/tools.md)에 있습니다.
 
 ---
 

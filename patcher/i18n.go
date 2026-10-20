@@ -16,9 +16,8 @@ package main
 
 // appTitle 是窗口标题，也是消息框的标题栏。三种语言共用同一个：程序本身是
 // 「三语补丁器」，不属于任何一种语言，没有必要按语言各写一个，更不该在某一
-// 语言里自称是那一语言的专用补丁。放在这里是常量而不是表里的字段——放表里三
-// 张表迟早会各自漂移。
-const appTitle = "FARLAND SAGA I Saturn Tribute"
+// 语言里自称是那一语言的专用补丁。它按作品定义在 game_saga1.go / game_saga2.go，
+// 不放进文字表——放表里三张表迟早会各自漂移。
 
 type uiStrings struct {
 	// nameChinese / nameKorean / nameEnglish 是用当前界面语言称呼三种语言。

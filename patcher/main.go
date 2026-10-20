@@ -1,7 +1,7 @@
-// FARLAND SAGA I Saturn Tribute 三语本地化补丁器。
+// FARLAND SAGA I / II Saturn Tribute 三语本地化补丁器（作品由构建标签选定）。
 //
-// 独立可执行文件，不依赖 Python：读取 tools/package_release.py 生成的补丁
-// 载荷（manifest.json + 相对原版的 4 KiB 差异对象），核对游戏文件身份后备份、
+// 独立可执行文件，不依赖 Python：读取 fls 工具链生成的补丁
+// 载荷（manifest.json + 差异对象或扇区对象），核对游戏文件身份后备份、
 // 回放、原子替换，并可随时从备份恢复原版。Windows 版不带参数运行进入图形界面，
 // 其他平台进入控制台向导；wizard 子命令在任何平台都走控制台向导。
 package main
@@ -19,8 +19,6 @@ import (
 	"strconv"
 	"strings"
 )
-
-const gameEnvVar = "FARLAND_SAGA_GAME"
 
 // humanSize 把字节数折算成便于阅读的单位。清扫旧备份动辄几百 MB，用 MiB/GiB
 // 比一串数字更能说明腾出了多少空间。
@@ -574,7 +572,7 @@ func resolveGame(explicit string, info *manifest, allowPrompt bool) (string, err
 		return "", errors.New("未指定游戏目录：用 --game 或环境变量 " + gameEnvVar + " 指定")
 	}
 	for attempt := 0; attempt < 5; attempt++ {
-		answer := prompt("游戏安装目录（Steam 库中的 FARLAND SAGA I Saturn Tribute）")
+		answer := prompt("游戏安装目录（Steam 库中的 " + appTitle + "）")
 		if strings.TrimSpace(answer) == "" {
 			return "", errors.New("未选择游戏目录")
 		}
@@ -604,7 +602,7 @@ func validateGameDir(directory string, info *manifest) (string, error) {
 	if !stat.IsDir() {
 		return "", fmt.Errorf("不是目录: %s", absolute)
 	}
-	probe, err := os.CreateTemp(absolute, ".FarlandSagaPatcher-write-")
+	probe, err := os.CreateTemp(absolute, "."+patcherStem+"-write-")
 	if err != nil {
 		return "", fmt.Errorf("游戏目录不可写: %s", absolute)
 	}
@@ -630,12 +628,12 @@ type gameConfig struct {
 
 func configPath() string {
 	if directory, err := os.UserConfigDir(); err == nil {
-		directory = filepath.Join(directory, "FarlandSagaPatcher")
+		directory = filepath.Join(directory, patcherStem)
 		if err := os.MkdirAll(directory, 0o755); err == nil {
 			return filepath.Join(directory, "config.json")
 		}
 	}
-	return filepath.Join(executableDir(), "FarlandSagaPatcher-config.json")
+	return filepath.Join(executableDir(), patcherStem+"-config.json")
 }
 
 func loadGameConfig() string {
@@ -835,29 +833,33 @@ func displayWidth(value string) int {
 }
 
 func printUsage() {
-	fmt.Println(`FARLAND SAGA I Saturn Tribute 三语本地化补丁器
+	program := patcherStem + ".exe"
+	fmt.Printf(`%s 三语本地化补丁器
 
 用法：
-  FarlandSagaPatcher.exe                      图形界面：先选语言，再安装或还原
-  FarlandSagaPatcher.exe wizard               控制台向导：安装或恢复
-  FarlandSagaPatcher.exe install  [选项]     安装补丁
-  FarlandSagaPatcher.exe restore [选项]     恢复原版
-  FarlandSagaPatcher.exe status  [选项]     查看当前状态
-  FarlandSagaPatcher.exe verify  [选项]     核对并返回退出码
+  %s                      图形界面：先选语言，再安装或还原
+  %s wizard               控制台向导：安装或恢复
+  %s install  [选项]     安装补丁
+  %s restore [选项]     恢复原版
+  %s status  [选项]     查看当前状态
+  %s verify  [选项]     核对并返回退出码
 
 选项：
-  --game <目录>     游戏安装目录（也可用环境变量 ` + gameEnvVar + `）
+  --game <目录>     游戏安装目录（也可用环境变量 `+"`%s`"+`）
   --payload <文件>  补丁载荷 ZIP（默认取本程序所在目录的 farland-patch-*.zip）
   --yes             跳过交互确认
   --json            输出 JSON
   -h, --help        显示本帮助
 
 图形界面把简体中文、한국어、English 三个补丁内置在程序里：把本程序放进游戏根目录
-（含 FarlandSaga.exe 的文件夹）双击运行，点语言按钮安装，点「还原」恢复。
+（含 %s 的文件夹）双击运行，点语言按钮安装，点「还原」恢复。
 界面语言跟随所选语言，第一屏的语言按钮各显示自己的名字。
 命令行用法面向脚本与排查，可另配 --payload 指定外部补丁包。
 
 安装前请先退出游戏。补丁只修改载荷 manifest 中列出的文件，原版会备份到
-游戏目录的 FarlandSagaPatcher-backup 目录，随时可以恢复；这个目录只有一个，
-不随安装次数增加，请勿删除。`)
+游戏目录的 %s 目录，随时可以恢复；这个目录只有一个，
+不随安装次数增加，请勿删除。`,
+		appTitle,
+		program, program, program, program, program, program,
+		gameEnvVar, gameExecutable, backupDirName)
 }

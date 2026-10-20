@@ -15,10 +15,10 @@ from pathlib import Path
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO/'tools'))
-import build_alpha
-import cd_parity
-import path_compat
+sys.path.insert(0, str(REPO))
+import fls.builders.build_alpha as build_alpha
+import fls.disc.cd_parity as cd_parity
+import fls.core.path_compat as path_compat
 
 WORK = path_compat.WORK
 

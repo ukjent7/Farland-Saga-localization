@@ -1,6 +1,6 @@
 // 安装、恢复与状态核对。
 //
-// 写入策略与 tools/install_alpha.py 一致：先核对每个目标文件的身份，再备份
+// 写入策略与 fls.storage.install_alpha 一致：先核对每个目标文件的身份，再备份
 // 当前状态，补丁文件先写临时文件并校验哈希后才原子改名，任何一步失败都从
 // 备份回滚。差异对象始终相对「原版」回放，因此切换语言时以原版备份为基准，
 // 而不是游戏目录里可能已被另一版补丁改过的文件。
@@ -27,17 +27,10 @@ import (
 	"time"
 )
 
+// 安装记录里的游戏文件名、目录名与临时后缀见 game_saga1.go / game_saga2.go，
+// 由构建标签选定；这里只保留与具体作品无关的格式与状态常量。
 const (
 	recordFormat    = 1
-	recordKind      = "farland-saga-patcher-install"
-	recordName      = "FarlandSagaPatcher-install.json"
-	backupDirName   = "FarlandSagaPatcher-backup"
-	rollbackDirName = "FarlandSagaPatcher-rollback"
-	// stalePrefix 与 rollbackPrefix 是旧版本留下的带时间戳目录，安装成功后
-	// 统一清扫。固定名 backupDirName 没有尾横线，匹配不到这两个前缀。
-	stalePrefix     = "FarlandSagaPatcher-backup-"
-	rollbackPrefix  = "FarlandSagaPatcher-restore-rollback-"
-	tempSuffix      = ".FarlandSagaPatcher-tmp"
 	stampLayout     = time.RFC3339
 	stateOriginal   = "original"
 	statePatched    = "patched"
@@ -215,6 +208,31 @@ func backupUnusableError(game string, targets []backupTarget, prior *installReco
 	return errors.New(strings.Join(parts, "\n"))
 }
 
+// supplementBackupWithOriginals 检查固定备份目录是否只是缺少部分目标文件，
+// 若缺失的目标在游戏当前目录中恰好是未经修改的原版，则安全补入固定备份目录中。
+// 这保证了补丁升级（例如新版补丁新增了对可执行文件的修改）时，已安装上一版补丁的
+// 用户无需重新验证游戏完整性即可无缝平滑升级。
+func supplementBackupWithOriginals(game string, dirName string, targets []backupTarget, statuses []fileStatus) bool {
+	destDir := gameFilePath(game, dirName)
+	if _, err := os.Stat(destDir); err != nil {
+		return false
+	}
+	repaired := false
+	for _, target := range targets {
+		backupFile := gameFilePath(destDir, target.path)
+		if _, err := os.Stat(backupFile); os.IsNotExist(err) {
+			if stateOf(statuses, target.path) == stateOriginal {
+				if err := os.MkdirAll(filepath.Dir(backupFile), 0o755); err == nil {
+					if err := copyFile(gameFilePath(game, target.path), backupFile); err == nil {
+						repaired = true
+					}
+				}
+			}
+		}
+	}
+	return repaired
+}
+
 // resolveBackup 确定这次安装使用的原版备份目录，返回相对游戏目录的单段名称。
 // 依次尝试：固定目录完整就直接沿用（一个字节都不拷）；记录里的旧式时间戳目录
 // 完整就原地改名成固定名，同卷 rename 瞬间完成；游戏文件恰好全是原版就从当前
@@ -222,16 +240,30 @@ func backupUnusableError(game string, targets []backupTarget, prior *installReco
 func resolveBackup(game string, info *manifest, statuses []fileStatus, prior *installRecord) (string, error) {
 	targets := backupTargetsFromManifest(info)
 	fixedProblems := verifyBackup(game, backupDirName, targets)
+	if len(fixedProblems) != 0 {
+		if supplementBackupWithOriginals(game, backupDirName, targets, statuses) {
+			fixedProblems = verifyBackup(game, backupDirName, targets)
+		}
+	}
 	if len(fixedProblems) == 0 {
 		return backupDirName, nil
 	}
 	if prior != nil && prior.BackupDirectory != "" && prior.BackupDirectory != backupDirName {
-		if len(verifyBackup(game, prior.BackupDirectory, targets)) == 0 {
-			old := gameFilePath(game, prior.BackupDirectory)
-			if err := os.Rename(old, filepath.Join(game, backupDirName)); err != nil {
-				return "", fmt.Errorf("迁移原版备份 %s 到 %s 失败: %w", prior.BackupDirectory, backupDirName, err)
+		old := gameFilePath(game, prior.BackupDirectory)
+		if _, err := os.Stat(old); err == nil {
+			if len(verifyBackup(game, prior.BackupDirectory, targets)) == 0 {
+				if err := os.Rename(old, filepath.Join(game, backupDirName)); err != nil {
+					return "", fmt.Errorf("迁移原版备份 %s 到 %s 失败: %w", prior.BackupDirectory, backupDirName, err)
+				}
+				return backupDirName, nil
 			}
-			return backupDirName, nil
+			if err := os.Rename(old, filepath.Join(game, backupDirName)); err == nil {
+				if supplementBackupWithOriginals(game, backupDirName, targets, statuses) {
+					if len(verifyBackup(game, backupDirName, targets)) == 0 {
+						return backupDirName, nil
+					}
+				}
+			}
 		}
 	}
 	if allOriginal(statuses) {
@@ -474,7 +506,7 @@ func blockedFiles(statuses []fileStatus) []string {
 // checkWritable 在写入前确认目标文件没有被占用（Windows 上运行中的游戏会锁住
 // 镜像文件），并确认游戏目录可写。
 func checkWritable(game string, info *manifest) error {
-	probe, err := os.CreateTemp(game, ".FarlandSagaPatcher-write-")
+	probe, err := os.CreateTemp(game, "."+patcherStem+"-write-")
 	if err != nil {
 		return fmt.Errorf("游戏目录不可写: %w", err)
 	}
@@ -605,7 +637,11 @@ func installPatch(game string, loaded *payload, progress func(fileEntry, int64))
 			return nil, rollback(fmt.Errorf("无法写入 %s: %w", entry.Path, err))
 		}
 		// 差异对象相对原版回放，基准取原版备份而不是游戏目录里的当前文件。
-		replayErr := loaded.replay(entry, gameFilePath(originalBackup, entry.Path), out, func(position int64) {
+		exeBase := gameFilePath(originalBackup, gameExecutable)
+		if _, err := os.Stat(exeBase); err != nil {
+			exeBase = filepath.Join(game, gameExecutable)
+		}
+		replayErr := loaded.replayEntry(entry, gameFilePath(originalBackup, entry.Path), exeBase, out, func(position int64) {
 			if progress != nil {
 				progress(entry, position)
 			}

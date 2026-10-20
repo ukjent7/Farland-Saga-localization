@@ -5,16 +5,10 @@ __pycache__/
 .pycache/
 .tmp/
 .ruff_cache/
-review.json
-review_fs2.json
-review.html
-review_fs2.html
-HISTORY.md
 FarlandSagaPatcher*.exe
 FarlandSaga2Patcher*.exe
+/patcher/farland-patcher
 /patcher/farland-saga-patcher
-/patcher2/farland-saga-patcher
-/patcher2/farland-saga-2-patcher
 SHA256SUMS
 
 # 轻量化 Format 2 声明式载荷随仓库纳管，实现公开仓库完全自包含与 CI 自动构建发布

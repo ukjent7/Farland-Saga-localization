@@ -6,11 +6,11 @@ import unittest
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / 'tools'))
+sys.path.insert(0, str(REPO))
 
-from build_full_languages import _copy_fresh_span, _encode_zh_condition
-from candidate import _copy_report, verify_builder_seed
-import path_compat
+from fls.builders.build_full_languages import _copy_fresh_span, _encode_zh_condition
+from fls.storage.candidate import _copy_report, verify_builder_seed
+import fls.core.path_compat as path_compat
 
 WORK = path_compat.WORK
 
@@ -36,10 +36,10 @@ class ChineseRebuild(unittest.TestCase):
             }
             reports = {ready.resolve(): ready_report, partial.resolve(): partial_report}
 
-            with patch('candidate.read_report', side_effect=lambda path: reports[Path(path).resolve()]), \
-                 patch('candidate.verify_candidate', side_effect=lambda path: reports[Path(path).resolve()]), \
-                 patch('candidate._verify_resource_only_files'), \
-                 patch('candidate._verify_resource_only_resources'):
+            with patch('fls.storage.candidate.read_report', side_effect=lambda path: reports[Path(path).resolve()]), \
+                 patch('fls.storage.candidate.verify_candidate', side_effect=lambda path: reports[Path(path).resolve()]), \
+                 patch('fls.storage.candidate._verify_resource_only_files'), \
+                 patch('fls.storage.candidate._verify_resource_only_resources'):
                 report, ancestor = verify_builder_seed(partial)
 
             self.assertIs(report, partial_report)

@@ -1,17 +1,16 @@
-"""Test CD-ROM Mode 1 sector EDC and ECC recomputation for Farland Saga II."""
+"""Cross-check the shared MODE1 finisher against the sequel's zero-ECC encoding."""
 import sys
 import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / 'tools/fs2'))
-sys.path.insert(0, str(REPO / 'tools'))
+sys.path.insert(0, str(REPO))
 
-from cd_mode1 import finish_sector
+from fls.disc.cdrom import finish_sector
 
 
-class TestFS2CDMode1(unittest.TestCase):
-    def test_mode1_finish_sector(self):
+class ZeroEccSectors(unittest.TestCase):
+    def test_zero_ecc_matches_the_sequel_steam_track(self):
         sample = bytearray(2352)
         sample[1:11] = b'\xFF' * 10
         sample[12:15] = b'\x00\x02\x00'

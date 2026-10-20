@@ -18,7 +18,7 @@ func TestSSFChecksum(t *testing.T) {
 }
 
 func TestSSFDecryptTexture(t *testing.T) {
-	exePath := filepath.Join("..", "..", "work", "analysis", "FarlandSaga.exe")
+	exePath := filepath.Join("..", "..", "work", "analysis", "FarlandSaga2.exe")
 	texPath := filepath.Join("..", "..", "work", "backups", "alpha01-20260930-104848", "Texture.tex")
 
 	if _, err := os.Stat(exePath); err != nil {

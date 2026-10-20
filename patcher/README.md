@@ -1,10 +1,12 @@
 # Patcher
 
-A standalone executable distributed to end users: it verifies the identity of the game files, backs them up, replays diffs, replaces them atomically, and can restore the original at any time. It needs no Python and never touches the private workspace.
+One Go module, two builds: **FARLAND SAGA I** (the default build) and **FARLAND SAGA II** (`-tags saga2`). Both are standalone executables distributed to end users: they verify the identity of the game files, back them up, replay diffs, replace them atomically, and can restore the original at any time. They need no Python and never touch the private workspace.
+
+The install engine, restore path, verification, backup policy, and interface are shared. The two games differ only in product names, file names, payload format, and the executable addresses of their encryption tables; those differences live in `game_saga1.go` / `game_saga2.go` (plus `payload_saga1.go`/`payload_saga2.go`, `cdrom_saga2.go`, `embedded_saga1.go`/`embedded_saga2.go`), selected by the build tag. The engine files carry no per-game branches.
 
 The Windows build ships a GUI that works on double-click; every platform keeps the command line and the interactive wizard.
 
-The release form is a **single executable**: the Simplified Chinese, Korean, and English patches are compiled into the program via `go:embed` at build time, so the exe the user receives carries all patches with it — no archive to distribute and no directory to pick.
+The release form is a **single executable**: the Simplified Chinese, Korean, and English patches are compiled into the program via `go:embed` at build time from `payload/saga1/` or `payload/saga2/`, so the exe the user receives carries all patches with it — no archive to distribute and no directory to pick.
 
 ```bash
 FarlandSagaPatcher.exe                  # GUI: pick a language, then install or restore
@@ -15,20 +17,23 @@ FarlandSagaPatcher.exe status           # Show the current status
 FarlandSagaPatcher.exe verify           # Verify and return an exit code
 ```
 
+`FarlandSaga2Patcher.exe` accepts exactly the same commands for the sequel.
+
 ## Building
 
 Go 1.25 or newer is required. The repository pulls in no third-party modules; `go.mod` holds only the standard library, and the GUI calls Win32 APIs directly, so no cgo is needed.
 
 ```bash
 cd patcher
-go vet ./...
-go test ./...
+go vet ./... && go test ./...                       # FARLAND SAGA I (default build)
+go vet -tags saga2 ./... && go test -tags saga2 ./...  # FARLAND SAGA II
 
 # Local build (current platform — Linux is only for go vet / go test / round trips)
 go build -o farland-saga-patcher .
 
-# Cross-compile the release target (without embedded patches)
+# Cross-compile the release targets (without embedded patches)
 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-s -w -H windowsgui' -o FarlandSagaPatcher-windows-amd64.exe .
+GOOS=windows GOARCH=amd64 go build -tags saga2 -trimpath -ldflags='-s -w -H windowsgui' -o FarlandSaga2Patcher-windows-amd64.exe .
 ```
 
 Windows is the only release target: the game is a Windows-only Steam build, so a Linux binary has no player to serve. Linux is still where `go vet`, `go test`, and the synthetic-game round trip run, which is why `console_other.go` and `gui_other.go` exist — but nothing ships a Linux executable.
@@ -41,9 +46,9 @@ bash flow.sh build-patcher --stage zh-CN-unifont08          # Embed only the nam
 bash flow.sh build-patcher --output release/patcher.exe     # Custom output location
 ```
 
-This command copies `work/release/farland-patch-<candidate>.zip` into `patcher/payload/` (missing candidates are packaged first) and then cross-compiles. The artifact is about 75 MB, of which about 71 MB is patch data. `patcher/payload/*.zip` is a private-workspace artifact, already gitignored, and never enters the public repository.
+This command copies `work/release/farland-patch-<candidate>.zip` into `patcher/payload/saga1/` (missing candidates are packaged first) and then cross-compiles. The artifact is about 75 MB, of which about 71 MB is patch data. `patcher/payload/saga1/*.zip` is a packaging artifact kept in the repository so the release build is self-contained. The sequel's payloads are produced by `python -m fls.storage.package_release_fs2` into `patcher/payload/saga2/` and are embedded by the `-tags saga2` build the same way.
 
-The Windows artifact adds `-H windowsgui`: it declares the GUI subsystem so a double-click runs without a console window, while standard output remains available when subcommands are called from a terminal. `.github/workflows/release.yml` performs the same steps on a pushed tag or manual confirmation and uploads the executable plus `SHA256SUMS` as release assets. The patch data is compiled in, so CI never touches the private workspace.
+The Windows artifact adds `-H windowsgui`: it declares the GUI subsystem so a double-click runs without a console window, while standard output remains available when subcommands are called from a terminal. `.github/workflows/release.yml` performs the same steps for both build tags on a pushed tag or manual confirmation and uploads the two executables plus `SHA256SUMS` as release assets. The patch data is compiled in, so CI never touches the private workspace.
 
 ## GUI
 
@@ -65,7 +70,7 @@ All interface text goes through the three tables in `i18n.go` (Simplified Chines
 - **Screen 1's three buttons show each language's name in that language itself** (`nativeLanguageName`). The user has not picked a language yet at this step, so a button must speak for itself — a Korean cannot read the Chinese word for Korean. The installed badge follows it, in screen 1's current language.
 - **After a language is chosen, references to other languages use the current interface language to name them** (`uiStrings.name`). So the status line in a Korean UI reads "한국어 설치됨" and in an English UI reads "Installed: Korean".
 
-Before screen 1's language is chosen, which text is used is decided by the operating system's UI language (`GetUserDefaultUILanguage`): Chinese systems use the Chinese table, Korean systems the Korean table, everything else falls back to English. After the choice the whole table switches at once — page title, status line, buttons, prompts, confirm boxes, and message boxes change together; pressing Back to screen 1 keeps the last chosen language instead of reverting to the system language, so switching back and forth does not flicker. The window title bar is `FARLAND SAGA I Saturn Tribute` in all three languages (the `appTitle` constant) — the program is a three-language patcher and belongs to none of them.
+Before screen 1's language is chosen, which text is used is decided by the operating system's UI language (`GetUserDefaultUILanguage`): Chinese systems use the Chinese table, Korean systems the Korean table, everything else falls back to English. After the choice the whole table switches at once — page title, status line, buttons, prompts, confirm boxes, and message boxes change together; pressing Back to screen 1 keeps the last chosen language instead of reverting to the system language, so switching back and forth does not flicker. The window title bar is the game's own title in all three languages (the `appTitle` constant, `FARLAND SAGA I Saturn Tribute` or `FARLAND SAGA II Saturn Tribute`) — the program is a three-language patcher and belongs to none of them.
 
 The Korean table additionally specifies the `Malgun Gothic` font (`fontFace`) so it does not render as boxes on a Chinese Windows without the Korean language pack; the other two tables use the system dialog font. Switching language rebuilds the font and re-applies it to every control.
 
@@ -100,7 +105,7 @@ The command line targets scripts and troubleshooting: it accepts any external pa
 
 ## Patch Payload Format
 
-The payload is a ZIP written by `tools/package_release.py`, matching `version_storage`'s diff-object format:
+The payload is a ZIP written by `fls.storage.package_release` (Format 1/2, first game) or `fls.storage.package_release_fs2` (Format 3, sequel), matching `version_storage`'s diff-object format:
 
 ```
 manifest.json            Manifest: version, language, and each target file's original/patched identity
@@ -164,4 +169,6 @@ Known limits: Linux has no mandatory file locking, so process-occupancy checks o
 
 `patcher_test.go` covers diff replay round trips and every corruption rejection (record out of order, out of range, truncated, hash mismatch, base mismatch, illegal header), path validation for the manifest and install record, install/restore/switch/idempotency/rollback, and rejection when the backup directory is tampered with. Backup policy has dedicated cases: a language switch creates no new directory, a restore leaves no directory, legacy timestamped directories are migrated and swept, a missing backup is rebuilt from the original, and a lost backup on a patched install refuses to install while leaving no residue. The tests write objects in the same format from the Go side and need no private workspace.
 
-Embedded patch loading lives in the platform-neutral `embedded.go`, so it can be exercised on Linux: `TestLoadEmbedded` verifies that all three language bundles parse, that the order is fixed as Chinese-Korean-English, and that each bundle declares every target file with valid hashes; when `payload/` is empty (a fresh clone with no packaging yet) the test skips. Interface-shared helpers (`blockedFiles`, `summarizeStates`, `samePath`) and entry-point dispatch also have unit tests. The Win32 UI code itself only compiles on Windows and cannot run under Linux `go test`; its correctness rests on `GOOS=windows go vet`, the compile-time struct size assertions, and install/restore round trips against the real payload on Windows.
+The per-game test fixtures live beside the build tags: `game_saga1_test.go` names the FARLAND SAGA I originals (the archived backup plus `work/analysis/FarlandSaga.exe`), `game_saga2_test.go` names the sequel's install directory and `FarlandSaga2.exe`. `TestEmbeddedRealPayloadReplay` therefore reconstructs every embedded payload byte-for-byte under both build tags whenever those files are present, and skips when they are not. `cdrom_saga2_test.go` holds the sector-transform and LZ/permutation-table tests that only apply to the sequel format.
+
+Embedded patch loading lives in the platform-neutral `embedded.go`, so it can be exercised on Linux: `TestLoadEmbedded` verifies that all three language bundles parse, that the order is fixed as Chinese-Korean-English, and that each bundle declares every target file with valid hashes; when the payload directory is empty (a fresh clone with no packaging yet) the test skips. Interface-shared helpers (`blockedFiles`, `summarizeStates`, `samePath`) and entry-point dispatch also have unit tests. The Win32 UI code itself only compiles on Windows and cannot run under Linux `go test`; its correctness rests on `GOOS=windows go vet`, the compile-time struct size assertions, and install/restore round trips against the real payload on Windows.

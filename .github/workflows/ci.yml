@@ -5,7 +5,8 @@ name: ci
 # 1. 语料库结构完整性与译文容量边界校验（防止 ISO/Saturn 内存越界或截断）
 # 2. ISO9660 数据轨空闲扇区分布与占用校验（test_iso_extents）
 # 3. CD-ROM MODE1 EDC/ECC 校验、字模槽位映射、资源绑定与 Unity 结构测试
-# 4. Go 单文件补丁器静态检查与单元测试
+# 4. 两代作品的翻译完整性、多语言排版与 Go 单文件补丁器单元测试
+#    （一个模块，两代各用一次构建标签跑一遍）
 
 on:
   push:
@@ -52,32 +53,21 @@ jobs:
           echo "=== 正在校验 2,786 行三语语料容量与格式边界 ==="
           bash flow.sh merge
 
-      - name: ISO 扇区空间与核心自动化测试套件
+      - name: 核心自动化测试套件
         env:
           FARLAND_WORK: ${{ runner.temp }}/work
           UV_PYTHON_DOWNLOADS: automatic
           UV_PYTHON_PREFERENCE: managed
         run: |
-          echo "=== 正在运行 ISO 扇区占用、CD 校验与 CLI 单元测试 ==="
+          echo "=== 正在运行 ISO 扇区占用、CD 校验、两代译稿与 CLI 单元测试 ==="
           bash flow.sh test --cli-only
-
-      - name: FARLAND SAGA II 自动化测试套件
-        env:
-          FARLAND_WORK: ${{ runner.temp }}/work
-          UV_PYTHON_DOWNLOADS: automatic
-          UV_PYTHON_PREFERENCE: managed
-        run: |
-          echo "=== 正在运行 FS2 翻译完整性、CD-ROM MODE1 与多语言排版测试 ==="
-          uv run python3 -m unittest discover -s tests -p "test_fs2_*.py"
 
       - name: 补丁引擎单元测试
         run: |
-          echo "=== 正在运行 Go 补丁器（一代）单元测试 ==="
           cd patcher
+          echo "=== 正在运行 Go 补丁器（一代，默认构建）单元测试 ==="
           go vet ./...
           go test -v ./...
-          cd ..
-          echo "=== 正在运行 Go 补丁器（二代）单元测试 ==="
-          cd patcher2
-          go vet ./...
-          go test -v ./...
+          echo "=== 正在运行 Go 补丁器（二代，-tags saga2）单元测试 ==="
+          go vet -tags saga2 ./...
+          go test -tags saga2 -v ./...

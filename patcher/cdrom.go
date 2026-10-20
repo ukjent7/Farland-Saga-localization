@@ -1,7 +1,7 @@
-// Saturn CD-ROM MODE1 扇区校验码 (EDC/ECC) 与扇区变换算法。
+// Saturn CD-ROM MODE1 扇区的 EDC/ECC 计算。
 //
-// 对应 build_alpha.py 中的 make_cd_tables / finish_sector 以及
-// disc_decode.py 中的 sector_transform。
+// 对应 fls/disc/cdrom.py 中的 make_tables / finish_sector。二代回放还要用到
+// 扇区变换与可执行文件里的置换表，见 cdrom_saga2.go。
 package main
 
 import (
@@ -99,27 +99,4 @@ func FinishSector(sector []byte) error {
 	parity(52, 43, 86, 88, 2248)
 
 	return nil
-}
-
-// SectorTransform 对 2352 字节的扇区执行 Steam Saturn 镜像变换（加密或解密）。
-func SectorTransform(data []byte, lba int, dwords []uint32, qwords []uint64, encode bool) []byte {
-	idx := lba & 1023
-	nxt := (idx + 1) & 1023
-	chain := uint64(dwords[idx]) | (uint64(dwords[nxt]) << 32)
-	idx = nxt >> 1
-
-	output := make([]byte, 2352)
-	for i := 0; i < 294; i++ {
-		idx = (idx + 1) & 511
-		val := binary.LittleEndian.Uint64(data[i*8 : (i+1)*8])
-		if encode {
-			val = val + chain
-			binary.LittleEndian.PutUint64(output[i*8:(i+1)*8], val)
-			chain = val + qwords[idx]
-		} else {
-			binary.LittleEndian.PutUint64(output[i*8:(i+1)*8], val-chain)
-			chain = val + qwords[idx]
-		}
-	}
-	return output
 }

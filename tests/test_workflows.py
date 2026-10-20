@@ -2,6 +2,11 @@
 
 Run normally for resource/executable replay; add --pack for one full encrypted
 disc replay. Temporary candidate outputs are removed after the tests.
+
+Each language gets its own test method, so the shard balancer in
+``fls.core.test_shards`` can spread the three replays across processes. The
+shared body of a per-language group lives in one private helper; the test
+methods only pass the language, source candidate and expected candidate.
 """
 import json
 import os
@@ -12,16 +17,16 @@ import time
 import unittest
 
 REPO=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(REPO/'tools'))
-from candidate import stage_path
-from native_patches import apply_recipe
-import build_full_languages
-import iso_layout
-from localize import invoke
-from test_shards import SHARD_ENV, artifact_path, balance, current_shard
-from workspace_assets import forget_preview_aliases
-from version_storage import materialize
-import path_compat
+sys.path.insert(0, str(REPO))
+from fls.storage.candidate import stage_path
+from fls.text.native_patches import apply_recipe
+import fls.builders.build_full_languages as build_full_languages
+import fls.disc.iso_layout as iso_layout
+from fls.cli.main import invoke
+from fls.core.test_shards import SHARD_ENV, artifact_path, balance, current_shard
+from fls.storage.workspace_assets import forget_preview_aliases
+from fls.storage.version_storage import materialize
+import fls.core.path_compat as path_compat
 
 WORK=path_compat.WORK
 
@@ -31,7 +36,6 @@ if '--shard' in sys.argv:
     at=sys.argv.index('--shard')
     os.environ[SHARD_ENV]=sys.argv[at+1]
     del sys.argv[at:at+2]
-
 
 class Workflows(unittest.TestCase):
     durations=[]
@@ -71,29 +75,38 @@ class Workflows(unittest.TestCase):
         self.assertEqual(set(actual_files),set(expected_files))
         for name,path in actual_files.items():self.assertEqual(path.read_bytes(),expected_files[name].read_bytes(),name)
         report=json.loads((frozen/'build_report.json').read_text())
-        from build_alpha import digest
+        from fls.builders.build_alpha import digest
         for name,item in report['files'].items():
             if name=='FarlandSaga.bin' and not packed:continue
             self.assertEqual(digest(result.stage/name),item['patched_sha256'],name)
         self.proof.append({'expected':expected,'native_resources_equal':len(actual_files),
                            'executable_and_unity_files_equal':True,'encrypted_disc_equal':packed})
 
-    def test_condition_tables(self):
-        for language,code in [('ko-KR','ko-KR'),('en-US','en-US')]:
-            result=apply_recipe(code+'-unifont-full01',self.output/(code+'-conditions'),language,
-                                'condition-labels',resources_only=True,create_preview=False)
-            self.assertEqual(result.report['translated_texts'],2786)
-            self.compare(result,code+'-unifont-full02')
+    def _condition_tables(self, language,code):
+        result=apply_recipe(code+'-unifont-full01',self.output/(code+'-conditions'),language,
+                            'condition-labels',resources_only=True,create_preview=False)
+        self.assertEqual(result.report['translated_texts'],2786)
+        self.compare(result,code+'-unifont-full02')
 
-    def test_menu_spacing(self):
-        for code,source,expected in [('ko-KR','ko-KR-unifont-full02','ko-KR-unifont-full03'),
-                                     ('zh-CN','zh-CN-unifont02','zh-CN-unifont03')]:
-            packed=PACK and code=='ko-KR'
-            result=apply_recipe(source,self.output/(code+'-spacing'),code,'menu-spacing',
-                                resources_only=not packed,create_preview=False)
-            self.assertEqual(result.report['menu_spacing']['target_width_pixels'],48)
-            if packed:self.assertFalse((result.stage/'inner.bin').exists())
-            self.compare(result,expected,packed)
+    def test_condition_tables_ko_kr(self):
+        self._condition_tables('ko-KR', 'ko-KR')
+
+    def test_condition_tables_en_us(self):
+        self._condition_tables('en-US', 'en-US')
+
+    def _menu_spacing(self, code,source,expected):
+        packed=PACK and code=='ko-KR'
+        result=apply_recipe(source,self.output/(code+'-spacing'),code,'menu-spacing',
+                            resources_only=not packed,create_preview=False)
+        self.assertEqual(result.report['menu_spacing']['target_width_pixels'],48)
+        if packed:self.assertFalse((result.stage/'inner.bin').exists())
+        self.compare(result,expected,packed)
+
+    def test_menu_spacing_ko_kr(self):
+        self._menu_spacing('ko-KR', 'ko-KR-unifont-full02', 'ko-KR-unifont-full03')
+
+    def test_menu_spacing_zh_cn(self):
+        self._menu_spacing('zh-CN', 'zh-CN-unifont02', 'zh-CN-unifont03')
 
     def test_dash_glyph(self):
         result=apply_recipe('alpha06',self.output/'dash','zh-CN','dash-center',
@@ -109,7 +122,7 @@ class Workflows(unittest.TestCase):
     def test_full_builder_preserves_later_fixes(self):
         output=self.output/'full'
         materialize('staging/ko-KR-unifont-full03')
-        invoke('build_full_languages',['--language','ko','--base','ko-KR-unifont-full03',
+        invoke('fls.builders.build_full_languages',['--language','ko','--base','ko-KR-unifont-full03',
                                       '--output',str(output),'--resources-only'])
         expected=WORK/'staging/ko-KR-unifont-full03/resources'
         for p in expected.rglob('*'):
@@ -126,34 +139,42 @@ class Workflows(unittest.TestCase):
         self.assertEqual(report['preserved_additional_field_texts'],0)
         self.proof.append({'full_builder_latest_resources_equal':True,'fixed_labels_and_spacing_retained':True})
 
-    def test_item_prices_restored_and_rebuilds_preserve_attributes(self):
-        import build_alpha as base
+    def _item_prices_restored(self, code,source):
+        from fls.builders import build_alpha as base
         original=(base.SOURCE/'SYSTEM/ITEM.DAT').read_bytes()
         self.assertEqual(int.from_bytes(original[12*36+18:12*36+20],'big'),300)
         install_record=(WORK/'install_report.json').read_bytes()
-        for code,source in [('zh-CN','zh-CN-unifont06'),('ko-KR','ko-KR-unifont-full06'),('en-US','en-US-unifont-full06')]:
-            packed=PACK and code=='zh-CN'
-            result=apply_recipe(source,self.output/(code+'-prices'),code,'item-prices',
-                                resources_only=not packed,create_preview=False)
-            item=result.resources['SYSTEM/ITEM.DAT']
-            for off in range(0,len(original),36):
-                self.assertEqual(item[off+18:off+36],original[off+18:off+36])
-                self.assertIn(b'\0',item[off:off+18])
-            self.assertEqual(result.resources['SYSTEM/MAIN.DAT'][0x2a5e4:0x2a5e4+7200],item)
-            for name,data in result.resources.items():
-                if name not in {'SYSTEM/ITEM.DAT','SYSTEM/MAIN.DAT','SYSTEM/KANJI.FON'}:
-                    self.assertEqual(data,result.original_resources[name],name)
-            if code in {'ko-KR','en-US'}:
-                rebuild=self.output/(code+'-price-rebuild')
-                invoke('build_full_languages',['--language','ko' if code=='ko-KR' else 'en',
-                                              '--base',source,'--output',str(rebuild),'--resources-only'])
-                self.assertEqual((rebuild/'resources/SYSTEM/ITEM.DAT').read_bytes(),item)
-            self.proof.append({'item_prices_language':code,'all_200_records_attributes_original':True,
-                               'runtime_mirror_matches':True,'encrypted_disc_verified':packed})
+        packed=PACK and code=='zh-CN'
+        result=apply_recipe(source,self.output/(code+'-prices'),code,'item-prices',
+                            resources_only=not packed,create_preview=False)
+        item=result.resources['SYSTEM/ITEM.DAT']
+        for off in range(0,len(original),36):
+            self.assertEqual(item[off+18:off+36],original[off+18:off+36])
+            self.assertIn(b'\0',item[off:off+18])
+        self.assertEqual(result.resources['SYSTEM/MAIN.DAT'][0x2a5e4:0x2a5e4+7200],item)
+        for name,data in result.resources.items():
+            if name not in {'SYSTEM/ITEM.DAT','SYSTEM/MAIN.DAT','SYSTEM/KANJI.FON'}:
+                self.assertEqual(data,result.original_resources[name],name)
+        if code in {'ko-KR','en-US'}:
+            rebuild=self.output/(code+'-price-rebuild')
+            invoke('fls.builders.build_full_languages',['--language','ko' if code=='ko-KR' else 'en',
+                                          '--base',source,'--output',str(rebuild),'--resources-only'])
+            self.assertEqual((rebuild/'resources/SYSTEM/ITEM.DAT').read_bytes(),item)
+        self.proof.append({'item_prices_language':code,'all_200_records_attributes_original':True,
+                           'runtime_mirror_matches':True,'encrypted_disc_verified':packed})
         self.assertEqual((WORK/'install_report.json').read_bytes(),install_record)
 
+    def test_item_prices_restored_zh_cn(self):
+        self._item_prices_restored('zh-CN', 'zh-CN-unifont06')
+
+    def test_item_prices_restored_ko_kr(self):
+        self._item_prices_restored('ko-KR', 'ko-KR-unifont-full06')
+
+    def test_item_prices_restored_en_us(self):
+        self._item_prices_restored('en-US', 'en-US-unifont-full06')
+
     def test_item_price_guard_rejects_legacy_zeroing(self):
-        import build_alpha as base
+        from fls.builders import build_alpha as base
         data=bytearray((base.SOURCE/'SYSTEM/ITEM.DAT').read_bytes())
         data[12*36+18:12*36+20]=b'\0\0'
         with self.assertRaisesRegex(AssertionError,'Item attributes changed'):
@@ -162,16 +183,11 @@ class Workflows(unittest.TestCase):
                                               'offset':'0x1b0','capacity_bytes':20}),18)
 
     def test_chinese_builder_preserves_item_values(self):
-        import build_alpha as base
-        from extract_text import event_header,event_strings
-        from translation_data import read_corpus_rows
+        from fls.builders import build_alpha as base
+        from fls.text.extract_text import event_header,event_strings
+        from fls.text.translation_data import read_corpus_rows
         output=self.output/'chinese-resources';output.mkdir()
-        previous=base.STAGE
-        try:
-            base.STAGE=output
-            changes,report=base.build_resources('unifont',enforce_capacity=False)
-        finally:
-            base.STAGE=previous
+        changes,report=base.build_resources('unifont',enforce_capacity=False,stage=output)
         base.verify_item_attributes(changes['SYSTEM/ITEM.DAT'])
         original=(base.SOURCE/'SYSTEM/ITEM.DAT').read_bytes()
         start=(base.SOURCE/'SYSTEM/MAIN.DAT').read_bytes().index(original)
@@ -231,12 +247,8 @@ class Workflows(unittest.TestCase):
         self.assertEqual((enforced['relocated_lba'],enforced['relocated_sectors']),
                          (relocated_lba,relocated_sectors))
         relocated=self.output/'chinese-full-capacity'
-        previous=base.STAGE
-        try:
-            invoke('build_full_languages',['--language','zh-CN','--base','zh-CN-unifont07',
-                                           '--output',str(relocated),'--resources-only'])
-        finally:
-            base.STAGE=previous
+        invoke('fls.builders.build_full_languages',['--language','zh-CN','--base','zh-CN-unifont07',
+                                       '--output',str(relocated),'--resources-only'])
         staged=json.loads((relocated/'resource_report.json').read_text(encoding='utf-8'))
         self.assertTrue(staged['packable'])
         self.assertEqual([item for item in staged['capacity_overflows'] if item['file']==target],[])
@@ -249,48 +261,55 @@ class Workflows(unittest.TestCase):
                            'all_translated_event_rows_decoded':len(decoded_ids),
                            'instruction_relative_offsets_preserved':True})
 
-    def test_frontend_menu_trilingual_containers(self):
-        from container_atlases import decode_container, parse_atlas
-        from build_alpha import digest
+    def _frontend_menu_containers(self, code,source):
+        from fls.containers.container_atlases import decode_container, parse_atlas
+        from fls.builders.build_alpha import digest
         install_record = (WORK/'install_report.json').read_bytes()
         policy = (WORK/'config/storage_policy.json').read_bytes()
-        for code, source in [('zh-CN','zh-CN-unifont03'), ('ko-KR','ko-KR-unifont-full03'),
-                             ('en-US','en-US-unifont-full02')]:
-            result = apply_recipe(source,self.output/(code+'-frontend'),code,'frontend-menu',
-                                  resources_only=True,create_preview=False)
-            self.assertEqual(result.resources,result.original_resources)
-            self.assertFalse((result.stage/'FarlandSaga.bin').exists())
-            atlas = result.report['frontend_menu']['container_atlases'][0]
-            self.assertEqual([row['part'] for row in atlas['labels']],[404,399,382,426,360,398,375,386])
-            self.assertEqual([row['part'] for row in atlas['panels']],list(range(104,111)))
-            for name in ['FarlandSaga.exe','S-Tribute_Data/resources.assets',
-                         'S-Tribute_Data/sharedassets0.assets','S-Tribute_Data/level0']:
-                self.assertEqual(digest(result.stage/name),digest(result.source/name),name)
-            header,data,_ = decode_container(result.stage/'Texture.tex','Texture.tex')
-            original_header,original_data,_ = decode_container(WORK/'assets/sources/Texture.tex','Texture.tex')
-            image,boxes,_,metadata = parse_atlas(data)
-            original,original_boxes,_,original_metadata = parse_atlas(original_data)
-            self.assertEqual(header,original_header)
-            self.assertEqual(boxes,original_boxes)
-            self.assertEqual(metadata,original_metadata)
-            # Seven language slots must show exactly the same candidate prompt.
-            first = image.crop(boxes[104]).crop((16,61,212,207))
-            for index in range(105,111):
-                self.assertEqual(first.tobytes(),image.crop(boxes[index]).crop((16,61,212,207)).tobytes())
-            changed_parts={row['part'] for row in atlas['labels']}|set(range(104,111))
-            for index,box in enumerate(boxes):
-                if index not in changed_parts:self.assertEqual(image.crop(box).tobytes(),original.crop(box).tobytes(),index)
-            if code=='ko-KR':
-                rebuild=self.output/'frontend-full-rebuild'
-                invoke('build_full_languages',['--language','ko','--base',str(result.stage),
-                                               '--output',str(rebuild),'--resources-only'])
-                rebuilt_report=json.loads((rebuild/'resource_report.json').read_text())
-                self.assertEqual(digest(rebuild/'Texture.tex'),digest(result.stage/'Texture.tex'))
-                self.assertEqual(rebuilt_report['frontend_menu'],json.loads(json.dumps(result.report['frontend_menu'])))
-            self.proof.append({'frontend_menu_language':code,'encrypted_atlas_readback':True,
-                               'sprite_metadata_and_unrelated_parts_unchanged':True,'native_resources_unchanged':True})
+        result = apply_recipe(source,self.output/(code+'-frontend'),code,'frontend-menu',
+                              resources_only=True,create_preview=False)
+        self.assertEqual(result.resources,result.original_resources)
+        self.assertFalse((result.stage/'FarlandSaga.bin').exists())
+        atlas = result.report['frontend_menu']['container_atlases'][0]
+        self.assertEqual([row['part'] for row in atlas['labels']],[404,399,382,426,360,398,375,386])
+        self.assertEqual([row['part'] for row in atlas['panels']],list(range(104,111)))
+        for name in ['FarlandSaga.exe','S-Tribute_Data/resources.assets',
+                     'S-Tribute_Data/sharedassets0.assets','S-Tribute_Data/level0']:
+            self.assertEqual(digest(result.stage/name),digest(result.source/name),name)
+        header,data,_ = decode_container(result.stage/'Texture.tex','Texture.tex')
+        original_header,original_data,_ = decode_container(WORK/'assets/sources/Texture.tex','Texture.tex')
+        image,boxes,_,metadata = parse_atlas(data)
+        original,original_boxes,_,original_metadata = parse_atlas(original_data)
+        self.assertEqual(header,original_header)
+        self.assertEqual(boxes,original_boxes)
+        self.assertEqual(metadata,original_metadata)
+        # Seven language slots must show exactly the same candidate prompt.
+        first = image.crop(boxes[104]).crop((16,61,212,207))
+        for index in range(105,111):
+            self.assertEqual(first.tobytes(),image.crop(boxes[index]).crop((16,61,212,207)).tobytes())
+        changed_parts={row['part'] for row in atlas['labels']}|set(range(104,111))
+        for index,box in enumerate(boxes):
+            if index not in changed_parts:self.assertEqual(image.crop(box).tobytes(),original.crop(box).tobytes(),index)
+        if code=='ko-KR':
+            rebuild=self.output/'frontend-full-rebuild'
+            invoke('fls.builders.build_full_languages',['--language','ko','--base',str(result.stage),
+                                           '--output',str(rebuild),'--resources-only'])
+            rebuilt_report=json.loads((rebuild/'resource_report.json').read_text())
+            self.assertEqual(digest(rebuild/'Texture.tex'),digest(result.stage/'Texture.tex'))
+            self.assertEqual(rebuilt_report['frontend_menu'],json.loads(json.dumps(result.report['frontend_menu'])))
+        self.proof.append({'frontend_menu_language':code,'encrypted_atlas_readback':True,
+                           'sprite_metadata_and_unrelated_parts_unchanged':True,'native_resources_unchanged':True})
         self.assertEqual((WORK/'install_report.json').read_bytes(),install_record)
         self.assertEqual((WORK/'config/storage_policy.json').read_bytes(),policy)
+
+    def test_frontend_menu_containers_zh_cn(self):
+        self._frontend_menu_containers('zh-CN', 'zh-CN-unifont03')
+
+    def test_frontend_menu_containers_ko_kr(self):
+        self._frontend_menu_containers('ko-KR', 'ko-KR-unifont-full03')
+
+    def test_frontend_menu_containers_en_us(self):
+        self._frontend_menu_containers('en-US', 'en-US-unifont-full02')
 
     def test_frontend_menu_rejects_wrong_source_and_overflow(self):
         recipe=json.loads((REPO/'config/patches/frontend-menu.json').read_text())
@@ -306,8 +325,8 @@ class Workflows(unittest.TestCase):
             apply_recipe('en-US-unifont-full02',self.output/'atlas-overflow','en-US',path,resources_only=True)
 
     def test_frontend_container_fit_contract(self):
-        from container_atlases import draw_text
-        from path_compat import local_path
+        from fls.containers.container_atlases import draw_text
+        from fls.core.path_compat import local_path
         from PIL import Image, ImageDraw, ImageFont
 
         recipe=json.loads((REPO/'config/patches/frontend-menu.json').read_text())
@@ -356,10 +375,10 @@ class Workflows(unittest.TestCase):
         self.assertIn(repr(too_long),str(caught.exception))
         self.assertIn('minimum_font_size=9',str(caught.exception))
 
-    def test_frontend_submenus_cover_language_slots_and_protect_art(self):
-        from container_atlases import decode_container,parse_atlas
+    def _frontend_submenus(self, code,source):
+        from fls.containers.container_atlases import decode_container,parse_atlas
         from PIL import Image,ImageDraw
-        from build_alpha import digest
+        from fls.builders.build_alpha import digest
         config=json.loads((REPO/'config/patches/frontend-submenus.json').read_text())['container_atlases'][0]
         draft=json.loads((REPO/'translation/frontend_submenus.json').read_text())
         expected=(set(range(15,94))|set(range(111,114))|set(range(123,342))
@@ -377,89 +396,96 @@ class Workflows(unittest.TestCase):
         policy=(WORK/'config/storage_policy.json').read_bytes()
         original_header,original_data,_=decode_container(WORK/config['source'],'Texture.tex')
         original,boxes,_,metadata=parse_atlas(original_data)
-        for code,source in [('zh-CN','zh-CN-unifont04'),('ko-KR','ko-KR-unifont-full04'),
-                            ('en-US','en-US-unifont-full04')]:
-            result=apply_recipe(source,self.output/(code+'-submenus'),code,'frontend-submenus',
-                                resources_only=True,create_preview=False)
-            self.assertEqual(result.resources,result.original_resources)
-            atlas=result.report['frontend_menu']['container_atlases'][0]
-            for name in ['FarlandSaga.exe','S-Tribute_Data/resources.assets',
-                         'S-Tribute_Data/sharedassets0.assets','S-Tribute_Data/level0']:
-                self.assertEqual(digest(result.stage/name),digest(result.source/name),name)
-            header,data,_=decode_container(result.stage/'Texture.tex','Texture.tex')
-            image,actual_boxes,_,actual_metadata=parse_atlas(data)
-            self.assertEqual(header,original_header)
-            self.assertEqual(actual_boxes,boxes)
-            self.assertEqual(actual_metadata,metadata)
-            _,base_data,_=decode_container(result.source/'Texture.tex','Texture.tex')
-            previous,_,_,_=parse_atlas(base_data)
-            # The top-level menu is shared with the frontend-menu recipe. The
-            # frozen base candidate was rasterized by an earlier FreeType build
-            # (the locked venv was reinstalled afterwards), so replay that recipe
-            # in this environment and require identical pixels instead of
-            # comparing against the stored candidate bytes.
-            menu=apply_recipe(source,self.output/(code+'-submenus-menu'),code,'frontend-menu',
-                              resources_only=True,create_preview=False)
-            _,menu_data,_=decode_container(menu.stage/'Texture.tex','Texture.tex')
-            menu_image,menu_boxes,_,_=parse_atlas(menu_data)
-            # The top-level menu must stay pixel-identical to that replay. View
-            # panel text is bound to the current theme, so preserve every pixel
-            # outside the declared title/body rectangles and verify its actual
-            # text below.
-            for part in [404,399,382,426,360,398,375,386]:
-                self.assertEqual(image.crop(boxes[part]).tobytes(),menu_image.crop(menu_boxes[part]).tobytes(),part)
-            panel_reports={row['part']:row for row in atlas['panels']}
-            panel_ids=config['panel_translation_ids']
-            for part in range(104,111):
-                before_panel=previous.crop(boxes[part]);after_panel=image.crop(boxes[part])
-                text_mask=Image.new('L',before_panel.size,0);mask_draw=ImageDraw.Draw(text_mask)
-                for region in [(16,6,212,52),(16,61,212,207)]:
-                    mask_draw.rectangle((region[0],region[1],region[2]-1,region[3]-1),fill=255)
-                preserved=after_panel.copy();preserved.paste(before_panel,(0,0),text_mask)
-                self.assertEqual(preserved.tobytes(),before_panel.tobytes(),part)
-                self.assertEqual(panel_reports[part]['title']['text'],
-                                 groups[panel_ids['title']]['text'][code])
-                self.assertEqual(panel_reports[part]['button']['text'],
-                                 groups[panel_ids['button']]['text'][code])
-            for part in protected:
-                self.assertEqual(image.crop(boxes[part]).tobytes(),original.crop(boxes[part]).tobytes(),part)
-            for part in range(430,436):
-                box=boxes[part];spinner=(box[0]+228,box[1],box[2],box[3])
-                self.assertEqual(image.crop(spinner).tobytes(),original.crop(spinner).tobytes(),part)
-            rendered_by_part={row['part']:row for row in atlas['labels']}
-            for row in config['labels']:
-                actual=rendered_by_part[row['part']]
-                self.assertEqual(actual['translation_id'],row['translation_id'])
-                reviewed=groups[row['translation_id']]['text'][code]
-                normalize=lambda text:''.join(text.split())
-                self.assertEqual(normalize(actual['text']),normalize(reviewed))
-                preferred=row.get('font_size',{}).get(code,32)
-                self.assertEqual(actual['preferred_font_size'],preferred)
-                self.assertEqual(actual['actual_font_size'],actual['font_size'])
-                self.assertEqual(actual['line_count'],len(actual['lines']))
-                self.assertEqual(actual['reduced_font'],actual['actual_font_size']<preferred)
-                draw_box=actual['draw_region'];left,top,right,bottom=actual['bounds']
-                self.assertGreaterEqual(left,draw_box[0]);self.assertGreaterEqual(top,draw_box[1])
-                self.assertLessEqual(right,draw_box[2]);self.assertLessEqual(bottom,draw_box[3])
-                self.assertLessEqual(actual['line_count'],row.get('max_lines',1))
-            self.assertEqual(len(atlas['labels']),371)
-            self.assertTrue(atlas['outside_pixels_unchanged'])
-            self.assertTrue(all(not row['overflow'] for row in atlas['labels']))
-            if code=='zh-CN':
-                self.assertEqual(atlas['fallback_font']['codepoints'],['U+30FB'])
-                self.assertEqual(sorted({cp for row in atlas['labels']
-                                         for cp in row['fallback_codepoints']}),['U+30FB'])
-            self.proof.append({'frontend_submenus_language':code,'all_text_parts':371,
-                               'original_main_menu_and_view_panel_art_retained':True,
-                               'spinner_art_and_sprite_metadata_unchanged':True,
-                               'fit_sizes_lines_bounds_and_current_theme_text_verified':True,
-                               'simhei_missing_glyph_30fb_fallback_only':code=='zh-CN'})
+        result=apply_recipe(source,self.output/(code+'-submenus'),code,'frontend-submenus',
+                            resources_only=True,create_preview=False)
+        self.assertEqual(result.resources,result.original_resources)
+        atlas=result.report['frontend_menu']['container_atlases'][0]
+        for name in ['FarlandSaga.exe','S-Tribute_Data/resources.assets',
+                     'S-Tribute_Data/sharedassets0.assets','S-Tribute_Data/level0']:
+            self.assertEqual(digest(result.stage/name),digest(result.source/name),name)
+        header,data,_=decode_container(result.stage/'Texture.tex','Texture.tex')
+        image,actual_boxes,_,actual_metadata=parse_atlas(data)
+        self.assertEqual(header,original_header)
+        self.assertEqual(actual_boxes,boxes)
+        self.assertEqual(actual_metadata,metadata)
+        _,base_data,_=decode_container(result.source/'Texture.tex','Texture.tex')
+        previous,_,_,_=parse_atlas(base_data)
+        # The top-level menu is shared with the frontend-menu recipe. The
+        # frozen base candidate was rasterized by an earlier FreeType build
+        # (the locked venv was reinstalled afterwards), so replay that recipe
+        # in this environment and require identical pixels instead of
+        # comparing against the stored candidate bytes.
+        menu=apply_recipe(source,self.output/(code+'-submenus-menu'),code,'frontend-menu',
+                          resources_only=True,create_preview=False)
+        _,menu_data,_=decode_container(menu.stage/'Texture.tex','Texture.tex')
+        menu_image,menu_boxes,_,_=parse_atlas(menu_data)
+        # The top-level menu must stay pixel-identical to that replay. View
+        # panel text is bound to the current theme, so preserve every pixel
+        # outside the declared title/body rectangles and verify its actual
+        # text below.
+        for part in [404,399,382,426,360,398,375,386]:
+            self.assertEqual(image.crop(boxes[part]).tobytes(),menu_image.crop(menu_boxes[part]).tobytes(),part)
+        panel_reports={row['part']:row for row in atlas['panels']}
+        panel_ids=config['panel_translation_ids']
+        for part in range(104,111):
+            before_panel=previous.crop(boxes[part]);after_panel=image.crop(boxes[part])
+            text_mask=Image.new('L',before_panel.size,0);mask_draw=ImageDraw.Draw(text_mask)
+            for region in [(16,6,212,52),(16,61,212,207)]:
+                mask_draw.rectangle((region[0],region[1],region[2]-1,region[3]-1),fill=255)
+            preserved=after_panel.copy();preserved.paste(before_panel,(0,0),text_mask)
+            self.assertEqual(preserved.tobytes(),before_panel.tobytes(),part)
+            self.assertEqual(panel_reports[part]['title']['text'],
+                             groups[panel_ids['title']]['text'][code])
+            self.assertEqual(panel_reports[part]['button']['text'],
+                             groups[panel_ids['button']]['text'][code])
+        for part in protected:
+            self.assertEqual(image.crop(boxes[part]).tobytes(),original.crop(boxes[part]).tobytes(),part)
+        for part in range(430,436):
+            box=boxes[part];spinner=(box[0]+228,box[1],box[2],box[3])
+            self.assertEqual(image.crop(spinner).tobytes(),original.crop(spinner).tobytes(),part)
+        rendered_by_part={row['part']:row for row in atlas['labels']}
+        for row in config['labels']:
+            actual=rendered_by_part[row['part']]
+            self.assertEqual(actual['translation_id'],row['translation_id'])
+            reviewed=groups[row['translation_id']]['text'][code]
+            normalize=lambda text:''.join(text.split())
+            self.assertEqual(normalize(actual['text']),normalize(reviewed))
+            preferred=row.get('font_size',{}).get(code,32)
+            self.assertEqual(actual['preferred_font_size'],preferred)
+            self.assertEqual(actual['actual_font_size'],actual['font_size'])
+            self.assertEqual(actual['line_count'],len(actual['lines']))
+            self.assertEqual(actual['reduced_font'],actual['actual_font_size']<preferred)
+            draw_box=actual['draw_region'];left,top,right,bottom=actual['bounds']
+            self.assertGreaterEqual(left,draw_box[0]);self.assertGreaterEqual(top,draw_box[1])
+            self.assertLessEqual(right,draw_box[2]);self.assertLessEqual(bottom,draw_box[3])
+            self.assertLessEqual(actual['line_count'],row.get('max_lines',1))
+        self.assertEqual(len(atlas['labels']),371)
+        self.assertTrue(atlas['outside_pixels_unchanged'])
+        self.assertTrue(all(not row['overflow'] for row in atlas['labels']))
+        if code=='zh-CN':
+            self.assertEqual(atlas['fallback_font']['codepoints'],['U+30FB'])
+            self.assertEqual(sorted({cp for row in atlas['labels']
+                                     for cp in row['fallback_codepoints']}),['U+30FB'])
+        self.proof.append({'frontend_submenus_language':code,'all_text_parts':371,
+                           'original_main_menu_and_view_panel_art_retained':True,
+                           'spinner_art_and_sprite_metadata_unchanged':True,
+                           'fit_sizes_lines_bounds_and_current_theme_text_verified':True,
+                           'simhei_missing_glyph_30fb_fallback_only':code=='zh-CN'})
         self.assertEqual((WORK/'install_report.json').read_bytes(),install_record)
         self.assertEqual((WORK/'config/storage_policy.json').read_bytes(),policy)
 
-    def test_save_folder_runtime_hooks_and_rebuild_preservation(self):
-        from build_alpha import digest,EXE
-        from runtime_text import replay_runtime_text
+    def test_frontend_submenus_zh_cn(self):
+        self._frontend_submenus('zh-CN', 'zh-CN-unifont04')
+
+    def test_frontend_submenus_ko_kr(self):
+        self._frontend_submenus('ko-KR', 'ko-KR-unifont-full04')
+
+    def test_frontend_submenus_en_us(self):
+        self._frontend_submenus('en-US', 'en-US-unifont-full04')
+
+    def _save_folder_runtime_hooks(self, code,source,expected):
+        from fls.builders.build_alpha import digest,EXE
+        from fls.text.runtime_text import replay_runtime_text
         install_record=(WORK/'install_report.json').read_bytes()
         policy=(WORK/'config/storage_policy.json').read_bytes()
         original=EXE.read_bytes()
@@ -469,63 +495,69 @@ class Workflows(unittest.TestCase):
         self.assertEqual({row['ordinal'] for row in labels},{1,2})
         self.assertEqual({int(write['memory_address'],0) for row in labels for write in row['word_writes']},
                          set(range(0x0601b828,0x0601b830,2))|set(range(0x0601b83c,0x0601b844,2)))
-        for code,source,expected in [('zh-CN','zh-CN-unifont05','zh-CN-unifont06'),
-                                     ('ko-KR','ko-KR-unifont-full05','ko-KR-unifont-full06'),
-                                     ('en-US','en-US-unifont-full05','en-US-unifont-full06')]:
-            result=apply_recipe(source,self.output/(code+'-folder'),code,'save-folder',
-                                resources_only=True,create_preview=False)
-            self.assertEqual(result.resources,result.original_resources)
-            self.compare(result,expected)
-            before=(result.source/'FarlandSaga.exe').read_bytes()
-            patched=(result.stage/'FarlandSaga.exe').read_bytes()
-            permitted=set()
-            runtime=result.report['save_folder']['runtime_word_writes']
-            self.assertEqual(runtime['word_write_count'],24)
-            mapping=json.loads((result.stage/'glyph_map.json').read_text())
-            mapping=mapping.get('all',{row.get('token',row.get('character')):row['cp932_hex'] for row in mapping['added']})
-            for row in runtime['labels']:
-                encoded=bytes.fromhex(row['encoded_hex'])
-                recovered=[]
-                for i,write in enumerate(row['word_writes']):
-                    off=int(write['offset'],0);permitted.update(range(off,off+4))
-                    pair=encoded[i*2:i*2+2]
-                    self.assertEqual(patched[off:off+4],int.from_bytes(pair,'big').to_bytes(4,'little'))
-                    for token,cp in mapping.items():
-                        if bytes.fromhex(cp)==pair:recovered.append(token);break
-                    else:self.assertEqual(pair,bytes.fromhex('8140'))
-                    self.assertEqual(patched[off-4:off],original[off-4:off])
-                    self.assertEqual(patched[off+4:off+14],original[off+4:off+14])
-                self.assertEqual(''.join(recovered).replace('　',''),row['text'])
-            self.assertTrue(all(i in permitted for i,(a,b) in enumerate(zip(before,patched)) if a!=b))
-            for name in ['Texture.tex','S-Tribute_Data/resources.assets','S-Tribute_Data/sharedassets0.assets','S-Tribute_Data/level0']:
-                self.assertEqual(digest(result.stage/name),digest(result.source/name),name)
-            # Reapplying the recipe must leave the already-fixed code identical.
-            repeated=apply_recipe(expected,self.output/(code+'-folder-repeat'),code,'save-folder',
-                                  resources_only=True,create_preview=False)
-            self.assertEqual((repeated.stage/'FarlandSaga.exe').read_bytes(),patched)
-            if code=='ko-KR':
-                rebuild=self.output/'folder-full-rebuild'
-                invoke('build_full_languages',['--language','ko','--base',expected,
-                                              '--output',str(rebuild),'--resources-only'])
-                self.assertEqual((rebuild/'FarlandSaga.exe').read_bytes(),patched)
-                rebuilt_report=json.loads((rebuild/'resource_report.json').read_text())
-                self.assertEqual(rebuilt_report['save_folder'],json.loads((WORK/'staging'/expected/'save_folder_report.json').read_text()))
-                # Full builds regenerate the executable before replaying hooks.
-                import shutil
-                shutil.copyfile(result.source/'FarlandSaga.exe',rebuild/'FarlandSaga.exe')
-                replay_runtime_text(WORK/'staging'/expected,rebuild)
-                self.assertEqual((rebuild/'FarlandSaga.exe').read_bytes(),patched)
-            if code=='zh-CN':
-                # Later font edits must preserve host runtime text immediates.
-                font=bytearray(result.resources['SYSTEM/KANJI.FON']);font[100]^=1
-                result.resources['SYSTEM/KANJI.FON']=bytes(font)
-                result.sync_description_font()
-                synced=(result.stage/'FarlandSaga.exe').read_bytes()
-                for off in permitted:self.assertEqual(synced[off],patched[off])
-            self.proof.append({'save_folder_language':code,'all_six_hooks_localized':True,
-                               'instruction_addresses_calls_and_unrelated_files_unchanged':True})
+        result=apply_recipe(source,self.output/(code+'-folder'),code,'save-folder',
+                            resources_only=True,create_preview=False)
+        self.assertEqual(result.resources,result.original_resources)
+        self.compare(result,expected)
+        before=(result.source/'FarlandSaga.exe').read_bytes()
+        patched=(result.stage/'FarlandSaga.exe').read_bytes()
+        permitted=set()
+        runtime=result.report['save_folder']['runtime_word_writes']
+        self.assertEqual(runtime['word_write_count'],24)
+        mapping=json.loads((result.stage/'glyph_map.json').read_text())
+        mapping=mapping.get('all',{row.get('token',row.get('character')):row['cp932_hex'] for row in mapping['added']})
+        for row in runtime['labels']:
+            encoded=bytes.fromhex(row['encoded_hex'])
+            recovered=[]
+            for i,write in enumerate(row['word_writes']):
+                off=int(write['offset'],0);permitted.update(range(off,off+4))
+                pair=encoded[i*2:i*2+2]
+                self.assertEqual(patched[off:off+4],int.from_bytes(pair,'big').to_bytes(4,'little'))
+                for token,cp in mapping.items():
+                    if bytes.fromhex(cp)==pair:recovered.append(token);break
+                else:self.assertEqual(pair,bytes.fromhex('8140'))
+                self.assertEqual(patched[off-4:off],original[off-4:off])
+                self.assertEqual(patched[off+4:off+14],original[off+4:off+14])
+            self.assertEqual(''.join(recovered).replace('　',''),row['text'])
+        self.assertTrue(all(i in permitted for i,(a,b) in enumerate(zip(before,patched)) if a!=b))
+        for name in ['Texture.tex','S-Tribute_Data/resources.assets','S-Tribute_Data/sharedassets0.assets','S-Tribute_Data/level0']:
+            self.assertEqual(digest(result.stage/name),digest(result.source/name),name)
+        # Reapplying the recipe must leave the already-fixed code identical.
+        repeated=apply_recipe(expected,self.output/(code+'-folder-repeat'),code,'save-folder',
+                              resources_only=True,create_preview=False)
+        self.assertEqual((repeated.stage/'FarlandSaga.exe').read_bytes(),patched)
+        if code=='ko-KR':
+            rebuild=self.output/'folder-full-rebuild'
+            invoke('fls.builders.build_full_languages',['--language','ko','--base',expected,
+                                          '--output',str(rebuild),'--resources-only'])
+            self.assertEqual((rebuild/'FarlandSaga.exe').read_bytes(),patched)
+            rebuilt_report=json.loads((rebuild/'resource_report.json').read_text())
+            self.assertEqual(rebuilt_report['save_folder'],json.loads((WORK/'staging'/expected/'save_folder_report.json').read_text()))
+            # Full builds regenerate the executable before replaying hooks.
+            import shutil
+            shutil.copyfile(result.source/'FarlandSaga.exe',rebuild/'FarlandSaga.exe')
+            replay_runtime_text(WORK/'staging'/expected,rebuild)
+            self.assertEqual((rebuild/'FarlandSaga.exe').read_bytes(),patched)
+        if code=='zh-CN':
+            # Later font edits must preserve host runtime text immediates.
+            font=bytearray(result.resources['SYSTEM/KANJI.FON']);font[100]^=1
+            result.resources['SYSTEM/KANJI.FON']=bytes(font)
+            result.sync_description_font()
+            synced=(result.stage/'FarlandSaga.exe').read_bytes()
+            for off in permitted:self.assertEqual(synced[off],patched[off])
+        self.proof.append({'save_folder_language':code,'all_six_hooks_localized':True,
+                           'instruction_addresses_calls_and_unrelated_files_unchanged':True})
         self.assertEqual((WORK/'install_report.json').read_bytes(),install_record)
         self.assertEqual((WORK/'config/storage_policy.json').read_bytes(),policy)
+
+    def test_save_folder_runtime_hooks_zh_cn(self):
+        self._save_folder_runtime_hooks('zh-CN', 'zh-CN-unifont05', 'zh-CN-unifont06')
+
+    def test_save_folder_runtime_hooks_ko_kr(self):
+        self._save_folder_runtime_hooks('ko-KR', 'ko-KR-unifont-full05', 'ko-KR-unifont-full06')
+
+    def test_save_folder_runtime_hooks_en_us(self):
+        self._save_folder_runtime_hooks('en-US', 'en-US-unifont-full05', 'en-US-unifont-full06')
 
     def test_save_folder_rejects_changed_instructions_and_overflow(self):
         import copy
@@ -545,7 +577,7 @@ class Workflows(unittest.TestCase):
                              resources_only=True,create_preview=False)
 
     def test_ui_builders_can_reuse_localized_base(self):
-        from build_ui_labels import LEGEND_END,LEGEND_START
+        from fls.builders.build_ui_labels import LEGEND_END,LEGEND_START
         from PIL import Image
 
         source=WORK/'staging/ko-KR-unifont-full03'
@@ -556,7 +588,7 @@ class Workflows(unittest.TestCase):
         outputs=[]
         for name in ['ui-first','ui-repeat']:
             output=self.output/name
-            invoke('build_ui_labels',['--language','ko-KR','--base',str(source),
+            invoke('fls.builders.build_ui_labels',['--language','ko-KR','--base',str(source),
                                      '--output',str(output),'--resources-only'])
             outputs.append(output)
         resources=[{p.relative_to(output/'resources').as_posix():p.read_bytes()
@@ -626,7 +658,7 @@ class Workflows(unittest.TestCase):
                            'item_attributes_and_mirror_preserved':True,'same_input_rebuild_idempotent':True})
 
     def test_equipment_builder_can_reuse_localized_base(self):
-        import build_alpha as base
+        from fls.builders import build_alpha as base
 
         source=WORK/'staging/ko-KR-unifont-full03'
         materialize(source)
@@ -636,7 +668,7 @@ class Workflows(unittest.TestCase):
         outputs=[]
         for name in ['equipment-first','equipment-repeat']:
             output=self.output/name
-            invoke('build_equipment_labels',['--language','ko-KR','--base',str(source),
+            invoke('fls.builders.build_equipment_labels',['--language','ko-KR','--base',str(source),
                                              '--output',str(output),'--resources-only'])
             outputs.append(output)
         resources=[{p.relative_to(output/'resources').as_posix():p.read_bytes()
@@ -707,7 +739,6 @@ class Workflows(unittest.TestCase):
             apply_recipe('ko-KR-unifont-full02',self.output/'overflow-output','ko-KR',path,
                          resources_only=True,create_preview=False)
 
-
 def _discover():
     """Flat list of every test id in this script, for shard selection."""
     loader = unittest.TestLoader()
@@ -722,7 +753,6 @@ def _discover():
 
     walk(loader.loadTestsFromModule(sys.modules[__name__]))
     return ids
-
 
 if __name__=='__main__':
     explicit=[name for name in sys.argv[1:] if not name.startswith('-')]

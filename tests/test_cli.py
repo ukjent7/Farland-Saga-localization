@@ -11,10 +11,10 @@ import zipfile
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO/'tools'))
-import localize
-import workspace_status as state
-import path_compat
+sys.path.insert(0, str(REPO))
+import fls.cli.main as localize
+import fls.storage.workspace_status as state
+import fls.core.path_compat as path_compat
 
 WORK = path_compat.WORK
 
@@ -31,7 +31,8 @@ class EntryPoints(unittest.TestCase):
         self.assertEqual(path_compat.local_path(external), external)
 
     def test_help_without_site_packages(self):
-        result = subprocess.run([sys.executable, '-S', str(REPO/'tools/localize.py'), '--help'], capture_output=True, text=True)
+        result = subprocess.run([sys.executable, '-S', '-m', 'fls', '--help'],
+                                capture_output=True, text=True, cwd=REPO)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('doctor', result.stdout)
 
@@ -49,7 +50,7 @@ class EntryPoints(unittest.TestCase):
     def test_installer_selection_and_check_only(self):
         with patch.object(sys, 'argv', ['localize.py', 'install', '--language', 'ko-KR', '--check-only']), patch.object(localize, 'invoke') as invoke:
             localize.main()
-        invoke.assert_called_once_with('install_alpha', ['--stage', state.active_stage('ko-KR').name, '--check-only'])
+        invoke.assert_called_once_with('fls.storage.install_alpha', ['--stage', state.active_stage('ko-KR').name, '--check-only'])
 
     def test_install_requires_exactly_one_source(self):
         for options in ([], ['--stage', 'alpha04', '--language', 'ko-KR']):
@@ -117,8 +118,8 @@ class PreflightSafety(unittest.TestCase):
             self.assertEqual(state.candidate_state(self.stage)['missing_or_wrong_size'], ['sample.bin'])
 
     def run_preflight(self, stage='release', processes='0'):
-        import install_alpha
-        import candidate
+        import fls.storage.install_alpha as install_alpha
+        import fls.storage.candidate as candidate
         process_check = RuntimeError('The game is running in Linux/Wine') if processes != '0' else None
         with patch.object(install_alpha, 'WORK', self.work), patch.object(install_alpha, 'ROOT', self.root), patch.object(install_alpha, 'require_no_linux_game_process', side_effect=process_check), patch.object(sys, 'argv', ['install_alpha.py', '--stage', stage, '--check-only']), patch.object(candidate, 'verify_candidate', return_value=json.loads(json.dumps(self.report))), contextlib.redirect_stdout(io.StringIO()):
             install_alpha.main()
@@ -168,9 +169,9 @@ class ReleasePackaging(unittest.TestCase):
     """合成候选打包成差异载荷的往返；夹具全部放在 work/.tmp 内。"""
 
     def setUp(self):
-        import build_alpha
-        import package_release
-        import version_storage as storage
+        import fls.builders.build_alpha as build_alpha
+        import fls.storage.package_release as package_release
+        import fls.storage.version_storage as storage
         (WORK/'.tmp').mkdir(parents=True, exist_ok=True)
         self.temp = tempfile.TemporaryDirectory(dir=WORK/'.tmp')
         self.addCleanup(self.temp.cleanup)
@@ -203,9 +204,9 @@ class ReleasePackaging(unittest.TestCase):
         package_release.WORK = self.work
 
     def tearDown(self):
-        import build_alpha
-        import package_release
-        import version_storage as storage
+        import fls.builders.build_alpha as build_alpha
+        import fls.storage.package_release as package_release
+        import fls.storage.version_storage as storage
         (build_alpha.WORK, storage.WORK, storage.STORE, package_release.WORK) = self.saved
 
     def read_manifest(self, payload):
@@ -215,8 +216,8 @@ class ReleasePackaging(unittest.TestCase):
         return names, manifest
 
     def test_payload_round_trip(self):
-        import package_release
-        import version_storage as storage
+        import fls.storage.package_release as package_release
+        import fls.storage.version_storage as storage
         result = package_release.package('release')
         payload = Path(result['payload'])
         self.assertEqual(payload.name, 'farland-patch-zh-CN-release01.zip')
@@ -234,13 +235,13 @@ class ReleasePackaging(unittest.TestCase):
             self.assertEqual(buffer.getvalue(), self.patched[entry['path']])
 
     def test_payload_is_reproducible(self):
-        import package_release
+        import fls.storage.package_release as package_release
         first = Path(package_release.package('release')['payload']).read_bytes()
         second = Path(package_release.package('release')['payload']).read_bytes()
         self.assertEqual(first, second)
 
     def test_bundle_contains_patcher_and_readme(self):
-        import package_release
+        import fls.storage.package_release as package_release
         patcher = self.root/'FarlandSagaPatcher.exe'
         patcher.write_bytes(b'fake-patcher-binary')
         result = package_release.package('release', patcher=str(patcher))
@@ -258,7 +259,7 @@ class ReleasePackaging(unittest.TestCase):
         self.assertIn('第一屏选语言', readme)
 
     def test_rejects_escape_and_missing_record(self):
-        import package_release
+        import fls.storage.package_release as package_release
         with self.assertRaisesRegex(ValueError, 'Candidates must be inside'):
             package_release.package('../escape')
         (self.work/'install_report.json').unlink()
@@ -266,13 +267,13 @@ class ReleasePackaging(unittest.TestCase):
             package_release.package('release')
 
     def test_rejects_changed_original_backup(self):
-        import package_release
+        import fls.storage.package_release as package_release
         (self.backup/'Texture.tex').write_bytes(b'tampered')
         with self.assertRaisesRegex(ValueError, '原版备份与候选报告不一致'):
             package_release.package('release')
 
     def test_rejects_candidate_that_is_not_ready(self):
-        import package_release
+        import fls.storage.package_release as package_release
         report = json.loads((self.stage/'build_report.json').read_text())
         report['build_status'] = 'resources_only'
         (self.stage/'build_report.json').write_text(json.dumps(report))
