@@ -7,7 +7,8 @@
 - `glossary.json`: 四语统一术语库（日文原名、简体中文、한국어、English）及角色背景说明。
 - `corpus.json`: 全量 2,660 条剧情对白的主语料库，整合日文原句与中、韩、英三语对应译文及槽位状态。
 - `ui_labels.json`: UI 菜单、系统界面与物品说明译稿。
-- `ko-KR/labels.json`、`en-US/labels.json`: 韩文和英文的人物名、章节标题与存档场景名，供 `02CB`、`040D..041E`、`041F` 位图资源生成使用。
+- `ko-KR/labels.json`、`en-US/labels.json`: 韩文和英文的人物名、章节标题、存档场景名，以及 `02CB` 中属性、装备限制、技能、升级主语、职业、状态、物品共 353 个文字槽位，供 `02CB`、`040D..041E`、`041F` 位图资源生成使用。
+- `zh-CN/descriptions.json`、`ko-KR/descriptions.json`、`en-US/descriptions.json`: `02CC..0409` 共 318 张 288×64 说明位图的逐条译文（物品 169、特殊指令 10、技能 65、职业 74），键为资源编号。中文文本由 `zh-CN/descriptions.json` 统一重排，避免四行文本底边被裁切。
 - `zh-CN/story.json`: 简体中文按 Bank 对齐的剧情主文件。
 - `ko-KR/story.json`: 韩文按 Bank 对齐的剧情主文件。
 - `en-US/story.json`: 英文按 Bank 对齐的剧情主文件。
