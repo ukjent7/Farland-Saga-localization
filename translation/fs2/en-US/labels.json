@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "game": "FARLAND SAGA II Saturn Tribute",
+  "language": "en-US",
+  "character_names": {
+    "カリン": "Karin",
+    "アル": "Al",
+    "アリス": "Alice",
+    "サーラ": "Sarah",
+    "ラディッシュ": "Radish",
+    "ソフィア": "Sophia",
+    "ルル": "Lulu",
+    "???": "???",
+    "Ｔ．Ｔ．": "T.T.",
+    "ソーン": "Sohn",
+    "マクドガル": "MacDougal",
+    "ガストン": "Gaston",
+    "マスター": "Master",
+    "まっする親父": "Muscle Dad",
+    "ショップ姉ちゃん": "Shop Girl",
+    "怒りのカリン": "Angry Karin",
+    "困ったアリス": "Troubled Alice",
+    "カトリーヌ": "Catherine",
+    "ベヒモス": "Behemoth",
+    "デュマ": "Dumas",
+    "ジャン": "Jean",
+    "ドッペルゲンガー": "Doppelganger",
+    "アルヴィース": "Alviss",
+    "ソーン・ヴァイス": "Sohn Vice",
+    "ヒーちゃん": "Hee-chan",
+    "コカちゃん": "Koka-chan",
+    "ギルドマスター": "Guild Master"
+  },
+  "chapter_titles": {
+    "040D": {
+      "day": 1,
+      "title": "Please Give Me Work"
+    },
+    "040E": {
+      "day": 2,
+      "title": "Papa Worries Too Much"
+    },
+    "040F": {
+      "day": 3,
+      "title": "A Maiden's Wrath"
+    },
+    "0410": {
+      "day": 3,
+      "title": "I'm Getting Married"
+    },
+    "0411": {
+      "day": 4,
+      "title": "My Beloved Catherine"
+    },
+    "0412": {
+      "day": 5,
+      "title": "A Song for My Feelings"
+    },
+    "0413": {
+      "day": 6,
+      "title": "Catherine Strikes Back!"
+    },
+    "0414": {
+      "day": 7,
+      "title": "The Beast of the Mine"
+    },
+    "0415": {
+      "day": 8,
+      "title": "In Search of Light"
+    },
+    "0416": {
+      "day": 9,
+      "title": "Who Will Take the Crown?"
+    },
+    "0417": {
+      "day": 10,
+      "title": "Men Must Be Strong"
+    },
+    "0418": {
+      "day": 11,
+      "title": "Who Are You?"
+    },
+    "0419": {
+      "day": 12,
+      "title": "A Promise from Long Ago"
+    },
+    "041A": {
+      "day": 13,
+      "title": "The Last Day Off"
+    },
+    "041B": {
+      "day": 14,
+      "title": "Decisive Battle at Sea"
+    },
+    "041C": {
+      "day": 15,
+      "title": "The Underworld"
+    },
+    "041D": {
+      "day": 16,
+      "title": "The Only Truth"
+    },
+    "041E": {
+      "day": 17,
+      "title": "The One Who Sees Time"
+    }
+  },
+  "save_scene_titles": [
+    "Please Give Me Work",
+    "My First Job",
+    "Night Deepens",
+    "The Guild Master",
+    "Papa Worries Too Much",
+    "Where Has the Runaway Gone?",
+    "Alice Kidnapped!?",
+    "Battle at the Warehouse",
+    "The Sleeping Town",
+    "The Runaway Lady Joins",
+    "Battle in the Mud",
+    "A Maiden's Wrath",
+    "I'm Getting Married",
+    "The Explosive Girl Joins",
+    "Beware the Stalker",
+    "Gaston's Disaster",
+    "My Beloved Catherine",
+    "Catherine Recovers",
+    "Karin Goes Recruiting",
+    "A Song for My Feelings",
+    "Battle in the Hall",
+    "Battle on the Rooftops",
+    "Operation: Rescue Alice!",
+    "Deathmatch at the Boathouse",
+    "The Night Alice Was Saved",
+    "The Carefree Winged Girl Joins",
+    "I Want a Swimsuit",
+    "Catherine Strikes Back!",
+    "What Will I Dream Tonight...?",
+    "Wounds of the Heart",
+    "The Beast of the Mine",
+    "Ruler of the Depths",
+    "In Search of Light",
+    "Go, Mine Cart!",
+    "Return After Two Days",
+    "Festival Morning",
+    "Who Will Take the Crown?",
+    "The Crab Has Come",
+    "After the Banquet",
+    "Death of a Boss",
+    "Let's Sweat at the Sauna",
+    "Men Must Be Strong",
+    "Jean's Triumph",
+    "Fresh After a Morning Bath",
+    "Who Are You?",
+    "The Battle Ends at Sundown",
+    "A Promise from Long Ago",
+    "Ghostbusters, Move Out",
+    "Fallen Angel vs. Fallen Angel",
+    "The Eve of the Storm",
+    "The Last Day Off",
+    "Just Before Departure",
+    "Battle on the Lighthouse 1F",
+    "The Light Returns",
+    "Battle on the Lighthouse 2F",
+    "Battle on the Lighthouse 3F",
+    "Decisive Battle at Sea",
+    "The Guild's Kidnappers?",
+    "Alice in Peril!",
+    "The Underworld",
+    "Head for the Dungeon",
+    "Battle in the Kitchen",
+    "Storm the Second Floor!",
+    "The Low-Blood-Pressure Folk",
+    "The Great Guild Battle!",
+    "The Only Truth",
+    "The One Who Passes Judgment",
+    "The One Who Sees Time",
+    "The Morning Without Al",
+    "Together with Friends",
+    "Race to the Sky",
+    "At the End of a Long Wander",
+    "The Angel of Revenge",
+    "Al's Battle",
+    "In the Gap of Time and Space"
+  ]
+}
