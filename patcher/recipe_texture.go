@@ -202,6 +202,19 @@ func generateRecipeTexture(file *recipeFile, original []byte, basePath, exePath 
 	}
 	pngData := pngBuffer.Bytes()
 
+	// The S-Tribute shell reads the Parts table at a fixed offset derived from
+	// the original PNG length. A shorter re-encode moves that table and makes
+	// the shell lose the option panel and misread ranking metadata, so pad the
+	// PNG section back to its original size.
+	originalPNGSize := int(binary.LittleEndian.Uint32(atlas.sectionHeader[32:36]))
+	if len(pngData) > originalPNGSize {
+		return nil, fmt.Errorf("Texture PNG 为 %d 字节，超过原版 %d 字节，无法保持 Parts 偏移",
+			len(pngData), originalPNGSize)
+	}
+	if len(pngData) < originalPNGSize {
+		pngData = append(pngData, make([]byte, originalPNGSize-len(pngData))...)
+	}
+
 	header := append([]byte(nil), atlas.sectionHeader...)
 	end := textureHeaderBytes + len(pngData)
 	binary.LittleEndian.PutUint32(header[20:24], uint32(end))
@@ -216,6 +229,9 @@ func generateRecipeTexture(file *recipeFile, original []byte, basePath, exePath 
 	output := make([]byte, 2048+len(encoded))
 	copy(output[:2048], original[:2048])
 	copy(output[2048:], encoded)
+	if int64(len(output)) != file.Size {
+		return nil, fmt.Errorf("Texture 容器为 %d 字节，原版为 %d 字节", len(output), file.Size)
+	}
 
 	// Decode the file we just produced. The game sees this exact container, so
 	// a mismatch here means the file must not be written.
