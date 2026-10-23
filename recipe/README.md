@@ -40,6 +40,9 @@ SHA-256 hashes.
 - `expected/<language>.json` — the required patched SHA-256 of every disc
   resource. A recipe edit that changes pixels must update these hashes; the
   installer refuses to write a resource whose generated hash does not match.
+- `plan.lock.json` — the length and SHA-256 of the rendered plan blob. The
+  compiler refuses to emit a plan with different bytes, so a font, layout, or
+  rasteriser change cannot reach a release by accident.
 
 ## Compiling the plan
 
@@ -49,11 +52,19 @@ SHA-256 hashes.
 
 The compiler rasterises text with Pillow, packs 1bpp slots, emits one mask per
 label, renders the three texture languages, and writes
-`patcher/plan/plan.bin`. `--report <path>` optionally writes a JSON build
-report; keep it outside `patcher/plan/`, which the Go build embeds whole. The
-compiler never reads the game, so a clean checkout produces the same plan byte
-for byte. `go build -tags saga2` embeds the plan; `patcher/plan/plan.bin` is
-ignored by git.
+`patcher/plan/plan.bin`. Every font load pins `ImageFont.Layout.BASIC`: when
+libraqm is installed, Pillow otherwise switches to Raqm/HarfBuzz, which changes
+shaping and bytes for some strings. The expected reference bytes use the basic
+layout, so the pin keeps every machine on the same renderer.
+
+The compiler then compares the blob length and SHA-256 with `plan.lock.json`.
+A mismatch is a hard error, and the message names the identity fields that
+moved. When a recipe edit intentionally changes rendered bytes, review the
+plan and rerun with `--write-plan-lock` to accept the new blob. Pass
+`--report <path>` for an optional JSON build report; keep it outside
+`patcher/plan/`, which the Go build embeds whole. The compiler never reads the
+game, so a clean checkout produces the same plan byte for byte. `go build -tags
+saga2` embeds the plan; `patcher/plan/plan.bin` is ignored by git.
 
 The plan starts with `FS2RECIPE1\n`, a little-endian u32 header length, a
 compact JSON header, and a gzip blob. The JSON header declares plan format 2;
@@ -151,8 +162,11 @@ changed, and exercises switching, restore, determinism and rejected-plan paths.
 1. Edit the string or box in the matching `resources/<id>.json`, `story.json`
    or `texture.json`.
 2. Compile. The compiler fails fast on a missing font, a box outside the atlas,
-   a 1bpp slot that cannot fit, or text that does not fit its box.
-3. Run the private `fs2/work/tools/recipe_e2e.py` gate. It installs all three
+   a 1bpp slot that cannot fit, text that does not fit its box, or rendered
+   bytes that differ from `plan.lock.json`.
+3. If the edit intentionally changes pixels, rerun with `--write-plan-lock`
+   after reviewing the report.
+4. Run the private `fs2/work/tools/recipe_e2e.py` gate. It installs all three
    languages into a throwaway game, decodes all 3016 resources plus
    `FarlandSaga2.exe` and `Texture.tex` from the installed files, compares them
    with `expected/` and the recipe reference layers, checks every story page's
