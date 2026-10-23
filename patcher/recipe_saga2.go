@@ -23,15 +23,27 @@ func embeddedPlanData() []byte {
 	return data
 }
 
-func wrapRecipeSource(loaded *payload, planData []byte) (patchSource, error) {
+func wrapRecipeSource(loaded *payload, planData []byte, language string) (patchSource, error) {
 	if len(planData) == 0 {
+		if loaded == nil {
+			return nil, errors.New("没有可用的 recipe plan 或补丁载荷")
+		}
 		return loaded, nil
 	}
 	plan, err := loadRecipePlan(planData)
 	if err != nil {
 		return nil, err
 	}
-	return newRecipeSource(loaded, plan, loaded.info.Language)
+	if language == "" {
+		if loaded != nil {
+			language = loaded.info.Language
+		} else if len(plan.Languages) == 1 {
+			language = plan.Languages[0]
+		} else {
+			return nil, errors.New("recipe plan 包含多种语言，请用 --lang 指定")
+		}
+	}
+	return newRecipePayload(plan, language)
 }
 
 func applyRecipeResource(rid string, resource *recipeResource, blob []byte, language string, original []byte) ([]byte, error) {

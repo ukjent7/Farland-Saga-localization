@@ -38,10 +38,25 @@ func (p *payload) replaySectors(entry fileEntry, basePath string, exePath string
 	return p.replaySectorsMerged(entry, basePath, exePath, output, progress, nil)
 }
 
-// replaySectorsMerged 在载荷扇区之上叠加 recipe 生成的扇区。recipe 扇区优先；
-// 若它和载荷里同一 LBA 的内容不同，就立即中止——Phase 0 的合并哈希直接
-// 沿用载荷声明，只有逐字节一致时这个声明才成立。
+// replaySectorsMerged 在载荷扇区之上叠加 recipe 生成的扇区。
 func (p *payload) replaySectorsMerged(entry fileEntry, basePath string, exePath string, output io.Writer, progress func(int64), overrides map[uint32][]byte) error {
+	stream, err := p.objects[entry.SectorsObject].Open()
+	if err != nil {
+		return fmt.Errorf("无法读取扇区对象 %s: %w", entry.SectorsObject, err)
+	}
+	defer stream.Close()
+	gzReader, err := gzip.NewReader(stream)
+	if err != nil {
+		return fmt.Errorf("扇区对象 %s 不是有效的 gzip: %w", entry.SectorsObject, err)
+	}
+	defer gzReader.Close()
+	return replaySectorStream(entry, basePath, exePath, output, progress, overrides, gzReader)
+}
+
+// replaySectorStream rebuilds an image from the pristine base, optional payload
+// sectors and recipe overrides. A nil sectors reader means the plan is
+// self-contained and only overrides are applied.
+func replaySectorStream(entry fileEntry, basePath string, exePath string, output io.Writer, progress func(int64), overrides map[uint32][]byte, sectors *gzip.Reader) error {
 	if exePath == "" {
 		dir := filepath.Dir(basePath)
 		candidate := filepath.Join(dir, gameExecutable)
@@ -67,18 +82,6 @@ func (p *payload) replaySectorsMerged(entry fileEntry, basePath string, exePath 
 	if err != nil {
 		return fmt.Errorf("解析 SSF 参数失败: %w", err)
 	}
-
-	stream, err := p.objects[entry.SectorsObject].Open()
-	if err != nil {
-		return fmt.Errorf("无法读取扇区对象 %s: %w", entry.SectorsObject, err)
-	}
-	defer stream.Close()
-
-	gzReader, err := gzip.NewReader(stream)
-	if err != nil {
-		return fmt.Errorf("扇区对象 %s 不是有效的 gzip: %w", entry.SectorsObject, err)
-	}
-	defer gzReader.Close()
 
 	baseFile, err := os.Open(basePath)
 	if err != nil {
@@ -136,28 +139,30 @@ func (p *payload) replaySectorsMerged(entry fileEntry, basePath string, exePath 
 		return nil
 	}
 
-	for {
-		if _, err := io.ReadFull(gzReader, hdrBuf); err != nil {
-			if errors.Is(err, io.EOF) {
-				break
+	if sectors != nil {
+		for {
+			if _, err := io.ReadFull(sectors, hdrBuf); err != nil {
+				if errors.Is(err, io.EOF) {
+					break
+				}
+				return fmt.Errorf("读取扇区头失败: %w", err)
 			}
-			return fmt.Errorf("读取扇区头失败: %w", err)
-		}
-		lba := binary.LittleEndian.Uint32(hdrBuf[0:4])
-		length := binary.LittleEndian.Uint32(hdrBuf[4:8])
-		if length != 2048 {
-			return fmt.Errorf("不支持的扇区载荷长度 %d (LBA %d)", length, lba)
-		}
-		if _, err := io.ReadFull(gzReader, sectorBuf[16:2064]); err != nil {
-			return fmt.Errorf("读取扇区数据失败 (LBA %d): %w", lba, err)
-		}
-		if _, ok := overrides[lba]; ok {
-			// recipe 生成的内容优先于载荷；资源本身的期望哈希在生成阶段
-			// 已经核对，这里不再要求与旧载荷逐字节一致。
-			continue
-		}
-		if err := addData(lba, sectorBuf[16:2064]); err != nil {
-			return err
+			lba := binary.LittleEndian.Uint32(hdrBuf[0:4])
+			length := binary.LittleEndian.Uint32(hdrBuf[4:8])
+			if length != 2048 {
+				return fmt.Errorf("不支持的扇区载荷长度 %d (LBA %d)", length, lba)
+			}
+			if _, err := io.ReadFull(sectors, sectorBuf[16:2064]); err != nil {
+				return fmt.Errorf("读取扇区数据失败 (LBA %d): %w", lba, err)
+			}
+			if _, ok := overrides[lba]; ok {
+				// recipe 生成的内容优先于载荷；资源本身的期望哈希在生成阶段
+				// 已经核对，这里不再要求与旧载荷逐字节一致。
+				continue
+			}
+			if err := addData(lba, sectorBuf[16:2064]); err != nil {
+				return err
+			}
 		}
 	}
 

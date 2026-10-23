@@ -1,8 +1,8 @@
 name: release
 
 # 编译分发给终端用户的补丁器可执行文件，并在打 tag 或手动确认时创建
-# GitHub Release。补丁载荷（含游戏数据）由私有工作区生成后上传到同一个
-# Release，本工作流只构建公开仓库里的补丁器源码。
+# GitHub Release。二代在构建时把公开仓库里的 recipe 编译成 plan.bin 并
+# 内嵌；一代仍内嵌仓库中的 ZIP 载荷。两条流水线都不需要游戏文件。
 on:
   push:
     tags: ['v*']
@@ -22,10 +22,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          allow-prereleases: true
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
       - uses: actions/setup-go@v5
         with:
           go-version-file: patcher/go.mod
           cache: false
+      - name: 编译二代 recipe plan
+        env:
+          FARLAND_WORK: ${{ runner.temp }}/work
+          UV_PYTHON_DOWNLOADS: automatic
+          UV_PYTHON_PREFERENCE: managed
+        run: |
+          echo "=== 正在从公开 recipe 与 OFL 字体编译二代安装计划 ==="
+          bash uv.sh run --locked python tools/compile_recipe.py
       - name: 静态检查与单元测试
         run: |
           cd patcher

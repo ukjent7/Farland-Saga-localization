@@ -15,11 +15,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strconv"
 )
 
 const (
 	recipeMagic       = "FS2RECIPE1\n"
-	recipePlanFormat  = 1
+	recipePlanFormat  = 2
 	maxRecipeHeader   = 16 << 20
 	maxRecipeMaskData = 64 << 20
 	maxRecipeCells    = 1 << 20
@@ -33,7 +34,57 @@ type recipePlan struct {
 	ArchiveLBA int
 	SectorSize int
 	Resources  map[string]*recipeResource
+	Files      map[string]*recipeFile
 	blob       []byte
+}
+
+// recipeFile describes one non-resource target file. Disc images and texture
+// atlases are generated from the user's original; executables are a small,
+// fully declared binary patch.
+type recipeFile struct {
+	Kind           string                    `json:"kind"`
+	Path           string                    `json:"path"`
+	OriginalSHA256 string                    `json:"original_sha256"`
+	Size           int64                     `json:"size"`
+	PatchedSHA256  string                    `json:"patched_sha256,omitempty"`
+	PatchedSize    int64                     `json:"patched_size,omitempty"`
+	Patches        []recipeBinaryPatch       `json:"patches,omitempty"`
+	ImageSize      []int                     `json:"image_size,omitempty"`
+	PartCount      int                       `json:"part_count,omitempty"`
+	Parts          map[string][4]int         `json:"parts,omitempty"`
+	Panels         *recipeTexturePanels      `json:"panels,omitempty"`
+	Layers         map[string]*recipeTexture `json:"languages,omitempty"`
+}
+
+type recipeBinaryPatch struct {
+	Name     string `json:"name"`
+	Offset   int64  `json:"offset"`
+	Original string `json:"original"`
+	Patched  string `json:"patched"`
+}
+
+type recipeTexturePanels struct {
+	Parts    []int  `json:"parts"`
+	TitleBox [4]int `json:"title_box"`
+	BodyBox  [4]int `json:"body_box"`
+}
+
+type recipeTexture struct {
+	Labels []recipeTextureLabel `json:"labels"`
+	Title  recipeTextureLayer   `json:"title"`
+	Button recipeTextureLayer   `json:"button"`
+}
+
+type recipeTextureLabel struct {
+	Part       int    `json:"part"`
+	Box        [4]int `json:"box"`
+	DataOffset int    `json:"data_offset"`
+	DataLength int    `json:"data_length"`
+}
+
+type recipeTextureLayer struct {
+	DataOffset int `json:"data_offset"`
+	DataLength int `json:"data_length"`
 }
 
 type recipeResource struct {
@@ -87,6 +138,7 @@ type recipeHeader struct {
 	ArchiveLBA   int                        `json:"archive_lba"`
 	SectorSize   int                        `json:"sector_size"`
 	Resources    map[string]*recipeResource `json:"resources"`
+	Files        map[string]*recipeFile     `json:"files"`
 	BinarySHA256 string                     `json:"binary_sha256"`
 }
 
@@ -156,6 +208,7 @@ func loadRecipePlan(data []byte) (*recipePlan, error) {
 		ArchiveLBA: header.ArchiveLBA,
 		SectorSize: header.SectorSize,
 		Resources:  header.Resources,
+		Files:      header.Files,
 		blob:       blob,
 	}
 	if plan.Game != "saga2" {
@@ -166,7 +219,159 @@ func loadRecipePlan(data []byte) (*recipePlan, error) {
 			return nil, err
 		}
 	}
+	if err := validateRecipeFiles(plan); err != nil {
+		return nil, err
+	}
 	return plan, nil
+}
+
+func validateRecipeFiles(plan *recipePlan) error {
+	if len(plan.Files) == 0 {
+		return errors.New("recipe plan 没有目标文件")
+	}
+	for _, required := range []string{gameDiscImage, gameExecutable, "Texture.tex"} {
+		if plan.Files[required] == nil {
+			return fmt.Errorf("recipe plan 缺少目标文件 %s", required)
+		}
+	}
+	seen := make(map[string]bool, len(plan.Files))
+	for name, file := range plan.Files {
+		if seen[name] {
+			return fmt.Errorf("recipe plan 重复列出文件 %s", name)
+		}
+		seen[name] = true
+		safe, err := safeRelativePath(name)
+		if err != nil || safe != name {
+			return fmt.Errorf("recipe plan 文件路径不合法: %q", name)
+		}
+		if file == nil {
+			return fmt.Errorf("recipe plan 文件 %s 为空", name)
+		}
+		if file.Path != name {
+			return fmt.Errorf("%s: path 与文件键不一致", name)
+		}
+		if !validSHA256(file.OriginalSHA256) || file.Size <= 0 {
+			return fmt.Errorf("%s: 原版哈希或大小不合法", name)
+		}
+		switch file.Kind {
+		case "disc":
+			if name != gameDiscImage {
+				return fmt.Errorf("%s: 光盘条目名称不合法", name)
+			}
+			if len(file.Patches) != 0 || file.Panels != nil || len(file.Layers) != 0 {
+				return fmt.Errorf("%s: 光盘条目包含多余字段", name)
+			}
+		case "binary":
+			if name != gameExecutable {
+				return fmt.Errorf("%s: 可执行文件条目名称不合法", name)
+			}
+			if !validSHA256(file.PatchedSHA256) || file.PatchedSize <= 0 {
+				return fmt.Errorf("%s: 补丁后哈希或大小不合法", name)
+			}
+			if len(file.Patches) == 0 {
+				return fmt.Errorf("%s: 没有二进制补丁", name)
+			}
+			for _, patch := range file.Patches {
+				if patch.Name == "" || patch.Offset < 0 {
+					return fmt.Errorf("%s: 二进制补丁缺少名字或偏移", name)
+				}
+				original, err := hex.DecodeString(patch.Original)
+				if err != nil || len(original) == 0 {
+					return fmt.Errorf("%s/%s: 原版字节不合法", name, patch.Name)
+				}
+				patched, err := hex.DecodeString(patch.Patched)
+				if err != nil || len(patched) != len(original) {
+					return fmt.Errorf("%s/%s: 补丁字节不合法", name, patch.Name)
+				}
+				if patch.Offset > file.Size || int64(len(original)) > file.Size-patch.Offset {
+					return fmt.Errorf("%s/%s: 补丁越过文件", name, patch.Name)
+				}
+			}
+		case "texture":
+			if err := validateRecipeTexture(file, plan); err != nil {
+				return err
+			}
+		default:
+			return fmt.Errorf("%s: 不支持的文件类型 %q", name, file.Kind)
+		}
+	}
+	return nil
+}
+
+func validateRecipeTexture(file *recipeFile, plan *recipePlan) error {
+	if len(file.ImageSize) != 2 || file.ImageSize[0] <= 0 || file.ImageSize[1] <= 0 {
+		return fmt.Errorf("%s: image_size 不合法", file.Path)
+	}
+	width, height := file.ImageSize[0], file.ImageSize[1]
+	if file.PartCount <= 0 || len(file.Parts) == 0 {
+		return fmt.Errorf("%s: parts 元数据不合法", file.Path)
+	}
+	for key, box := range file.Parts {
+		if key == "" {
+			return fmt.Errorf("%s: part 编号为空", file.Path)
+		}
+		if !validBox(box, width, height) {
+			return fmt.Errorf("%s: part %s 越界", file.Path, key)
+		}
+	}
+	if file.Panels == nil || len(file.Panels.Parts) == 0 {
+		return fmt.Errorf("%s: panel 信息缺失", file.Path)
+	}
+	for _, part := range file.Panels.Parts {
+		if _, ok := file.Parts[strconv.Itoa(part)]; !ok {
+			return fmt.Errorf("%s: panel part %d 没有坐标", file.Path, part)
+		}
+	}
+	for _, box := range [][4]int{file.Panels.TitleBox, file.Panels.BodyBox} {
+		if !validBox(box, width, height) {
+			return fmt.Errorf("%s: panel box 越界", file.Path)
+		}
+	}
+	if len(file.Layers) != len(plan.Languages) {
+		return fmt.Errorf("%s: 语言层数量不符", file.Path)
+	}
+	for _, language := range plan.Languages {
+		layers := file.Layers[language]
+		if layers == nil {
+			return fmt.Errorf("%s: 缺少 %s 的图层", file.Path, language)
+		}
+		if len(layers.Labels) == 0 {
+			return fmt.Errorf("%s: %s 没有标签图层", file.Path, language)
+		}
+		for _, label := range layers.Labels {
+			if label.Part < 0 || label.Part >= file.PartCount {
+				return fmt.Errorf("%s/%s: label part 越界", file.Path, language)
+			}
+			if _, ok := file.Parts[strconv.Itoa(label.Part)]; !ok {
+				return fmt.Errorf("%s/%s: label part %d 没有声明坐标", file.Path, language, label.Part)
+			}
+			if !validBox(label.Box, width, height) {
+				return fmt.Errorf("%s/%s: label box 越界", file.Path, language)
+			}
+			if err := validateLayer(plan, label.DataOffset, label.DataLength); err != nil {
+				return fmt.Errorf("%s/%s: %w", file.Path, language, err)
+			}
+		}
+		if err := validateLayer(plan, layers.Title.DataOffset, layers.Title.DataLength); err != nil {
+			return fmt.Errorf("%s/%s: title %w", file.Path, language, err)
+		}
+		if err := validateLayer(plan, layers.Button.DataOffset, layers.Button.DataLength); err != nil {
+			return fmt.Errorf("%s/%s: button %w", file.Path, language, err)
+		}
+	}
+	return nil
+}
+
+func validBox(box [4]int, width, height int) bool {
+	return box[0] >= 0 && box[1] >= 0 && box[2] > box[0] && box[3] > box[1] &&
+		box[2] <= width && box[3] <= height
+}
+
+func validateLayer(plan *recipePlan, offset, length int) error {
+	if offset < 0 || length <= 0 || offset > len(plan.blob) || length > len(plan.blob)-offset {
+		return errors.New("图层数据范围越过 plan")
+	}
+	return nil
 }
 
 func validResourceID(rid string) bool {

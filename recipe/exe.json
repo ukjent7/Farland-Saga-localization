@@ -1,0 +1,16 @@
+{
+  "format": "binary_patches",
+  "path": "FarlandSaga2.exe",
+  "original_sha256": "741b9f8da6dbf35a8794af2de28bd2c8ac808ab48657e0df723b85225ed35fc3",
+  "original_size": 19223552,
+  "patched_sha256": "c8b54f254e2a90d94ae29c433f323bdca2aa154a56a9896d71faf14ef5b1da60",
+  "patched_size": 19223552,
+  "patches": [
+    {
+      "name": "enable-frontend-texture",
+      "offset": 922353,
+      "original": "7432",
+      "patched": "eb32"
+    }
+  ]
+}
