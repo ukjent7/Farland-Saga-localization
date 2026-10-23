@@ -19,8 +19,8 @@
       "offset": 0,
       "width": 256,
       "height": 64,
-      "background": 0,
-      "ink": 1,
+      "background": 1,
+      "ink": 0,
       "reserve": 8,
       "lines": [
         {
@@ -29,10 +29,12 @@
             "ko-KR": "14일째",
             "en-US": "Day 14"
           },
-          "y": 16,
-          "height": 16,
-          "max_size": 16,
-          "min_size": 7
+          "y": 2,
+          "height": 22,
+          "max_size": 22,
+          "min_size": 7,
+          "align": "left",
+          "left": 10
         },
         {
           "text": {
@@ -40,9 +42,9 @@
             "ko-KR": "「해상 결전」",
             "en-US": "\"Decisive Battle at Sea\""
           },
-          "y": 32,
-          "height": 16,
-          "max_size": 16,
+          "y": 33,
+          "height": 22,
+          "max_size": 22,
           "min_size": 7
         }
       ]

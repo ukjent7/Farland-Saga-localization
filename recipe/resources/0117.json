@@ -1,0 +1,31 @@
+{
+  "resource": "0117",
+  "description": "Restaurant scene script. The cook's four lines name speaker index 14, which the shell draws from a baked Japanese sprite; point them at index 30 so the translated 02CB slot 29 shows instead.",
+  "format": "word_patches_16be",
+  "patches": [
+    {
+      "name": "cook-speaker[0]",
+      "offset": 2122,
+      "original": 14,
+      "patched": 30
+    },
+    {
+      "name": "cook-speaker[1]",
+      "offset": 2164,
+      "original": 14,
+      "patched": 30
+    },
+    {
+      "name": "cook-speaker[2]",
+      "offset": 2188,
+      "original": 14,
+      "patched": 30
+    },
+    {
+      "name": "cook-speaker[3]",
+      "offset": 2212,
+      "original": 14,
+      "patched": 30
+    }
+  ]
+}

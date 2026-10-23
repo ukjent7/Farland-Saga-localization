@@ -503,8 +503,8 @@
           "en-US": ""
         }
       ],
-      "background": 0,
-      "ink": 1,
+      "background": 1,
+      "ink": 0,
       "max_size": 16,
       "min_size": 7,
       "align": "center"

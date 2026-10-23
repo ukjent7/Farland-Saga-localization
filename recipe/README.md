@@ -17,7 +17,8 @@ SHA-256 hashes.
 - `resources/<id>.json` — one recipe per generated resource. A tile atlas lists
   erase regions, label boxes and styles; a 1bpp text bank lists slot writes; a
   description bitmap holds one wrapped paragraph; an opening character card
-  stores its tile geometry, palette indices and translated layout.
+  stores its tile geometry, palette indices and translated layout; a script
+  resource lists the big-endian u16 words to repoint.
 - `story.json` — story-page layout, language fonts and timing constants.
 - `story_pages.json` — the story page index: page id, bank, archive offset,
   size and the original SHA-256 of every 4096-byte page.
@@ -106,6 +107,13 @@ backup, and dispatches on its format:
   indices used by the art and the translated layout; the compiler deduplicates
   8x8 tiles and emits only the map and graphics regions. The original header,
   palette and unused tail stay untouched.
+- `word_patches_16be`: replace big-endian u16 words in a script resource. Each
+  patch declares its offset, the pristine value and the new value; the
+  installer refuses a resource whose current word is not the declared original
+  and leaves every other byte alone. Resource `0117` uses this to move the
+  cook's four restaurant lines from speaker index 14, which the shell draws
+  from a baked Japanese sprite, to index 30, which draws 02CB slot 29 with the
+  translated name (厨师 / 요리사 / Cook).
 - `binary_patches`: copy the original executable, require each patch's original
   bytes at its offset, replace them, and verify the declared patched size and
   SHA-256. The sequel patch changes one two-byte branch so the frontend uses the
@@ -133,11 +141,12 @@ backup rather than layering one language over another.
 
 ## Phase scope
 
-Generated disc resources (3023: 366 UI resources and 2657 story pages):
+Generated disc resources (3024: 367 UI resources and 2657 story pages):
 
 | Group | Resources |
 | --- | --- |
 | Opening character cards | `00E2`, `00E4`, `00EA`, `00EC`, `00EF`, `00F0`, `0101` |
+| Restaurant script | `0117` |
 | Mission banners | `02B9`–`02C8` |
 | Shared UI atlas | `02C9` |
 | 1bpp text bank | `02CB` |
@@ -159,6 +168,23 @@ untouched. The remaining pages are re-rendered from the story translations and
 the original timing curve is rescaled to the new character count; the tail after
 offset 2528 is preserved. Unifont wraps each paragraph into balanced lines and
 keeps closing punctuation off the start of a line.
+
+## 1bpp polarity
+
+The 1bpp text resources (`02CB`, `02CC`–`0409`, `040D`–`041E`, `041F`, `0439`)
+use bit 1 for the transparent background and bit 0 for the white glyph, so a
+text bitmap is mostly ones. A `mono_bitmap_1bpp` write must therefore use
+`"background": 1, "ink": 0`. Swapping the two renders the glyphs as holes in a
+solid block: chapter cards paint an opaque white rectangle over the town art
+and the letters show the artwork through them. The private E2E compares each
+generated 1bpp resource's ones fraction against the pristine resource and fails
+on an inversion.
+
+Chapter cards (`040D`–`041E`) also match the original layout: the day line is
+left aligned at x=10 in a y=2..24 band, and the title line is centered in a
+y=33..55 band. Both bands use `max_size: 22`, the size that fills the original
+22-pixel line height. Canvas writes accept per-line `align` and `left`; a line
+without them inherits the write-level values.
 
 `Texture.tex` contains 502 parts. Phase 3 changes 370 of them: 363 labels plus
 seven option panels. The atlas keeps its 2370x4394 dimensions and 2048-byte SSF
@@ -184,10 +210,11 @@ changed, and exercises switching, restore, determinism and rejected-plan paths.
 3. If the edit intentionally changes pixels, rerun with `--write-plan-lock`
    after reviewing the report.
 4. Run the private `fs2/work/tools/recipe_e2e.py` gate. It installs all three
-   languages into a throwaway game, decodes all 3023 resources plus
+   languages into a throwaway game, decodes all 3024 resources plus
    `FarlandSaga2.exe` and `Texture.tex` from the installed files, compares them
    with `expected/` and the recipe reference layers, checks every story page's
    timing table and preserved tail, proves that only recipe sectors changed,
-   and exercises texture layers, switching, restore and rejected-plan paths.
+   renders the cook nameplate and records the restaurant speaker words, and
+   exercises texture layers, switching, restore and rejected-plan paths.
 5. Update `expected/<language>.json` only when the new pixels are the intended
    result, and record the new hashes in the change description.

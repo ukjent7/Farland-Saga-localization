@@ -107,13 +107,23 @@ type recipeResource struct {
 }
 
 type recipeOperation struct {
-	Type             string        `json:"type"`
-	Erase            []recipeErase `json:"erase"`
-	Labels           []recipeLabel `json:"labels"`
-	Writes           []recipeWrite `json:"writes"`
-	DataOffset       int           `json:"data_offset"`
-	DataLength       int           `json:"data_length"`
-	TimingCharacters int           `json:"timing_characters"`
+	Type             string            `json:"type"`
+	Erase            []recipeErase     `json:"erase"`
+	Labels           []recipeLabel     `json:"labels"`
+	Writes           []recipeWrite     `json:"writes"`
+	Patches          []recipeWordPatch `json:"patches"`
+	DataOffset       int               `json:"data_offset"`
+	DataLength       int               `json:"data_length"`
+	TimingCharacters int               `json:"timing_characters"`
+}
+
+// recipeWordPatch replaces one big-endian u16 inside a script resource. The
+// restaurant scene stores the cook's speaker index this way.
+type recipeWordPatch struct {
+	Name     string `json:"name"`
+	Offset   int    `json:"offset"`
+	Original int    `json:"original"`
+	Patched  int    `json:"patched"`
 }
 
 type recipeErase struct {
@@ -461,6 +471,10 @@ func validateRecipeResource(rid string, resource *recipeResource, plan *recipePl
 		if resource.Size != 4096 {
 			return fmt.Errorf("%s: 剧情页大小必须是 4096", rid)
 		}
+	case "word_patches_16be":
+		if len(resource.AtlasSize) != 0 {
+			return fmt.Errorf("%s: 脚本词补丁不应带 atlas_size", rid)
+		}
 	default:
 		return fmt.Errorf("%s: 不支持的 recipe 资源格式 %q", rid, resource.Format)
 	}
@@ -490,7 +504,45 @@ func validateRecipeResource(rid string, resource *recipeResource, plan *recipePl
 			if err := validateStoryOperation(rid, language, operation, resource, plan); err != nil {
 				return err
 			}
+		case "word_patches_16be":
+			if err := validateWordOperation(rid, language, operation, resource); err != nil {
+				return err
+			}
 		}
+	}
+	return nil
+}
+
+func validateWordOperation(rid, language string, operation recipeOperation, resource *recipeResource) error {
+	if operation.Type != "word_patches" {
+		return fmt.Errorf("%s: %s 的操作类型 %q 不受支持", rid, language, operation.Type)
+	}
+	if len(operation.Patches) == 0 || len(operation.Labels) != 0 ||
+		len(operation.Erase) != 0 || len(operation.Writes) != 0 {
+		return fmt.Errorf("%s: %s 的脚本词补丁内容不合法", rid, language)
+	}
+	seen := make(map[int]bool, len(operation.Patches))
+	for _, patch := range operation.Patches {
+		if patch.Name == "" {
+			return fmt.Errorf("%s: 脚本词补丁缺少名字", rid)
+		}
+		if patch.Offset < 0 || patch.Offset%2 != 0 {
+			return fmt.Errorf("%s/%s: 偏移必须是偶数", rid, patch.Name)
+		}
+		if patch.Offset > resource.Size-2 {
+			return fmt.Errorf("%s/%s: 补丁越过资源", rid, patch.Name)
+		}
+		if patch.Original < 0 || patch.Original > 0xFFFF ||
+			patch.Patched < 0 || patch.Patched > 0xFFFF {
+			return fmt.Errorf("%s/%s: 词值必须是 u16", rid, patch.Name)
+		}
+		if patch.Original == patch.Patched {
+			return fmt.Errorf("%s/%s: 原值与新值相同", rid, patch.Name)
+		}
+		if seen[patch.Offset] {
+			return fmt.Errorf("%s/%s: 偏移重复", rid, patch.Name)
+		}
+		seen[patch.Offset] = true
 	}
 	return nil
 }
