@@ -1,0 +1,51 @@
+{
+  "resource": "0418",
+  "description": "Chapter title card.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "card",
+      "generator": "canvas",
+      "offset": 0,
+      "width": 256,
+      "height": 64,
+      "background": 0,
+      "ink": 1,
+      "reserve": 8,
+      "lines": [
+        {
+          "text": {
+            "zh-CN": "第11天",
+            "ko-KR": "11일째",
+            "en-US": "Day 11"
+          },
+          "y": 16,
+          "height": 16,
+          "max_size": 16,
+          "min_size": 7
+        },
+        {
+          "text": {
+            "zh-CN": "「少女之怒」",
+            "ko-KR": "「당신은 누구세요?」",
+            "en-US": "\"Who Are You?\""
+          },
+          "y": 32,
+          "height": 16,
+          "max_size": 16,
+          "min_size": 7
+        }
+      ]
+    }
+  ]
+}

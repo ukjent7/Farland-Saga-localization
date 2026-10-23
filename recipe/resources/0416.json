@@ -1,0 +1,51 @@
+{
+  "resource": "0416",
+  "description": "Chapter title card.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "card",
+      "generator": "canvas",
+      "offset": 0,
+      "width": 256,
+      "height": 64,
+      "background": 0,
+      "ink": 1,
+      "reserve": 8,
+      "lines": [
+        {
+          "text": {
+            "zh-CN": "第9天",
+            "ko-KR": "9일째",
+            "en-US": "Day 9"
+          },
+          "y": 16,
+          "height": 16,
+          "max_size": 16,
+          "min_size": 7
+        },
+        {
+          "text": {
+            "zh-CN": "「离家千金参战」",
+            "ko-KR": "「영관은 누구의 손에」",
+            "en-US": "\"Who Will Take the Crown?\""
+          },
+          "y": 32,
+          "height": 16,
+          "max_size": 16,
+          "min_size": 7
+        }
+      ]
+    }
+  ]
+}

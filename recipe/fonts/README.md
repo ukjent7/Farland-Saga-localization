@@ -1,20 +1,19 @@
 # Recipe fonts
 
-The recipe names fonts by role, never by a machine-specific path. A public
-build resolves those names through `fonts.json`; a private build may add a
-`fonts.local.json` beside this file with absolute paths, and that file is
-ignored by git.
+The recipe names fonts by role. `recipe/fonts.json` resolves each role to a
+file committed under `recipe/fonts/`, so a clean checkout and CI rasterise the
+same glyphs as a local build.
 
-Public entries point at files committed under `recipe/fonts/`:
+| Role | File | License | Used for |
+| --- | --- | --- | --- |
+| `NotoSansSC` | `NotoSansSC-Regular-subset.otf` | OFL-1.1 | Simplified Chinese |
+| `Galmuri11` | `Galmuri11-subset.ttf` | OFL-1.1 | Korean |
+| `LiberationSans` | `LiberationSans-Regular-subset.ttf` | OFL-1.1 | English |
+| `Unifont` | `unifont-subset.hex.gz` | OFL-1.1 | Title menu and place-name bitmaps |
 
-```json
-{
-  "fonts": {
-    "Galmuri11": {"file": "fonts/Galmuri11.ttf", "license": "OFL-1.1"}
-  }
-}
-```
+The `.otf`/`.ttf` files are subsets containing the characters used by the
+committed recipes. `unifont-subset.hex.gz` is a filtered Unifont hex file used
+by the bitmap renderer. License texts are next to the fonts.
 
-Phase 0 is a byte-parity pilot against the fonts used by the existing private
-pipeline, so its font map lives in `fonts.local.json` only. Phase 1 switches
-the public recipe to OFL fonts and commits the subset files and licenses.
+When recipe text adds a new character, regenerate the affected subset. The
+compiler fails on a missing glyph rather than silently drawing `.notdef`.

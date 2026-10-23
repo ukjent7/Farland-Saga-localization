@@ -1,0 +1,107 @@
+{
+  "resource": "0439",
+  "description": "Job acceptance prompt.",
+  "format": "tile_atlas_8bpp",
+  "atlas_size": [
+    184,
+    72
+  ],
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "styles": {
+    "label": {
+      "body": 2,
+      "outline": 1
+    }
+  },
+  "erase": [
+    {
+      "box": [
+        30,
+        16,
+        123,
+        16
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        50,
+        40,
+        101,
+        16
+      ],
+      "mode": "row_background"
+    }
+  ],
+  "labels": [
+    {
+      "name": "question",
+      "text": {
+        "zh-CN": "接受这份工作吗？",
+        "ko-KR": "이 일을 맡을까요?",
+        "en-US": "Accept this job?"
+      },
+      "box": [
+        30,
+        16,
+        116,
+        16
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 14,
+      "min_size": 12,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "yes",
+      "text": {
+        "zh-CN": "是",
+        "ko-KR": "예",
+        "en-US": "Yes"
+      },
+      "box": [
+        52,
+        40,
+        28,
+        16
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 14,
+      "min_size": 10,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "no",
+      "text": {
+        "zh-CN": "否",
+        "ko-KR": "아니요",
+        "en-US": "No"
+      },
+      "box": [
+        104,
+        40,
+        39,
+        16
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 14,
+      "min_size": 10,
+      "reserve": 1,
+      "align": "center"
+    }
+  ]
+}

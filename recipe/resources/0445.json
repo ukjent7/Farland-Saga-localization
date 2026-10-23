@@ -1,0 +1,243 @@
+{
+  "resource": "0445",
+  "description": "Title menu panel.",
+  "format": "tile_atlas_8bpp",
+  "atlas_size": [
+    512,
+    48
+  ],
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "styles": {
+    "normal": {
+      "body": 2,
+      "outline": 1
+    },
+    "disabled": {
+      "body": 1,
+      "outline": 1
+    }
+  },
+  "erase": [
+    {
+      "box": [
+        34,
+        2,
+        68,
+        13
+      ],
+      "mode": "row_background",
+      "sample": [
+        33,
+        1,
+        70,
+        15
+      ]
+    },
+    {
+      "box": [
+        34,
+        18,
+        68,
+        13
+      ],
+      "mode": "row_background",
+      "sample": [
+        33,
+        17,
+        70,
+        15
+      ]
+    },
+    {
+      "box": [
+        170,
+        2,
+        68,
+        13
+      ],
+      "mode": "row_background",
+      "sample": [
+        169,
+        1,
+        70,
+        15
+      ]
+    },
+    {
+      "box": [
+        170,
+        18,
+        68,
+        13
+      ],
+      "mode": "row_background",
+      "sample": [
+        169,
+        17,
+        70,
+        15
+      ]
+    },
+    {
+      "box": [
+        171,
+        35,
+        67,
+        12
+      ],
+      "mode": "row_background",
+      "sample": [
+        169,
+        34,
+        70,
+        14
+      ]
+    }
+  ],
+  "labels": [
+    {
+      "name": "start-selected",
+      "text": {
+        "zh-CN": "开始游戏",
+        "ko-KR": "처음부터",
+        "en-US": "New Game"
+      },
+      "box": [
+        34,
+        2,
+        68,
+        13
+      ],
+      "style": "normal",
+      "render": "unifont",
+      "effect": "shadow",
+      "size_group": "title",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "start-plain",
+      "text": {
+        "zh-CN": "开始游戏",
+        "ko-KR": "처음부터",
+        "en-US": "New Game"
+      },
+      "box": [
+        34,
+        18,
+        68,
+        13
+      ],
+      "style": "normal",
+      "render": "unifont",
+      "effect": "shadow",
+      "size_group": "title",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "continue-selected",
+      "text": {
+        "zh-CN": "继续游戏",
+        "ko-KR": "이어하기",
+        "en-US": "Continue"
+      },
+      "box": [
+        170,
+        2,
+        68,
+        13
+      ],
+      "style": "normal",
+      "render": "unifont",
+      "effect": "shadow",
+      "size_group": "title",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "continue-plain",
+      "text": {
+        "zh-CN": "继续游戏",
+        "ko-KR": "이어하기",
+        "en-US": "Continue"
+      },
+      "box": [
+        170,
+        18,
+        68,
+        13
+      ],
+      "style": "normal",
+      "render": "unifont",
+      "effect": "shadow",
+      "size_group": "title",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "continue-disabled",
+      "text": {
+        "zh-CN": "继续游戏",
+        "ko-KR": "이어하기",
+        "en-US": "Continue"
+      },
+      "box": [
+        171,
+        35,
+        67,
+        12
+      ],
+      "style": "disabled",
+      "render": "unifont",
+      "effect": "shadow",
+      "size_group": "title",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    }
+  ]
+}

@@ -21,9 +21,6 @@ SHA256SUMS
 # 私有工作区约定：游戏数据、候选、备份与存储都放这里，不进入公开仓库
 /work/
 
-# Recipe fonts are machine-specific; the public build uses recipe/fonts.json.
-/recipe/fonts.local.json
-
 # Compiled recipe plan and report are private build artifacts.
 /patcher/plan/*
 !/patcher/plan/.gitkeep

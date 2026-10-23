@@ -1,0 +1,51 @@
+{
+  "resource": "0412",
+  "description": "Chapter title card.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "card",
+      "generator": "canvas",
+      "offset": 0,
+      "width": 256,
+      "height": 64,
+      "background": 0,
+      "ink": 1,
+      "reserve": 8,
+      "lines": [
+        {
+          "text": {
+            "zh-CN": "第5天",
+            "ko-KR": "5일째",
+            "en-US": "Day 5"
+          },
+          "y": 16,
+          "height": 16,
+          "max_size": 16,
+          "min_size": 7
+        },
+        {
+          "text": {
+            "zh-CN": "「出走少女在何方」",
+            "ko-KR": "「그리움을 노래로」",
+            "en-US": "\"A Song for My Feelings\""
+          },
+          "y": 32,
+          "height": 16,
+          "max_size": 16,
+          "min_size": 7
+        }
+      ]
+    }
+  ]
+}

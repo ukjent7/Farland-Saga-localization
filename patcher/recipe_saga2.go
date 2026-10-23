@@ -52,6 +52,16 @@ func applyRecipeResource(rid string, resource *recipeResource, blob []byte, lang
 			return nil, fmt.Errorf("%s: %w", rid, err)
 		}
 		return atlas.raw, nil
+	case "mono_bitmap_1bpp":
+		operations, err := planOperations(resource, language)
+		if err != nil {
+			return nil, err
+		}
+		generated, err := applyMonoBitmapOperations(original, operations, blob)
+		if err != nil {
+			return nil, fmt.Errorf("%s: %w", rid, err)
+		}
+		return generated, nil
 	default:
 		return nil, fmt.Errorf("%s: 不支持的资源格式 %q", rid, resource.Format)
 	}

@@ -2,20 +2,23 @@
   "resource": "043F",
   "description": "Save and load screen labels and status messages.",
   "format": "tile_atlas_8bpp",
-  "atlas_size": [512, 144],
+  "atlas_size": [
+    512,
+    144
+  ],
   "palette": {
     "resource": "0281",
     "offset": 512
   },
   "fonts": {
-    "zh-CN": "MicrosoftYaHei",
+    "zh-CN": "NotoSansSC",
     "ko-KR": "Galmuri11",
-    "en-US": "Arial"
+    "en-US": "LiberationSans"
   },
   "thresholds": {
-    "zh-CN": 1,
+    "zh-CN": 128,
     "ko-KR": 128,
-    "en-US": 1
+    "en-US": 128
   },
   "styles": {
     "label": {
@@ -35,292 +38,652 @@
       "outline": 255
     }
   },
-  "strings": {
-    "new_save": {
-      "zh-CN": "新建存档",
-      "ko-KR": "새로 저장",
-      "en-US": "Save New"
+  "erase": [
+    {
+      "box": [
+        71,
+        1,
+        100,
+        15
+      ],
+      "mode": "row_background"
     },
-    "time": {
-      "zh-CN": "小时",
-      "ko-KR": "시간",
-      "en-US": "h"
+    {
+      "box": [
+        71,
+        17,
+        100,
+        15
+      ],
+      "mode": "row_background"
     },
-    "min": {
-      "zh-CN": "分",
-      "ko-KR": "분",
-      "en-US": "m"
+    {
+      "box": [
+        424,
+        2,
+        31,
+        15
+      ],
+      "mode": "row_background"
     },
-    "no_data": {
-      "zh-CN": "没有存档数据",
-      "ko-KR": "저장 데이터 없음",
-      "en-US": "No save data"
+    {
+      "box": [
+        471,
+        2,
+        17,
+        15
+      ],
+      "mode": "row_background"
     },
-    "load": {
-      "zh-CN": "读取游戏",
-      "ko-KR": "불러오기",
-      "en-US": "Load Game"
+    {
+      "box": [
+        424,
+        18,
+        31,
+        15
+      ],
+      "mode": "row_background"
     },
-    "save": {
-      "zh-CN": "保存游戏",
-      "ko-KR": "저장하기",
-      "en-US": "Save Game"
+    {
+      "box": [
+        471,
+        18,
+        17,
+        15
+      ],
+      "mode": "row_background"
     },
-    "folder1": {
-      "zh-CN": "文件夹1",
-      "ko-KR": "폴더1",
-      "en-US": "Folder 1"
+    {
+      "box": [
+        58,
+        33,
+        129,
+        15
+      ],
+      "mode": "row_background"
     },
-    "folder2": {
-      "zh-CN": "文件夹2",
-      "ko-KR": "폴더2",
-      "en-US": "Folder 2"
+    {
+      "box": [
+        250,
+        33,
+        84,
+        15
+      ],
+      "mode": "row_background"
     },
-    "cancel": {
-      "zh-CN": "取消",
-      "ko-KR": "취소",
-      "en-US": "Cancel"
+    {
+      "box": [
+        337,
+        33,
+        85,
+        15
+      ],
+      "mode": "row_background"
     },
-    "attractor": {
-      "zh-CN": "未命名",
-      "ko-KR": "무제",
-      "en-US": "Untitled"
+    {
+      "box": [
+        20,
+        49,
+        68,
+        15
+      ],
+      "mode": "row_background"
     },
-    "day": {
-      "zh-CN": "天",
-      "ko-KR": "일",
-      "en-US": "Day"
+    {
+      "box": [
+        132,
+        49,
+        68,
+        15
+      ],
+      "mode": "row_background"
     },
-    "msg_l1": {
-      "zh-CN": "正在保存游戏记录。关闭电源可能",
-      "ko-KR": "게임 기록을 저장하는 중입니다. 전원을",
-      "en-US": "Saving game data. Turning off the power"
+    {
+      "box": [
+        246,
+        49,
+        73,
+        15
+      ],
+      "mode": "row_background"
     },
-    "msg_l2": {
-      "zh-CN": "导致记录无法正确保存。",
-      "ko-KR": "끄면 저장되지 않을 수 있습니다.",
-      "en-US": "may prevent it from saving correctly."
+    {
+      "box": [
+        337,
+        49,
+        70,
+        15
+      ],
+      "mode": "row_background"
     },
-    "msg_l3": {
-      "zh-CN": "无法使用此存档。",
-      "ko-KR": "이 기록은 사용할 수 없습니다.",
-      "en-US": "This save cannot be used."
+    {
+      "box": [
+        487,
+        49,
+        24,
+        15
+      ],
+      "mode": "row_background"
     },
-    "msg_l4": {
-      "zh-CN": "已保存记录。",
-      "ko-KR": "기록을 저장했습니다.",
-      "en-US": "Game saved."
+    {
+      "box": [
+        2,
+        65,
+        254,
+        15
+      ],
+      "mode": "row_background"
     },
-    "msg_l5": {
-      "zh-CN": "请在存档管理画面中删除。",
-      "ko-KR": "저장 데이터 관리 화면에서 삭제하세요.",
-      "en-US": "Delete it from the save-data manager."
+    {
+      "box": [
+        2,
+        81,
+        254,
+        15
+      ],
+      "mode": "row_background"
     },
-    "msg_r1": {
-      "zh-CN": "无法正确保存记录。",
-      "ko-KR": "기록을 올바르게 저장할 수 없습니다.",
-      "en-US": "The game could not be saved correctly."
+    {
+      "box": [
+        2,
+        97,
+        254,
+        15
+      ],
+      "mode": "row_background"
     },
-    "msg_r2": {
-      "zh-CN": "请再试一次。",
-      "ko-KR": "다시 한 번 시도해 주세요.",
-      "en-US": "Please try again."
+    {
+      "box": [
+        2,
+        113,
+        254,
+        15
+      ],
+      "mode": "row_background"
     },
-    "msg_r3": {
-      "zh-CN": "要更新存档吗？",
-      "ko-KR": "저장 데이터를 갱신하시겠습니까?",
-      "en-US": "Update this save?"
+    {
+      "box": [
+        2,
+        129,
+        254,
+        15
+      ],
+      "mode": "row_background"
     },
-    "msg_r4": {
-      "zh-CN": "要读取存档吗？",
-      "ko-KR": "저장 데이터를 불러오시겠습니까?",
-      "en-US": "Load this save?"
+    {
+      "box": [
+        258,
+        65,
+        254,
+        15
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        258,
+        81,
+        254,
+        15
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        258,
+        97,
+        254,
+        15
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        258,
+        113,
+        254,
+        15
+      ],
+      "mode": "row_background"
     }
-  },
+  ],
   "labels": [
     {
       "name": "new_save_hi",
-      "text": "new_save",
-      "box": [71, 1, 100, 15],
+      "box": [
+        71,
+        1,
+        100,
+        15
+      ],
       "style": "label",
       "max_size": 16,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "新建存档",
+        "ko-KR": "새로 저장",
+        "en-US": "Save New"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "new_save",
-      "text": "new_save",
-      "box": [71, 17, 100, 15],
+      "box": [
+        71,
+        17,
+        100,
+        15
+      ],
       "style": "label",
       "max_size": 16,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "新建存档",
+        "ko-KR": "새로 저장",
+        "en-US": "Save New"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "time_hi",
-      "text": "time",
-      "box": [424, 2, 31, 15],
+      "box": [
+        424,
+        2,
+        31,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "小时",
+        "ko-KR": "시간",
+        "en-US": "h"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "min_hi",
-      "text": "min",
-      "box": [471, 2, 17, 15],
+      "box": [
+        471,
+        2,
+        17,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "分",
+        "ko-KR": "분",
+        "en-US": "m"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "time",
-      "text": "time",
-      "box": [424, 18, 31, 15],
+      "box": [
+        424,
+        18,
+        31,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "小时",
+        "ko-KR": "시간",
+        "en-US": "h"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "min",
-      "text": "min",
-      "box": [471, 18, 17, 15],
+      "box": [
+        471,
+        18,
+        17,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "分",
+        "ko-KR": "분",
+        "en-US": "m"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "no_data",
-      "text": "no_data",
-      "box": [58, 33, 129, 15],
+      "box": [
+        58,
+        33,
+        129,
+        15
+      ],
       "style": "label",
       "max_size": 16,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "没有存档数据",
+        "ko-KR": "저장 데이터 없음",
+        "en-US": "No save data"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "load",
-      "text": "load",
-      "box": [250, 33, 84, 15],
+      "box": [
+        250,
+        33,
+        84,
+        15
+      ],
       "style": "load",
       "max_size": 16,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "读取游戏",
+        "ko-KR": "불러오기",
+        "en-US": "Load Game"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "save",
-      "text": "save",
-      "box": [337, 33, 85, 15],
+      "box": [
+        337,
+        33,
+        85,
+        15
+      ],
       "style": "save",
       "max_size": 16,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "保存游戏",
+        "ko-KR": "저장하기",
+        "en-US": "Save Game"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "folder1",
-      "text": "folder1",
-      "box": [20, 49, 68, 15],
+      "box": [
+        20,
+        49,
+        68,
+        15
+      ],
       "style": "solid",
       "max_size": 15,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "文件夹1",
+        "ko-KR": "폴더1",
+        "en-US": "Folder 1"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "folder2",
-      "text": "folder2",
-      "box": [132, 49, 68, 15],
+      "box": [
+        132,
+        49,
+        68,
+        15
+      ],
       "style": "solid",
       "max_size": 15,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "文件夹2",
+        "ko-KR": "폴더2",
+        "en-US": "Folder 2"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "cancel",
-      "text": "cancel",
-      "box": [246, 49, 73, 15],
+      "box": [
+        246,
+        49,
+        73,
+        15
+      ],
       "style": "solid",
       "max_size": 16,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "取消",
+        "ko-KR": "취소",
+        "en-US": "Cancel"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "attractor",
-      "text": "attractor",
-      "box": [337, 49, 70, 15],
+      "box": [
+        337,
+        49,
+        70,
+        15
+      ],
       "style": "label",
       "max_size": 16,
-      "align": "center"
+      "align": "center",
+      "text": {
+        "zh-CN": "未命名",
+        "ko-KR": "무제",
+        "en-US": "Untitled"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "day",
-      "text": "day",
-      "box": [487, 49, 24, 15],
+      "box": [
+        487,
+        49,
+        24,
+        15
+      ],
       "style": "label",
       "max_size": 13,
-      "align": "left"
+      "align": "left",
+      "text": {
+        "zh-CN": "天",
+        "ko-KR": "일",
+        "en-US": "Day"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "msg_l1",
-      "text": "msg_l1",
-      "box": [2, 65, 254, 15],
+      "box": [
+        2,
+        65,
+        254,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "left"
+      "align": "left",
+      "text": {
+        "zh-CN": "正在保存游戏记录。关闭电源可能",
+        "ko-KR": "게임 기록을 저장하는 중입니다. 전원을",
+        "en-US": "Saving game data. Turning off the power"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "msg_l2",
-      "text": "msg_l2",
-      "box": [2, 81, 254, 15],
+      "box": [
+        2,
+        81,
+        254,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "left"
+      "align": "left",
+      "text": {
+        "zh-CN": "导致记录无法正确保存。",
+        "ko-KR": "끄면 저장되지 않을 수 있습니다.",
+        "en-US": "may prevent it from saving correctly."
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "msg_l3",
-      "text": "msg_l3",
-      "box": [2, 97, 254, 15],
+      "box": [
+        2,
+        97,
+        254,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "left"
+      "align": "left",
+      "text": {
+        "zh-CN": "无法使用此存档。",
+        "ko-KR": "이 기록은 사용할 수 없습니다.",
+        "en-US": "This save cannot be used."
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "msg_l4",
-      "text": "msg_l4",
-      "box": [2, 113, 254, 15],
+      "box": [
+        2,
+        113,
+        254,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "left"
+      "align": "left",
+      "text": {
+        "zh-CN": "已保存记录。",
+        "ko-KR": "기록을 저장했습니다.",
+        "en-US": "Game saved."
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "msg_l5",
-      "text": "msg_l5",
-      "box": [2, 129, 254, 15],
+      "box": [
+        2,
+        129,
+        254,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "left"
+      "align": "left",
+      "text": {
+        "zh-CN": "请在存档管理画面中删除。",
+        "ko-KR": "저장 데이터 관리 화면에서 삭제하세요.",
+        "en-US": "Delete it from the save-data manager."
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "msg_r1",
-      "text": "msg_r1",
-      "box": [258, 65, 254, 15],
+      "box": [
+        258,
+        65,
+        254,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "left"
+      "align": "left",
+      "text": {
+        "zh-CN": "无法正确保存记录。",
+        "ko-KR": "기록을 올바르게 저장할 수 없습니다.",
+        "en-US": "The game could not be saved correctly."
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "msg_r2",
-      "text": "msg_r2",
-      "box": [258, 81, 254, 15],
+      "box": [
+        258,
+        81,
+        254,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "left"
+      "align": "left",
+      "text": {
+        "zh-CN": "请再试一次。",
+        "ko-KR": "다시 한 번 시도해 주세요.",
+        "en-US": "Please try again."
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "msg_r3",
-      "text": "msg_r3",
-      "box": [258, 97, 254, 15],
+      "box": [
+        258,
+        97,
+        254,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "left"
+      "align": "left",
+      "text": {
+        "zh-CN": "要更新存档吗？",
+        "ko-KR": "저장 데이터를 갱신하시겠습니까?",
+        "en-US": "Update this save?"
+      },
+      "effect": "outline",
+      "min_size": 7
     },
     {
       "name": "msg_r4",
-      "text": "msg_r4",
-      "box": [258, 113, 254, 15],
+      "box": [
+        258,
+        113,
+        254,
+        15
+      ],
       "style": "label",
       "max_size": 14,
-      "align": "left"
+      "align": "left",
+      "text": {
+        "zh-CN": "要读取存档吗？",
+        "ko-KR": "저장 데이터를 불러오시겠습니까?",
+        "en-US": "Load this save?"
+      },
+      "effect": "outline",
+      "min_size": 7
     }
   ]
 }

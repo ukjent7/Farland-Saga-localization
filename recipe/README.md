@@ -3,25 +3,31 @@
 This directory is the human-readable source for the FARLAND SAGA II localisation.
 The patcher no longer needs a prebuilt ZIP of patched game resources: it reads
 the user's pristine `FarlandSaga2.bin`, applies the recipe, verifies the result,
-and writes the same sectors the payload used to carry.
+and writes the changed sectors itself.
 
 Nothing here contains game bytes. The only inputs are text, label boxes, colour
-indices, font roles and expected SHA-256 hashes.
+indices, font roles, operation lists and expected SHA-256 hashes.
 
 ## Layout
 
 - `manifest.json` — recipe version, languages, disc constants, resource index
   (archive offset, size, original hash) and the recipe file for each resource.
-- `resources/043F.json` — save/load screen labels: strings, boxes, styles,
-  font roles, size limits and alignment.
+- `resources/<id>.json` — one recipe per generated resource. A tile atlas lists
+  erase regions, label boxes and styles; a 1bpp text bank lists slot writes.
+- `fonts.json` — public font roles used by every resource:
+  `NotoSansSC` (zh-CN), `Galmuri11` (ko-KR), `LiberationSans` (en-US) and
+  `Unifont` for the title-menu and place-name bitmap glyphs.
+- `render` on a label selects its mask renderer. `pillow` rasterises the
+  language font and `unifont` uses Unifont's bitmap glyphs. The value is either
+  one name or a per-language map such as `{"en-US": "unifont"}`. The English
+  battle menus use proportional Unifont at 8px: Liberation Sans breaks up at
+  that size after the 1-bit threshold, while Unifont stays crisp and fits the
+  atlas tile budget.
+- `fonts/` — the committed OFL font subsets and their licence texts. The
+  subsets contain only the characters these recipes draw.
 - `expected/<language>.json` — the required patched SHA-256 of every resource.
   A recipe edit that changes pixels must update these hashes; the installer
   refuses to write a resource whose generated hash does not match.
-- `fonts.json` — public font roles. It is empty in Phase 0 because that phase
-  reproduces the existing private pipeline byte for byte.
-- `fonts.local.json` — optional, ignored by git. Absolute paths for the fonts
-  used by the private Phase 0 build. Phase 1 replaces these with OFL fonts
-  committed under `recipe/fonts/`.
 
 ## Compiling the plan
 
@@ -29,50 +35,66 @@ indices, font roles and expected SHA-256 hashes.
 ./uv.sh run --locked python tools/compile_recipe.py
 ```
 
-The compiler rasterises the text with Pillow, emits one mask per label, and
-writes `patcher/plan/plan.bin` plus a JSON build report. `go build -tags saga2`
-embeds the plan. The build is deterministic: the same recipe and fonts produce
-the same plan hash.
+The compiler rasterises the text with Pillow, packs 1bpp slots, emits one mask
+per label, and writes `patcher/plan/plan.bin` plus a JSON build report.
+`go build -tags saga2` embeds the plan. The build is deterministic: the same
+recipe and fonts produce the same plan hash.
 
-A clean public checkout has no private fonts and no `plan.bin`; the patcher
-still compiles and falls back to the payload ZIP. A private build with the
-fonts produces the recipe-enabled patcher.
+`patcher/plan/plan.bin` is ignored by git. A clean checkout can compile it from
+the committed fonts; without a plan the patcher falls back to the payload ZIP.
+Some resources still have no recipe in Phase 1 and always come from that ZIP.
 
 ## Applying a recipe
 
-The installer verifies the original disc image, reads resource `043F` from the
-backup, decodes its tile atlas, erases the label rows with their row background,
-blits the masks, and runs the same first-fit tile allocation as the private
-Python pipeline. It then checks the expected hash and turns the bytes into
-2048-byte sectors at `archive_lba + archive_offset / 2048`.
+The installer verifies the original disc image, reads each resource from the
+backup, and dispatches on its format:
 
-Phase 0 keeps the payload as the source for every resource the recipe does not
-cover and for the executable and `Texture.tex`. It also enforces byte parity:
-each recipe sector must equal the payload sector at the same LBA, so the merged
-image keeps the payload's declared hash. This is the gate that proves the
-install-time generator matches the released candidate.
+- `tile_atlas_8bpp`: decode the map and tiles into a pixel plane, apply every
+  erase region, blit the label masks, then repack the whole atlas. One tile is
+  claimed per distinct 8x8 cell image; the repack fails if the atlas needs more
+  tiles than it has.
+- `mono_bitmap_1bpp`: copy the plan's packed slot bytes into the original
+  resource at their declared offsets.
 
-## Phase 0 scope
+The generated resource must match its expected hash and length. The installer
+then replaces the payload's sectors for that resource and computes the final
+image hash from the bytes it actually wrote; the install record stores that
+hash, so `status`, `verify` and `restore` keep working.
 
-Only `043F` is generated. The three languages are byte-identical to candidate16:
+Phase 1 keeps the payload as the source for every resource the recipe does not
+cover and for the executable and `Texture.tex`. Recipe sectors take precedence
+over the payload at the same LBA.
 
-| Language | 043F SHA-256 |
+## Phase 1 scope
+
+Generated resources:
+
+| Group | Resources |
 | --- | --- |
-| `zh-CN` | `66b2f35db889dfe9af7f46da8bd58f72c11f80c39f1da6d93237371cfd6413a7` |
-| `ko-KR` | `1655744b1450010a658aaf65635e2f741d84b82c407791e9abcb74a89e55dd66` |
-| `en-US` | `74aaebd37f2326b7b379e285e630f59071e222c6e5bad522bd771088d86f3d00` |
+| Mission banners | `02B9`–`02C8` |
+| Shared UI atlas | `02C9` |
+| Job prompt | `0439` |
+| Save/load screen | `043F` |
+| Title panels | `0444`, `0445` |
+| 1bpp text bank | `02CB` |
+| Chapter cards | `040D`–`041E` |
+| Save-scene titles | `041F` |
 
-Phases 1–3 move the remaining tile atlases, text banks, descriptions, story
-pages and `Texture.tex` into recipes. Phase 4 removes the FS2 payload ZIPs and
-compiles the plan in CI from the committed OFL fonts.
+The public fonts change the pixels relative to the candidate16 ZIP, so Phase 1
+no longer requires byte parity with that payload. `expected/` records the new
+reference pixels for all three languages.
+
+Phases 2–3 move descriptions, story pages and `Texture.tex` into recipes.
+Phase 4 removes the FS2 payload ZIPs and compiles the plan in CI.
 
 ## Changing text
 
-1. Edit the string or box in `resources/043F.json`.
+1. Edit the string or box in the matching `resources/<id>.json`.
 2. Compile. The compiler fails fast on a missing font, a box outside the atlas,
-   or text that does not fit its box.
+   a 1bpp slot that cannot fit, or text that does not fit its box.
 3. Run the private `fs2/work/tools/recipe_e2e.py` gate. It installs all three
-   languages into a throwaway game, compares the decoded `043F` with the
-   payload's bytes, and exercises switching, restore and rejected-plan paths.
+   languages into a throwaway game, decodes all 41 resources from the installed
+   image, compares them with `expected/`, proves that only recipe sectors
+   changed, and exercises switching, restore and rejected-plan paths.
 4. Update `expected/<language>.json` only when the new pixels are the intended
    result, and record the new hashes in the change description.

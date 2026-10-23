@@ -1,7 +1,7 @@
 {
   "format": 1,
   "kind": "farland-saga-recipe",
-  "version": "recipe01",
+  "version": "recipe02",
   "game": "saga2",
   "title": "FARLAND SAGA II Saturn Tribute",
   "languages": [
@@ -16,11 +16,251 @@
     "sector_size": 2048
   },
   "resources": {
+    "02B9": {
+      "recipe": "resources/02B9.json",
+      "archive_offset": 37584896,
+      "size": 6144,
+      "original_sha256": "3b006835d65bd821d2fc1f9664948f0d3d5c198412cdc0eb31f852e3c453946c"
+    },
+    "02BA": {
+      "recipe": "resources/02BA.json",
+      "archive_offset": 37591040,
+      "size": 4096,
+      "original_sha256": "d70457659ee15e1266aad9e00094d94ef984a391a2efd61fe76122268d6336ed"
+    },
+    "02BB": {
+      "recipe": "resources/02BB.json",
+      "archive_offset": 37595136,
+      "size": 4096,
+      "original_sha256": "2cf1020ace2dfc14fedd878d8119885bcb87dadfa7221ba34764dabec24b3b17"
+    },
+    "02BC": {
+      "recipe": "resources/02BC.json",
+      "archive_offset": 37599232,
+      "size": 6144,
+      "original_sha256": "b50ed9f7ec89d69c49fcb5ac0a26dec35b8271076f1960703e6b0fea10d10177"
+    },
+    "02BD": {
+      "recipe": "resources/02BD.json",
+      "archive_offset": 37605376,
+      "size": 4096,
+      "original_sha256": "78c1e7d0e7a5e3cb31f59e871ab60b502adf73f0e274cfffb0e779323666b8db"
+    },
+    "02BE": {
+      "recipe": "resources/02BE.json",
+      "archive_offset": 37609472,
+      "size": 4096,
+      "original_sha256": "f145bdb0213f7f7fd149531e12d64d007e5636c7f4a3c8197d199073e79af10e"
+    },
+    "02BF": {
+      "recipe": "resources/02BF.json",
+      "archive_offset": 37613568,
+      "size": 4096,
+      "original_sha256": "e9ab4faa1f6fa6ae3ff76675b790238f3fa57d73571b183194b4c9ebefa039ec"
+    },
+    "02C0": {
+      "recipe": "resources/02C0.json",
+      "archive_offset": 37617664,
+      "size": 4096,
+      "original_sha256": "1c8693d75c4f9c5fe41f940876371003e7a149ca9cac5f8233aecda6c87af8e8"
+    },
+    "02C1": {
+      "recipe": "resources/02C1.json",
+      "archive_offset": 37621760,
+      "size": 6144,
+      "original_sha256": "48c1678d56b0b35d98169e7c4d5cc571f71d21666cd7a9a162326f348751818e"
+    },
+    "02C2": {
+      "recipe": "resources/02C2.json",
+      "archive_offset": 37627904,
+      "size": 4096,
+      "original_sha256": "06b5f6fc041c8691371ec8cb94365b7ce3f5ceb83f4fc993227d68a9b8321bac"
+    },
+    "02C3": {
+      "recipe": "resources/02C3.json",
+      "archive_offset": 37632000,
+      "size": 6144,
+      "original_sha256": "efebbb042520a2c30eccb6ba9ff2c5b5b10cfc5b483c639b76cf0f851917f282"
+    },
+    "02C4": {
+      "recipe": "resources/02C4.json",
+      "archive_offset": 37638144,
+      "size": 4096,
+      "original_sha256": "ab8dd81469a0bb762720b61991d00b50402b7ad46886652e09246b9818e47d10"
+    },
+    "02C5": {
+      "recipe": "resources/02C5.json",
+      "archive_offset": 37642240,
+      "size": 6144,
+      "original_sha256": "ae02cc8a4fe701b80babd92be1c2750f52b4aa4437f1ef6d9cb13a05901156f3"
+    },
+    "02C6": {
+      "recipe": "resources/02C6.json",
+      "archive_offset": 37648384,
+      "size": 4096,
+      "original_sha256": "9085e3f0066e59f5cfed095736aab1f252a6571cbd73cf2f18e7b5c581eabb76"
+    },
+    "02C7": {
+      "recipe": "resources/02C7.json",
+      "archive_offset": 37652480,
+      "size": 4096,
+      "original_sha256": "64bd17bda121cfdf6afae59a3d7c33f8691239b282c06d0455845be3dca83f78"
+    },
+    "02C8": {
+      "recipe": "resources/02C8.json",
+      "archive_offset": 37656576,
+      "size": 6144,
+      "original_sha256": "6215dded7c9cce64bb638dc0e1ac8a4c74b02752315f40d869a63c2ce6531b78"
+    },
+    "02C9": {
+      "recipe": "resources/02C9.json",
+      "archive_offset": 37662720,
+      "size": 100352,
+      "original_sha256": "e2df078e239e2524fa53dc2d5688f4dc752c3ccb7fc8707260dce3ee1a3d5e88"
+    },
+    "0439": {
+      "recipe": "resources/0439.json",
+      "archive_offset": 39546880,
+      "size": 6144,
+      "original_sha256": "38351c547de44e73b8c83ae2ff90c40405893b0c3282dd31c08bc276718c6c44"
+    },
     "043F": {
       "recipe": "resources/043F.json",
       "archive_offset": 39579648,
       "size": 45056,
       "original_sha256": "e8038cde287fafaf5933fa8d766e70ed9c5485a7d0a855c28ab9e3dcb1643341"
+    },
+    "0444": {
+      "recipe": "resources/0444.json",
+      "archive_offset": 39647232,
+      "size": 4096,
+      "original_sha256": "6cfee2051b2e1b4efd3dde86f202097d37df33a10abf695dafb734f7639dbde2"
+    },
+    "0445": {
+      "recipe": "resources/0445.json",
+      "archive_offset": 39651328,
+      "size": 8192,
+      "original_sha256": "23503f786398e6a51b03d7a6bc34b239d507f11a4a8b32c5341a1e170acb3e86"
+    },
+    "02CB": {
+      "recipe": "resources/02CB.json",
+      "archive_offset": 37783552,
+      "size": 86016,
+      "original_sha256": "a7befb98eb8681124538168a3098bc417d75a9217fb1bd2e50473d20a87a61ae"
+    },
+    "040D": {
+      "recipe": "resources/040D.json",
+      "archive_offset": 39221248,
+      "size": 2048,
+      "original_sha256": "15747cce3b31948aa2a1d1d9dcfebe6cc14d2335006201421a6df3739c80dfe7"
+    },
+    "040E": {
+      "recipe": "resources/040E.json",
+      "archive_offset": 39223296,
+      "size": 2048,
+      "original_sha256": "ac5a9e78eb01cb720c8b42be72e23ff84ba107258452c5a0aa38cb4dd2432999"
+    },
+    "040F": {
+      "recipe": "resources/040F.json",
+      "archive_offset": 39225344,
+      "size": 2048,
+      "original_sha256": "92a9f759bec3d4207e826a42ab2b9525ff5e85fe083f148e393b2f472048341a"
+    },
+    "0410": {
+      "recipe": "resources/0410.json",
+      "archive_offset": 39227392,
+      "size": 2048,
+      "original_sha256": "28ce5c88588ba3f9d41316402f7d7bcbb306f0612f2cdaf9fd30a5273e6ee515"
+    },
+    "0411": {
+      "recipe": "resources/0411.json",
+      "archive_offset": 39229440,
+      "size": 2048,
+      "original_sha256": "b1a37f6872052147e55a96b7f52529598b14ad2ba7312db812c82e66cc78810b"
+    },
+    "0412": {
+      "recipe": "resources/0412.json",
+      "archive_offset": 39231488,
+      "size": 2048,
+      "original_sha256": "1834dc67d7b3b37ce1cef60713a41ff6b50b0f012561e560d76d02b278211176"
+    },
+    "0413": {
+      "recipe": "resources/0413.json",
+      "archive_offset": 39233536,
+      "size": 2048,
+      "original_sha256": "4cc688e366e0d2730d7c8e71e4d0c60f42a75ddf66ba26543bcc9ce56631cee3"
+    },
+    "0414": {
+      "recipe": "resources/0414.json",
+      "archive_offset": 39235584,
+      "size": 2048,
+      "original_sha256": "c1d66c281a7ce865d06d2d6f55aed16da9c9fa8526c5eced816b66be02e28a1e"
+    },
+    "0415": {
+      "recipe": "resources/0415.json",
+      "archive_offset": 39237632,
+      "size": 2048,
+      "original_sha256": "a7272ecbecb1559e6e1f6f3bf64878929e311d03a6cb332f846a0c8988fcace6"
+    },
+    "0416": {
+      "recipe": "resources/0416.json",
+      "archive_offset": 39239680,
+      "size": 2048,
+      "original_sha256": "d2fcb39253afa8148dba0b6f4ac8ee739e6743c81f804e36943ac3241dde34f4"
+    },
+    "0417": {
+      "recipe": "resources/0417.json",
+      "archive_offset": 39241728,
+      "size": 2048,
+      "original_sha256": "5af190648163666903fe19f70891781b685e8c51f6d481ebf9901a9dbc0a07a3"
+    },
+    "0418": {
+      "recipe": "resources/0418.json",
+      "archive_offset": 39243776,
+      "size": 2048,
+      "original_sha256": "4ce72380c28963501d1cece31ead9e7b283d60f344388edc8f8f581b908dc6ca"
+    },
+    "0419": {
+      "recipe": "resources/0419.json",
+      "archive_offset": 39245824,
+      "size": 2048,
+      "original_sha256": "1619b6d22f971f484a038d559fd3028c46ed7937936bfc34a7f99431fb009e58"
+    },
+    "041A": {
+      "recipe": "resources/041A.json",
+      "archive_offset": 39247872,
+      "size": 2048,
+      "original_sha256": "705d3bab848d60ea43b8221745cd559bdb1433d5de4225dfd9d8f085c2410393"
+    },
+    "041B": {
+      "recipe": "resources/041B.json",
+      "archive_offset": 39249920,
+      "size": 2048,
+      "original_sha256": "a6e178d4dd04a0ef3fa1f186fa4d8e353872770414e1b976989196ea0e195bad"
+    },
+    "041C": {
+      "recipe": "resources/041C.json",
+      "archive_offset": 39251968,
+      "size": 2048,
+      "original_sha256": "e410521ce10ba3dbe7e90b07161639045de85c4eead5c33165cf81c77f546495"
+    },
+    "041D": {
+      "recipe": "resources/041D.json",
+      "archive_offset": 39254016,
+      "size": 2048,
+      "original_sha256": "e963aa262a79aaf7133dceaf002f98a1f345e996e6f87c252a52844b766879e3"
+    },
+    "041E": {
+      "recipe": "resources/041E.json",
+      "archive_offset": 39256064,
+      "size": 2048,
+      "original_sha256": "c471f0920d09bb01f20ea21481be7747820328bc50deffdf007a4157645a20b1"
+    },
+    "041F": {
+      "recipe": "resources/041F.json",
+      "archive_offset": 39258112,
+      "size": 24576,
+      "original_sha256": "4ef9e27405eed9030f619f0b471710675379fba9003702fd359c799fb5a107c2"
     }
   }
 }

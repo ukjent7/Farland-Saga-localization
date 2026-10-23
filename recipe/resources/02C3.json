@@ -1,0 +1,58 @@
+{
+  "resource": "02C3",
+  "description": "Mission banner.",
+  "format": "tile_atlas_8bpp",
+  "atlas_size": [
+    232,
+    48
+  ],
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "styles": {
+    "label": {
+      "body": 2,
+      "outline": 1
+    }
+  },
+  "erase": [
+    {
+      "box": [
+        12,
+        14,
+        208,
+        20
+      ],
+      "mode": "row_background"
+    }
+  ],
+  "labels": [
+    {
+      "name": "banner",
+      "text": {
+        "zh-CN": "全歼敌人（尽量用让）！",
+        "ko-KR": "적 전멸 (가능한 한 쟝으로)!",
+        "en-US": "Rout the enemy (use Jean)!"
+      },
+      "box": [
+        16,
+        15,
+        200,
+        18
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 14,
+      "min_size": 9,
+      "reserve": 1,
+      "align": "center"
+    }
+  ]
+}

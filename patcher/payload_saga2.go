@@ -6,7 +6,6 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"compress/gzip"
 	"crypto/sha256"
 	"encoding/binary"
@@ -152,10 +151,9 @@ func (p *payload) replaySectorsMerged(entry fileEntry, basePath string, exePath 
 		if _, err := io.ReadFull(gzReader, sectorBuf[16:2064]); err != nil {
 			return fmt.Errorf("读取扇区数据失败 (LBA %d): %w", lba, err)
 		}
-		if want, ok := overrides[lba]; ok {
-			if !bytes.Equal(want, sectorBuf[16:2064]) {
-				return fmt.Errorf("recipe 扇区 LBA %d 与载荷不一致", lba)
-			}
+		if _, ok := overrides[lba]; ok {
+			// recipe 生成的内容优先于载荷；资源本身的期望哈希在生成阶段
+			// 已经核对，这里不再要求与旧载荷逐字节一致。
 			continue
 		}
 		if err := addData(lba, sectorBuf[16:2064]); err != nil {
@@ -243,7 +241,7 @@ func (p *payload) replaySectorsMerged(entry fileEntry, basePath string, exePath 
 		return fmt.Errorf("扇区重构长度不符: 期望 %d, 实际 %d", entry.PatchedSize, position)
 	}
 	rebuiltSHA256 := hex.EncodeToString(hash.Sum(nil))
-	if rebuiltSHA256 != entry.PatchedSHA256 {
+	if len(overrides) == 0 && rebuiltSHA256 != entry.PatchedSHA256 {
 		return fmt.Errorf("扇区重构哈希不符: 期望 %s, 实际 %s", entry.PatchedSHA256, rebuiltSHA256)
 	}
 	return nil

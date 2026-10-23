@@ -1,0 +1,2277 @@
+{
+  "resource": "02CB",
+  "description": "Dialogue name bank, skills, classes, items and status labels.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "attributes",
+      "generator": "slots",
+      "offset": 1760,
+      "width": 64,
+      "height": 16,
+      "slots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "texts": [
+        {
+          "zh-CN": "攻击力",
+          "ko-KR": "공격력",
+          "en-US": "Attack"
+        },
+        {
+          "zh-CN": "防御力",
+          "ko-KR": "방어력",
+          "en-US": "Defense"
+        },
+        {
+          "zh-CN": "智力",
+          "ko-KR": "지력",
+          "en-US": "Intellect"
+        },
+        {
+          "zh-CN": "魔抗力",
+          "ko-KR": "마법저항",
+          "en-US": "Magic Res."
+        },
+        {
+          "zh-CN": "敏捷度",
+          "ko-KR": "민첩성",
+          "en-US": "Agility"
+        },
+        {
+          "zh-CN": "火属性",
+          "ko-KR": "화 속성",
+          "en-US": "Fire"
+        },
+        {
+          "zh-CN": "水属性",
+          "ko-KR": "수 속성",
+          "en-US": "Water"
+        },
+        {
+          "zh-CN": "风属性",
+          "ko-KR": "풍 속성",
+          "en-US": "Wind"
+        },
+        {
+          "zh-CN": "土属性",
+          "ko-KR": "토 속성",
+          "en-US": "Earth"
+        },
+        {
+          "zh-CN": "光属性",
+          "ko-KR": "광 속성",
+          "en-US": "Light"
+        },
+        {
+          "zh-CN": "暗属性",
+          "ko-KR": "암 속성",
+          "en-US": "Dark"
+        },
+        {
+          "zh-CN": "移动力",
+          "ko-KR": "이동력",
+          "en-US": "Move"
+        }
+      ],
+      "background": 1,
+      "ink": 0,
+      "max_size": 16,
+      "min_size": 7,
+      "align": "center",
+      "box_width": {
+        "zh-CN": 64,
+        "ko-KR": 64,
+        "en-US": 63
+      }
+    },
+    {
+      "name": "equip_restrictions",
+      "generator": "slots",
+      "offset": 3296,
+      "width": 72,
+      "height": 16,
+      "slots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "texts": [
+        {
+          "zh-CN": "卡琳",
+          "ko-KR": "카린",
+          "en-US": "Karin"
+        },
+        {
+          "zh-CN": "阿尔",
+          "ko-KR": "알",
+          "en-US": "Al"
+        },
+        {
+          "zh-CN": "爱丽丝",
+          "ko-KR": "앨리스",
+          "en-US": "Alice"
+        },
+        {
+          "zh-CN": "莎拉",
+          "ko-KR": "사라",
+          "en-US": "Sarah"
+        },
+        {
+          "zh-CN": "莱迪修",
+          "ko-KR": "라디쉬",
+          "en-US": "Radish"
+        },
+        {
+          "zh-CN": "索菲亚",
+          "ko-KR": "소피아",
+          "en-US": "Sophia"
+        },
+        {
+          "zh-CN": "露露",
+          "ko-KR": "루루",
+          "en-US": "Lulu"
+        },
+        {
+          "zh-CN": "索恩",
+          "ko-KR": "손",
+          "en-US": "Sohn"
+        },
+        {
+          "zh-CN": "让",
+          "ko-KR": "쟝",
+          "en-US": "Jean"
+        },
+        {
+          "zh-CN": "全员",
+          "ko-KR": "전원",
+          "en-US": "All"
+        },
+        {
+          "zh-CN": "仅限女性",
+          "ko-KR": "여성 전용",
+          "en-US": "Women only"
+        },
+        {
+          "zh-CN": "魔术师除外",
+          "ko-KR": "마술사 이외",
+          "en-US": "Non-mages"
+        }
+      ],
+      "background": 1,
+      "ink": 0,
+      "max_size": 16,
+      "min_size": 7,
+      "align": "center",
+      "box_width": {
+        "zh-CN": 72,
+        "ko-KR": 72,
+        "en-US": 71
+      }
+    },
+    {
+      "name": "skills_magic",
+      "generator": "slots",
+      "offset": 5024,
+      "width": 120,
+      "height": 16,
+      "slots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        38,
+        39,
+        40,
+        43,
+        44,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        62
+      ],
+      "texts": [
+        {
+          "zh-CN": "烈焰爆发",
+          "ko-KR": "플레임 버스트",
+          "en-US": "Flame Burst"
+        },
+        {
+          "zh-CN": "熔化",
+          "ko-KR": "멜트",
+          "en-US": "Melt"
+        },
+        {
+          "zh-CN": "炽热之刃",
+          "ko-KR": "히트 블레이드",
+          "en-US": "Heat Blade"
+        },
+        {
+          "zh-CN": "爆裂",
+          "ko-KR": "익스플로전",
+          "en-US": "Explosion"
+        },
+        {
+          "zh-CN": "闪光",
+          "ko-KR": "플래시",
+          "en-US": "Flash"
+        },
+        {
+          "zh-CN": "伊芙利特",
+          "ko-KR": "이프리트",
+          "en-US": "Ifrit"
+        },
+        {
+          "zh-CN": "净化",
+          "ko-KR": "퓨리파이",
+          "en-US": "Purify"
+        },
+        {
+          "zh-CN": "冰冻",
+          "ko-KR": "프리즈",
+          "en-US": "Freeze"
+        },
+        {
+          "zh-CN": "暴风雪",
+          "ko-KR": "블리자드",
+          "en-US": "Blizzard"
+        },
+        {
+          "zh-CN": "恢复",
+          "ko-KR": "리스토어",
+          "en-US": "Restore"
+        },
+        {
+          "zh-CN": "死亡之舞",
+          "ko-KR": "마카브르 댄스",
+          "en-US": "Macabre Dance"
+        },
+        {
+          "zh-CN": "雪龙",
+          "ko-KR": "스노 드래곤",
+          "en-US": "Snow Dragon"
+        },
+        {
+          "zh-CN": "闪电",
+          "ko-KR": "라이트닝",
+          "en-US": "Lightning"
+        },
+        {
+          "zh-CN": "加速",
+          "ko-KR": "헤이스트",
+          "en-US": "Haste"
+        },
+        {
+          "zh-CN": "急救",
+          "ko-KR": "에이드",
+          "en-US": "Aid"
+        },
+        {
+          "zh-CN": "静音",
+          "ko-KR": "뮤트",
+          "en-US": "Mute"
+        },
+        {
+          "zh-CN": "摇篮曲",
+          "ko-KR": "랄라바이",
+          "en-US": "Lullaby"
+        },
+        {
+          "zh-CN": "鼓舞",
+          "ko-KR": "치어링",
+          "en-US": "Cheering"
+        },
+        {
+          "zh-CN": "雷龙",
+          "ko-KR": "썬더 드래곤",
+          "en-US": "Thunder Dragon"
+        },
+        {
+          "zh-CN": "沉默",
+          "ko-KR": "사일런스",
+          "en-US": "Silence"
+        },
+        {
+          "zh-CN": "放逐",
+          "ko-KR": "배니시",
+          "en-US": "Banish"
+        },
+        {
+          "zh-CN": "尖石攻击",
+          "ko-KR": "스톤 에지",
+          "en-US": "Stone Edge"
+        },
+        {
+          "zh-CN": "命令",
+          "ko-KR": "오더",
+          "en-US": "Order"
+        },
+        {
+          "zh-CN": "大地",
+          "ko-KR": "어스",
+          "en-US": "Earth"
+        },
+        {
+          "zh-CN": "保护",
+          "ko-KR": "프로텍션",
+          "en-US": "Protection"
+        },
+        {
+          "zh-CN": "毒气云",
+          "ko-KR": "가스 클라우드",
+          "en-US": "Gas Cloud"
+        },
+        {
+          "zh-CN": "浮空",
+          "ko-KR": "레비테이트",
+          "en-US": "Levitate"
+        },
+        {
+          "zh-CN": "陨石",
+          "ko-KR": "메테오",
+          "en-US": "Meteor"
+        },
+        {
+          "zh-CN": "治疗",
+          "ko-KR": "힐링",
+          "en-US": "Healing"
+        },
+        {
+          "zh-CN": "复活",
+          "ko-KR": "리저렉션",
+          "en-US": "Resurrection"
+        },
+        {
+          "zh-CN": "魔法护盾",
+          "ko-KR": "매직 실드",
+          "en-US": "Magic Shield"
+        },
+        {
+          "zh-CN": "全愈",
+          "ko-KR": "리커버리",
+          "en-US": "Recovery"
+        },
+        {
+          "zh-CN": "石化云",
+          "ko-KR": "페트로 클라우드",
+          "en-US": "Petro Cloud"
+        },
+        {
+          "zh-CN": "束缚",
+          "ko-KR": "홀드",
+          "en-US": "Hold"
+        },
+        {
+          "zh-CN": "傀儡",
+          "ko-KR": "퍼펫",
+          "en-US": "Puppet"
+        },
+        {
+          "zh-CN": "暗黑力量",
+          "ko-KR": "다크 포스",
+          "en-US": "Dark Force"
+        },
+        {
+          "zh-CN": "灭神乱舞",
+          "ko-KR": "멸신난무",
+          "en-US": "Godslayer Dance"
+        },
+        {
+          "zh-CN": "生命汲取",
+          "ko-KR": "라이프 스틸",
+          "en-US": "Life Steal"
+        },
+        {
+          "zh-CN": "死亡时刻",
+          "ko-KR": "데스 모먼트",
+          "en-US": "Death Moment"
+        }
+      ],
+      "background": 1,
+      "ink": 0,
+      "max_size": 16,
+      "min_size": 7,
+      "align": "center",
+      "box_width": {
+        "zh-CN": 120,
+        "ko-KR": 120,
+        "en-US": 119
+      }
+    },
+    {
+      "name": "levelup_subjects",
+      "generator": "slots",
+      "offset": 20384,
+      "width": 88,
+      "height": 16,
+      "slots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "texts": [
+        {
+          "zh-CN": "卡琳",
+          "ko-KR": "카린은",
+          "en-US": "Karin"
+        },
+        {
+          "zh-CN": "阿尔",
+          "ko-KR": "알은",
+          "en-US": "Al"
+        },
+        {
+          "zh-CN": "爱丽丝",
+          "ko-KR": "앨리스는",
+          "en-US": "Alice"
+        },
+        {
+          "zh-CN": "莎拉",
+          "ko-KR": "사라는",
+          "en-US": "Sarah"
+        },
+        {
+          "zh-CN": "莱迪修",
+          "ko-KR": "라디쉬는",
+          "en-US": "Radish"
+        },
+        {
+          "zh-CN": "索菲亚",
+          "ko-KR": "소피아는",
+          "en-US": "Sophia"
+        },
+        {
+          "zh-CN": "露露",
+          "ko-KR": "루루는",
+          "en-US": "Lulu"
+        },
+        {
+          "zh-CN": "索恩",
+          "ko-KR": "손은",
+          "en-US": "Sohn"
+        },
+        {
+          "zh-CN": "让",
+          "ko-KR": "쟝은",
+          "en-US": "Jean"
+        }
+      ],
+      "background": 1,
+      "ink": 0,
+      "max_size": 16,
+      "min_size": 7,
+      "align": "center",
+      "box_width": {
+        "zh-CN": 88,
+        "ko-KR": 88,
+        "en-US": 87
+      }
+    },
+    {
+      "name": "character_names",
+      "generator": "slots",
+      "offset": 21968,
+      "width": 80,
+      "height": 16,
+      "slots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "texts": [
+        {
+          "zh-CN": "卡琳",
+          "ko-KR": "카린",
+          "en-US": "Karin"
+        },
+        {
+          "zh-CN": "阿尔",
+          "ko-KR": "알",
+          "en-US": "Al"
+        },
+        {
+          "zh-CN": "爱丽丝",
+          "ko-KR": "앨리스",
+          "en-US": "Alice"
+        },
+        {
+          "zh-CN": "莎拉",
+          "ko-KR": "사라",
+          "en-US": "Sarah"
+        },
+        {
+          "zh-CN": "莱迪修",
+          "ko-KR": "라디쉬",
+          "en-US": "Radish"
+        },
+        {
+          "zh-CN": "索菲亚",
+          "ko-KR": "소피아",
+          "en-US": "Sophia"
+        },
+        {
+          "zh-CN": "露露",
+          "ko-KR": "루루",
+          "en-US": "Lulu"
+        },
+        {
+          "zh-CN": "???",
+          "ko-KR": "???",
+          "en-US": "???"
+        },
+        {
+          "zh-CN": "Ｔ．Ｔ．",
+          "ko-KR": "T.T.",
+          "en-US": "T.T."
+        },
+        {
+          "zh-CN": "索恩",
+          "ko-KR": "손",
+          "en-US": "Sohn"
+        },
+        {
+          "zh-CN": "麦克杜格尔",
+          "ko-KR": "맥도걸",
+          "en-US": "MacDougal"
+        },
+        {
+          "zh-CN": "加斯顿",
+          "ko-KR": "가스통",
+          "en-US": "Gaston"
+        },
+        {
+          "zh-CN": "会长",
+          "ko-KR": "마스터",
+          "en-US": "Master"
+        },
+        {
+          "zh-CN": "肌肉大叔",
+          "ko-KR": "머슬 아저씨",
+          "en-US": "Muscle Dad"
+        },
+        {
+          "zh-CN": "商店大姐",
+          "ko-KR": "상점 누나",
+          "en-US": "Shop Girl"
+        },
+        {
+          "zh-CN": "愤怒的卡琳",
+          "ko-KR": "화난 카린",
+          "en-US": "Angry Karin"
+        },
+        {
+          "zh-CN": "困扰的爱丽丝",
+          "ko-KR": "곤란한 앨리스",
+          "en-US": "Troubled Alice"
+        },
+        {
+          "zh-CN": "卡特琳娜",
+          "ko-KR": "카트린",
+          "en-US": "Catherine"
+        },
+        {
+          "zh-CN": "贝希摩斯",
+          "ko-KR": "베히모스",
+          "en-US": "Behemoth"
+        },
+        {
+          "zh-CN": "大仲马",
+          "ko-KR": "듀마",
+          "en-US": "Dumas"
+        },
+        {
+          "zh-CN": "让",
+          "ko-KR": "쟝",
+          "en-US": "Jean"
+        },
+        {
+          "zh-CN": "分身怪",
+          "ko-KR": "도플갱어",
+          "en-US": "Doppelganger"
+        },
+        {
+          "zh-CN": "阿尔维斯",
+          "ko-KR": "알비스",
+          "en-US": "Alviss"
+        },
+        {
+          "zh-CN": "索恩·怀斯",
+          "ko-KR": "손 바이스",
+          "en-US": "Sohn Vice"
+        },
+        {
+          "zh-CN": "小希",
+          "ko-KR": "히짱",
+          "en-US": "Hee-chan"
+        },
+        {
+          "zh-CN": "小可",
+          "ko-KR": "코카짱",
+          "en-US": "Koka-chan"
+        },
+        {
+          "zh-CN": "公会会长",
+          "ko-KR": "길드 마스터",
+          "en-US": "Guild Master"
+        }
+      ],
+      "background": 1,
+      "ink": 0,
+      "max_size": 16,
+      "min_size": 7,
+      "align": "center",
+      "box_width": {
+        "zh-CN": 80,
+        "ko-KR": 80,
+        "en-US": 79
+      }
+    },
+    {
+      "name": "classes_units",
+      "generator": "slots",
+      "offset": 26960,
+      "width": 112,
+      "height": 16,
+      "slots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        36,
+        37,
+        38,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        55,
+        56,
+        57,
+        58,
+        60,
+        61,
+        62,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73
+      ],
+      "texts": [
+        {
+          "zh-CN": "魔法师",
+          "ko-KR": "마법사",
+          "en-US": "Mage"
+        },
+        {
+          "zh-CN": "剑士",
+          "ko-KR": "검사",
+          "en-US": "Swordsman"
+        },
+        {
+          "zh-CN": "治疗师",
+          "ko-KR": "힐러",
+          "en-US": "Healer"
+        },
+        {
+          "zh-CN": "萨满",
+          "ko-KR": "샤먼",
+          "en-US": "Shaman"
+        },
+        {
+          "zh-CN": "塞壬",
+          "ko-KR": "세이렌",
+          "en-US": "Siren"
+        },
+        {
+          "zh-CN": "盗贼",
+          "ko-KR": "도적",
+          "en-US": "Thief"
+        },
+        {
+          "zh-CN": "精灵使",
+          "ko-KR": "정령사",
+          "en-US": "Spirit Caller"
+        },
+        {
+          "zh-CN": "ＮＰＣ",
+          "ko-KR": "NPC",
+          "en-US": "NPC"
+        },
+        {
+          "zh-CN": "宝箱",
+          "ko-KR": "보물상자",
+          "en-US": "Treasure Chest"
+        },
+        {
+          "zh-CN": "金币",
+          "ko-KR": "금화",
+          "en-US": "Gold"
+        },
+        {
+          "zh-CN": "蓝色史莱姆",
+          "ko-KR": "블루 슬라임",
+          "en-US": "Blue Slime"
+        },
+        {
+          "zh-CN": "绿色史莱姆",
+          "ko-KR": "그린 슬라임",
+          "en-US": "Green Slime"
+        },
+        {
+          "zh-CN": "酸性史莱姆",
+          "ko-KR": "애시드 슬라임",
+          "en-US": "Acid Slime"
+        },
+        {
+          "zh-CN": "灰泥怪",
+          "ko-KR": "그레이 우즈",
+          "en-US": "Gray Ooze"
+        },
+        {
+          "zh-CN": "泥浆水母",
+          "ko-KR": "매드 젤리",
+          "en-US": "Mud Jelly"
+        },
+        {
+          "zh-CN": "白猫",
+          "ko-KR": "흰 고양이",
+          "en-US": "White Cat"
+        },
+        {
+          "zh-CN": "黑猫",
+          "ko-KR": "검은 고양이",
+          "en-US": "Black Cat"
+        },
+        {
+          "zh-CN": "三花猫",
+          "ko-KR": "삼색 고양이",
+          "en-US": "Calico Cat"
+        },
+        {
+          "zh-CN": "秃鹰兽",
+          "ko-KR": "콘도로",
+          "en-US": "Condor"
+        },
+        {
+          "zh-CN": "无赖",
+          "ko-KR": "깡패",
+          "en-US": "Thug"
+        },
+        {
+          "zh-CN": "虎斑猫",
+          "ko-KR": "호랑이 고양이",
+          "en-US": "Tiger Cat"
+        },
+        {
+          "zh-CN": "九头蛇",
+          "ko-KR": "히드라",
+          "en-US": "Hydra"
+        },
+        {
+          "zh-CN": "鹰身女妖",
+          "ko-KR": "하피",
+          "en-US": "Harpy"
+        },
+        {
+          "zh-CN": "贝希摩斯",
+          "ko-KR": "베히모스",
+          "en-US": "Behemoth"
+        },
+        {
+          "zh-CN": "装甲魔像",
+          "ko-KR": "아머 골렘",
+          "en-US": "Armor Golem"
+        },
+        {
+          "zh-CN": "岩石魔像",
+          "ko-KR": "록 골렘",
+          "en-US": "Rock Golem"
+        },
+        {
+          "zh-CN": "石魔像",
+          "ko-KR": "스톤 골렘",
+          "en-US": "Stone Golem"
+        },
+        {
+          "zh-CN": "幽灵",
+          "ko-KR": "고스트",
+          "en-US": "Ghost"
+        },
+        {
+          "zh-CN": "怨灵",
+          "ko-KR": "스펙터",
+          "en-US": "Specter"
+        },
+        {
+          "zh-CN": "妖精",
+          "ko-KR": "페어리",
+          "en-US": "Fairy"
+        },
+        {
+          "zh-CN": "小精灵",
+          "ko-KR": "픽시",
+          "en-US": "Pixie"
+        },
+        {
+          "zh-CN": "死灵法师",
+          "ko-KR": "네크로맨서",
+          "en-US": "Necromancer"
+        },
+        {
+          "zh-CN": "死亡战士",
+          "ko-KR": "데스 워리어",
+          "en-US": "Death Warrior"
+        },
+        {
+          "zh-CN": "食尸鬼",
+          "ko-KR": "구울",
+          "en-US": "Ghoul"
+        },
+        {
+          "zh-CN": "迷路的孩子",
+          "ko-KR": "미아",
+          "en-US": "Lost Child"
+        },
+        {
+          "zh-CN": "铁匠学徒",
+          "ko-KR": "대장장이 견습생",
+          "en-US": "Smith Apprentice"
+        },
+        {
+          "zh-CN": "囚犯",
+          "ko-KR": "죄수",
+          "en-US": "Prisoner"
+        },
+        {
+          "zh-CN": "小鬼",
+          "ko-KR": "임프",
+          "en-US": "Imp"
+        },
+        {
+          "zh-CN": "小恶魔",
+          "ko-KR": "그렘린",
+          "en-US": "Gremlin"
+        },
+        {
+          "zh-CN": "囚犯",
+          "ko-KR": "죄수",
+          "en-US": "Prisoner"
+        },
+        {
+          "zh-CN": "恶魔",
+          "ko-KR": "데몬",
+          "en-US": "Demon"
+        },
+        {
+          "zh-CN": "鹰身女妖",
+          "ko-KR": "하피",
+          "en-US": "Harpy"
+        },
+        {
+          "zh-CN": "红蟹",
+          "ko-KR": "레드 크랩",
+          "en-US": "Red Crab"
+        },
+        {
+          "zh-CN": "公会会长",
+          "ko-KR": "길드 마스터",
+          "en-US": "Guild Master"
+        },
+        {
+          "zh-CN": "鸡蛇兽",
+          "ko-KR": "코카트리스",
+          "en-US": "Cockatrice"
+        },
+        {
+          "zh-CN": "巫师",
+          "ko-KR": "소서러",
+          "en-US": "Sorcerer"
+        },
+        {
+          "zh-CN": "炼金术士",
+          "ko-KR": "연금술사",
+          "en-US": "Alchemist"
+        },
+        {
+          "zh-CN": "精灵",
+          "ko-KR": "스프라이트",
+          "en-US": "Sprite"
+        },
+        {
+          "zh-CN": "混混",
+          "ko-KR": "양아치",
+          "en-US": "Punk"
+        },
+        {
+          "zh-CN": "魔导士",
+          "ko-KR": "위저드",
+          "en-US": "Wizard"
+        },
+        {
+          "zh-CN": "苍白蟹",
+          "ko-KR": "페일 크랩",
+          "en-US": "Pale Crab"
+        },
+        {
+          "zh-CN": "术士",
+          "ko-KR": "워록",
+          "en-US": "Warlock"
+        },
+        {
+          "zh-CN": "胖猫",
+          "ko-KR": "뚱뚱한 고양이",
+          "en-US": "Fat Cat"
+        },
+        {
+          "zh-CN": "魅魔",
+          "ko-KR": "서큐버스",
+          "en-US": "Succubus"
+        },
+        {
+          "zh-CN": "异乡人",
+          "ko-KR": "스트레인저",
+          "en-US": "Stranger"
+        },
+        {
+          "zh-CN": "分身怪",
+          "ko-KR": "도플갱어",
+          "en-US": "Doppelganger"
+        },
+        {
+          "zh-CN": "大恶魔",
+          "ko-KR": "아크 데몬",
+          "en-US": "Arch Demon"
+        },
+        {
+          "zh-CN": "天使",
+          "ko-KR": "엔젤",
+          "en-US": "Angel"
+        },
+        {
+          "zh-CN": "大天使",
+          "ko-KR": "아크 엔젤",
+          "en-US": "Arch Angel"
+        },
+        {
+          "zh-CN": "堕天使",
+          "ko-KR": "타락천사",
+          "en-US": "Fallen Angel"
+        },
+        {
+          "zh-CN": "恶魔领主",
+          "ko-KR": "데몬 로드",
+          "en-US": "Demon Lord"
+        },
+        {
+          "zh-CN": "海盗",
+          "ko-KR": "해적",
+          "en-US": "Pirate"
+        },
+        {
+          "zh-CN": "维京人",
+          "ko-KR": "바이킹",
+          "en-US": "Viking"
+        },
+        {
+          "zh-CN": "炽天使",
+          "ko-KR": "세라프",
+          "en-US": "Seraph"
+        },
+        {
+          "zh-CN": "炽天使",
+          "ko-KR": "세라프",
+          "en-US": "Seraph"
+        }
+      ],
+      "background": 1,
+      "ink": 0,
+      "max_size": 16,
+      "min_size": 7,
+      "align": "center",
+      "box_width": {
+        "zh-CN": 112,
+        "ko-KR": 112,
+        "en-US": 111
+      }
+    },
+    {
+      "name": "status_effects",
+      "generator": "slots",
+      "offset": 43760,
+      "width": 32,
+      "height": 16,
+      "slots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "texts": [
+        {
+          "zh-CN": "正常",
+          "ko-KR": "정상",
+          "en-US": "Normal"
+        },
+        {
+          "zh-CN": "气绝",
+          "ko-KR": "기절",
+          "en-US": "Stun"
+        },
+        {
+          "zh-CN": "中毒",
+          "ko-KR": "중독",
+          "en-US": "Poison"
+        },
+        {
+          "zh-CN": "睡眠",
+          "ko-KR": "수면",
+          "en-US": "Sleep"
+        },
+        {
+          "zh-CN": "石化",
+          "ko-KR": "석화",
+          "en-US": "Petrify"
+        },
+        {
+          "zh-CN": "冻结",
+          "ko-KR": "빙결",
+          "en-US": "Freeze"
+        },
+        {
+          "zh-CN": "沉默",
+          "ko-KR": "침묵",
+          "en-US": "Silence"
+        },
+        {
+          "zh-CN": "魅惑",
+          "ko-KR": "매료",
+          "en-US": "Charm"
+        },
+        {
+          "zh-CN": "麻痹",
+          "ko-KR": "마비",
+          "en-US": "Para."
+        },
+        {
+          "zh-CN": "透明",
+          "ko-KR": "투명",
+          "en-US": "Invis."
+        },
+        {
+          "zh-CN": "敏捷",
+          "ko-KR": "민첩",
+          "en-US": "Haste"
+        },
+        {
+          "zh-CN": "浮游",
+          "ko-KR": "부유",
+          "en-US": "Float"
+        }
+      ],
+      "background": 1,
+      "ink": 0,
+      "max_size": 16,
+      "min_size": 7,
+      "align": "center",
+      "box_width": {
+        "zh-CN": 32,
+        "ko-KR": 32,
+        "en-US": 31
+      }
+    },
+    {
+      "name": "item_names",
+      "generator": "slots",
+      "offset": 44528,
+      "width": 120,
+      "height": 16,
+      "slots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168
+      ],
+      "texts": [
+        {
+          "zh-CN": "药草",
+          "ko-KR": "약초",
+          "en-US": "Medicinal Herb"
+        },
+        {
+          "zh-CN": "解毒剂",
+          "ko-KR": "해독제",
+          "en-US": "Antidote"
+        },
+        {
+          "zh-CN": "妖精之泪",
+          "ko-KR": "요정의 눈물",
+          "en-US": "Fairy Tears"
+        },
+        {
+          "zh-CN": "南瓜种子",
+          "ko-KR": "호박씨",
+          "en-US": "Pumpkin Seed"
+        },
+        {
+          "zh-CN": "回复药",
+          "ko-KR": "회복약",
+          "en-US": "Healing Potion"
+        },
+        {
+          "zh-CN": "治愈之花",
+          "ko-KR": "치유의 꽃",
+          "en-US": "Healing Flower"
+        },
+        {
+          "zh-CN": "醒神药",
+          "ko-KR": "각성제",
+          "en-US": "Smelling Salts"
+        },
+        {
+          "zh-CN": "伏特加",
+          "ko-KR": "보드카",
+          "en-US": "Vodka"
+        },
+        {
+          "zh-CN": "白兰地",
+          "ko-KR": "브랜디",
+          "en-US": "Brandy"
+        },
+        {
+          "zh-CN": "长剑",
+          "ko-KR": "롱소드",
+          "en-US": "Long Sword"
+        },
+        {
+          "zh-CN": "阔剑",
+          "ko-KR": "브로드소드",
+          "en-US": "Broad Sword"
+        },
+        {
+          "zh-CN": "手半剑",
+          "ko-KR": "바스타드 소드",
+          "en-US": "Bastard Sword"
+        },
+        {
+          "zh-CN": "双手大剑",
+          "ko-KR": "클레이모어",
+          "en-US": "Claymore"
+        },
+        {
+          "zh-CN": "焰形剑",
+          "ko-KR": "플랑베르주",
+          "en-US": "Flamberge"
+        },
+        {
+          "zh-CN": "巨剑",
+          "ko-KR": "그레이트 소드",
+          "en-US": "Great Sword"
+        },
+        {
+          "zh-CN": "寒冰之刃",
+          "ko-KR": "아이스 블레이드",
+          "en-US": "Ice Blade"
+        },
+        {
+          "zh-CN": "烈焰之剑",
+          "ko-KR": "플레임 소드",
+          "en-US": "Flame Sword"
+        },
+        {
+          "zh-CN": "雷霆之刃",
+          "ko-KR": "썬더 블레이드",
+          "en-US": "Thunder Blade"
+        },
+        {
+          "zh-CN": "弑神之剑",
+          "ko-KR": "갓 슬레이어",
+          "en-US": "Godslayer"
+        },
+        {
+          "zh-CN": "力量护腕",
+          "ko-KR": "파워 리스트",
+          "en-US": "Power Band"
+        },
+        {
+          "zh-CN": "黄铜指虎",
+          "ko-KR": "브라스 너클",
+          "en-US": "Brass Knuckles"
+        },
+        {
+          "zh-CN": "虎爪拳刃",
+          "ko-KR": "바그나그",
+          "en-US": "Baghnakh"
+        },
+        {
+          "zh-CN": "铁拳",
+          "ko-KR": "아이언 피스트",
+          "en-US": "Iron Fist"
+        },
+        {
+          "zh-CN": "银牙",
+          "ko-KR": "실버 팽",
+          "en-US": "Silver Fang"
+        },
+        {
+          "zh-CN": "龙爪",
+          "ko-KR": "드래곤 클로",
+          "en-US": "Dragon Claw"
+        },
+        {
+          "zh-CN": "明镜止水之拳",
+          "ko-KR": "명경지수의 권",
+          "en-US": "Fist of Serenity"
+        },
+        {
+          "zh-CN": "大地束缚者",
+          "ko-KR": "어스 바인더",
+          "en-US": "Earth Binder"
+        },
+        {
+          "zh-CN": "震击手套",
+          "ko-KR": "스턴 글러브",
+          "en-US": "Stun Glove"
+        },
+        {
+          "zh-CN": "魔人手套",
+          "ko-KR": "마인의 장갑",
+          "en-US": "Demon's Gloves"
+        },
+        {
+          "zh-CN": "魔法师之杖",
+          "ko-KR": "마법사의 지팡이",
+          "en-US": "Mage's Staff"
+        },
+        {
+          "zh-CN": "术士之杖",
+          "ko-KR": "마술사의 지팡이",
+          "en-US": "Wizard's Staff"
+        },
+        {
+          "zh-CN": "炎术士之杖",
+          "ko-KR": "화염술사의 지팡이",
+          "en-US": "Flame Staff"
+        },
+        {
+          "zh-CN": "炼金师之杖",
+          "ko-KR": "연금술사의 지팡이",
+          "en-US": "Alchemist's Staff"
+        },
+        {
+          "zh-CN": "绯炎之杖",
+          "ko-KR": "비염의 지팡이",
+          "en-US": "Scarlet Flame Staff"
+        },
+        {
+          "zh-CN": "贤者之杖",
+          "ko-KR": "현자의 지팡이",
+          "en-US": "Sage's Staff"
+        },
+        {
+          "zh-CN": "深红之杖",
+          "ko-KR": "진홍의 지팡이",
+          "en-US": "Crimson Staff"
+        },
+        {
+          "zh-CN": "艾尔谢拉之杖",
+          "ko-KR": "엘셰라의 지팡이",
+          "en-US": "Elshera's Staff"
+        },
+        {
+          "zh-CN": "链鞭",
+          "ko-KR": "체인 채찍",
+          "en-US": "Chain Whip"
+        },
+        {
+          "zh-CN": "铁锤",
+          "ko-KR": "쇠망치",
+          "en-US": "Iron Hammer"
+        },
+        {
+          "zh-CN": "长枪",
+          "ko-KR": "파이크",
+          "en-US": "Pike"
+        },
+        {
+          "zh-CN": "标枪",
+          "ko-KR": "재블린",
+          "en-US": "Javelin"
+        },
+        {
+          "zh-CN": "三叉戟",
+          "ko-KR": "트라이던트",
+          "en-US": "Trident"
+        },
+        {
+          "zh-CN": "战叉",
+          "ko-KR": "배틀 포크",
+          "en-US": "Battle Fork"
+        },
+        {
+          "zh-CN": "钩镰枪",
+          "ko-KR": "부지",
+          "en-US": "Voulge"
+        },
+        {
+          "zh-CN": "战斗骑枪",
+          "ko-KR": "배틀 랜스",
+          "en-US": "Battle Lance"
+        },
+        {
+          "zh-CN": "戟",
+          "ko-KR": "할버드",
+          "en-US": "Halberd"
+        },
+        {
+          "zh-CN": "海神之枪",
+          "ko-KR": "트리톤",
+          "en-US": "Triton"
+        },
+        {
+          "zh-CN": "女武神之枪",
+          "ko-KR": "발키리아",
+          "en-US": "Valkyria"
+        },
+        {
+          "zh-CN": "冈格尼尔",
+          "ko-KR": "궁니르",
+          "en-US": "Gungnir"
+        },
+        {
+          "zh-CN": "手套",
+          "ko-KR": "장갑",
+          "en-US": "Gloves"
+        },
+        {
+          "zh-CN": "连指手套",
+          "ko-KR": "벙어리장갑",
+          "en-US": "Mittens"
+        },
+        {
+          "zh-CN": "长腕手套",
+          "ko-KR": "손목 장갑",
+          "en-US": "Wrist Gloves"
+        },
+        {
+          "zh-CN": "晚宴手套",
+          "ko-KR": "이브닝 글러브",
+          "en-US": "Evening Gloves"
+        },
+        {
+          "zh-CN": "护手甲",
+          "ko-KR": "건틀릿",
+          "en-US": "Gauntlets"
+        },
+        {
+          "zh-CN": "皇家手套",
+          "ko-KR": "로열 글러브",
+          "en-US": "Royal Gloves"
+        },
+        {
+          "zh-CN": "秘银短衣",
+          "ko-KR": "미스릴 쇼티",
+          "en-US": "Mithril Shorty"
+        },
+        {
+          "zh-CN": "羽毛外套",
+          "ko-KR": "페더 코트",
+          "en-US": "Feather Coat"
+        },
+        {
+          "zh-CN": "堕天使戒指",
+          "ko-KR": "타락천사의 반지",
+          "en-US": "Fallen Angel Ring"
+        },
+        {
+          "zh-CN": "铜铠",
+          "ko-KR": "브론즈 메일",
+          "en-US": "Bronze Mail"
+        },
+        {
+          "zh-CN": "玩具杖",
+          "ko-KR": "장난감 지팡이",
+          "en-US": "Toy Staff"
+        },
+        {
+          "zh-CN": "手杖",
+          "ko-KR": "스테키",
+          "en-US": "Walking Stick"
+        },
+        {
+          "zh-CN": "梦境之杖",
+          "ko-KR": "꿈꾸는 지팡이",
+          "en-US": "Dreaming Staff"
+        },
+        {
+          "zh-CN": "妖精之杖",
+          "ko-KR": "요정의 지팡이",
+          "en-US": "Fairy's Staff"
+        },
+        {
+          "zh-CN": "沉默之杖",
+          "ko-KR": "과묵한 지팡이",
+          "en-US": "Silent Staff"
+        },
+        {
+          "zh-CN": "漆黑之杖",
+          "ko-KR": "새까만 지팡이",
+          "en-US": "Pitch-Black Staff"
+        },
+        {
+          "zh-CN": "怪色之杖",
+          "ko-KR": "이상한 색 지팡이",
+          "en-US": "Odd-Colored Staff"
+        },
+        {
+          "zh-CN": "朋友之杖",
+          "ko-KR": "친구의 지팡이",
+          "en-US": "Friend's Staff"
+        },
+        {
+          "zh-CN": "化鸟之杖",
+          "ko-KR": "새가 되는 지팡이",
+          "en-US": "Bird Staff"
+        },
+        {
+          "zh-CN": "神奇之杖",
+          "ko-KR": "굉장한 지팡이",
+          "en-US": "Amazing Staff"
+        },
+        {
+          "zh-CN": "匕首",
+          "ko-KR": "단검",
+          "en-US": "Dagger"
+        },
+        {
+          "zh-CN": "银匕首",
+          "ko-KR": "실버 대거",
+          "en-US": "Silver Dagger"
+        },
+        {
+          "zh-CN": "罗马短剑",
+          "ko-KR": "글라디우스",
+          "en-US": "Gladius"
+        },
+        {
+          "zh-CN": "毒匕首",
+          "ko-KR": "포이즌 대거",
+          "en-US": "Poison Dagger"
+        },
+        {
+          "zh-CN": "梦境之刃",
+          "ko-KR": "드림 나이프",
+          "en-US": "Dream Knife"
+        },
+        {
+          "zh-CN": "飞行匕首",
+          "ko-KR": "플라잉 대거",
+          "en-US": "Flying Dagger"
+        },
+        {
+          "zh-CN": "双匕首",
+          "ko-KR": "트윈 대거",
+          "en-US": "Twin Daggers"
+        },
+        {
+          "zh-CN": "小铁",
+          "ko-KR": "코테츠",
+          "en-US": "Kotetsu"
+        },
+        {
+          "zh-CN": "碎魂之刃",
+          "ko-KR": "소울 버스터",
+          "en-US": "Soul Buster"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "예비",
+          "en-US": "Spare"
+        },
+        {
+          "zh-CN": "布甲",
+          "ko-KR": "크로스 아머",
+          "en-US": "Cloth Armor"
+        },
+        {
+          "zh-CN": "软皮甲",
+          "ko-KR": "소프트 레더",
+          "en-US": "Soft Leather"
+        },
+        {
+          "zh-CN": "硬皮甲",
+          "ko-KR": "하드 레더",
+          "en-US": "Hard Leather"
+        },
+        {
+          "zh-CN": "环甲",
+          "ko-KR": "링 메일",
+          "en-US": "Ring Mail"
+        },
+        {
+          "zh-CN": "鳞甲",
+          "ko-KR": "스케일 아머",
+          "en-US": "Scale Armor"
+        },
+        {
+          "zh-CN": "胸甲",
+          "ko-KR": "브레스트 아머",
+          "en-US": "Breastplate"
+        },
+        {
+          "zh-CN": "条片甲",
+          "ko-KR": "스프린트 메일",
+          "en-US": "Splint Mail"
+        },
+        {
+          "zh-CN": "锁子甲",
+          "ko-KR": "체인 메일",
+          "en-US": "Chain Mail"
+        },
+        {
+          "zh-CN": "带甲",
+          "ko-KR": "밴디드 메일",
+          "en-US": "Banded Mail"
+        },
+        {
+          "zh-CN": "板甲",
+          "ko-KR": "플레이트 메일",
+          "en-US": "Plate Mail"
+        },
+        {
+          "zh-CN": "寒冰锁甲",
+          "ko-KR": "콜드 체인",
+          "en-US": "Cold Chain"
+        },
+        {
+          "zh-CN": "秘银锁甲",
+          "ko-KR": "미스릴 체인",
+          "en-US": "Mithril Chain"
+        },
+        {
+          "zh-CN": "龙鳞甲",
+          "ko-KR": "드래곤 스케일",
+          "en-US": "Dragon Scale"
+        },
+        {
+          "zh-CN": "神圣板甲",
+          "ko-KR": "홀리 플레이트",
+          "en-US": "Holy Plate"
+        },
+        {
+          "zh-CN": "众神铠甲",
+          "ko-KR": "갓즈 메일",
+          "en-US": "Gods' Mail"
+        },
+        {
+          "zh-CN": "紧身衣",
+          "ko-KR": "레오타드",
+          "en-US": "Leotard"
+        },
+        {
+          "zh-CN": "护手外套",
+          "ko-KR": "핸드 재킷",
+          "en-US": "Hand Jacket"
+        },
+        {
+          "zh-CN": "暗影衣",
+          "ko-KR": "셰이드",
+          "en-US": "Shade"
+        },
+        {
+          "zh-CN": "丝绸长袍",
+          "ko-KR": "실크 로브",
+          "en-US": "Silk Robe"
+        },
+        {
+          "zh-CN": "精制长袍",
+          "ko-KR": "파인 로브",
+          "en-US": "Fine Robe"
+        },
+        {
+          "zh-CN": "衬甲衣",
+          "ko-KR": "아밍 코트",
+          "en-US": "Arming Coat"
+        },
+        {
+          "zh-CN": "武道服",
+          "ko-KR": "무도복",
+          "en-US": "Martial Arts Gi"
+        },
+        {
+          "zh-CN": "龙之道服",
+          "ko-KR": "용의 도복",
+          "en-US": "Dragon Gi"
+        },
+        {
+          "zh-CN": "辛之衣",
+          "ko-KR": "신의 옷",
+          "en-US": "Shin's Robe"
+        },
+        {
+          "zh-CN": "战斗服",
+          "ko-KR": "배틀 슈트",
+          "en-US": "Battle Suit"
+        },
+        {
+          "zh-CN": "连衣裙",
+          "ko-KR": "원피스",
+          "en-US": "One-Piece"
+        },
+        {
+          "zh-CN": "礼服",
+          "ko-KR": "드레스",
+          "en-US": "Dress"
+        },
+        {
+          "zh-CN": "派对礼服",
+          "ko-KR": "파티 드레스",
+          "en-US": "Party Dress"
+        },
+        {
+          "zh-CN": "旗袍",
+          "ko-KR": "차이나 드레스",
+          "en-US": "Cheongsam"
+        },
+        {
+          "zh-CN": "天使羽衣",
+          "ko-KR": "천사의 깃옷",
+          "en-US": "Angel's Robe"
+        },
+        {
+          "zh-CN": "童装",
+          "ko-KR": "아동복",
+          "en-US": "Children's Clothes"
+        },
+        {
+          "zh-CN": "马甲",
+          "ko-KR": "조끼",
+          "en-US": "Vest"
+        },
+        {
+          "zh-CN": "魔法师之服",
+          "ko-KR": "마법사의 옷",
+          "en-US": "Mage's Robe"
+        },
+        {
+          "zh-CN": "术士之服",
+          "ko-KR": "마술사의 옷",
+          "en-US": "Wizard's Robe"
+        },
+        {
+          "zh-CN": "达人之服",
+          "ko-KR": "달인의 옷",
+          "en-US": "Master's Robe"
+        },
+        {
+          "zh-CN": "火焰长袍",
+          "ko-KR": "화염의 로브",
+          "en-US": "Flame Robe"
+        },
+        {
+          "zh-CN": "大魔导师之服",
+          "ko-KR": "대마도사의 옷",
+          "en-US": "Archmage Robe"
+        },
+        {
+          "zh-CN": "贤者长袍",
+          "ko-KR": "현자의 로브",
+          "en-US": "Sage's Robe"
+        },
+        {
+          "zh-CN": "抵抗戒指",
+          "ko-KR": "레지스트 링",
+          "en-US": "Resist Ring"
+        },
+        {
+          "zh-CN": "守护戒指",
+          "ko-KR": "프로텍트 링",
+          "en-US": "Protect Ring"
+        },
+        {
+          "zh-CN": "灼热戒指",
+          "ko-KR": "작열의 반지",
+          "en-US": "Scorching Ring"
+        },
+        {
+          "zh-CN": "冰雪戒指",
+          "ko-KR": "빙설의 반지",
+          "en-US": "Ice Ring"
+        },
+        {
+          "zh-CN": "疾风戒指",
+          "ko-KR": "질풍의 반지",
+          "en-US": "Gale Ring"
+        },
+        {
+          "zh-CN": "大地戒指",
+          "ko-KR": "대지의 반지",
+          "en-US": "Earth Ring"
+        },
+        {
+          "zh-CN": "降魔戒指",
+          "ko-KR": "항마의 반지",
+          "en-US": "Exorcism Ring"
+        },
+        {
+          "zh-CN": "慈爱戒指",
+          "ko-KR": "자애의 반지",
+          "en-US": "Mercy Ring"
+        },
+        {
+          "zh-CN": "辛之腕轮",
+          "ko-KR": "신의 팔찌",
+          "en-US": "Shin's Bracelet"
+        },
+        {
+          "zh-CN": "破魔手环",
+          "ko-KR": "파마의 팔찌",
+          "en-US": "Spellbreak Bracelet"
+        },
+        {
+          "zh-CN": "冻结手环",
+          "ko-KR": "빙결의 팔찌",
+          "en-US": "Freezing Bracelet"
+        },
+        {
+          "zh-CN": "时空手环",
+          "ko-KR": "시공의 팔찌",
+          "en-US": "Space-Time Bracelet"
+        },
+        {
+          "zh-CN": "敌剑A",
+          "ko-KR": "#적검A",
+          "en-US": "#Enemy Sword A"
+        },
+        {
+          "zh-CN": "敌剑B",
+          "ko-KR": "#적검B",
+          "en-US": "#Enemy Sword B"
+        },
+        {
+          "zh-CN": "敌剑C",
+          "ko-KR": "#적검C",
+          "en-US": "#Enemy Sword C"
+        },
+        {
+          "zh-CN": "敌剑D",
+          "ko-KR": "#적검D",
+          "en-US": "#Enemy Sword D"
+        },
+        {
+          "zh-CN": "敌剑E",
+          "ko-KR": "#적검E",
+          "en-US": "#Enemy Sword E"
+        },
+        {
+          "zh-CN": "敌枪A",
+          "ko-KR": "#적창A",
+          "en-US": "#Enemy Spear A"
+        },
+        {
+          "zh-CN": "敌枪B",
+          "ko-KR": "#적창B",
+          "en-US": "#Enemy Spear B"
+        },
+        {
+          "zh-CN": "敌枪C",
+          "ko-KR": "#적창C",
+          "en-US": "#Enemy Spear C"
+        },
+        {
+          "zh-CN": "敌枪D",
+          "ko-KR": "#적창D",
+          "en-US": "#Enemy Spear D"
+        },
+        {
+          "zh-CN": "敌枪E",
+          "ko-KR": "#적창E",
+          "en-US": "#Enemy Spear E"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#적대검A",
+          "en-US": "#Enemy Greatsword A"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#적대검B",
+          "en-US": "#Enemy Greatsword B"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#적대검C",
+          "en-US": "#Enemy Greatsword C"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#적대검D",
+          "en-US": "#Enemy Greatsword D"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#적대검E",
+          "en-US": "#Enemy Greatsword E"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#독의 발톱C",
+          "en-US": "#Poison Claw C"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#석화의 발톱",
+          "en-US": "#Petrifying Claw"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#독의 발톱D",
+          "en-US": "#Poison Claw D"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#예비",
+          "en-US": "#Spare"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#예비",
+          "en-US": "#Spare"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#예비",
+          "en-US": "#Spare"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#예비",
+          "en-US": "#Spare"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#예비",
+          "en-US": "#Spare"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#예비",
+          "en-US": "#Spare"
+        },
+        {
+          "zh-CN": "备用",
+          "ko-KR": "#예비",
+          "en-US": "#Spare"
+        },
+        {
+          "zh-CN": "蘑菇",
+          "ko-KR": "마법 버섯",
+          "en-US": "Magic Mushroom"
+        },
+        {
+          "zh-CN": "魔导书",
+          "ko-KR": "마도서",
+          "en-US": "Grimoire"
+        },
+        {
+          "zh-CN": "力量之果",
+          "ko-KR": "힘의 열매",
+          "en-US": "Power Fruit"
+        },
+        {
+          "zh-CN": "守护石",
+          "ko-KR": "수호석",
+          "en-US": "Guardian Stone"
+        },
+        {
+          "zh-CN": "百科全书",
+          "ko-KR": "백과사전",
+          "en-US": "Encyclopedia"
+        },
+        {
+          "zh-CN": "护符",
+          "ko-KR": "탈리스만",
+          "en-US": "Talisman"
+        },
+        {
+          "zh-CN": "魔力回复剂",
+          "ko-KR": "마력 회복제",
+          "en-US": "Mana Potion"
+        },
+        {
+          "zh-CN": "瓦玛之花",
+          "ko-KR": "와마의 꽃",
+          "en-US": "Warma Flower"
+        },
+        {
+          "zh-CN": "灵药",
+          "ko-KR": "엘릭서",
+          "en-US": "Elixir"
+        },
+        {
+          "zh-CN": "某物（体验版用）",
+          "ko-KR": "무언가(체험판용)",
+          "en-US": "Something (Demo)"
+        },
+        {
+          "zh-CN": "焦热项链",
+          "ko-KR": "초열의 목걸이",
+          "en-US": "Blazing Necklace"
+        },
+        {
+          "zh-CN": "水晶项链",
+          "ko-KR": "수정 목걸이",
+          "en-US": "Crystal Necklace"
+        },
+        {
+          "zh-CN": "雷电项链",
+          "ko-KR": "번개의 목걸이",
+          "en-US": "Lightning Necklace"
+        },
+        {
+          "zh-CN": "地脉项链",
+          "ko-KR": "지맥의 목걸이",
+          "en-US": "Leyline Necklace"
+        },
+        {
+          "zh-CN": "祝福项链",
+          "ko-KR": "축복의 목걸이",
+          "en-US": "Blessed Necklace"
+        }
+      ],
+      "background": 1,
+      "ink": 0,
+      "max_size": 16,
+      "min_size": 7,
+      "align": "center",
+      "box_width": {
+        "zh-CN": 120,
+        "ko-KR": 120,
+        "en-US": 119
+      }
+    },
+    {
+      "name": "generic_name",
+      "generator": "slots",
+      "offset": 21968,
+      "width": 80,
+      "height": 16,
+      "slots": [
+        29
+      ],
+      "texts": [
+        {
+          "zh-CN": "厨师",
+          "ko-KR": "요리사",
+          "en-US": "Cook"
+        }
+      ],
+      "background": 1,
+      "ink": 0,
+      "max_size": 16,
+      "min_size": 7,
+      "align": "center"
+    }
+  ]
+}

@@ -411,7 +411,7 @@ func writeRecord(game string, record *installRecord) error {
 
 // inspectFile 把游戏里的当前文件与 manifest 身份对照；priorHashes 提供上一版
 // 补丁的哈希，用于识别「已打补丁但属于另一版本」的状态。
-func inspectFile(game string, entry fileEntry, priorHashes map[string]string) fileStatus {
+func inspectFile(game string, entry fileEntry, priorHashes map[string]string, priorIsCurrent bool) fileStatus {
 	status := fileStatus{Path: entry.Path, OriginalSize: entry.OriginalSize, PatchedSize: entry.PatchedSize}
 	target := gameFilePath(game, entry.Path)
 	info, err := os.Stat(target)
@@ -442,7 +442,11 @@ func inspectFile(game string, entry fileEntry, priorHashes map[string]string) fi
 		status.State = statePatched
 	default:
 		if prior, ok := priorHashes[entry.Path]; ok && hash == prior {
-			status.State = statePrevious
+			if priorIsCurrent {
+				status.State = statePatched
+			} else {
+				status.State = statePrevious
+			}
 			break
 		}
 		status.State = stateMismatch
@@ -457,9 +461,14 @@ func inspectAll(game string, info *manifest, prior *installRecord) []fileStatus 
 			priorHashes[name] = item.PatchedSHA256
 		}
 	}
+	// A file matching the install record is the version that record describes,
+	// even when the current payload was built by another engine. installPatch
+	// separately checks the engine before treating it as already installed.
+	priorIsCurrent := prior != nil && prior.Version == info.Version &&
+		prior.Language == info.Language
 	statuses := make([]fileStatus, 0, len(info.Files))
 	for _, entry := range info.Files {
-		statuses = append(statuses, inspectFile(game, entry, priorHashes))
+		statuses = append(statuses, inspectFile(game, entry, priorHashes, priorIsCurrent))
 	}
 	return statuses
 }
@@ -528,6 +537,12 @@ func checkWritable(game string, info *manifest) error {
 	return nil
 }
 
+// patchedHashSource lets a generator report the hash of the bytes it produced
+// when that hash cannot be known before the replay (recipe overrides).
+type patchedHashSource interface {
+	patchedHash(path string) (string, bool)
+}
+
 // installPatch 执行一次安装：核对身份、备份、回放差异、原子改名、写安装记录，
 // 任何失败都从刚建立的备份回滚已替换的文件。
 func installPatch(game string, loaded patchSource, progress func(fileEntry, int64)) (*installResult, error) {
@@ -540,7 +555,8 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 	if blocked := blockedFiles(statuses); len(blocked) > 0 {
 		return nil, errors.New("以下文件既不是原版也不是本程序安装的补丁，已中止:\n" + strings.Join(blocked, "\n"))
 	}
-	if prior != nil && prior.Version == info.Version && prior.Language == info.Language {
+	if prior != nil && prior.Version == info.Version && prior.Language == info.Language &&
+		prior.Engine == loaded.engineName() {
 		// 已安装的判定：每个文件都达到补丁后状态；补丁不改变的文件（原版与
 		// 补丁后内容相同）保持原版也算达成，避免重复安装反复建备份。
 		installed := true
@@ -628,8 +644,14 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 		os.RemoveAll(rollbackDir)
 		return cause
 	}
+	// Files patched by this same source already hold the right bytes. A file
+	// patched by another engine (for example candidate16 before the recipe
+	// upgrade) must be rebuilt even though its state is "patched".
+	sameInstall := prior != nil && prior.Version == info.Version &&
+		prior.Language == info.Language && prior.Engine == loaded.engineName()
+	installedHashes := map[string]string{}
 	for _, entry := range info.Files {
-		if stateOf(statuses, entry.Path) == statePatched {
+		if sameInstall && stateOf(statuses, entry.Path) == statePatched {
 			continue
 		}
 		target := gameFilePath(game, entry.Path)
@@ -656,16 +678,23 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 		if closeErr != nil {
 			return nil, rollback(fmt.Errorf("写入 %s 失败: %w", entry.Path, closeErr))
 		}
-		if hash, size, err := digestFile(temporary); err != nil || hash != entry.PatchedSHA256 || size != entry.PatchedSize {
+		expectedHash := entry.PatchedSHA256
+		if dynamic, ok := loaded.(patchedHashSource); ok {
+			if value, ok := dynamic.patchedHash(entry.Path); ok {
+				expectedHash = value
+			}
+		}
+		if hash, size, err := digestFile(temporary); err != nil || hash != expectedHash || size != entry.PatchedSize {
 			return nil, rollback(fmt.Errorf("补丁文件校验失败: %s", entry.Path))
 		}
 		if err := os.Rename(temporary, target); err != nil {
 			return nil, rollback(fmt.Errorf("替换 %s 失败: %w", entry.Path, err))
 		}
 		replaced = append(replaced, entry.Path)
-		if hash, _, err := digestFile(target); err != nil || hash != entry.PatchedSHA256 {
+		if hash, _, err := digestFile(target); err != nil || hash != expectedHash {
 			return nil, rollback(fmt.Errorf("安装后校验失败: %s", entry.Path))
 		}
+		installedHashes[entry.Path] = expectedHash
 	}
 
 	record := &installRecord{
@@ -676,8 +705,12 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 		Status:       statusInstalled,
 	}
 	for _, entry := range info.Files {
+		patchedHash := entry.PatchedSHA256
+		if generated, ok := installedHashes[entry.Path]; ok {
+			patchedHash = generated
+		}
 		record.Files[entry.Path] = fileRecord{OriginalSHA256: entry.OriginalSHA256,
-			PatchedSHA256: entry.PatchedSHA256, Size: entry.PatchedSize}
+			PatchedSHA256: patchedHash, Size: entry.PatchedSize}
 	}
 	// backupName 已经是校验过的单段相对名，直接记进记录。
 	record.BackupDirectory = backupName

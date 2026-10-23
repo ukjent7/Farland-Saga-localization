@@ -1,0 +1,2287 @@
+{
+  "resource": "02C9",
+  "description": "Battle menus, title labels, place signs and prompts.",
+  "format": "tile_atlas_8bpp",
+  "atlas_size": [
+    512,
+    512
+  ],
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "styles": {
+    "label": {
+      "body": 2,
+      "outline": 1
+    },
+    "normal": {
+      "body": 2,
+      "outline": 1
+    },
+    "disabled": {
+      "body": 1,
+      "outline": 1
+    }
+  },
+  "erase": [
+    {
+      "box": [
+        298,
+        314,
+        68,
+        13
+      ],
+      "mode": "row_background",
+      "sample": [
+        280,
+        312,
+        100,
+        16
+      ]
+    },
+    {
+      "box": [
+        298,
+        330,
+        68,
+        13
+      ],
+      "mode": "row_background",
+      "sample": [
+        280,
+        328,
+        100,
+        16
+      ]
+    },
+    {
+      "box": [
+        298,
+        346,
+        68,
+        13
+      ],
+      "mode": "row_background",
+      "sample": [
+        280,
+        344,
+        100,
+        16
+      ]
+    },
+    {
+      "box": [
+        298,
+        362,
+        68,
+        13
+      ],
+      "mode": "row_background",
+      "sample": [
+        280,
+        360,
+        100,
+        16
+      ]
+    },
+    {
+      "box": [
+        299,
+        379,
+        67,
+        12
+      ],
+      "mode": "row_background",
+      "sample": [
+        280,
+        375,
+        100,
+        17
+      ]
+    },
+    {
+      "box": [
+        441,
+        9,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        41,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        73,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        105,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        137,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        169,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        201,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        233,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        265,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        297,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        329,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        361,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        393,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        425,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        457,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        441,
+        489,
+        62,
+        16
+      ],
+      "mode": "color",
+      "color": 3
+    },
+    {
+      "box": [
+        183,
+        34,
+        26,
+        12
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        234,
+        34,
+        36,
+        12
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        183,
+        51,
+        26,
+        12
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        234,
+        51,
+        36,
+        12
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        319,
+        162,
+        26,
+        12
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        370,
+        162,
+        36,
+        12
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        319,
+        178,
+        26,
+        12
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        370,
+        178,
+        36,
+        12
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        7,
+        168,
+        75,
+        94
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        103,
+        168,
+        75,
+        94
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        7,
+        280,
+        75,
+        94
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        103,
+        280,
+        75,
+        94
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        7,
+        392,
+        75,
+        110
+      ],
+      "mode": "row_background"
+    },
+    {
+      "box": [
+        103,
+        392,
+        75,
+        110
+      ],
+      "mode": "row_background"
+    }
+  ],
+  "labels": [
+    {
+      "name": "title-start-selected",
+      "text": {
+        "zh-CN": "开始游戏",
+        "ko-KR": "처음부터",
+        "en-US": "New Game"
+      },
+      "box": [
+        298,
+        314,
+        68,
+        13
+      ],
+      "style": "normal",
+      "render": "unifont",
+      "effect": "shadow",
+      "size_group": "title",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "title-start-plain",
+      "text": {
+        "zh-CN": "开始游戏",
+        "ko-KR": "처음부터",
+        "en-US": "New Game"
+      },
+      "box": [
+        298,
+        330,
+        68,
+        13
+      ],
+      "style": "normal",
+      "render": "unifont",
+      "effect": "shadow",
+      "size_group": "title",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "title-continue-selected",
+      "text": {
+        "zh-CN": "继续游戏",
+        "ko-KR": "이어하기",
+        "en-US": "Continue"
+      },
+      "box": [
+        298,
+        346,
+        68,
+        13
+      ],
+      "style": "normal",
+      "render": "unifont",
+      "effect": "shadow",
+      "size_group": "title",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "title-continue-plain",
+      "text": {
+        "zh-CN": "继续游戏",
+        "ko-KR": "이어하기",
+        "en-US": "Continue"
+      },
+      "box": [
+        298,
+        362,
+        68,
+        13
+      ],
+      "style": "normal",
+      "render": "unifont",
+      "effect": "shadow",
+      "size_group": "title",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "title-continue-disabled",
+      "text": {
+        "zh-CN": "继续游戏",
+        "ko-KR": "이어하기",
+        "en-US": "Continue"
+      },
+      "box": [
+        299,
+        379,
+        67,
+        12
+      ],
+      "style": "disabled",
+      "render": "unifont",
+      "effect": "shadow",
+      "size_group": "title",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-00",
+      "text": {
+        "zh-CN": "公会",
+        "ko-KR": "길드",
+        "en-US": "Guild"
+      },
+      "box": [
+        441,
+        9,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-01",
+      "text": {
+        "zh-CN": "旅店",
+        "ko-KR": "여관",
+        "en-US": "Inn"
+      },
+      "box": [
+        441,
+        41,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-02",
+      "text": {
+        "zh-CN": "离开城镇",
+        "ko-KR": "마을 밖",
+        "en-US": "Outside"
+      },
+      "box": [
+        441,
+        73,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-03",
+      "text": {
+        "zh-CN": "马克托卡山",
+        "ko-KR": "마쿠토카",
+        "en-US": "Maktoka"
+      },
+      "box": [
+        441,
+        105,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-04",
+      "text": {
+        "zh-CN": "武器店",
+        "ko-KR": "무기점",
+        "en-US": "Weapons"
+      },
+      "box": [
+        441,
+        137,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-05",
+      "text": {
+        "zh-CN": "杂货店",
+        "ko-KR": "잡화점",
+        "en-US": "Goods"
+      },
+      "box": [
+        441,
+        169,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-06",
+      "text": {
+        "zh-CN": "咖啡馆",
+        "ko-KR": "카페",
+        "en-US": "Café"
+      },
+      "box": [
+        441,
+        201,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-07",
+      "text": {
+        "zh-CN": "基地",
+        "ko-KR": "기지",
+        "en-US": "Base"
+      },
+      "box": [
+        441,
+        233,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-08",
+      "text": {
+        "zh-CN": "教会",
+        "ko-KR": "교회",
+        "en-US": "Church"
+      },
+      "box": [
+        441,
+        265,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-09",
+      "text": {
+        "zh-CN": "后门",
+        "ko-KR": "뒷문",
+        "en-US": "Back Door"
+      },
+      "box": [
+        441,
+        297,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-10",
+      "text": {
+        "zh-CN": "仓库",
+        "ko-KR": "창고",
+        "en-US": "Storage"
+      },
+      "box": [
+        441,
+        329,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-11",
+      "text": {
+        "zh-CN": "灯塔",
+        "ko-KR": "등대",
+        "en-US": "Lighthouse"
+      },
+      "box": [
+        441,
+        361,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-12",
+      "text": {
+        "zh-CN": "铁匠铺",
+        "ko-KR": "대장간",
+        "en-US": "Smithy"
+      },
+      "box": [
+        441,
+        393,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-13",
+      "text": {
+        "zh-CN": "港口",
+        "ko-KR": "항구",
+        "en-US": "Port"
+      },
+      "box": [
+        441,
+        425,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-14",
+      "text": {
+        "zh-CN": "田地",
+        "ko-KR": "밭",
+        "en-US": "Fields"
+      },
+      "box": [
+        441,
+        457,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "place-15",
+      "text": {
+        "zh-CN": "爱与和平",
+        "ko-KR": "사랑과 평화",
+        "en-US": "Love&Peace"
+      },
+      "box": [
+        441,
+        489,
+        62,
+        16
+      ],
+      "style": "label",
+      "render": "unifont",
+      "effect": "shadow",
+      "max_size": 12,
+      "min_size": 8,
+      "reserve": 2,
+      "align": "center",
+      "proportional": {
+        "zh-CN": false,
+        "ko-KR": false,
+        "en-US": true
+      }
+    },
+    {
+      "name": "prompt-yes1",
+      "text": {
+        "zh-CN": "是",
+        "ko-KR": "예",
+        "en-US": "Yes"
+      },
+      "box": [
+        184,
+        34,
+        24,
+        12
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 10,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center"
+    },
+    {
+      "name": "prompt-no1",
+      "text": {
+        "zh-CN": "否",
+        "ko-KR": "아니요",
+        "en-US": "No"
+      },
+      "box": [
+        234,
+        34,
+        36,
+        12
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 10,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center"
+    },
+    {
+      "name": "prompt-yes1b",
+      "text": {
+        "zh-CN": "是",
+        "ko-KR": "예",
+        "en-US": "Yes"
+      },
+      "box": [
+        184,
+        51,
+        24,
+        12
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 10,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center"
+    },
+    {
+      "name": "prompt-no1b",
+      "text": {
+        "zh-CN": "否",
+        "ko-KR": "아니요",
+        "en-US": "No"
+      },
+      "box": [
+        234,
+        51,
+        36,
+        12
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 10,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center"
+    },
+    {
+      "name": "prompt-yes2",
+      "text": {
+        "zh-CN": "是",
+        "ko-KR": "예",
+        "en-US": "Yes"
+      },
+      "box": [
+        320,
+        162,
+        24,
+        12
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 10,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center"
+    },
+    {
+      "name": "prompt-no2",
+      "text": {
+        "zh-CN": "否",
+        "ko-KR": "아니요",
+        "en-US": "No"
+      },
+      "box": [
+        370,
+        162,
+        36,
+        12
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 10,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center"
+    },
+    {
+      "name": "prompt-yes2b",
+      "text": {
+        "zh-CN": "是",
+        "ko-KR": "예",
+        "en-US": "Yes"
+      },
+      "box": [
+        320,
+        178,
+        24,
+        12
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 10,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center"
+    },
+    {
+      "name": "prompt-no2b",
+      "text": {
+        "zh-CN": "否",
+        "ko-KR": "아니요",
+        "en-US": "No"
+      },
+      "box": [
+        370,
+        178,
+        36,
+        12
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 10,
+      "min_size": 8,
+      "reserve": 0,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-7-0",
+      "text": {
+        "zh-CN": "移动/攻击",
+        "ko-KR": "이동/공격",
+        "en-US": "Move/Attack"
+      },
+      "box": [
+        7,
+        169,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-7-1",
+      "text": {
+        "zh-CN": "魔法/特技",
+        "ko-KR": "마법/특기",
+        "en-US": "Magic/Skill"
+      },
+      "box": [
+        7,
+        185,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-7-2",
+      "text": {
+        "zh-CN": "使用道具",
+        "ko-KR": "도구 사용",
+        "en-US": "Item"
+      },
+      "box": [
+        7,
+        201,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-7-3",
+      "text": {
+        "zh-CN": "信息",
+        "ko-KR": "정보",
+        "en-US": "Info"
+      },
+      "box": [
+        7,
+        217,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-7-4",
+      "text": {
+        "zh-CN": "装备",
+        "ko-KR": "장비",
+        "en-US": "Equip"
+      },
+      "box": [
+        7,
+        233,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-7-5",
+      "text": {
+        "zh-CN": "取消",
+        "ko-KR": "취소",
+        "en-US": "Cancel"
+      },
+      "box": [
+        7,
+        249,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-107-0",
+      "text": {
+        "zh-CN": "移动/攻击",
+        "ko-KR": "이동/공격",
+        "en-US": "Move/Attack"
+      },
+      "box": [
+        103,
+        169,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-107-1",
+      "text": {
+        "zh-CN": "魔法/特技",
+        "ko-KR": "마법/특기",
+        "en-US": "Magic/Skill"
+      },
+      "box": [
+        103,
+        185,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-107-2",
+      "text": {
+        "zh-CN": "使用道具",
+        "ko-KR": "도구 사용",
+        "en-US": "Item"
+      },
+      "box": [
+        103,
+        201,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-107-3",
+      "text": {
+        "zh-CN": "信息",
+        "ko-KR": "정보",
+        "en-US": "Info"
+      },
+      "box": [
+        103,
+        217,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-107-4",
+      "text": {
+        "zh-CN": "装备",
+        "ko-KR": "장비",
+        "en-US": "Equip"
+      },
+      "box": [
+        103,
+        233,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-action-107-5",
+      "text": {
+        "zh-CN": "取消",
+        "ko-KR": "취소",
+        "en-US": "Cancel"
+      },
+      "box": [
+        103,
+        249,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-action",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-7-0",
+      "text": {
+        "zh-CN": "移动",
+        "ko-KR": "이동",
+        "en-US": "Move"
+      },
+      "box": [
+        7,
+        281,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-7-1",
+      "text": {
+        "zh-CN": "单位列表",
+        "ko-KR": "유닛 목록",
+        "en-US": "Units"
+      },
+      "box": [
+        7,
+        297,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-7-2",
+      "text": {
+        "zh-CN": "保存",
+        "ko-KR": "세이브",
+        "en-US": "Save"
+      },
+      "box": [
+        7,
+        313,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-7-3",
+      "text": {
+        "zh-CN": "读取",
+        "ko-KR": "로드",
+        "en-US": "Load"
+      },
+      "box": [
+        7,
+        329,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-7-4",
+      "text": {
+        "zh-CN": "环境设置",
+        "ko-KR": "환경 설정",
+        "en-US": "Options"
+      },
+      "box": [
+        7,
+        345,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-7-5",
+      "text": {
+        "zh-CN": "取消",
+        "ko-KR": "취소",
+        "en-US": "Cancel"
+      },
+      "box": [
+        7,
+        361,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-107-0",
+      "text": {
+        "zh-CN": "移动",
+        "ko-KR": "이동",
+        "en-US": "Move"
+      },
+      "box": [
+        103,
+        281,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-107-1",
+      "text": {
+        "zh-CN": "单位列表",
+        "ko-KR": "유닛 목록",
+        "en-US": "Units"
+      },
+      "box": [
+        103,
+        297,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-107-2",
+      "text": {
+        "zh-CN": "保存",
+        "ko-KR": "세이브",
+        "en-US": "Save"
+      },
+      "box": [
+        103,
+        313,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-107-3",
+      "text": {
+        "zh-CN": "读取",
+        "ko-KR": "로드",
+        "en-US": "Load"
+      },
+      "box": [
+        103,
+        329,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-107-4",
+      "text": {
+        "zh-CN": "环境设置",
+        "ko-KR": "환경 설정",
+        "en-US": "Options"
+      },
+      "box": [
+        103,
+        345,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-move-107-5",
+      "text": {
+        "zh-CN": "取消",
+        "ko-KR": "취소",
+        "en-US": "Cancel"
+      },
+      "box": [
+        103,
+        361,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-move",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-7-0",
+      "text": {
+        "zh-CN": "结束回合",
+        "ko-KR": "턴 종료",
+        "en-US": "End Turn"
+      },
+      "box": [
+        7,
+        393,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-7-1",
+      "text": {
+        "zh-CN": "单位列表",
+        "ko-KR": "유닛 목록",
+        "en-US": "Units"
+      },
+      "box": [
+        7,
+        409,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-7-2",
+      "text": {
+        "zh-CN": "胜利条件",
+        "ko-KR": "클리어 조건",
+        "en-US": "Objectives"
+      },
+      "box": [
+        7,
+        425,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-7-3",
+      "text": {
+        "zh-CN": "保存",
+        "ko-KR": "세이브",
+        "en-US": "Save"
+      },
+      "box": [
+        7,
+        441,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-7-4",
+      "text": {
+        "zh-CN": "读取",
+        "ko-KR": "로드",
+        "en-US": "Load"
+      },
+      "box": [
+        7,
+        457,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-7-5",
+      "text": {
+        "zh-CN": "环境设置",
+        "ko-KR": "환경 설정",
+        "en-US": "Options"
+      },
+      "box": [
+        7,
+        473,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-7-6",
+      "text": {
+        "zh-CN": "取消",
+        "ko-KR": "취소",
+        "en-US": "Cancel"
+      },
+      "box": [
+        7,
+        489,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-107-0",
+      "text": {
+        "zh-CN": "结束回合",
+        "ko-KR": "턴 종료",
+        "en-US": "End Turn"
+      },
+      "box": [
+        103,
+        393,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-107-1",
+      "text": {
+        "zh-CN": "单位列表",
+        "ko-KR": "유닛 목록",
+        "en-US": "Units"
+      },
+      "box": [
+        103,
+        409,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-107-2",
+      "text": {
+        "zh-CN": "胜利条件",
+        "ko-KR": "클리어 조건",
+        "en-US": "Objectives"
+      },
+      "box": [
+        103,
+        425,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-107-3",
+      "text": {
+        "zh-CN": "保存",
+        "ko-KR": "세이브",
+        "en-US": "Save"
+      },
+      "box": [
+        103,
+        441,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-107-4",
+      "text": {
+        "zh-CN": "读取",
+        "ko-KR": "로드",
+        "en-US": "Load"
+      },
+      "box": [
+        103,
+        457,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-107-5",
+      "text": {
+        "zh-CN": "环境设置",
+        "ko-KR": "환경 설정",
+        "en-US": "Options"
+      },
+      "box": [
+        103,
+        473,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    },
+    {
+      "name": "menu-turn-107-6",
+      "text": {
+        "zh-CN": "取消",
+        "ko-KR": "취소",
+        "en-US": "Cancel"
+      },
+      "box": [
+        103,
+        489,
+        75,
+        14
+      ],
+      "style": "label",
+      "render": {
+        "en-US": "unifont"
+      },
+      "proportional": {
+        "en-US": true
+      },
+      "effect": "shadow",
+      "size_group": "menu-turn",
+      "max_size": {
+        "zh-CN": 13,
+        "ko-KR": 11,
+        "en-US": 8
+      },
+      "min_size": 8,
+      "reserve": 1,
+      "align": "center"
+    }
+  ]
+}

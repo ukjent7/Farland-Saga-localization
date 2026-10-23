@@ -1,3 +1,8 @@
 {
-  "fonts": {}
+  "fonts": {
+    "NotoSansSC": "fonts/NotoSansSC-Regular-subset.otf",
+    "Galmuri11": "fonts/Galmuri11-subset.ttf",
+    "LiberationSans": "fonts/LiberationSans-Regular-subset.ttf",
+    "Unifont": "fonts/unifont-subset.hex.gz"
+  }
 }
