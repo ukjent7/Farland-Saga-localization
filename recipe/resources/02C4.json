@@ -1,0 +1,58 @@
+{
+  "resource": "02C4",
+  "description": "Mission banner.",
+  "format": "tile_atlas_8bpp",
+  "atlas_size": [
+    128,
+    48
+  ],
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "styles": {
+    "label": {
+      "body": 2,
+      "outline": 1
+    }
+  },
+  "erase": [
+    {
+      "box": [
+        12,
+        14,
+        104,
+        20
+      ],
+      "mode": "row_background"
+    }
+  ],
+  "labels": [
+    {
+      "name": "banner",
+      "text": {
+        "zh-CN": "打倒迪尤马！",
+        "ko-KR": "듀마 격파!",
+        "en-US": "Defeat Dumas!"
+      },
+      "box": [
+        16,
+        15,
+        96,
+        18
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 14,
+      "min_size": 9,
+      "reserve": 1,
+      "align": "center"
+    }
+  ]
+}

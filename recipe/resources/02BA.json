@@ -1,0 +1,58 @@
+{
+  "resource": "02BA",
+  "description": "Mission banner.",
+  "format": "tile_atlas_8bpp",
+  "atlas_size": [
+    160,
+    48
+  ],
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "styles": {
+    "label": {
+      "body": 2,
+      "outline": 1
+    }
+  },
+  "erase": [
+    {
+      "box": [
+        12,
+        14,
+        136,
+        20
+      ],
+      "mode": "row_background"
+    }
+  ],
+  "labels": [
+    {
+      "name": "banner",
+      "text": {
+        "zh-CN": "全歼盗贼！",
+        "ko-KR": "도적 전멸!",
+        "en-US": "Annihilate bandits!"
+      },
+      "box": [
+        16,
+        15,
+        128,
+        18
+      ],
+      "style": "label",
+      "effect": "shadow",
+      "max_size": 14,
+      "min_size": 9,
+      "reserve": 1,
+      "align": "center"
+    }
+  ]
+}

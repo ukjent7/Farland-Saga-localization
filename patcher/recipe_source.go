@@ -24,6 +24,7 @@ type recipeSource struct {
 	info      *manifest
 	overrides map[uint32][]byte
 	generated map[string][]byte
+	patched   map[string]string
 }
 
 func newRecipeSource(loaded *payload, plan *recipePlan, language string) (*recipeSource, error) {
@@ -58,6 +59,7 @@ func newRecipeSource(loaded *payload, plan *recipePlan, language string) (*recip
 		language:  language,
 		info:      &synthetic,
 		generated: map[string][]byte{},
+		patched:   map[string]string{},
 	}, nil
 }
 
@@ -78,7 +80,26 @@ func (s *recipeSource) replayEntry(entry fileEntry, basePath, exePath string, ou
 	if err != nil {
 		return err
 	}
-	return s.payload.replaySectorsMerged(entry, basePath, exePath, output, progress, overrides)
+	// The merged image differs from the payload's declared hash once a recipe
+	// changes pixels, so hash the bytes this replay actually writes and hand
+	// that identity to the installer and the install record.
+	hash := sha256.New()
+	writer := io.Writer(hash)
+	if output != nil {
+		writer = io.MultiWriter(output, hash)
+	}
+	if err := s.payload.replaySectorsMerged(entry, basePath, exePath, writer, progress, overrides); err != nil {
+		return err
+	}
+	s.patched[entry.Path] = hex.EncodeToString(hash.Sum(nil))
+	return nil
+}
+
+// patchedHash returns the digest of the image produced by the last replay.
+// Other files come from the payload unchanged and keep their static hash.
+func (s *recipeSource) patchedHash(path string) (string, bool) {
+	value, ok := s.patched[path]
+	return value, ok
 }
 
 // buildOverrides generates every recipe resource once and maps its bytes to

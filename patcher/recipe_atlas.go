@@ -92,14 +92,20 @@ func decodeTileAtlas(raw []byte) (*tileAtlas, error) {
 	return atlas, nil
 }
 
-// applyTileAtlasOperations erases each label row with its most common colour,
-// then overlays the plan's mask. The mask already contains the final outline
-// and body choices, so Go never has to rasterise a font.
+// applyTileAtlasOperations erases the operation's regions first, then overlays
+// every label. The mask already contains the final outline and body choices,
+// so Go never has to rasterise a font. Erasing first is what lets one region
+// clear several old labels without a later erase wiping an earlier new one.
 func applyTileAtlasOperations(atlas *tileAtlas, operations []recipeOperation, blob []byte) (int, error) {
 	ink := 0
 	for _, operation := range operations {
 		if operation.Type != "tile_atlas" {
 			return 0, fmt.Errorf("不支持的 atlas 操作 %q", operation.Type)
+		}
+		for _, region := range operation.Erase {
+			if err := eraseTileRegion(atlas, region); err != nil {
+				return 0, err
+			}
 		}
 		for _, label := range operation.Labels {
 			x0, y0, width, height := label.Box[0], label.Box[1], label.Box[2], label.Box[3]
@@ -116,13 +122,6 @@ func applyTileAtlasOperations(atlas *tileAtlas, operations []recipeOperation, bl
 			mask := blob[label.MaskOffset : label.MaskOffset+label.MaskLength]
 			if len(mask) != width*height {
 				return 0, fmt.Errorf("%s: mask 长度与 box 不符", label.Name)
-			}
-			for y := y0; y < y0+height; y++ {
-				background := rowBackground(atlas.plane, atlas.pixelWidth, x0, x0+width, y)
-				row := y * atlas.pixelWidth
-				for x := x0; x < x0+width; x++ {
-					atlas.plane[row+x] = background
-				}
 			}
 			for y := 0; y < height; y++ {
 				row := (y0 + y) * atlas.pixelWidth
@@ -146,24 +145,69 @@ func applyTileAtlasOperations(atlas *tileAtlas, operations []recipeOperation, bl
 	return ink, nil
 }
 
-// rowBackground returns the first value with the highest count in the row,
-// matching Python Counter.most_common(1)'s stable insertion-order tie-break.
-func rowBackground(plane []byte, stride, start, end, y int) byte {
-	var counts [256]int
-	row := y * stride
-	for x := start; x < end; x++ {
-		counts[plane[row+x]]++
+// eraseTileRegion mirrors the reference Python eraser: a colour region is a
+// flat fill; a row-background region samples one scanline range for every row
+// of the box and fills that row with the most common colour. The sample skips
+// pixels inside the erase box so old glyph ink cannot win the vote.
+func eraseTileRegion(atlas *tileAtlas, region recipeErase) error {
+	x0, y0, width, height := region.Box[0], region.Box[1], region.Box[2], region.Box[3]
+	if x0 < 0 || y0 < 0 || width <= 0 || height <= 0 ||
+		x0 > atlas.pixelWidth || y0 > atlas.pixelHeight ||
+		width > atlas.pixelWidth-x0 || height > atlas.pixelHeight-y0 {
+		return errors.New("erase box 越界")
 	}
-	best := 0
-	bestCount := -1
-	for x := start; x < end; x++ {
-		value := plane[row+x]
-		if counts[value] > bestCount {
-			best = int(value)
-			bestCount = counts[value]
+	sampleX, sampleWidth := x0, width
+	skipInside := false
+	if region.Sample != nil {
+		sampleX = region.Sample[0]
+		sampleWidth = region.Sample[2]
+		skipInside = true
+		if sampleX < 0 || sampleWidth <= 0 || sampleX > atlas.pixelWidth ||
+			sampleWidth > atlas.pixelWidth-sampleX {
+			return errors.New("erase sample 越界")
 		}
 	}
-	return byte(best)
+	for y := y0; y < y0+height; y++ {
+		background := byte(0)
+		if region.Mode == "color" {
+			if region.Color == nil {
+				return errors.New("颜色擦除缺少 color")
+			}
+			background = byte(*region.Color)
+		} else if region.Mode == "row_background" {
+			var counts [256]int
+			row := y * atlas.pixelWidth
+			for x := sampleX; x < sampleX+sampleWidth; x++ {
+				if skipInside && x >= x0 && x < x0+width {
+					continue
+				}
+				counts[atlas.plane[row+x]]++
+			}
+			best := byte(0)
+			bestCount := -1
+			for x := sampleX; x < sampleX+sampleWidth; x++ {
+				if skipInside && x >= x0 && x < x0+width {
+					continue
+				}
+				value := atlas.plane[row+x]
+				if counts[value] > bestCount {
+					best = value
+					bestCount = counts[value]
+				}
+			}
+			if bestCount < 0 {
+				return errors.New("erase sample 为空")
+			}
+			background = best
+		} else {
+			return fmt.Errorf("不支持的擦除方式 %q", region.Mode)
+		}
+		row := y * atlas.pixelWidth
+		for x := x0; x < x0+width; x++ {
+			atlas.plane[row+x] = background
+		}
+	}
+	return nil
 }
 
 // repackTileAtlas recomputes every cell image, claims an existing tile for
