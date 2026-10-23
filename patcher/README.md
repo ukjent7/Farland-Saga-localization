@@ -6,7 +6,7 @@ The install engine, restore path, verification, backup policy, and interface are
 
 The Windows build ships a GUI that works on double-click; every platform keeps the command line and the interactive wizard.
 
-The release form is a **single executable**: the Simplified Chinese, Korean, and English patches are compiled into the program via `go:embed` at build time from `payload/saga1/` or `payload/saga2/`, so the exe the user receives carries all patches with it — no archive to distribute and no directory to pick.
+The release form is a **single executable**. The first game embeds the Simplified Chinese, Korean, and English ZIP payloads from `payload/saga1/` via `go:embed`. The sequel embeds `plan/plan.bin`, a compact plan compiled from the public `recipe/` and its OFL fonts; the installer reads the user's pristine files and generates the patched resources locally. Neither build needs a separate archive or a directory picker.
 
 ```bash
 FarlandSagaPatcher.exe                  # GUI: pick a language, then install or restore
@@ -38,7 +38,7 @@ GOOS=windows GOARCH=amd64 go build -tags saga2 -trimpath -ldflags='-s -w -H wind
 
 Windows is the only release target: the game is a Windows-only Steam build, so a Linux binary has no player to serve. Linux is still where `go vet`, `go test`, and the synthetic-game round trip run, which is why `console_other.go` and `gui_other.go` exist — but nothing ships a Linux executable.
 
-The commands above produce a program without patches; the language buttons show "(not provided)". For the single-file version aimed at users, use the unified entry point's `build-patcher`:
+The commands above produce a first-game program without patches; its language buttons show "(not provided)". For the single-file version aimed at users, use the unified entry point's `build-patcher`:
 
 ```bash
 bash flow.sh build-patcher                                  # Embeds the zh-CN, ko-KR, and en-US candidates
@@ -46,7 +46,17 @@ bash flow.sh build-patcher --stage zh-CN-unifont08          # Embed only the nam
 bash flow.sh build-patcher --output release/patcher.exe     # Custom output location
 ```
 
-This command copies `work/release/farland-patch-<candidate>.zip` into `patcher/payload/saga1/` (missing candidates are packaged first) and then cross-compiles. The artifact is about 75 MB, of which about 71 MB is patch data. `patcher/payload/saga1/*.zip` is a packaging artifact kept in the repository so the release build is self-contained. The sequel's payloads are produced by `python -m fls.storage.package_release_fs2` into `patcher/payload/saga2/` and are embedded by the `-tags saga2` build the same way.
+This command copies `work/release/farland-patch-<candidate>.zip` into `patcher/payload/saga1/` (missing candidates are packaged first) and then cross-compiles. The artifact is about 75 MB, of which about 71 MB is patch data. `patcher/payload/saga1/*.zip` is a packaging artifact kept in the repository so the release build is self-contained.
+
+The sequel needs no payload ZIP. Compile the plan, then build:
+
+```bash
+./uv.sh run --locked python tools/compile_recipe.py
+cd patcher
+go build -tags saga2 -o FarlandSaga2Patcher .
+```
+
+`tools/compile_recipe.py` reads only `recipe/` and the committed OFL font subsets, so a clean checkout rebuilds the same plan byte for byte. The plan contains label layers, story-page images, texture layers, the executable patch, and original-file hashes; it contains no game bytes. `patcher/plan/plan.bin` is ignored by git and produced by CI before every test and release build.
 
 The Windows artifact adds `-H windowsgui`: it declares the GUI subsystem so a double-click runs without a console window, while standard output remains available when subcommands are called from a terminal. `.github/workflows/release.yml` performs the same steps for both build tags on a pushed tag or manual confirmation and uploads the two executables plus `SHA256SUMS` as release assets. The patch data is compiled in, so CI never touches the private workspace.
 
@@ -99,13 +109,13 @@ The interface depends only on the standard library and `user32` / `comctl32` / `
 | `gui` | Open the GUI (Windows only) |
 | `wizard` | Console wizard, available on every platform |
 
-Common options: `--game <dir>` (or the `FARLAND_SAGA_GAME` environment variable), `--payload <file>` (defaults to `farland-patch-*.zip` next to the program; the embedded build can name an external patch bundle), `--yes` (skip interactive confirmation), `--json` (emit JSON), `-h`.
+Common options: `--game <dir>` (or the `FARLAND_SAGA_GAME` environment variable), `--plan <file>` (recipe plan; defaults to the embedded plan), `--lang <code>` (required when an external plan contains more than one language), `--engine recipe|payload`, `--payload <file>` (first game, or an external bundle for troubleshooting), `--yes` (skip interactive confirmation), `--json` (emit JSON), `-h`.
 
-The command line targets scripts and troubleshooting: it accepts any external patch bundle and game directory, free of the GUI's "the program's directory is the game directory" constraint.
+The command line targets scripts and troubleshooting: it accepts any plan, patch bundle, and game directory, free of the GUI's "the program's directory is the game directory" constraint.
 
 ## Patch Payload Format
 
-The payload is a ZIP written by `fls.storage.package_release` (Format 1/2, first game) or `fls.storage.package_release_fs2` (Format 3, sequel), matching `version_storage`'s diff-object format:
+The sequel's release build carries no ZIP. Its `plan/plan.bin` format is described in [../recipe/README.md](../recipe/README.md); the installer replays the disc image from the pristine base and generates `FarlandSaga2.exe` and `Texture.tex` from the recipe. The ZIP format below remains in use for the first game and for external troubleshooting bundles:
 
 ```
 manifest.json            Manifest: version, language, and each target file's original/patched identity
@@ -169,6 +179,6 @@ Known limits: Linux has no mandatory file locking, so process-occupancy checks o
 
 `patcher_test.go` covers diff replay round trips and every corruption rejection (record out of order, out of range, truncated, hash mismatch, base mismatch, illegal header), path validation for the manifest and install record, install/restore/switch/idempotency/rollback, and rejection when the backup directory is tampered with. Backup policy has dedicated cases: a language switch creates no new directory, a restore leaves no directory, legacy timestamped directories are migrated and swept, a missing backup is rebuilt from the original, and a lost backup on a patched install refuses to install while leaving no residue. The tests write objects in the same format from the Go side and need no private workspace.
 
-The per-game test fixtures live beside the build tags: `game_saga1_test.go` names the FARLAND SAGA I originals (the archived backup plus `work/analysis/FarlandSaga.exe`), `game_saga2_test.go` names the sequel's install directory and `FarlandSaga2.exe`. `TestEmbeddedRealPayloadReplay` therefore reconstructs every embedded payload byte-for-byte under both build tags whenever those files are present, and skips when they are not. `cdrom_saga2_test.go` holds the sector-transform and LZ/permutation-table tests that only apply to the sequel format.
+The per-game test fixtures live beside the build tags: `game_saga1_test.go` names the FARLAND SAGA I originals (the archived backup plus `work/analysis/FarlandSaga.exe`), `game_saga2_test.go` names the sequel's install directory and `FarlandSaga2.exe`. `TestEmbeddedRealPayloadReplay` therefore reconstructs every embedded payload under both build tags whenever those files are present, and skips when they are not. Under `-tags saga2` it replays the embedded recipe plan and compares the generated bytes with the hashes and sizes the generator reports, including the disc image and the re-encoded texture. `cdrom_saga2_test.go` holds the sector-transform and LZ/permutation-table tests that only apply to the sequel format.
 
-Embedded patch loading lives in the platform-neutral `embedded.go`, so it can be exercised on Linux: `TestLoadEmbedded` verifies that all three language bundles parse, that the order is fixed as Chinese-Korean-English, and that each bundle declares every target file with valid hashes; when the payload directory is empty (a fresh clone with no packaging yet) the test skips. Interface-shared helpers (`blockedFiles`, `summarizeStates`, `samePath`) and entry-point dispatch also have unit tests. The Win32 UI code itself only compiles on Windows and cannot run under Linux `go test`; its correctness rests on `GOOS=windows go vet`, the compile-time struct size assertions, and install/restore round trips against the real payload on Windows.
+Embedded patch loading lives in the platform-neutral `embedded.go`, so it can be exercised on Linux: `TestLoadEmbedded` verifies that all three language bundles or plan languages parse, that the order is fixed as Chinese-Korean-English, and that each declares every target file with valid hashes; when no payload or plan is embedded (a fresh clone before compilation) the test skips. Interface-shared helpers (`blockedFiles`, `summarizeStates`, `samePath`) and entry-point dispatch also have unit tests. The Win32 UI code itself only compiles on Windows and cannot run under Linux `go test`; its correctness rests on `GOOS=windows go vet`, the compile-time struct size assertions, and install/restore round trips against the real payload on Windows.

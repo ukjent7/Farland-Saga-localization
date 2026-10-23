@@ -26,19 +26,23 @@ import math
 import struct
 import sys
 from collections import Counter
+from io import BytesIO
 from pathlib import Path
 
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 MAGIC = b'FS2RECIPE1\n'
-PLAN_FORMAT = 1
+RECIPE_FORMAT = 1
+PLAN_FORMAT = 2
 REPO = Path(__file__).resolve().parents[1]
 DEFAULT_RECIPE = REPO / 'recipe'
 DEFAULT_OUTPUT = REPO / 'patcher' / 'plan' / 'plan.bin'
 TILE_FORMAT = 'tile_atlas_8bpp'
 MONO_FORMAT = 'mono_bitmap_1bpp'
 STORY_FORMAT = 'story_page_2bpp'
+TEXTURE_FORMAT = 'texture_atlas_rgba'
+BINARY_FORMAT = 'binary_patches'
 
 
 def digest(data):
@@ -592,7 +596,7 @@ def validate_mono_recipe(rid, recipe, languages, fonts, size):
 
 
 def validate_manifest(manifest, recipe_dir):
-    if manifest.get('format') != PLAN_FORMAT:
+    if manifest.get('format') != RECIPE_FORMAT:
         raise SystemExit(f'unsupported recipe format {manifest.get("format")!r}')
     if manifest.get('kind') != 'farland-saga-recipe':
         raise SystemExit('manifest is not a farland-saga-recipe')
@@ -619,6 +623,12 @@ def validate_manifest(manifest, recipe_dir):
         for key in ('recipe', 'pages'):
             if not (recipe_dir / story[key]).is_file():
                 raise SystemExit(f'manifest story {key} file is missing')
+    for key in ('executable', 'texture'):
+        section = manifest.get(key)
+        if not isinstance(section, dict) or not isinstance(section.get('recipe'), str):
+            raise SystemExit(f'manifest {key} block needs a recipe')
+        if not (recipe_dir / section['recipe']).is_file():
+            raise SystemExit(f'manifest {key} recipe {section["recipe"]} is missing')
     for rid, meta in resources.items():
         if not isinstance(meta, dict):
             raise SystemExit(f'{rid}: resource entry must be an object')
@@ -1206,6 +1216,342 @@ def compile_story(recipe_dir, manifest, languages, fonts, unifont, oracle, blob,
     return resources, report
 
 
+def texture_text_metrics(draw, text, font, stroke):
+    if '\n' in text:
+        bbox = draw.multiline_textbbox((0, 0), text, font=font, spacing=4,
+                                       stroke_width=stroke)
+    else:
+        bbox = font.getbbox(text, stroke_width=stroke)
+    return bbox, bbox[2] - bbox[0], bbox[3] - bbox[1]
+
+
+def fit_text_layer(text, path, width, height, largest, smallest, stroke):
+    draw = ImageDraw.Draw(Image.new('RGBA', (1, 1)))
+    for size in range(largest, smallest - 1, -1):
+        try:
+            font = ImageFont.truetype(str(path), size)
+        except OSError as error:
+            raise SystemExit(f'cannot load font {path}: {error}') from None
+        bbox, ink_width, ink_height = texture_text_metrics(draw, text, font, stroke)
+        if ink_width <= width and ink_height <= height:
+            return size, font, bbox, ink_width, ink_height
+    raise SystemExit(f'texture text {text!r} does not fit {width}x{height} '
+                     f'(font {path.name}, sizes {smallest}..{largest})')
+
+
+def paint_text_layer(width, height, text, path, largest, smallest, align,
+                     stroke=0, cell=None):
+    """Render one RGBA text layer with a transparent background.
+
+    ``cell`` is the horizontal range inside the part box that the original
+    frontend layout used for its text.  It is relative to the left edge.  The
+    installer blits the result over the original atlas, so leaving the rest of
+    the layer transparent keeps every pixel outside the label untouched.
+    """
+    layer = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+    if cell is None:
+        left, right = 0, width
+        limits = width - 8
+    else:
+        left, right = cell
+        if align == 'left':
+            limits = width - left - 4
+        elif align == 'right':
+            limits = right - 4
+        else:
+            limits = width - 8
+    size, font, bbox, ink_width, ink_height = fit_text_layer(
+        text, path, limits, height - 4, largest, smallest, stroke)
+    if align == 'left':
+        x = left
+    elif align == 'right':
+        x = right - ink_width
+    else:
+        x = (left + right - ink_width) // 2
+    y = (height - ink_height) // 2
+    draw = ImageDraw.Draw(layer)
+    if '\n' in text:
+        draw.multiline_text((x - bbox[0], y - bbox[1]), text, font=font,
+                            fill=(255, 255, 255, 255), spacing=4, align=align,
+                            stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
+    else:
+        draw.text((x - bbox[0], y - bbox[1]), text, font=font,
+                  fill=(255, 255, 255, 255), stroke_width=stroke,
+                  stroke_fill=(0, 0, 0, 255))
+    return layer, size
+
+
+def encode_layer(layer):
+    buffer = BytesIO()
+    layer.save(buffer, format='PNG', compress_level=9)
+    return buffer.getvalue()
+
+
+def validate_texture_recipe(recipe, languages, fonts):
+    if recipe.get('format') != TEXTURE_FORMAT:
+        raise SystemExit(f'texture: unsupported format {recipe.get("format")!r}')
+    if not isinstance(recipe.get('path'), str) or not recipe['path']:
+        raise SystemExit('texture: path is missing')
+    if len(recipe.get('original_sha256', '')) != 64:
+        raise SystemExit('texture: original_sha256 is missing')
+    size = recipe.get('size')
+    if not isinstance(size, int) or size <= 0:
+        raise SystemExit('texture: size must be positive')
+    image_size = recipe.get('image_size')
+    if (not isinstance(image_size, list) or len(image_size) != 2
+            or any(not isinstance(value, int) or value <= 0 for value in image_size)):
+        raise SystemExit('texture: image_size must be two positive integers')
+    width, height = image_size
+    part_count = recipe.get('part_count')
+    if not isinstance(part_count, int) or part_count <= 0:
+        raise SystemExit('texture: part_count must be positive')
+    parts = recipe.get('parts')
+    if not isinstance(parts, dict) or not parts:
+        raise SystemExit('texture: parts are missing')
+    for key, box in parts.items():
+        if not key.isdigit() or int(key) >= part_count:
+            raise SystemExit(f'texture: part key {key!r} is invalid')
+        if (not isinstance(box, list) or len(box) != 4
+                or any(not isinstance(value, int) for value in box)):
+            raise SystemExit(f'texture: part {key} must be four integers')
+        x0, y0, x1, y1 = box
+        if x0 < 0 or y0 < 0 or x1 <= x0 or y1 <= y0 or x1 > width or y1 > height:
+            raise SystemExit(f'texture: part {key} leaves the atlas')
+    role_map = recipe.get('fonts')
+    if not isinstance(role_map, dict):
+        raise SystemExit('texture: fonts are missing')
+    for language in languages:
+        role = role_map.get(language)
+        if role not in fonts:
+            raise SystemExit(f'texture: unknown font role {role!r} for {language}')
+    labels = recipe.get('labels')
+    if not isinstance(labels, list) or not labels:
+        raise SystemExit('texture: no labels')
+    seen = set()
+    for label in labels:
+        name = label.get('name')
+        if not name or name in seen:
+            raise SystemExit('texture: label names must be unique')
+        seen.add(name)
+        part = label.get('part')
+        if not isinstance(part, int) or str(part) not in parts:
+            raise SystemExit(f'texture/{name}: part is missing from parts')
+        x0, y0, x1, y1 = parts[str(part)]
+        box_width = x1 - x0
+        if label.get('align') not in ('left', 'center', 'right'):
+            raise SystemExit(f'texture/{name}: align must be left, center or right')
+        cell = label.get('cell')
+        if (not isinstance(cell, list) or len(cell) != 2
+                or any(not isinstance(value, int) for value in cell)
+                or cell[0] < 0 or cell[1] > box_width or cell[0] >= cell[1]):
+            raise SystemExit(f'texture/{name}: cell is invalid')
+        for key in ('min_size', 'max_size'):
+            value = label.get(key)
+            if isinstance(value, dict):
+                if set(value) != set(languages):
+                    raise SystemExit(f'texture/{name}: {key} must cover every language')
+            elif not isinstance(value, int):
+                raise SystemExit(f'texture/{name}: {key} is missing')
+        for language in languages:
+            text = label.get('text', {}).get(language)
+            if not isinstance(text, str) or not text:
+                raise SystemExit(f'texture/{name}: missing {language} text')
+            if any(ord(char) < 32 and char != '\n' for char in text):
+                raise SystemExit(f'texture/{name}: control character in {language} text')
+            largest = size_limit(label, 'max_size', language)
+            smallest = size_limit(label, 'min_size', language, 8)
+            if not isinstance(largest, int) or not isinstance(smallest, int) or smallest < 7:
+                raise SystemExit(f'texture/{name}: invalid sizes for {language}')
+            if smallest > largest:
+                raise SystemExit(f'texture/{name}: min_size exceeds max_size')
+            path = fonts[role_map[language]]
+            cmap = font_cmap(path)
+            missing = sorted({char for char in text if char != '\n' and ord(char) not in cmap})
+            if missing:
+                codes = ' '.join(f'U+{ord(char):04X}' for char in missing)
+                raise SystemExit(f'texture/{name}: {language} font lacks {codes}')
+    panels = recipe.get('panels')
+    if not isinstance(panels, dict):
+        raise SystemExit('texture: panels are missing')
+    panel_parts = panels.get('parts')
+    if not isinstance(panel_parts, list) or not panel_parts:
+        raise SystemExit('texture: panel parts are missing')
+    if len(set(panel_parts)) != len(panel_parts):
+        raise SystemExit('texture: duplicate panel part')
+    for part in panel_parts:
+        if not isinstance(part, int) or str(part) not in parts:
+            raise SystemExit(f'texture: panel part {part!r} is missing')
+    for key in ('title_box', 'body_box'):
+        box = panels.get(key)
+        if (not isinstance(box, list) or len(box) != 4
+                or any(not isinstance(value, int) for value in box)):
+            raise SystemExit(f'texture: {key} is invalid')
+        x0, y0, x1, y1 = box
+        if x0 < 0 or y0 < 0 or x1 <= x0 or y1 <= y0 or x1 > 228 or y1 > 225:
+            raise SystemExit(f'texture: {key} leaves the panel')
+    text = panels.get('text')
+    if not isinstance(text, dict):
+        raise SystemExit('texture: panel text is missing')
+    for language in languages:
+        if not isinstance(text.get(language), dict):
+            raise SystemExit(f'texture: missing {language} panel text')
+        for key in ('title', 'button'):
+            value = text[language].get(key)
+            if not isinstance(value, str) or not value:
+                raise SystemExit(f'texture: missing {language} panel {key}')
+    for key in ('title_size', 'button_size', 'minimum_size'):
+        if not isinstance(panels.get(key), int) or panels[key] < 7:
+            raise SystemExit(f'texture: {key} must be at least 7')
+
+
+def compile_texture(recipe_dir, manifest, languages, fonts, blob, preview_dir):
+    recipe = read_json(recipe_dir / manifest['texture']['recipe'])
+    validate_texture_recipe(recipe, languages, fonts)
+    width, height = recipe['image_size']
+    label_report = {}
+    language_header = {}
+    for language in languages:
+        path = fonts[recipe['fonts'][language]]
+        labels = []
+        preview = None
+        if preview_dir:
+            preview = Image.new('RGBA', (width, height), (0, 0, 0, 255))
+        details = []
+        for label in recipe['labels']:
+            part = label['part']
+            x0, y0, x1, y1 = recipe['parts'][str(part)]
+            box_width, box_height = x1 - x0, y1 - y0
+            layer, chosen = paint_text_layer(
+                box_width, box_height, label['text'][language], path,
+                size_limit(label, 'max_size', language),
+                size_limit(label, 'min_size', language, 8),
+                label['align'], cell=label['cell'])
+            data = encode_layer(layer)
+            labels.append({'part': part, 'box': [x0, y0, x1, y1],
+                           'data_offset': len(blob), 'data_length': len(data)})
+            blob.extend(data)
+            if preview is not None:
+                preview.alpha_composite(layer, (x0, y0))
+            details.append({'name': label['name'], 'part': part,
+                            'font_size': chosen, 'box': [x0, y0, x1, y1],
+                            'layer_bytes': len(data)})
+        panels = recipe['panels']
+        panel_layers = {}
+        for key, stroke in (('title', 2), ('button', 0)):
+            box = panels['title_box' if key == 'title' else 'body_box']
+            layer, chosen = paint_text_layer(
+                box[2] - box[0], box[3] - box[1], panels['text'][language][key],
+                path, panels[f'{key}_size'], panels['minimum_size'], 'center',
+                stroke=stroke)
+            data = encode_layer(layer)
+            panel_layers[key] = {'data_offset': len(blob), 'data_length': len(data)}
+            blob.extend(data)
+            details.append({'name': f'panel-{key}', 'part': -1,
+                            'font_size': chosen, 'box': box, 'layer_bytes': len(data)})
+        language_header[language] = {
+            'labels': labels,
+            'title': panel_layers['title'],
+            'button': panel_layers['button'],
+        }
+        label_report[language] = {
+            'labels': len(labels),
+            'panel_layers': 2,
+            'bytes': sum(item['layer_bytes'] for item in details),
+            'min_font_size': min(item['font_size'] for item in details),
+            'max_font_size': max(item['font_size'] for item in details),
+            'details': details,
+        }
+        if preview is not None:
+            preview_dir.mkdir(parents=True, exist_ok=True)
+            preview.save(preview_dir / f'{language}-texture-layers.png')
+    header = {
+        'kind': 'texture',
+        'original_sha256': recipe['original_sha256'],
+        'size': recipe['size'],
+        'path': recipe['path'],
+        'image_size': recipe['image_size'],
+        'part_count': recipe['part_count'],
+        'parts': recipe['parts'],
+        'panels': {
+            'parts': recipe['panels']['parts'],
+            'title_box': recipe['panels']['title_box'],
+            'body_box': recipe['panels']['body_box'],
+        },
+        'languages': language_header,
+    }
+    return header, label_report
+
+
+def compile_executable(recipe_dir, manifest):
+    recipe = read_json(recipe_dir / manifest['executable']['recipe'])
+    if recipe.get('format') != BINARY_FORMAT:
+        raise SystemExit(f'executable: unsupported format {recipe.get("format")!r}')
+    for key in ('path', 'original_sha256', 'patched_sha256'):
+        if not isinstance(recipe.get(key), str) or not recipe[key]:
+            raise SystemExit(f'executable: {key} is missing')
+    if len(recipe['original_sha256']) != 64 or len(recipe['patched_sha256']) != 64:
+        raise SystemExit('executable: invalid SHA-256')
+    for key in ('original_size', 'patched_size'):
+        if not isinstance(recipe.get(key), int) or recipe[key] <= 0:
+            raise SystemExit(f'executable: {key} must be positive')
+    patches = recipe.get('patches')
+    if not isinstance(patches, list) or not patches:
+        raise SystemExit('executable: no patches')
+    emitted = []
+    for patch in patches:
+        name = patch.get('name')
+        offset = patch.get('offset')
+        original = patch.get('original')
+        patched = patch.get('patched')
+        if not name or not isinstance(offset, int) or offset < 0:
+            raise SystemExit('executable: patch name or offset is invalid')
+        if not isinstance(original, str) or not isinstance(patched, str):
+            raise SystemExit(f'executable/{name}: patch bytes are missing')
+        try:
+            original_bytes = bytes.fromhex(original)
+            patched_bytes = bytes.fromhex(patched)
+        except ValueError:
+            raise SystemExit(f'executable/{name}: patch bytes are not hex') from None
+        if not original_bytes or len(original_bytes) != len(patched_bytes):
+            raise SystemExit(f'executable/{name}: patch lengths differ')
+        if offset + len(original_bytes) > recipe['original_size']:
+            raise SystemExit(f'executable/{name}: patch leaves the file')
+        emitted.append({'name': name, 'offset': offset,
+                        'original': original.lower(), 'patched': patched.lower()})
+    return {
+        'kind': 'binary',
+        'path': recipe['path'],
+        'original_sha256': recipe['original_sha256'],
+        'size': recipe['original_size'],
+        'patched_sha256': recipe['patched_sha256'],
+        'patched_size': recipe['patched_size'],
+        'patches': emitted,
+    }
+
+
+def compile_file_plan(recipe_dir, manifest, languages, fonts, blob, preview_dir):
+    disc = manifest['disc']
+    if len(disc.get('image_sha256', '')) != 64:
+        raise SystemExit('disc: image_sha256 is missing')
+    if not isinstance(disc.get('image_size'), int) or disc['image_size'] <= 0:
+        raise SystemExit('disc: image_size must be positive')
+    files = {
+        disc['image']: {
+            'kind': 'disc',
+            'path': disc['image'],
+            'original_sha256': disc['image_sha256'],
+            'size': disc['image_size'],
+        },
+        disc['executable']: compile_executable(recipe_dir, manifest),
+    }
+    texture, report = compile_texture(recipe_dir, manifest, languages, fonts,
+                                      blob, preview_dir)
+    if texture['path'] in files:
+        raise SystemExit(f'{texture["path"]}: file path collides with the disc or executable')
+    files[texture['path']] = texture
+    return files, report
+
+
 def load_oracle(recipe_dir, languages, allow_missing):
     oracle = {}
     for language in languages:
@@ -1277,6 +1623,10 @@ def compile_plan(recipe_dir, output, report_path, preview_dir, allow_missing=Fal
                 if not resource['expected'].get(language):
                     raise SystemExit(f'{rid}: missing {language} expected hash')
 
+    header['files'], texture_report = compile_file_plan(
+        recipe_dir, manifest, languages, fonts, blob, preview_dir)
+    report['texture'] = texture_report
+
     header['binary_sha256'] = digest(blob)
     header_bytes = json.dumps(header, ensure_ascii=False, sort_keys=True,
                               separators=(',', ':')).encode('utf-8')
@@ -1304,6 +1654,7 @@ def compile_plan(recipe_dir, output, report_path, preview_dir, allow_missing=Fal
         'plan_bytes': len(plan),
         'languages': languages,
         'resources': list(header['resources']),
+        'files': sorted(header['files']),
     }, ensure_ascii=False, sort_keys=True))
     return report
 
@@ -1315,14 +1666,15 @@ def main():
     parser.add_argument('--output', type=Path, default=DEFAULT_OUTPUT,
                         help='plan path (default: patcher/plan/plan.bin)')
     parser.add_argument('--report', type=Path,
-                        default=REPO / 'patcher' / 'plan' / 'report.json',
-                        help='JSON build report; empty string disables it')
+                        help='optional JSON build report; keep it outside patcher/plan/')
     parser.add_argument('--preview-dir', type=Path,
                         help='optional directory for per-language mask previews')
     parser.add_argument('--allow-missing-expected', action='store_true',
                         help='development only: compile without expected hashes')
     args = parser.parse_args()
-    report = None if str(args.report) in ('', '.') else args.report
+    report = args.report
+    if report is not None and str(report) in ('', '.'):
+        report = None
     compile_plan(args.recipe_dir, args.output, report, args.preview_dir,
                  args.allow_missing_expected)
     return 0

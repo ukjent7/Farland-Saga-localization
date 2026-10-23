@@ -4,9 +4,9 @@
 // 这些差异集中在本文件与 game_saga1.go / game_saga2.go 中，由构建标签选择一份：
 // 默认构建一代，`-tags saga2` 构建二代。引擎其余文件不出现按游戏分支的代码。
 //
-// 补丁载荷目录同样按标签划分（payload/saga1、payload/saga2），go:embed 只嵌入
-// 与当前构建对应的那一份；go:embed 的路径必须是字面量，所以两个 embedded_saga*.go
-// 各写一条指令。
+// 内嵌来源按标签划分：一代嵌入 payload/saga1 的语言 ZIP，二代嵌入公开 recipe
+// 编译出的 plan/plan.bin。go:embed 的路径必须是字面量，所以两个
+// embedded_saga*.go 各自声明。
 //
 // 二代独有的 Format 3 扇区回放集中在 payload_saga2.go / cdrom_saga2.go，
 // 安装器通过 replay_saga1.go / replay_saga2.go 的 replayEntry 调用，引擎本身

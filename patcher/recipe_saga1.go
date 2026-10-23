@@ -5,9 +5,12 @@ package main
 
 import "errors"
 
-func wrapRecipeSource(loaded *payload, planData []byte) (patchSource, error) {
+func wrapRecipeSource(loaded *payload, planData []byte, language string) (patchSource, error) {
 	if len(planData) > 0 {
 		return nil, errors.New("一代补丁器不支持 recipe plan")
+	}
+	if loaded == nil {
+		return nil, errors.New("没有可用的补丁载荷")
 	}
 	return loaded, nil
 }

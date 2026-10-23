@@ -18,7 +18,6 @@ const (
 	patcherStem     = "FarlandSaga2Patcher"
 	guiClassName    = "FarlandSaga2PatcherWindow"
 	traceFileName   = "farland-saga-2-patcher-trace.log"
-	payloadDir      = "payload/saga2"
 )
 
 // payloadFormats 是二代接受的 manifest 格式：声明式差异块（1）与

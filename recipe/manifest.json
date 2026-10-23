@@ -1,7 +1,7 @@
 {
   "format": 1,
   "kind": "farland-saga-recipe",
-  "version": "recipe04",
+  "version": "recipe05",
   "game": "saga2",
   "title": "FARLAND SAGA II Saturn Tribute",
   "languages": [
@@ -11,9 +11,17 @@
   ],
   "disc": {
     "image": "FarlandSaga2.bin",
+    "image_sha256": "62b2da954a02c2b714921d3012c4a07ad880db0edf7f3e745b777fbc395ce02f",
+    "image_size": 516463628,
     "executable": "FarlandSaga2.exe",
     "archive_lba": 178,
     "sector_size": 2048
+  },
+  "executable": {
+    "recipe": "exe.json"
+  },
+  "texture": {
+    "recipe": "texture.json"
   },
   "resources": {
     "02B9": {

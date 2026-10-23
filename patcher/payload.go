@@ -1,12 +1,12 @@
 // 补丁载荷的读取与差异回放。
 //
-// 载荷由 fls.storage.package_release（一代）或 fls.storage.package_release_fs2
-// （二代）写出，与 version_storage 的差异对象格式一致：ZIP 内一个 manifest.json
-// 描述每个目标文件的原版/补丁身份，objects/<sha256>.gz 是相对原版的差异块
-// （gzip：一行 JSON 头 + 连续的 <偏移 u64, 长度 u32> 记录与块数据）。回放时空隙
-// 从原版文件读取，重建结果的 SHA-256 必须等于对象名，任何不符都视为损坏。
-// 二代的镜像文件换成 Format 3：manifest 指向 sectors.bin.gz，由 payload_saga2.go
-// 现场重建；可执行文件仍然走这里的差异块回放。
+// 一代载荷由 fls.storage.package_release 写出，与 version_storage 的差异对象
+// 格式一致：ZIP 内一个 manifest.json 描述每个目标文件的原版/补丁身份，
+// objects/<sha256>.gz 是相对原版的差异块（gzip：一行 JSON 头 + 连续的
+// <偏移 u64, 长度 u32> 记录与块数据）。回放时空隙从原版文件读取，重建结果的
+// SHA-256 必须等于对象名，任何不符都视为损坏。二代不再使用 ZIP 载荷：内嵌的
+// recipe plan 由 recipe_source.go 从用户原版现场生成，Format 3 历史载荷仍由
+// payload_saga2.go 支持。
 package main
 
 import (
@@ -86,6 +86,9 @@ type objectHeader struct {
 type payload struct {
 	path string
 	info *manifest
+	// recipe is non-nil when this payload is one language of an embedded
+	// install-time recipe plan rather than a ZIP.
+	recipe recipeRunner
 	// closer 在从磁盘路径打开时关闭底层文件句柄；从内存（go:embed）打开时
 	// 为 nil，没有需要释放的资源。
 	closer  io.Closer
@@ -101,9 +104,40 @@ type patchSource interface {
 	close() error
 }
 
+// recipeRunner is implemented by the saga2-only install-time generator and
+// lets a *payload carry it without making the shared payload code depend on
+// the saga2 build tag.
+type recipeRunner interface {
+	engineName() string
+	patchedHash(path string) (string, bool)
+	patchedSize(path string) (int64, bool)
+	replayEntry(entry fileEntry, basePath, exePath string, output io.Writer, progress func(int64)) error
+}
+
 func (p *payload) sourceInfo() *manifest { return p.info }
 
-func (p *payload) engineName() string { return "payload" }
+func (p *payload) engineName() string {
+	if p.recipe != nil {
+		return p.recipe.engineName()
+	}
+	return "payload"
+}
+
+// patchedHash / patchedSize expose the identity of generated files whose
+// bytes depend on the user's pristine resources.
+func (p *payload) patchedHash(path string) (string, bool) {
+	if p.recipe != nil {
+		return p.recipe.patchedHash(path)
+	}
+	return "", false
+}
+
+func (p *payload) patchedSize(path string) (int64, bool) {
+	if p.recipe != nil {
+		return p.recipe.patchedSize(path)
+	}
+	return 0, false
+}
 
 // safeRelativePath 只接受 POSIX 相对路径：拒绝绝对路径、盘符、反斜杠、
 // 空段与上级跳转，和安装器对游戏内路径的约束保持一致。

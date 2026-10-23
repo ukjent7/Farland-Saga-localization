@@ -462,10 +462,11 @@ func inspectAll(game string, info *manifest, prior *installRecord) []fileStatus 
 		}
 	}
 	// A file matching the install record is the version that record describes,
-	// even when the current payload was built by another engine. installPatch
-	// separately checks the engine before treating it as already installed.
-	priorIsCurrent := prior != nil && prior.Version == info.Version &&
-		prior.Language == info.Language
+	// even when the current payload is another language or was built by another
+	// engine. installPatch separately checks the engine before treating it as
+	// already installed; status and verify must not call a Korean install
+	// "previous" just because the embedded plan defaults to Chinese.
+	priorIsCurrent := prior != nil && prior.Version == info.Version
 	statuses := make([]fileStatus, 0, len(info.Files))
 	for _, entry := range info.Files {
 		statuses = append(statuses, inspectFile(game, entry, priorHashes, priorIsCurrent))
@@ -537,10 +538,12 @@ func checkWritable(game string, info *manifest) error {
 	return nil
 }
 
-// patchedHashSource lets a generator report the hash of the bytes it produced
-// when that hash cannot be known before the replay (recipe overrides).
+// patchedHashSource lets a generator report the hash and length of the bytes
+// it produced when they cannot be known before the replay (recipe overrides
+// and the re-encoded texture atlas).
 type patchedHashSource interface {
 	patchedHash(path string) (string, bool)
+	patchedSize(path string) (int64, bool)
 }
 
 // installPatch 执行一次安装：核对身份、备份、回放差异、原子改名、写安装记录，
@@ -650,6 +653,10 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 	sameInstall := prior != nil && prior.Version == info.Version &&
 		prior.Language == info.Language && prior.Engine == loaded.engineName()
 	installedHashes := map[string]string{}
+	installedSizes := map[string]int64{}
+	for _, entry := range info.Files {
+		installedSizes[entry.Path] = entry.PatchedSize
+	}
 	for _, entry := range info.Files {
 		if sameInstall && stateOf(statuses, entry.Path) == statePatched {
 			continue
@@ -679,12 +686,16 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 			return nil, rollback(fmt.Errorf("写入 %s 失败: %w", entry.Path, closeErr))
 		}
 		expectedHash := entry.PatchedSHA256
+		expectedSize := entry.PatchedSize
 		if dynamic, ok := loaded.(patchedHashSource); ok {
 			if value, ok := dynamic.patchedHash(entry.Path); ok {
 				expectedHash = value
 			}
+			if value, ok := dynamic.patchedSize(entry.Path); ok {
+				expectedSize = value
+			}
 		}
-		if hash, size, err := digestFile(temporary); err != nil || hash != expectedHash || size != entry.PatchedSize {
+		if hash, size, err := digestFile(temporary); err != nil || hash != expectedHash || size != expectedSize {
 			return nil, rollback(fmt.Errorf("补丁文件校验失败: %s", entry.Path))
 		}
 		if err := os.Rename(temporary, target); err != nil {
@@ -695,6 +706,7 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 			return nil, rollback(fmt.Errorf("安装后校验失败: %s", entry.Path))
 		}
 		installedHashes[entry.Path] = expectedHash
+		installedSizes[entry.Path] = expectedSize
 	}
 
 	record := &installRecord{
@@ -710,7 +722,7 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 			patchedHash = generated
 		}
 		record.Files[entry.Path] = fileRecord{OriginalSHA256: entry.OriginalSHA256,
-			PatchedSHA256: patchedHash, Size: entry.PatchedSize}
+			PatchedSHA256: patchedHash, Size: installedSizes[entry.Path]}
 	}
 	// backupName 已经是校验过的单段相对名，直接记进记录。
 	record.BackupDirectory = backupName

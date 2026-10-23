@@ -1466,8 +1466,13 @@ func TestLoadEmbedded(t *testing.T) {
 			t.Fatalf("%s 的 manifest 没有目标文件", code)
 		}
 		for _, entry := range info.Files {
-			if entry.Path == "" || (entry.Object == "" && entry.SectorsObject == "") {
-				t.Fatalf("%s 的 manifest 有条目缺少路径或对象名", code)
+			if entry.Path == "" {
+				t.Fatalf("%s 的 manifest 有条目缺少路径", code)
+			}
+			// recipe plan 的文件由安装时生成，没有 ZIP 对象名；补丁后哈希
+			// 也可能在生成前未知，由 patchedHashSource 动态报告。
+			if loaded[index].recipe == nil && entry.Object == "" && entry.SectorsObject == "" {
+				t.Fatalf("%s 的 manifest 有条目缺少对象名", code)
 			}
 			if !validSHA256(entry.OriginalSHA256) || !validSHA256(entry.PatchedSHA256) {
 				t.Fatalf("%s 的 %s 哈希不合法", code, entry.Path)
@@ -1663,6 +1668,21 @@ func TestEmbeddedRealPayloadReplay(t *testing.T) {
 	if len(problems) > 0 {
 		t.Fatalf("内嵌载荷问题: %v", problems)
 	}
+	if len(payloads) == 0 {
+		t.Skip("没有内嵌载荷可回放")
+	}
+	// 本地安装目录可能已被旧补丁改写。回放必须从原版开始，否则跳过而不是
+	// 用已经打补丁的文件去反推一个错误的“原版”。
+	for _, f := range payloads[0].info.Files {
+		path := filepath.Join(backupDir, filepath.FromSlash(f.Path))
+		hash, _, err := digestFile(path)
+		if err != nil {
+			t.Skipf("本地缺少原版文件: %s", path)
+		}
+		if hash != f.OriginalSHA256 {
+			t.Skipf("本地 %s 不是 recipe 声明的原版（可能是旧补丁），跳过真实回放", f.Path)
+		}
+	}
 
 	for _, p := range payloads {
 		t.Run(p.info.Language, func(t *testing.T) {
@@ -1679,11 +1699,19 @@ func TestEmbeddedRealPayloadReplay(t *testing.T) {
 					t.Fatalf("文件 %s 回放失败: %v", f.Path, replayErr)
 				}
 				gotHash := hex.EncodeToString(h.Sum(nil))
-				if gotHash != f.PatchedSHA256 {
-					t.Errorf("文件 %s 回放哈希不符: 期望 %s, 实际 %s", f.Path, f.PatchedSHA256, gotHash)
+				expectedHash := f.PatchedSHA256
+				expectedSize := f.PatchedSize
+				if value, ok := p.patchedHash(f.Path); ok {
+					expectedHash = value
 				}
-				if totalWritten != f.PatchedSize {
-					t.Errorf("文件 %s 回放大小不符: 期望 %d, 实际 %d", f.Path, f.PatchedSize, totalWritten)
+				if value, ok := p.patchedSize(f.Path); ok {
+					expectedSize = value
+				}
+				if gotHash != expectedHash {
+					t.Errorf("文件 %s 回放哈希不符: 期望 %s, 实际 %s", f.Path, expectedHash, gotHash)
+				}
+				if totalWritten != expectedSize {
+					t.Errorf("文件 %s 回放大小不符: 期望 %d, 实际 %d", f.Path, expectedSize, totalWritten)
 				}
 			}
 		})

@@ -40,8 +40,16 @@ func humanSize(size int64) string {
 }
 
 type payloadChoice struct {
-	path string
-	info *manifest
+	path   string
+	info   *manifest
+	source *payload
+}
+
+func (c payloadChoice) open() (*payload, error) {
+	if c.source != nil {
+		return c.source, nil
+	}
+	return openPayload(c.path)
 }
 
 func main() {
@@ -93,6 +101,7 @@ func runCommand(command string, arguments []string) error {
 	game := set.String("game", "", "游戏安装目录")
 	payloadPath := set.String("payload", "", "补丁载荷 ZIP 路径")
 	planPath := set.String("plan", "", "recipe plan 路径")
+	language := set.String("lang", "", "语言代码（使用 recipe plan 时）")
 	engine := set.String("engine", "", "生成方式：recipe 或 payload")
 	yes := set.Bool("yes", false, "跳过交互确认")
 	asJSON := set.Bool("json", false, "输出 JSON")
@@ -114,7 +123,7 @@ func runCommand(command string, arguments []string) error {
 	}
 	switch command {
 	case "install":
-		return commandInstall(*game, *payloadPath, *planPath, *engine, *yes, *asJSON, allowPrompt)
+		return commandInstall(*game, *payloadPath, *planPath, *engine, *language, *yes, *asJSON, allowPrompt)
 	case "restore":
 		return commandRestore(*game, *yes, *asJSON, allowPrompt)
 	case "status":
@@ -124,19 +133,32 @@ func runCommand(command string, arguments []string) error {
 	}
 }
 
-func commandInstall(game, payloadPath, planPath, engine string, yes, asJSON, allowPrompt bool) error {
-	loaded, err := resolvePayload(payloadPath)
-	if err != nil {
-		return err
-	}
+func commandInstall(game, payloadPath, planPath, engine, language string, yes, asJSON, allowPrompt bool) error {
 	planData, planSource, err := resolvePlanData(planPath, engine)
 	if err != nil {
-		loaded.close()
 		return err
 	}
-	source, err := wrapRecipeSource(loaded, planData)
+	var loaded *payload
+	if len(planData) > 0 {
+		if payloadPath != "" && language == "" {
+			// A legacy payload can still name the language when the embedded
+			// plan is the source of the bytes.
+			loaded, err = openPayload(payloadPath)
+			if err != nil {
+				return err
+			}
+			defer loaded.close()
+			language = loaded.info.Language
+		}
+	} else {
+		loaded, err = resolvePayload(payloadPath)
+		if err != nil {
+			return err
+		}
+		defer loaded.close()
+	}
+	source, err := wrapRecipeSource(loaded, planData, language)
 	if err != nil {
-		loaded.close()
 		return err
 	}
 	defer source.close()
@@ -151,7 +173,11 @@ func commandInstall(game, payloadPath, planPath, engine string, yes, asJSON, all
 	}
 	statuses := inspectAll(game, info, prior)
 	if !asJSON {
-		fmt.Printf("补丁载荷：%s\n", filepath.Base(loaded.path))
+		if loaded != nil {
+			fmt.Printf("补丁载荷：%s\n", filepath.Base(loaded.path))
+		} else {
+			fmt.Printf("生成配方：%s\n", planSource)
+		}
 		fmt.Printf("版本：%s（%s）\n", info.Version, info.Language)
 		if planSource != "" {
 			fmt.Printf("生成方式：%s（%s）\n", source.engineName(), planSource)
@@ -371,7 +397,7 @@ func commandVerify(game, payloadPath string, asJSON, allowPrompt bool) error {
 // wizard 是不带参数运行时的交互流程：定位游戏、展示状态，再安装或恢复。
 // 已经装过补丁时直接给出恢复/切换菜单，不必先选语言。
 func wizard() error {
-	choices, problems := discoverPayloads()
+	choices, problems := allChoices()
 	for _, problem := range problems {
 		fmt.Printf("警告：%s\n", problem)
 	}
@@ -402,7 +428,7 @@ func wizard() error {
 		}
 		chosen = choices[index-1]
 	}
-	loaded, err := openPayload(chosen.path)
+	loaded, err := chosen.open()
 	if err != nil {
 		return err
 	}
@@ -478,7 +504,7 @@ func wizardInstalled(game string, prior *installRecord, choices []payloadChoice)
 			return errors.New("无效选择")
 		}
 		target := choices[index-1]
-		switched, err := openPayload(target.path)
+		switched, err := target.open()
 		if err != nil {
 			return err
 		}
@@ -499,6 +525,21 @@ func wizardInstalled(game string, prior *installRecord, choices []payloadChoice)
 	default:
 		return nil
 	}
+}
+
+// allChoices prefers the embedded recipe plan over legacy ZIP payloads. A
+// release build carries the plan, so the wizard and GUI list its languages
+// without any external files.
+func allChoices() ([]payloadChoice, []string) {
+	payloads, problems := loadEmbedded()
+	if len(payloads) > 0 {
+		choices := make([]payloadChoice, 0, len(payloads))
+		for _, loaded := range payloads {
+			choices = append(choices, payloadChoice{path: loaded.path, info: loaded.info, source: loaded})
+		}
+		return choices, problems
+	}
+	return discoverPayloads()
 }
 
 // resolvePayload 按显式路径或程序所在目录的 glob 取唯一载荷。
@@ -527,6 +568,9 @@ func resolvePayload(explicit string) (*payload, error) {
 func resolvePayloadOptional(explicit string) (*payload, error) {
 	if explicit != "" {
 		return openPayload(explicit)
+	}
+	if payloads, _ := loadEmbedded(); len(payloads) > 0 {
+		return payloads[0], nil
 	}
 	choices, _ := discoverPayloads()
 	if len(choices) == 0 {
