@@ -1,7 +1,7 @@
 {
   "format": 1,
   "kind": "farland-saga-recipe",
-  "version": "recipe05",
+  "version": "recipe06",
   "game": "saga2",
   "title": "FARLAND SAGA II Saturn Tribute",
   "languages": [
@@ -65,6 +65,12 @@
       "archive_offset": 20635648,
       "size": 30720,
       "original_sha256": "dcc2788e3f68b7da2f2e2f50fa5fc339f8b8d257db03bfb1a10759c9b0161498"
+    },
+    "0117": {
+      "recipe": "resources/0117.json",
+      "archive_offset": 21104640,
+      "size": 8192,
+      "original_sha256": "225dde5033790bc3dda8625a8d25d7afc02809b8c3cd6e6419092a9b8646c733"
     },
     "02B9": {
       "recipe": "resources/02B9.json",

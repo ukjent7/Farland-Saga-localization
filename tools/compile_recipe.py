@@ -46,6 +46,7 @@ CARD_FORMAT = 'card_tilemap_8bpp'
 STORY_FORMAT = 'story_page_2bpp'
 TEXTURE_FORMAT = 'texture_atlas_rgba'
 BINARY_FORMAT = 'binary_patches'
+WORD_FORMAT = 'word_patches_16be'
 
 
 def digest(data):
@@ -595,6 +596,11 @@ def validate_mono_recipe(rid, recipe, languages, fonts, size):
                         raise SystemExit(f'{rid}/{name}[{index}]: {key} must be non-negative')
                 if line['y'] + line['height'] > height:
                     raise SystemExit(f'{rid}/{name}[{index}]: line leaves the canvas')
+                if line.get('align', write.get('align', 'center')) not in ('left', 'center'):
+                    raise SystemExit(f'{rid}/{name}[{index}]: align must be left or center')
+                left = line.get('left', write.get('left', 0))
+                if not isinstance(left, int) or left < 0:
+                    raise SystemExit(f'{rid}/{name}[{index}]: left must be non-negative')
                 for language in languages:
                     text_for(line, language)
                 for key in ('max_size', 'min_size'):
@@ -869,7 +875,14 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
                         if chosen is None:
                             raise SystemExit(f'{rid}/{name}: {text!r} does not fit the card')
                         size, font, bbox, ink_width, ink_height = chosen
-                        x = (width - ink_width) // 2 - bbox[0]
+                        align = line.get('align', spec.get('align', 'center'))
+                        if align == 'left':
+                            left = line.get('left', spec.get('left', 0))
+                            if left + ink_width > width:
+                                raise SystemExit(f'{rid}/{name}: {text!r} leaves the card')
+                            x = left - bbox[0]
+                        else:
+                            x = (width - ink_width) // 2 - bbox[0]
                         y = line['y'] + (line['height'] - ink_height) // 2 - bbox[1]
                         draw.text((x, y), text, font=font, fill=spec['ink'])
                         report['writes'].setdefault(language, {})[f'{name}:{line["y"]}'] = {
@@ -1019,6 +1032,59 @@ def compile_card(rid, meta, recipe, languages, unifont, oracle, blob, preview_di
         'expected': {language: oracle.get(rid, {}).get(language, '') for language in languages},
         'operations': operations,
     }
+    return header, report
+
+
+def validate_word_recipe(rid, recipe, meta):
+    """Check a script-word recipe against the resource it edits."""
+    if recipe.get('format') != WORD_FORMAT:
+        raise SystemExit(f'{rid}: expected format {WORD_FORMAT!r}')
+    patches = recipe.get('patches')
+    if not isinstance(patches, list) or not patches:
+        raise SystemExit(f'{rid}: no patches')
+    seen = set()
+    for patch in patches:
+        name = patch.get('name', '?')
+        offset = patch.get('offset')
+        if not isinstance(name, str) or not name:
+            raise SystemExit(f'{rid}: patch needs a name')
+        if not isinstance(offset, int) or offset < 0 or offset % 2:
+            raise SystemExit(f'{rid}/{name}: offset must be an even non-negative integer')
+        if offset + 2 > meta['size']:
+            raise SystemExit(f'{rid}/{name}: patch leaves the resource')
+        if offset in seen:
+            raise SystemExit(f'{rid}/{name}: duplicate offset {offset}')
+        seen.add(offset)
+        for key in ('original', 'patched'):
+            value = patch.get(key)
+            if not isinstance(value, int) or not 0 <= value <= 0xFFFF:
+                raise SystemExit(f'{rid}/{name}: {key} must be a u16')
+        if patch['original'] == patch['patched']:
+            raise SystemExit(f'{rid}/{name}: original and patched are identical')
+
+
+def compile_word(rid, meta, recipe, languages, oracle):
+    """Compile script-word patches; they are language independent.
+
+    The restaurant scene selects the cook's nameplate by a speaker index stored
+    as a big-endian u16 in the script resource. Index 14 draws a baked Japanese
+    sprite, so the translated 02CB slot 29 never appears; pointing those words
+    at index 30 makes the normal name bank handle them.
+    """
+    patches = [{'name': patch['name'], 'offset': patch['offset'],
+                'original': patch['original'], 'patched': patch['patched']}
+               for patch in recipe['patches']]
+    operations = {language: [{'type': 'word_patches', 'patches': patches}]
+                  for language in languages}
+    header = {
+        'format': recipe['format'],
+        'archive_offset': meta['archive_offset'],
+        'size': meta['size'],
+        'original_sha256': meta['original_sha256'],
+        'expected': {language: oracle.get(rid, {}).get(language, '') for language in languages},
+        'operations': operations,
+    }
+    report = {'format': recipe['format'], 'patches': len(patches)}
     return header, report
 
 
@@ -1773,6 +1839,12 @@ def compile_plan(recipe_dir, output, report_path, preview_dir, allow_missing=Fal
                 oracle.setdefault(rid, {})
             resource_header, resource_report = compile_card(
                 rid, meta, recipe, languages, unifont, oracle, blob, preview_dir)
+        elif fmt == WORD_FORMAT:
+            validate_word_recipe(rid, recipe, meta)
+            if allow_missing:
+                oracle.setdefault(rid, {})
+            resource_header, resource_report = compile_word(
+                rid, meta, recipe, languages, oracle)
         else:
             raise SystemExit(f'{rid}: unsupported recipe format {fmt!r}')
         header['resources'][rid] = resource_header

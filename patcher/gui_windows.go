@@ -800,7 +800,7 @@ func (a *guiApp) onInstall() {
 	}
 	loaded := a.payloads[a.selected]
 	label := a.ui.name(loaded.info.Language)
-	if a.installedLanguage() == loaded.info.Language {
+	if a.installedFrom(loaded) {
 		messageBox(a.window, fmt.Sprintf(a.ui.alreadyInstalledFormat, label), appTitle, mbOk|mbIconInformation)
 		return
 	}
@@ -927,6 +927,18 @@ func (a *guiApp) installedLanguage() string {
 	return ""
 }
 
+// installedFrom 判断已安装的补丁是否正是这个载荷。只看语言会把旧版本的
+// 同语言安装当成已完成，用户就拿不到新版修正。条件与 installPatch 判断
+// 「同一次安装」时用的版本、语言和引擎名保持一致。
+func (a *guiApp) installedFrom(loaded *payload) bool {
+	if a.record == nil || a.record.Status != statusInstalled || loaded == nil {
+		return false
+	}
+	return a.record.Version == loaded.info.Version &&
+		a.record.Language == loaded.info.Language &&
+		a.record.Engine == loaded.engineName()
+}
+
 // titleText 是两屏各自的标题。
 func (a *guiApp) titleText() string {
 	if a.page == pageInstall && a.selected >= 0 && a.selected < len(a.payloads) {
@@ -953,7 +965,7 @@ func (a *guiApp) languageButtonLabel(index int) string {
 	}
 	info := a.payloads[index].info
 	label := nativeLanguageName(info.Language)
-	if a.installedLanguage() == info.Language {
+	if a.installedFrom(a.payloads[index]) {
 		label += a.ui.installedTag
 	}
 	return label
