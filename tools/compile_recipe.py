@@ -122,11 +122,20 @@ def style_for(recipe, label):
     return style
 
 
-def load_font(path):
+def font_at(path, size):
+    """Load a font with Pillow's deterministic basic layout.
+
+    Pillow switches to Raqm/HarfBuzz automatically when libraqm is present.
+    That changes shaping and rasterisation for some strings, so the same recipe
+    produced different bytes on machines with different system libraries.  The
+    expected hashes were recorded with the basic layout; pin it so every
+    machine stays on the same renderer.
+    """
     if not path.is_file():
         raise SystemExit(f'font file not found: {path}')
     try:
-        return ImageFont.truetype(str(path), 16)
+        return ImageFont.truetype(str(path), size,
+                                  layout_engine=ImageFont.Layout.BASIC)
     except OSError as error:
         raise SystemExit(f'cannot load font {path}: {error}') from None
 
@@ -172,10 +181,7 @@ def fit_pillow(path, text, width, height, largest, smallest, reserve):
     if not path or not path.is_file():
         raise SystemExit(f'font file not found: {path}')
     for size in range(largest, smallest - 1, -1):
-        try:
-            font = ImageFont.truetype(str(path), size)
-        except OSError as error:
-            raise SystemExit(f'cannot load font {path}: {error}') from None
+        font = font_at(path, size)
         bbox = font.getbbox(text)
         ink_width, ink_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
         if ink_width + reserve <= width and ink_height + reserve <= height:
@@ -756,7 +762,7 @@ def paint_slot(text, width, height, path, largest, smallest, background, ink,
     draw = ImageDraw.Draw(image)
     chosen = None
     for size in range(largest, smallest - 1, -1):
-        font = ImageFont.truetype(str(path), size)
+        font = font_at(path, size)
         bbox = draw.textbbox((0, 0), text, font=font)
         ink_width, ink_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
         if ink_width <= box_width and ink_height <= height:
@@ -817,7 +823,7 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
                     reserve = spec.get('reserve', 0)
                     chosen = None
                     for size in range(spec['max_size'], spec['min_size'] - 1, -1):
-                        font = ImageFont.truetype(str(path), size)
+                        font = font_at(path, size)
                         lines = wrap_paragraphs(draw, text, font, width - reserve, language)
                         if len(lines) > spec['max_lines']:
                             continue
@@ -851,7 +857,7 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
                         text = text_for(line, language)
                         chosen = None
                         for size in range(line['max_size'], line['min_size'] - 1, -1):
-                            font = ImageFont.truetype(str(path), size)
+                            font = font_at(path, size)
                             bbox = draw.textbbox((0, 0), text, font=font)
                             ink_width, ink_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
                             if ink_width <= width - spec.get('reserve', 0) and ink_height <= line['height']:
@@ -1066,7 +1072,7 @@ def paint_story_ttf(path, text, language, spec, rid):
         else:
             variants.append(''.join(part.strip() for part in text.split('\n') if part.strip()))
     for size in range(spec['max_ttf_size'], spec['min_ttf_size'] - 1, -1):
-        font = ImageFont.truetype(str(path), size)
+        font = font_at(path, size)
         for variant in variants:
             lines = wrap_paragraphs(draw, variant, font, spec['max_width'], language)
             if len(lines) > spec['max_lines']:
@@ -1228,10 +1234,7 @@ def texture_text_metrics(draw, text, font, stroke):
 def fit_text_layer(text, path, width, height, largest, smallest, stroke):
     draw = ImageDraw.Draw(Image.new('RGBA', (1, 1)))
     for size in range(largest, smallest - 1, -1):
-        try:
-            font = ImageFont.truetype(str(path), size)
-        except OSError as error:
-            raise SystemExit(f'cannot load font {path}: {error}') from None
+        font = font_at(path, size)
         bbox, ink_width, ink_height = texture_text_metrics(draw, text, font, stroke)
         if ink_width <= width and ink_height <= height:
             return size, font, bbox, ink_width, ink_height
@@ -1568,7 +1571,37 @@ def load_oracle(recipe_dir, languages, allow_missing):
     return oracle
 
 
-def compile_plan(recipe_dir, output, report_path, preview_dir, allow_missing=False):
+def verify_plan_lock(path, version, binary_bytes, binary_sha256):
+    """Fail when rendered layers drift from the reviewed plan.
+
+    The blob digest covers every generated mask and image, independent of
+    gzip output.  A mismatch means the recipe or the rasteriser changed; review
+    the plan, then rerun with --write-plan-lock to accept the new bytes.
+    """
+    if not path.is_file():
+        raise SystemExit(
+            f'missing plan lock: {path}; rerun with --write-plan-lock')
+    locked = read_json(path)
+    actual = {
+        'format': PLAN_FORMAT,
+        'version': version,
+        'binary_bytes': binary_bytes,
+        'binary_sha256': binary_sha256,
+    }
+    if locked == actual:
+        return
+    differences = [
+        f'{key}: compiled {actual.get(key)!r}, locked {locked.get(key)!r}'
+        for key in sorted(set(actual) | set(locked))
+        if actual.get(key) != locked.get(key)
+    ]
+    raise SystemExit(
+        f'plan does not match {path}:\n  ' + '\n  '.join(differences) +
+        '\nIf these rendered bytes are intended, rerun with --write-plan-lock.')
+
+
+def compile_plan(recipe_dir, output, report_path, preview_dir, allow_missing=False,
+                 write_plan_lock=False):
     manifest = read_json(recipe_dir / 'manifest.json')
     validate_manifest(manifest, recipe_dir)
     languages = manifest['languages']
@@ -1632,10 +1665,21 @@ def compile_plan(recipe_dir, output, report_path, preview_dir, allow_missing=Fal
                               separators=(',', ':')).encode('utf-8')
     compressed = gzip.compress(bytes(blob), compresslevel=9, mtime=0)
     plan = MAGIC + struct.pack('<I', len(header_bytes)) + header_bytes + compressed
+    lock_path = recipe_dir / 'plan.lock.json'
+    if not write_plan_lock:
+        verify_plan_lock(lock_path, manifest['version'], len(blob),
+                         header['binary_sha256'])
     output.parent.mkdir(parents=True, exist_ok=True)
     temporary = output.with_name(output.name + '.tmp')
     temporary.write_bytes(plan)
     temporary.replace(output)
+    if write_plan_lock:
+        lock_path.write_text(json.dumps({
+            'format': PLAN_FORMAT,
+            'version': manifest['version'],
+            'binary_bytes': len(blob),
+            'binary_sha256': header['binary_sha256'],
+        }, indent=2, sort_keys=True) + '\n', encoding='utf-8')
     report.update({
         'plan': str(output),
         'plan_bytes': len(plan),
@@ -1671,12 +1715,14 @@ def main():
                         help='optional directory for per-language mask previews')
     parser.add_argument('--allow-missing-expected', action='store_true',
                         help='development only: compile without expected hashes')
+    parser.add_argument('--write-plan-lock', action='store_true',
+                        help='accept the rendered plan bytes into recipe/plan.lock.json')
     args = parser.parse_args()
     report = args.report
     if report is not None and str(report) in ('', '.'):
         report = None
     compile_plan(args.recipe_dir, args.output, report, args.preview_dir,
-                 args.allow_missing_expected)
+                 args.allow_missing_expected, args.write_plan_lock)
     return 0
 
 
