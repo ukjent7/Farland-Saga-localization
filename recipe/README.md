@@ -63,8 +63,16 @@ moved. When a recipe edit intentionally changes rendered bytes, review the
 plan and rerun with `--write-plan-lock` to accept the new blob. Pass
 `--report <path>` for an optional JSON build report; keep it outside
 `patcher/plan/`, which the Go build embeds whole. The compiler never reads the
-game, so a clean checkout produces the same plan byte for byte. `go build -tags
-saga2` embeds the plan; `patcher/plan/plan.bin` is ignored by git.
+game, so a clean checkout produces the same rendered blob byte for byte. The
+gzip wrapper can differ with the host zlib, so the lock covers the uncompressed
+blob rather than the plan file. `go build -tags saga2` embeds the plan;
+`patcher/plan/plan.bin` is ignored by git.
+
+Texture label and panel layers are stored as raw RGBA in the blob. Pillow's PNG
+encoder uses the host zlib, which changed the plan bytes between Fedora and the
+Ubuntu CI runner even when the decoded pixels matched. Raw rows keep the blob
+independent of zlib, and the plan's gzip wrapper still compresses the mostly
+transparent layers.
 
 The plan starts with `FS2RECIPE1\n`, a little-endian u32 header length, a
 compact JSON header, and a gzip blob. The JSON header declares plan format 2;
