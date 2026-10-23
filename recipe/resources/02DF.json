@@ -1,0 +1,40 @@
+{
+  "resource": "02DF",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "缠在手臂上的护带。\n威力聊胜于无。",
+        "ko-KR": "팔에 감는 밴드. 위력은 기분 전환 정도.",
+        "en-US": "A band wrapped around the arm. Its power is little more than a placebo."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resource": "02FF",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "长及手腕的手套。\n里面填满羽毛，因此非常结实。",
+        "ko-KR": "손목까지 오는 장갑. 깃털이 채워져 있어 매우 튼튼하다.",
+        "en-US": "Gloves that reach the wrist. They are stuffed with feathers and very durable."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

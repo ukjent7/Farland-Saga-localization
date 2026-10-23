@@ -1,0 +1,40 @@
+{
+  "resource": "031B",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "填入棉花并绗缝的布甲。\n只能起到缓和冲击的效果。",
+        "ko-KR": "솜을 넣고 누빔 처리를 한 천 갑옷. 충격을 완화하는 정도의 위력.",
+        "en-US": "Cloth armor stuffed with cotton and quilted. It only softens impacts."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resource": "03A1",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "中咒者能在一段时间内\n轻飘飘地漫步空中。\n得意忘形时效果可能突然消失，\n务必小心。",
+        "ko-KR": "이 주문을 받은 사람은 일정 시간 둥둥 떠서 공중을 걸을 수 있다. 기세를 올리다 보면 갑자기 효과가 끊길 수 있으니 주의.",
+        "en-US": "Anyone under this spell can walk lightly through the air for a time. Be careful: the effect can suddenly wear off while you are enjoying it."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

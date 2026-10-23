@@ -1,0 +1,40 @@
+{
+  "resource": "03F8",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "操纵火与土的魔法师。\n也就是说，用水和风攻击即可。",
+        "ko-KR": "불과 흙을 다루는 마법사. 즉, 물과 바람으로 공격하면 된다.",
+        "en-US": "A mage who controls fire and earth. In other words, attack with water and wind."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

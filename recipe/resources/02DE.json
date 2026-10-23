@@ -1,0 +1,40 @@
+{
+  "resource": "02DE",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "顾名思义，这是专为弑神打造的剑。\n拥有最强的破坏力。",
+        "ko-KR": "이름 그대로 신을 쓰러뜨리기 위해 만들어진 검. 최강의 파괴력을 지닌다.",
+        "en-US": "A sword made solely to slay a god, as its name suggests. It has the greatest destructive power."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

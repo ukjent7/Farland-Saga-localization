@@ -20,8 +20,8 @@ import (
 const (
 	recipeMagic       = "FS2RECIPE1\n"
 	recipePlanFormat  = 1
-	maxRecipeHeader   = 1 << 20
-	maxRecipeMaskData = 16 << 20
+	maxRecipeHeader   = 16 << 20
+	maxRecipeMaskData = 64 << 20
 	maxRecipeCells    = 1 << 20
 )
 
@@ -47,10 +47,13 @@ type recipeResource struct {
 }
 
 type recipeOperation struct {
-	Type   string        `json:"type"`
-	Erase  []recipeErase `json:"erase"`
-	Labels []recipeLabel `json:"labels"`
-	Writes []recipeWrite `json:"writes"`
+	Type             string        `json:"type"`
+	Erase            []recipeErase `json:"erase"`
+	Labels           []recipeLabel `json:"labels"`
+	Writes           []recipeWrite `json:"writes"`
+	DataOffset       int           `json:"data_offset"`
+	DataLength       int           `json:"data_length"`
+	TimingCharacters int           `json:"timing_characters"`
 }
 
 type recipeErase struct {
@@ -167,11 +170,20 @@ func loadRecipePlan(data []byte) (*recipePlan, error) {
 }
 
 func validResourceID(rid string) bool {
-	if len(rid) != 4 {
+	if len(rid) == 4 {
+		for _, char := range rid {
+			if (char < '0' || char > '9') && (char < 'A' || char > 'F') {
+				return false
+			}
+		}
+		return true
+	}
+	// Story pages use P followed by the four- or five-digit page id.
+	if len(rid) < 5 || len(rid) > 6 || rid[0] != 'P' {
 		return false
 	}
-	for _, char := range rid {
-		if (char < '0' || char > '9') && (char < 'A' || char > 'F') {
+	for _, char := range rid[1:] {
+		if char < '0' || char > '9' {
 			return false
 		}
 	}
@@ -205,6 +217,13 @@ func validateRecipeResource(rid string, resource *recipeResource, plan *recipePl
 		if len(resource.AtlasSize) != 0 {
 			return fmt.Errorf("%s: 位图资源不应带 atlas_size", rid)
 		}
+	case "story_page_2bpp":
+		if len(resource.AtlasSize) != 0 {
+			return fmt.Errorf("%s: 剧情页不应带 atlas_size", rid)
+		}
+		if resource.Size != 4096 {
+			return fmt.Errorf("%s: 剧情页大小必须是 4096", rid)
+		}
 	default:
 		return fmt.Errorf("%s: 不支持的 recipe 资源格式 %q", rid, resource.Format)
 	}
@@ -226,7 +245,29 @@ func validateRecipeResource(rid string, resource *recipeResource, plan *recipePl
 			if err := validateMonoOperation(rid, language, operation, resource, plan); err != nil {
 				return err
 			}
+		case "story_page_2bpp":
+			if err := validateStoryOperation(rid, language, operation, resource, plan); err != nil {
+				return err
+			}
 		}
+	}
+	return nil
+}
+
+func validateStoryOperation(rid, language string, operation recipeOperation, resource *recipeResource, plan *recipePlan) error {
+	if operation.Type != "story_page" {
+		return fmt.Errorf("%s: %s 的操作类型 %q 不受支持", rid, language, operation.Type)
+	}
+	if len(operation.Labels) != 0 || len(operation.Erase) != 0 || len(operation.Writes) != 0 {
+		return fmt.Errorf("%s: %s 的剧情页操作内容不合法", rid, language)
+	}
+	if operation.DataOffset < 0 || operation.DataLength != 2352 ||
+		operation.DataOffset > len(plan.blob) ||
+		operation.DataLength > len(plan.blob)-operation.DataOffset {
+		return fmt.Errorf("%s: %s 的剧情页图像范围不合法", rid, language)
+	}
+	if operation.TimingCharacters < 0 || operation.TimingCharacters > 42 {
+		return fmt.Errorf("%s: %s 的时序字符数不合法", rid, language)
 	}
 	return nil
 }

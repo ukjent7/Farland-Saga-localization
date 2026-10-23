@@ -1,0 +1,40 @@
+{
+  "resource": "0387",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "从火之精灵界召唤伊夫利特，\n焚尽大范围内的敌人。",
+        "ko-KR": "불의 정령계에서 이프리트를 소환해 넓은 범위의 적을 불태운다.",
+        "en-US": "Summons Ifrit from the fire spirit realm and burns enemies over a wide area."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

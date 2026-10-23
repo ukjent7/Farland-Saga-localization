@@ -1,0 +1,40 @@
+{
+  "resource": "03B1",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "向对手施加诅咒，使其完全无法行动。\n过一段时间后诅咒会解除。",
+        "ko-KR": "상대에게 저주를 걸어 그 행동을 전부 멈추게 한다. 시간이 지나면 풀린다.",
+        "en-US": "Curses the opponent and stops all of their actions. The curse wears off with time."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resource": "0324",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "在锁子甲外再用金属板覆盖全身的铠甲。\n防御力和重量都属顶级。",
+        "ko-KR": "체인 메일 위에 전신을 금속판으로 덮은 갑옷. 방어 효과와 무게 모두 최고급.",
+        "en-US": "Armor that covers the whole body in metal plates over chain mail. Both defense and weight are top class."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

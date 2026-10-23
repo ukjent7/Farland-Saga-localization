@@ -1,0 +1,40 @@
+{
+  "resource": "0394",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "奏响柔和的旋律，为听者恢复体力。\n声音指向性很强，\n只能为一人恢复体力。",
+        "ko-KR": "부드러운 선율을 연주해 듣는 이의 체력을 회복시킨다. 지향성이 강해 단 한 명만 회복시킬 수 있다.",
+        "en-US": "Plays a gentle melody that restores the HP of those who hear it. Its directionality is strong, so it can heal only one person."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

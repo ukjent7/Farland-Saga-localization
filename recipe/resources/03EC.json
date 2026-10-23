@@ -1,0 +1,40 @@
+{
+  "resource": "03EC",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "乍看之下很像小鬼，\n但会施放催眠魔法，要小心。",
+        "ko-KR": "얼핏 보면 임프와 매우 비슷하지만 수면 마법을 걸어 오니 주의.",
+        "en-US": "At a glance it looks much like an imp, but it casts sleep magic, so be careful."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resource": "03FD",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "长着蝙蝠翅膀的妖艳女魔物。\n用妖异魅力诱惑敌人，\n使其成为同伴。",
+        "ko-KR": "박쥐 날개를 가진 요염한 여성 몬스터. 요염한 매력으로 적을 유혹해 아군으로 만든다.",
+        "en-US": "A bewitching female monster with bat wings. She uses her alluring charm to seduce enemies and make them allies."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

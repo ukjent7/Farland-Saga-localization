@@ -1,0 +1,40 @@
+{
+  "resource": "0395",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "停止一名敌人周围空气的振动，\n使其无法咏唱咒文。\n不过，被人骂了也听不见，\n这是它的缺点。",
+        "ko-KR": "적 한 명 주위의 공기 진동을 멈추게 해 주문을 외우지 못하게 한다. 다만 욕을 먹어도 알아차리지 못한다는 단점도 있다.",
+        "en-US": "Stops the vibration of the air around one enemy, preventing them from casting spells. The drawback is that they won't notice even if insulted."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

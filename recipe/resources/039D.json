@@ -1,0 +1,40 @@
+{
+  "resource": "039D",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "吹响号角下达号令。\n若抵抗失败，就会不由自主地\n和大家面朝同一方向。\n顺带一提，吹的是军队起床号。",
+        "ko-KR": "나팔을 불어 호령한다. 저항에 실패하면 저도 모르게 모두와 같은 방향을 보게 된다. 참고로 연주하는 것은 군대의 기상 나팔.",
+        "en-US": "Blows a bugle and gives a command. Those who fail to resist cannot help but face the same direction as everyone else. Incidentally, the tune is the army wake-up call."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

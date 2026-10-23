@@ -1,0 +1,40 @@
+{
+  "resource": "03A0",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "从地下召出有毒物质，伤害一名敌人，\n并有很高几率使其中毒。\n毒气臭不可闻，连友军也受不了。\n等级越高，效果范围越大。",
+        "ko-KR": "땅속에서 유독한 물질을 불러내 적 하나에게 피해를 주고, 높은 확률로 중독시킨다. 이 가스는 매우 악취가 나서 아군도 싫어한다. 레벨이 오르면 효과 범위가 넓어진다.",
+        "en-US": "Calls a toxic substance from underground to damage one enemy and poison them with high probability. The gas smells so awful that allies hate it too. The area of effect grows with level."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

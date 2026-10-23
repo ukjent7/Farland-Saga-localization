@@ -1,0 +1,40 @@
+{
+  "resource": "0381",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "使友方一人的武器附上火焰，\n提升其攻击力。可重复施放，\n但受施法者能力限制，\n效果每回合都会减弱。",
+        "ko-KR": "아군 한 명의 무기에 불꽃을 둘러 공격력을 올린다. 중복 시전이 가능하지만 시전자의 능력에 따라 상한이 있고, 매 턴 효과도 줄어든다.",
+        "en-US": "Wreathes one ally's weapon in flame and raises attack. It can be stacked, but the caster's ability sets a cap, and the effect decreases each turn."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

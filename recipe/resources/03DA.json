@@ -1,0 +1,40 @@
+{
+  "resource": "03DA",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "石制的人偶。\n魔法很难对它奏效，\n用直接攻击打倒它吧。",
+        "ko-KR": "돌로 만든 꼭두각시. 마법이 거의 통하지 않으니 직접 공격으로 쓰러뜨리자.",
+        "en-US": "A puppet made of stone. Magic barely affects it, so defeat it with direct attacks."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

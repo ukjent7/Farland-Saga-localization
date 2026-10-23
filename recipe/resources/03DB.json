@@ -1,0 +1,40 @@
+{
+  "resource": "03DB",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "普通的幽灵。幽灵不怕斩击。\n既然是幽灵，就用魔法打倒它吧。",
+        "ko-KR": "평범한 유령. 유령이라 베어도 통하지 않는다. 유령이니 마법으로 쓰러뜨리자.",
+        "en-US": "An ordinary ghost. Since it is a ghost, slashing does not work. Use magic to defeat it."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

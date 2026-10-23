@@ -1,0 +1,40 @@
+{
+  "resource": "0397",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "听到这旋律的人会精神振奋，\n从而能够再行动一次。\n若能手持指挥棒、再穿上迷你裙，\n那就完美了。",
+        "ko-KR": "이 소리를 들은 사람은 기운을 차려 한 번 더 행동할 수 있게 된다. 이걸로 바톤을 들고 미니스커트라면 완벽하겠지만.",
+        "en-US": "Anyone who hears this becomes energized and can act one more time. With a baton and a miniskirt, it would be perfect."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

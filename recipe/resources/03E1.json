@@ -1,0 +1,40 @@
+{
+  "resource": "03E1",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "也叫食尸鬼，是吞食尸体的可怕魔物。\n受到攻击后有可能陷入麻痹。",
+        "ko-KR": "구울이라고도 한다. 시체를 먹는 끔찍한 몬스터. 공격받으면 마비될 위험이 있다.",
+        "en-US": "Also called a ghoul. A horrifying monster that eats corpses. Being attacked by it risks paralysis."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

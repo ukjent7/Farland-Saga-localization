@@ -1,0 +1,40 @@
+{
+  "resource": "03B2",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "诅咒一名敌人，将其变成提线木偶。\n中咒者会转而攻击\n与施法者为敌的人。",
+        "ko-KR": "적 하나에게 저주를 걸어 꼭두각시로 만든다. 걸린 사람은 시전자와 적대하는 자를 공격하게 된다.",
+        "en-US": "Curses one enemy and turns them into a puppet. The victim will attack those who are hostile to the caster."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

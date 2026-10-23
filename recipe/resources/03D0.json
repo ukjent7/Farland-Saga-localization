@@ -1,0 +1,40 @@
+{
+  "resource": "03D0",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "有着油亮黑毛的猫。\n身手灵活，在猫中格外强悍。",
+        "ko-KR": "윤기 나는 검은 털을 가진 고양이. 몸놀림도 유연해 고양이 중에서는 단연 강하다.",
+        "en-US": "A cat with glossy black fur. It moves gracefully and is exceptionally strong among cats."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

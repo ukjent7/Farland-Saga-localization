@@ -1,0 +1,40 @@
+{
+  "resource": "0401",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "统率恶魔的更强大魔物。\n爆炎魔法能将一切烧得灰飞烟灭。",
+        "ko-KR": "데몬을 거느리는 더욱 강대한 몬스터. 폭염 마법은 재조차 남기지 않는다.",
+        "en-US": "An even mightier monster that commands demons. Its blast-flame magic leaves not even ashes."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

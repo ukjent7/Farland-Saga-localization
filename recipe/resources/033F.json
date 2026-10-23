@@ -1,0 +1,40 @@
+{
+  "resource": "033F",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "高阶魔导师穿着的衣服。\n多重附魔，是性能出众的法衣，\n效果堪称顶级。",
+        "ko-KR": "고위 마법을 익힌 마도사가 입는 옷. 부여 마법이 여러 겹으로 걸린 고성능 마도복으로, 효과는 최고급.",
+        "en-US": "Clothing worn by mages who have mastered high magic. Multiple enchantments are layered into this high-performance robe, giving it top-class effects."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

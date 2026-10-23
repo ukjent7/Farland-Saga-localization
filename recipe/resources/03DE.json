@@ -1,0 +1,40 @@
+{
+  "resource": "03DE",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "喜欢恶作剧的小妖精。\n用催眠露珠将旅人引入梦乡。",
+        "ko-KR": "장난을 좋아하는 작은 요정. 수면의 물방울로 여행자를 꿈의 세계로 유도한다.",
+        "en-US": "A mischievous little fairy. It leads travelers into the world of dreams with sleeping dew."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

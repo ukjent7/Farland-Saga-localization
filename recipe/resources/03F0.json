@@ -1,0 +1,40 @@
+{
+  "resource": "03F0",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "栖息在深海的普通螃蟹。\n产卵时会爬上沙滩，\n那时会变得极其凶暴。",
+        "ko-KR": "심해에 사는 아주 평범한 게. 산란기에는 모래사장에 올라오지만 그때는 극도로 흉포해진다.",
+        "en-US": "A very ordinary crab living in the deep sea. It comes ashore to spawn, and at that time it becomes extremely ferocious."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

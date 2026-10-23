@@ -1,0 +1,40 @@
+{
+  "resource": "0409",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "由力量强大的天使彼此合体而重生。\n不过，如果合体双方不够默契，\n就没那么可怕。",
+        "ko-KR": "강대한 힘을 가진 천사들이 합체해 다시 태어난 존재. 하지만 합체한 자들끼리 협조적이지 않으면 무섭지 않다.",
+        "en-US": "Born anew from the fusion of angels with mighty power. However, if the fused pair do not work together, it is not so frightening."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

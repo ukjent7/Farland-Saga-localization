@@ -1,0 +1,40 @@
+{
+  "resource": "02E8",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "据说是黑暗魔人制造的手套。\n被打得太疼，连声音都发不出来。",
+        "ko-KR": "어둠의 마인이 만들어냈다고 하는 장갑. 맞으면 너무 아파서 소리도 나오지 않는다.",
+        "en-US": "Gloves said to have been made by a dark demon. A hit hurts so much that no sound comes out."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resource": "036F",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "它就是某种东西，除此之外别无其他。\n说到底，谁也不知道它是什么。\n因为搞不清楚，所以没人会用。",
+        "ko-KR": "무언가는 무언가이다. 그 이외의 무엇도 아니다. 결국 잘 모르겠다. 모르니 아무도 쓸 수 없다.",
+        "en-US": "Something is something. It is nothing other than that. In the end, nobody really knows what it is. And because nobody knows, nobody can use it."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

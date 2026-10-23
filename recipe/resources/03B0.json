@@ -1,0 +1,40 @@
+{
+  "resource": "03B0",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "释放石化气体，将吸入者变成石像。\n石化者必须接受“复原”或“恢复”等\n魔法，否则无法复活。",
+        "ko-KR": "석화 가스를 발생시켜 뒤집어쓴 사람을 석상으로 만든다. 석화된 사람은 리스토어나 리커버리 같은 마법을 받지 않는 한 되살아나지 않는다.",
+        "en-US": "Generates petrification gas that turns anyone who breathes it into stone. A petrified person will not revive unless Restore, Recovery, or a similar spell is cast on them."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

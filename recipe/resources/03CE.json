@@ -1,0 +1,40 @@
+{
+  "resource": "03CE",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "区区史莱姆竟然会用催眠魔法。\n然后就会被一顿暴打。",
+        "ko-KR": "슬라임 주제에 수면 마법을 쓴다. 그 뒤에는 마구 두들겨 맞는다.",
+        "en-US": "A mere slime, yet it uses sleep magic. Afterwards it gets beaten to a pulp."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

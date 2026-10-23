@@ -1,0 +1,40 @@
+{
+  "resource": "03A7",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "唤醒一名昏厥的友军。\n施法者的能力越强，\n恢复的体力似乎也越多。",
+        "ko-KR": "기절한 아군 한 명을 깨운다. 시전자의 능력에 비례해 회복되는 체력도 커진다고 한다.",
+        "en-US": "Wakes one unconscious ally. The HP restored apparently increases in proportion to the caster's ability."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

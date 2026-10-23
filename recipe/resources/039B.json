@@ -1,0 +1,40 @@
+{
+  "resource": "039B",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "震动空气分子，伴随强烈放电\n破坏物质的分子键，\n是一种可怕的咒文。",
+        "ko-KR": "대기의 분자를 떨게 해 격렬한 방전과 함께 물체의 분자 결합을 파괴하는 무서운 주문.",
+        "en-US": "A terrifying spell that vibrates atmospheric molecules and, with a violent discharge, destroys the molecular bonds of objects."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

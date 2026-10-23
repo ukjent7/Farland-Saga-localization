@@ -1,0 +1,40 @@
+{
+  "resource": "03CD",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "在史莱姆中算是相当强的一类，\n不过并没有特殊能力，\n所以并不可怕。",
+        "ko-KR": "슬라임 중에서는 꽤 강한 부류에 들지만 특별한 능력이 있는 것은 아니므로 무섭지 않다.",
+        "en-US": "It ranks among the stronger slimes, but it has no special abilities, so it is not frightening."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

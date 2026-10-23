@@ -1,0 +1,40 @@
+{
+  "resource": "02DD",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "施有风系魔法的剑。\n触碰剑身会被电得噼啪作响，请小心。\n对土属性魔物能发挥威力。",
+        "ko-KR": "바람 마법이 걸린 검. 날에 닿으면 찌릿하니 주의. 토 속성 마물에게 위력을 발휘한다.",
+        "en-US": "A sword enchanted with wind magic. Touching the blade gives a sharp shock, so be careful. Effective against earth-attribute monsters."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

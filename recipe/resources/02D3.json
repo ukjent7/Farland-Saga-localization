@@ -1,0 +1,40 @@
+{
+  "resource": "02D3",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "产自北方寒冷地区的酒。\n对感冒或冻僵的人有效。\n写作“伏特加”，读作“伏特加”。\n恢复10点体力和少许魔力。",
+        "ko-KR": "북쪽의 추운 땅에서 만드는 술. 감기에 걸린 사람, 얼어붙은 사람에게 유효. 보드카라고 쓰고 보드카라고 읽는다. 체력 10과 마력을 조금 회복시킨다.",
+        "en-US": "A liquor made in the cold northern lands. Effective on people with colds or who are frozen. It is written as vodka and read as vodka. Restores 10 HP and a little MP."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

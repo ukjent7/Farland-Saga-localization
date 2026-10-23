@@ -1,0 +1,40 @@
+{
+  "resource": "0323",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "用编织铁丝覆盖全身的铠甲。\n比锁子甲稍微更不灵活。",
+        "ko-KR": "전신을 엮은 철사로 덮는 형태의 갑옷. 체인 메일보다 조금 움직이기 어렵다.",
+        "en-US": "Armor that covers the whole body in woven wire. It is somewhat harder to move in than chain mail."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

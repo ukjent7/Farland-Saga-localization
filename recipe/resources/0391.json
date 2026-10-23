@@ -1,0 +1,40 @@
+{
+  "resource": "0391",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "从冰之精灵界召唤冰雪龙，\n掀起暴风雪，冻结大范围内的敌人。",
+        "ko-KR": "얼음의 정령계에서 스노 드래곤을 소환해 대눈보라를 일으킨다. 넓은 범위의 적을 얼릴 수 있다.",
+        "en-US": "Summons a Snow Dragon from the ice spirit realm and raises a great blizzard. It can freeze enemies over a wide area."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

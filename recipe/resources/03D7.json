@@ -1,0 +1,40 @@
+{
+  "resource": "03D7",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "栖息在地底的巨大魔物。\n有时会被奉为矿山之神。\n发怒时就引发地震，真是麻烦的小家伙。",
+        "ko-KR": "지하에 서식하는 거대 몬스터. 광산의 신으로 숭배되기도 한다. 화나면 지진을 일으키는 골칫덩이.",
+        "en-US": "A giant monster that lives underground. It is sometimes worshipped as a god of mines. When angered, it causes earthquakes—a real handful."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resource": "0326",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "秘银钢制成的锁子甲。\n轻巧坚固，还具有魔法抗性。",
+        "ko-KR": "미스릴강으로 만든 체인 메일. 가볍고 튼튼하며 마법 저항 효과도 갖추었다.",
+        "en-US": "Chain mail made of mithril steel. Light, sturdy, and magically resistant."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

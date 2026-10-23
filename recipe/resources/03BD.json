@@ -1,0 +1,40 @@
+{
+  "resource": "03BD",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "短暂停止时间，在此期间将对手\n砍个不停。可想而知，最后只会\n留下破烂抹布般的残骸。",
+        "ko-KR": "아주 잠깐 시간을 멈추고 그동안 상대를 마구 벤다. 당연히 그 뒤에는 너덜너덜한 걸레만 남는다.",
+        "en-US": "Stops time for a brief moment and slashes the opponent to pieces in the meantime. Naturally, only a ragged scrap is left behind."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

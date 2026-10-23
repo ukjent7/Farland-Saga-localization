@@ -15,17 +15,20 @@ Plan layout (little-endian):
 
 Tile-atlas masks are one byte per pixel: 0 keeps the erased background, 1 is
 the outline/shadow colour, 2 is the body colour.  Mono writes are already
-packed 1bpp rows, one byte per eight pixels, MSB first.
+packed 1bpp rows, one byte per eight pixels, MSB first.  Story pages store a
+196x48 2bpp image plus the character count for the timing table.
 """
 import argparse
 import gzip
 import hashlib
 import json
+import math
 import struct
 import sys
 from collections import Counter
 from pathlib import Path
 
+from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 MAGIC = b'FS2RECIPE1\n'
@@ -35,6 +38,7 @@ DEFAULT_RECIPE = REPO / 'recipe'
 DEFAULT_OUTPUT = REPO / 'patcher' / 'plan' / 'plan.bin'
 TILE_FORMAT = 'tile_atlas_8bpp'
 MONO_FORMAT = 'mono_bitmap_1bpp'
+STORY_FORMAT = 'story_page_2bpp'
 
 
 def digest(data):
@@ -121,6 +125,30 @@ def load_font(path):
         return ImageFont.truetype(str(path), 16)
     except OSError as error:
         raise SystemExit(f'cannot load font {path}: {error}') from None
+
+
+_FONT_CMAPS = {}
+
+
+def font_cmap(path):
+    key = str(path)
+    if key not in _FONT_CMAPS:
+        font = TTFont(key)
+        cmap = set()
+        for table in font['cmap'].tables:
+            cmap.update(table.cmap)
+        _FONT_CMAPS[key] = cmap
+    return _FONT_CMAPS[key]
+
+
+def check_font_coverage(recipe, language, fonts, text, rid, name):
+    path = font_path_for(recipe, language, fonts, 'pillow')
+    cmap = font_cmap(path)
+    missing = sorted({char for char in text
+                      if char not in '\n\r\t' and ord(char) not in cmap})
+    if missing:
+        codes = ' '.join(f'U+{ord(char):04X}' for char in missing)
+        raise SystemExit(f'{rid}/{name}: {language} font lacks {codes}')
 
 
 def font_path_for(recipe, language, fonts, render):
@@ -512,6 +540,31 @@ def validate_mono_recipe(rid, recipe, languages, fonts, size):
                 for language in languages:
                     if language not in text or not isinstance(text[language], str):
                         raise SystemExit(f'{rid}/{name}[{index}]: missing {language} text')
+                    check_font_coverage(recipe, language, fonts, text[language], rid,
+                                        f'{name}[{index}]')
+            for key in ('max_size', 'min_size'):
+                if not isinstance(write.get(key), int) or write[key] < 7:
+                    raise SystemExit(f'{rid}/{name}: {key} must be at least 7')
+            if write['min_size'] > write['max_size']:
+                raise SystemExit(f'{rid}/{name}: min_size exceeds max_size')
+        elif write.get('wrap'):
+            text = write.get('text')
+            if not isinstance(text, dict):
+                raise SystemExit(f'{rid}/{name}: wrapped canvas needs a text object')
+            for language in languages:
+                if language not in text or not isinstance(text[language], str):
+                    raise SystemExit(f'{rid}/{name}: missing {language} text')
+                words = text[language].replace('\n', ' ')
+                check_font_coverage(recipe, language, fonts, words, rid, name)
+            for key in ('line_height', 'max_lines'):
+                if not isinstance(write.get(key), int) or write[key] < 1:
+                    raise SystemExit(f'{rid}/{name}: {key} must be a positive integer')
+            if write['line_height'] * write['max_lines'] > height:
+                raise SystemExit(f'{rid}/{name}: wrapped lines leave the canvas')
+            if not isinstance(write.get('reserve', 0), int) or write['reserve'] < 0:
+                raise SystemExit(f'{rid}/{name}: reserve must be non-negative')
+            if write.get('align', 'center') not in ('left', 'center'):
+                raise SystemExit(f'{rid}/{name}: align must be left or center')
             for key in ('max_size', 'min_size'):
                 if not isinstance(write.get(key), int) or write[key] < 7:
                     raise SystemExit(f'{rid}/{name}: {key} must be at least 7')
@@ -559,6 +612,13 @@ def validate_manifest(manifest, recipe_dir):
     resources = manifest.get('resources')
     if not isinstance(resources, dict) or not resources:
         raise SystemExit('manifest needs at least one resource')
+    story = manifest.get('story')
+    if story is not None:
+        if not isinstance(story, dict) or not story.get('recipe') or not story.get('pages'):
+            raise SystemExit('manifest story block needs recipe and pages')
+        for key in ('recipe', 'pages'):
+            if not (recipe_dir / story[key]).is_file():
+                raise SystemExit(f'manifest story {key} file is missing')
     for rid, meta in resources.items():
         if not isinstance(meta, dict):
             raise SystemExit(f'{rid}: resource entry must be an object')
@@ -637,6 +697,49 @@ def compile_tile(rid, meta, recipe, languages, fonts, unifont, oracle, blob, pre
     return header, report
 
 
+def wrap_text(draw, text, font, max_width, language):
+    """Split one paragraph into lines that fit max_width."""
+    if language == 'zh-CN':
+        units = list(text)
+        separator = ''
+    else:
+        units = text.split(' ')
+        separator = ' '
+    lines = []
+    line = ''
+    for unit in units:
+        candidate = f'{line}{separator}{unit}' if line else unit
+        if draw.textlength(candidate, font=font) <= max_width:
+            line = candidate
+            continue
+        if line:
+            lines.append(line)
+            line = ''
+        if draw.textlength(unit, font=font) <= max_width:
+            line = unit
+            continue
+        piece = ''
+        for char in unit:
+            if piece and draw.textlength(piece + char, font=font) > max_width:
+                lines.append(piece)
+                piece = char
+            else:
+                piece += char
+        line = piece
+    if line:
+        lines.append(line)
+    return lines
+
+
+def wrap_paragraphs(draw, text, font, max_width, language):
+    lines = []
+    for paragraph in text.split('\n'):
+        paragraph = paragraph.strip()
+        if paragraph:
+            lines.extend(wrap_text(draw, paragraph, font, max_width, language))
+    return lines
+
+
 def paint_slot(text, width, height, path, largest, smallest, background, ink,
                box_width, align='center'):
     image = Image.new('1', (width, height), background)
@@ -699,26 +802,61 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
             else:
                 image = Image.new('1', (width, height), spec['background'])
                 draw = ImageDraw.Draw(image)
-                for line in spec['lines']:
-                    text = text_for(line, language)
+                if spec.get('wrap'):
+                    text = text_for(spec, language)
+                    reserve = spec.get('reserve', 0)
                     chosen = None
-                    for size in range(line['max_size'], line['min_size'] - 1, -1):
+                    for size in range(spec['max_size'], spec['min_size'] - 1, -1):
                         font = ImageFont.truetype(str(path), size)
-                        bbox = draw.textbbox((0, 0), text, font=font)
-                        ink_width, ink_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
-                        if ink_width <= width - spec.get('reserve', 0) and ink_height <= line['height']:
-                            chosen = (size, font, bbox, ink_width, ink_height)
-                            break
+                        lines = wrap_paragraphs(draw, text, font, width - reserve, language)
+                        if len(lines) > spec['max_lines']:
+                            continue
+                        boxes = [draw.textbbox((0, 0), line, font=font) for line in lines]
+                        if any(box[2] - box[0] > width - reserve for box in boxes):
+                            continue
+                        chosen = (size, font, lines, boxes)
+                        break
                     if chosen is None:
-                        raise SystemExit(f'{rid}/{name}: {text!r} does not fit the card')
-                    size, font, bbox, ink_width, ink_height = chosen
-                    x = (width - ink_width) // 2 - bbox[0]
-                    y = line['y'] + (line['height'] - ink_height) // 2 - bbox[1]
-                    draw.text((x, y), text, font=font, fill=spec['ink'])
-                    report['writes'].setdefault(language, {})[f'{name}:{line["y"]}'] = {
-                        'text': text, 'font': recipe['fonts'][language],
-                        'font_size': size, 'y': line['y'],
-                    }
+                        raise SystemExit(
+                            f'{rid}/{name}: {text!r} needs more than '
+                            f'{spec["max_lines"]} lines at {spec["min_size"]}px')
+                    size, font, lines, boxes = chosen
+                    left = spec.get('left', 0)
+                    top = spec.get('top', 0)
+                    for index, line in enumerate(lines):
+                        bbox = boxes[index]
+                        ink_width = bbox[2] - bbox[0]
+                        if spec.get('align', 'center') == 'left':
+                            x = left - bbox[0]
+                        else:
+                            x = (width - ink_width) // 2 - bbox[0]
+                        y = top + index * spec['line_height'] - bbox[1]
+                        draw.text((x, y), line, font=font, fill=spec['ink'])
+                        report['writes'].setdefault(language, {})[f'{name}[{index}]'] = {
+                            'text': line, 'font': recipe['fonts'][language],
+                            'font_size': size, 'y': y + bbox[1],
+                        }
+                else:
+                    for line in spec['lines']:
+                        text = text_for(line, language)
+                        chosen = None
+                        for size in range(line['max_size'], line['min_size'] - 1, -1):
+                            font = ImageFont.truetype(str(path), size)
+                            bbox = draw.textbbox((0, 0), text, font=font)
+                            ink_width, ink_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
+                            if ink_width <= width - spec.get('reserve', 0) and ink_height <= line['height']:
+                                chosen = (size, font, bbox, ink_width, ink_height)
+                                break
+                        if chosen is None:
+                            raise SystemExit(f'{rid}/{name}: {text!r} does not fit the card')
+                        size, font, bbox, ink_width, ink_height = chosen
+                        x = (width - ink_width) // 2 - bbox[0]
+                        y = line['y'] + (line['height'] - ink_height) // 2 - bbox[1]
+                        draw.text((x, y), text, font=font, fill=spec['ink'])
+                        report['writes'].setdefault(language, {})[f'{name}:{line["y"]}'] = {
+                            'text': text, 'font': recipe['fonts'][language],
+                            'font_size': size, 'y': line['y'],
+                        }
                 data = image.tobytes()
                 writes.append({'name': name, 'offset': offset,
                                'data_offset': len(blob), 'data_length': len(data)})
@@ -745,6 +883,327 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
         'operations': operations,
     }
     return header, report
+
+
+_UNIFONT_CELLS = {}
+
+
+def unifont_cell(font, character, rid):
+    key = ord(character)
+    if key not in _UNIFONT_CELLS:
+        raw = font.get(key)
+        if raw is None:
+            raise SystemExit(f'{rid}: Unifont has no glyph for U+{key:04X} ({character!r})')
+        if len(raw) not in (16, 32):
+            raise SystemExit(f'{rid}: U+{key:04X} has an unexpected Unifont cell')
+        width = 16 if len(raw) == 32 else 8
+        _UNIFONT_CELLS[key] = (Image.frombytes('1', (width, 16), raw), width)
+    return _UNIFONT_CELLS[key]
+
+
+_STORY_CLOSE = set('，。！？、；：…）】」』》〉”’,.;:!?)]}')
+_STORY_OPEN = set('（【「『《〈“‘([{')
+
+
+def _story_atoms(font, paragraph, language, max_width, rid):
+    atoms = []
+    if language in ('en-US', 'ko-KR'):
+        for word in paragraph.split(' '):
+            if not word:
+                continue
+            glyphs = [unifont_cell(font, char, rid) for char in word]
+            width = sum(glyph[1] for glyph in glyphs)
+            if width <= max_width:
+                atoms.append((glyphs, width, False, word))
+                continue
+            chunk = []
+            used = 0
+            pieces = []
+            for glyph, glyph_width in glyphs:
+                if chunk and used + glyph_width > max_width:
+                    pieces.append((chunk, used))
+                    chunk = []
+                    used = 0
+                chunk.append((glyph, glyph_width))
+                used += glyph_width
+            if chunk:
+                pieces.append((chunk, used))
+            for index, (piece, piece_width) in enumerate(pieces):
+                atoms.append((piece, piece_width, index > 0, word))
+    else:
+        for character in paragraph:
+            glyph, width = unifont_cell(font, character, rid)
+            atoms.append(([(glyph, width)], width, True, character))
+    return atoms
+
+
+def _wrap_story_paragraph(font, paragraph, language, max_width, space_width, rid):
+    """Break one paragraph into balanced lines, keeping punctuation with its text."""
+    atoms = _story_atoms(font, paragraph, language, max_width, rid)
+    count = len(atoms)
+    if count == 0:
+        return []
+    prefix = [0] * (count + 1)
+    spaced = [0] * (count + 1)
+    for index, (_, width, glue, _) in enumerate(atoms):
+        prefix[index + 1] = prefix[index] + width
+        spaced[index + 1] = spaced[index] + (0 if glue else 1)
+
+    def line_width(start, end):
+        return (prefix[end] - prefix[start] +
+                space_width * (spaced[end] - spaced[start + 1]))
+
+    def break_allowed(start, end):
+        if end >= count or language in ('en-US', 'ko-KR'):
+            return True
+        if atoms[end][3] in _STORY_CLOSE:
+            return False
+        if start > 0 and atoms[start - 1][3] in _STORY_OPEN:
+            return False
+        return True
+
+    infinity = 10 ** 9
+    minimal = [infinity] * (count + 1)
+    minimal[0] = 0
+    for end in range(1, count + 1):
+        for start in range(end):
+            if (minimal[start] + 1 < minimal[end] and
+                    line_width(start, end) <= max_width and break_allowed(start, end)):
+                minimal[end] = minimal[start] + 1
+    if minimal[count] >= infinity:
+        return None
+
+    cost = [infinity] * (count + 1)
+    previous = [-1] * (count + 1)
+    cost[0] = 0
+    for end in range(1, count + 1):
+        for start in range(end):
+            if minimal[start] + 1 != minimal[end] or not break_allowed(start, end):
+                continue
+            width = line_width(start, end)
+            if width > max_width:
+                continue
+            value = cost[start] + (max_width - width) ** 2
+            if value < cost[end]:
+                cost[end] = value
+                previous[end] = start
+    if previous[count] < 0:
+        return None
+
+    space = Image.new('1', (space_width, 16))
+    lines = []
+    end = count
+    while end > 0:
+        start = previous[end]
+        if start < 0:
+            return None
+        line = []
+        for index in range(start, end):
+            if index > start and not atoms[index][2]:
+                line.append((space, space_width))
+            line.extend(atoms[index][0])
+        lines.append(line)
+        end = start
+    lines.reverse()
+    return lines
+
+
+def wrap_story_unifont(font, text, language, max_width, compact, rid):
+    """Wrap one story page using Unifont's native 8/16px cells."""
+    space_width = 4 if compact else 8
+    lines = []
+    for paragraph in text.split('\n'):
+        paragraph = paragraph.strip()
+        if not paragraph:
+            continue
+        wrapped = _wrap_story_paragraph(font, paragraph, language, max_width,
+                                        space_width, rid)
+        if wrapped is None:
+            return None
+        lines.extend(wrapped)
+    return lines
+
+
+def paint_story_unifont(font, text, language, spec, rid):
+    variants = [text]
+    if '\n' in text:
+        if language in ('en-US', 'ko-KR'):
+            variants.append(' '.join(part.strip() for part in text.split('\n') if part.strip()))
+        else:
+            variants.append(''.join(part.strip() for part in text.split('\n') if part.strip()))
+    for compact in (False, True):
+        for variant in variants:
+            lines = wrap_story_unifont(font, variant, language,
+                                       spec['max_width'], compact, rid)
+            if lines is None or len(lines) > spec['max_lines']:
+                continue
+            mask = Image.new('1', (spec['width'], spec['height']))
+            for index, line in enumerate(lines):
+                x = 0
+                for glyph, width in line:
+                    mask.paste(glyph, (x, index * spec['line_height']))
+                    x += width
+            return mask, spec['unifont_size'], len(lines)
+    return None
+
+
+def paint_story_ttf(path, text, language, spec, rid):
+    draw = ImageDraw.Draw(Image.new('L', (1, 1)))
+    variants = [text]
+    if '\n' in text:
+        if language in ('en-US', 'ko-KR'):
+            variants.append(' '.join(part.strip() for part in text.split('\n') if part.strip()))
+        else:
+            variants.append(''.join(part.strip() for part in text.split('\n') if part.strip()))
+    for size in range(spec['max_ttf_size'], spec['min_ttf_size'] - 1, -1):
+        font = ImageFont.truetype(str(path), size)
+        for variant in variants:
+            lines = wrap_paragraphs(draw, variant, font, spec['max_width'], language)
+            if len(lines) > spec['max_lines']:
+                continue
+            if any(draw.textlength(line, font=font) > spec['max_width'] for line in lines):
+                continue
+            mask = Image.new('1', (spec['width'], spec['height']))
+            target = ImageDraw.Draw(mask)
+            for index, line in enumerate(lines):
+                bbox = draw.textbbox((0, 0), line, font=font)
+                target.text((-bbox[0], index * spec['line_height'] - bbox[1]),
+                            line, font=font, fill=1)
+            return mask, size, len(lines)
+    raise SystemExit(f'{rid}: {language} story text does not fit {spec["max_lines"]} lines '
+                     f'at {spec["min_ttf_size"]}px: {text!r}')
+
+
+def compose_story_image(mask, spec):
+    shadow = Image.new('1', (spec['width'], spec['height']))
+    shadow.paste(mask, (1, 1))
+    for y in range(spec['line_height'], spec['height'], spec['line_height']):
+        shadow.paste(0, (0, y, spec['width'], y + 1))
+    image = Image.new('L', (spec['width'], spec['height']), 0)
+    image.paste(85, (0, 0), shadow)
+    image.paste(170, (0, 0), mask)
+    span = 0
+    for index in range(spec['height'] // spec['line_height']):
+        band = image.crop((0, index * spec['line_height'],
+                           spec['width'], (index + 1) * spec['line_height']))
+        bbox = band.getbbox()
+        if bbox:
+            span = max(span, index * spec['width'] + bbox[2])
+    timing = math.ceil(span / spec['columns_per_character'])
+    return image, timing
+
+
+def encode_story_2bpp(image):
+    pixels = image.load()
+    data = bytearray(2352)
+    for column in range(588):
+        for half in range(2):
+            word = 0
+            for y in range(8):
+                value = pixels[column % 196, column // 196 * 16 + half * 8 + y] // 85
+                word |= value << (14 - y * 2)
+            struct.pack_into('>H', data, column * 4 + half * 2, word)
+    return bytes(data)
+
+
+def compile_story(recipe_dir, manifest, languages, fonts, unifont, oracle, blob,
+                  preview_dir):
+    settings = manifest['story']
+    spec = read_json(recipe_dir / settings['recipe'])
+    if spec.get('format') != STORY_FORMAT:
+        raise SystemExit(f'unsupported story format {spec.get("format")!r}')
+    pages = read_json(recipe_dir / settings['pages']).get('pages')
+    if not isinstance(pages, list) or not pages:
+        raise SystemExit('story page index is empty')
+    translations = {}
+    for language in languages:
+        source = spec.get('sources', {}).get(language)
+        if not source:
+            raise SystemExit(f'story recipe has no source for {language}')
+        rows = read_json(REPO / source)
+        translations[language] = {str(row.get('id')): row for row in rows}
+        if len(translations[language]) != len(rows):
+            raise SystemExit(f'{source}: duplicate story page ids')
+
+    resources = {}
+    report = {}
+    seen = set()
+    for page in pages:
+        pid = str(page.get('id'))
+        if not pid or pid in seen:
+            raise SystemExit(f'story page id is missing or repeated: {pid!r}')
+        seen.add(pid)
+        offset = page.get('archive_offset')
+        size = page.get('size')
+        if not isinstance(offset, int) or offset < 0 or offset % 2048:
+            raise SystemExit(f'story page {pid}: archive_offset is not sector aligned')
+        if size != 4096:
+            raise SystemExit(f'story page {pid}: size must be 4096')
+        texts = {}
+        blank = True
+        for language in languages:
+            row = translations[language].get(pid)
+            if row is None:
+                raise SystemExit(f'story page {pid}: missing {language} translation')
+            text = row.get('translation', '')
+            if row.get('blank') or not text.strip():
+                texts[language] = ''
+            else:
+                texts[language] = text
+                blank = False
+        if blank:
+            continue
+        if any(not text.strip() for text in texts.values()):
+            raise SystemExit(f'story page {pid}: has text in some languages only')
+        rid = f'P{pid}'
+        operations = {}
+        page_report = {}
+        for language in languages:
+            mask = paint_story_unifont(unifont, texts[language], language, spec, rid)
+            if mask is None:
+                role = spec.get('fonts', {}).get(language)
+                if not role or role not in fonts:
+                    raise SystemExit(f'story recipe has no font role for {language}')
+                check_font_coverage(spec, language, fonts, texts[language], rid, 'story')
+                mask = paint_story_ttf(fonts[role], texts[language], language, spec, rid)
+                font_name = role
+            else:
+                font_name = 'Unifont'
+            image, timing = compose_story_image(mask[0], spec)
+            if timing > (spec['timing_end'] - spec['timing_table_offset']) // 4 - 1:
+                raise SystemExit(f'{rid}: {language} timing table too long ({timing})')
+            data = encode_story_2bpp(image)
+            operations[language] = [{
+                'type': 'story_page',
+                'data_offset': len(blob),
+                'data_length': len(data),
+                'timing_characters': timing,
+            }]
+            blob.extend(data)
+            page_report[language] = {
+                'font': font_name,
+                'font_size': mask[1],
+                'lines': mask[2],
+                'timing_characters': timing,
+            }
+            if preview_dir:
+                preview_dir.mkdir(parents=True, exist_ok=True)
+                image.resize((image.width * 3, image.height * 3),
+                             Image.Resampling.NEAREST).save(
+                    preview_dir / f'{language}-{rid}-mask.png')
+        resources[rid] = {
+            'format': STORY_FORMAT,
+            'archive_offset': offset,
+            'size': size,
+            'original_sha256': page.get('original_sha256'),
+            'expected': {language: oracle.get(rid, {}).get(language, '')
+                         for language in languages},
+            'operations': operations,
+        }
+        report[rid] = page_report
+    if not resources:
+        raise SystemExit('story recipe produced no pages')
+    return resources, report
 
 
 def load_oracle(recipe_dir, languages, allow_missing):
@@ -802,6 +1261,21 @@ def compile_plan(recipe_dir, output, report_path, preview_dir, allow_missing=Fal
             raise SystemExit(f'{rid}: unsupported recipe format {fmt!r}')
         header['resources'][rid] = resource_header
         report['resources'][rid] = resource_report
+
+    if manifest.get('story'):
+        story_resources, story_report = compile_story(
+            recipe_dir, manifest, languages, fonts, unifont, oracle, blob, preview_dir)
+        for rid, resource_header in story_resources.items():
+            if rid in header['resources']:
+                raise SystemExit(f'{rid}: story page collides with a resource id')
+            header['resources'][rid] = resource_header
+        report['story'] = story_report
+
+    if not allow_missing:
+        for rid, resource in header['resources'].items():
+            for language in languages:
+                if not resource['expected'].get(language):
+                    raise SystemExit(f'{rid}: missing {language} expected hash')
 
     header['binary_sha256'] = digest(blob)
     header_bytes = json.dumps(header, ensure_ascii=False, sort_keys=True,
