@@ -26,7 +26,6 @@ import math
 import struct
 import sys
 from collections import Counter
-from io import BytesIO
 from pathlib import Path
 
 from fontTools.ttLib import TTFont
@@ -1285,9 +1284,15 @@ def paint_text_layer(width, height, text, path, largest, smallest, align,
 
 
 def encode_layer(layer):
-    buffer = BytesIO()
-    layer.save(buffer, format='PNG', compress_level=9)
-    return buffer.getvalue()
+    """Return tightly packed RGBA pixels for the plan blob.
+
+    Pillow's PNG compressor uses the host zlib, so identical pixels produced
+    different bytes on different machines.  Raw rows are deterministic and the
+    plan's gzip wrapper still compresses the transparent areas.
+    """
+    if layer.mode != 'RGBA':
+        layer = layer.convert('RGBA')
+    return layer.tobytes()
 
 
 def validate_texture_recipe(recipe, languages, fonts):
@@ -1431,7 +1436,9 @@ def compile_texture(recipe_dir, manifest, languages, fonts, blob, preview_dir):
                 label['align'], cell=label['cell'])
             data = encode_layer(layer)
             labels.append({'part': part, 'box': [x0, y0, x1, y1],
-                           'data_offset': len(blob), 'data_length': len(data)})
+                           'data_offset': len(blob), 'data_length': len(data),
+                           'data_width': layer.width, 'data_height': layer.height,
+                           'data_format': 'raw_rgba'})
             blob.extend(data)
             if preview is not None:
                 preview.alpha_composite(layer, (x0, y0))
@@ -1447,7 +1454,9 @@ def compile_texture(recipe_dir, manifest, languages, fonts, blob, preview_dir):
                 path, panels[f'{key}_size'], panels['minimum_size'], 'center',
                 stroke=stroke)
             data = encode_layer(layer)
-            panel_layers[key] = {'data_offset': len(blob), 'data_length': len(data)}
+            panel_layers[key] = {'data_offset': len(blob), 'data_length': len(data),
+                                 'data_width': layer.width, 'data_height': layer.height,
+                                 'data_format': 'raw_rgba'}
             blob.extend(data)
             details.append({'name': f'panel-{key}', 'part': -1,
                             'font_size': chosen, 'box': box, 'layer_bytes': len(data)})

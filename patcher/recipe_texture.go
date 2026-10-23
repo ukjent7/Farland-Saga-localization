@@ -150,7 +150,8 @@ func generateRecipeTexture(file *recipeFile, original []byte, basePath, exePath 
 		if atlas.boxes[label.Part] != label.Box {
 			return nil, fmt.Errorf("Texture 标签 part %d 坐标与 recipe 不符", label.Part)
 		}
-		layer, err := decodeTextureLayer(blob, label.DataOffset, label.DataLength)
+		layer, err := decodeTextureLayer(blob, label.DataOffset, label.DataLength,
+			label.DataWidth, label.DataHeight, label.DataFormat)
 		if err != nil {
 			return nil, err
 		}
@@ -165,11 +166,13 @@ func generateRecipeTexture(file *recipeFile, original []byte, basePath, exePath 
 	if file.Panels == nil || len(file.Panels.Parts) == 0 {
 		return nil, errors.New("Texture 缺少面板信息")
 	}
-	titleLayer, err := decodeTextureLayer(blob, layers.Title.DataOffset, layers.Title.DataLength)
+	titleLayer, err := decodeTextureLayer(blob, layers.Title.DataOffset, layers.Title.DataLength,
+		layers.Title.DataWidth, layers.Title.DataHeight, layers.Title.DataFormat)
 	if err != nil {
 		return nil, err
 	}
-	buttonLayer, err := decodeTextureLayer(blob, layers.Button.DataOffset, layers.Button.DataLength)
+	buttonLayer, err := decodeTextureLayer(blob, layers.Button.DataOffset, layers.Button.DataLength,
+		layers.Button.DataWidth, layers.Button.DataHeight, layers.Button.DataFormat)
 	if err != nil {
 		return nil, err
 	}
@@ -243,18 +246,35 @@ func generateRecipeTexture(file *recipeFile, original []byte, basePath, exePath 
 	return output, nil
 }
 
-func decodeTextureLayer(blob []byte, offset, length int) (*image.NRGBA, error) {
+func decodeTextureLayer(blob []byte, offset, length, width, height int, format string) (*image.NRGBA, error) {
 	if offset < 0 || length <= 0 || offset > len(blob) || length > len(blob)-offset {
 		return nil, errors.New("Texture 图层范围越过 plan")
 	}
-	decoded, err := png.Decode(bytes.NewReader(blob[offset : offset+length]))
-	if err != nil {
-		return nil, fmt.Errorf("Texture 图层 PNG 解码失败: %w", err)
+	encoded := blob[offset : offset+length]
+	switch format {
+	case "", "png":
+		decoded, err := png.Decode(bytes.NewReader(encoded))
+		if err != nil {
+			return nil, fmt.Errorf("Texture 图层 PNG 解码失败: %w", err)
+		}
+		bounds := decoded.Bounds()
+		if width > 0 && height > 0 &&
+			(bounds.Dx() != width || bounds.Dy() != height) {
+			return nil, errors.New("Texture 图层尺寸与声明不符")
+		}
+		layer := image.NewNRGBA(image.Rect(0, 0, bounds.Dx(), bounds.Dy()))
+		draw.Draw(layer, layer.Bounds(), decoded, bounds.Min, draw.Src)
+		return layer, nil
+	case "raw_rgba":
+		if width <= 0 || height <= 0 || length != width*height*4 {
+			return nil, errors.New("Texture raw 图层尺寸不合法")
+		}
+		layer := image.NewNRGBA(image.Rect(0, 0, width, height))
+		copy(layer.Pix, encoded)
+		return layer, nil
+	default:
+		return nil, fmt.Errorf("Texture 未知图层编码 %q", format)
 	}
-	bounds := decoded.Bounds()
-	layer := image.NewNRGBA(image.Rect(0, 0, bounds.Dx(), bounds.Dy()))
-	draw.Draw(layer, layer.Bounds(), decoded, bounds.Min, draw.Src)
-	return layer, nil
 }
 
 func paintTexturePanel(target *image.NRGBA, panel, titleBox, bodyBox [4]int, title, button *image.NRGBA) {

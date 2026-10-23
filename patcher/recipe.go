@@ -22,7 +22,10 @@ const (
 	recipeMagic       = "FS2RECIPE1\n"
 	recipePlanFormat  = 2
 	maxRecipeHeader   = 16 << 20
-	maxRecipeMaskData = 64 << 20
+	// Texture layers are raw RGBA so their bytes do not depend on the host
+	// zlib. The three-language blob is about 120 MiB before the plan's gzip
+	// wrapper, so leave room for more labels while still bounding the read.
+	maxRecipeMaskData = 256 << 20
 	maxRecipeCells    = 1 << 20
 )
 
@@ -80,11 +83,17 @@ type recipeTextureLabel struct {
 	Box        [4]int `json:"box"`
 	DataOffset int    `json:"data_offset"`
 	DataLength int    `json:"data_length"`
+	DataWidth  int    `json:"data_width"`
+	DataHeight int    `json:"data_height"`
+	DataFormat string `json:"data_format"`
 }
 
 type recipeTextureLayer struct {
-	DataOffset int `json:"data_offset"`
-	DataLength int `json:"data_length"`
+	DataOffset int    `json:"data_offset"`
+	DataLength int    `json:"data_length"`
+	DataWidth  int    `json:"data_width"`
+	DataHeight int    `json:"data_height"`
+	DataFormat string `json:"data_format"`
 }
 
 type recipeResource struct {
@@ -348,14 +357,19 @@ func validateRecipeTexture(file *recipeFile, plan *recipePlan) error {
 			if !validBox(label.Box, width, height) {
 				return fmt.Errorf("%s/%s: label box 越界", file.Path, language)
 			}
-			if err := validateLayer(plan, label.DataOffset, label.DataLength); err != nil {
+			if err := validateTextureLayer(plan, label.DataOffset, label.DataLength,
+				label.DataWidth, label.DataHeight, label.DataFormat, label.Box); err != nil {
 				return fmt.Errorf("%s/%s: %w", file.Path, language, err)
 			}
 		}
-		if err := validateLayer(plan, layers.Title.DataOffset, layers.Title.DataLength); err != nil {
+		if err := validateTextureLayer(plan, layers.Title.DataOffset, layers.Title.DataLength,
+			layers.Title.DataWidth, layers.Title.DataHeight, layers.Title.DataFormat,
+			file.Panels.TitleBox); err != nil {
 			return fmt.Errorf("%s/%s: title %w", file.Path, language, err)
 		}
-		if err := validateLayer(plan, layers.Button.DataOffset, layers.Button.DataLength); err != nil {
+		if err := validateTextureLayer(plan, layers.Button.DataOffset, layers.Button.DataLength,
+			layers.Button.DataWidth, layers.Button.DataHeight, layers.Button.DataFormat,
+			file.Panels.BodyBox); err != nil {
 			return fmt.Errorf("%s/%s: button %w", file.Path, language, err)
 		}
 	}
@@ -367,11 +381,25 @@ func validBox(box [4]int, width, height int) bool {
 		box[2] <= width && box[3] <= height
 }
 
-func validateLayer(plan *recipePlan, offset, length int) error {
+func validateTextureLayer(plan *recipePlan, offset, length, width, height int,
+	format string, box [4]int) error {
 	if offset < 0 || length <= 0 || offset > len(plan.blob) || length > len(plan.blob)-offset {
 		return errors.New("图层数据范围越过 plan")
 	}
-	return nil
+	switch format {
+	case "", "png":
+		return nil
+	case "raw_rgba":
+		if width != box[2]-box[0] || height != box[3]-box[1] {
+			return errors.New("raw 图层尺寸与 box 不符")
+		}
+		if length != width*height*4 {
+			return errors.New("raw 图层长度与尺寸不符")
+		}
+		return nil
+	default:
+		return fmt.Errorf("未知图层编码 %q", format)
+	}
 }
 
 func validResourceID(rid string) bool {
