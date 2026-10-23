@@ -24,6 +24,48 @@
     "recipe": "texture.json"
   },
   "resources": {
+    "00E2": {
+      "recipe": "resources/cards/00E2.json",
+      "archive_offset": 18333696,
+      "size": 30720,
+      "original_sha256": "be0ca9ea20cb4999dcca883054ab649c33359c11aa8fbb3784e36b3302f4494e"
+    },
+    "00E4": {
+      "recipe": "resources/cards/00E4.json",
+      "archive_offset": 18442240,
+      "size": 28672,
+      "original_sha256": "b7447d1e439e3bb06f8a10f39a793fe255347d174dc5e62cd108605295dd413e"
+    },
+    "00EA": {
+      "recipe": "resources/cards/00EA.json",
+      "archive_offset": 18839552,
+      "size": 28672,
+      "original_sha256": "152f1d794600955dd12a4383aedd997dc38f988280433d001635fbeaf52b1fde"
+    },
+    "00EC": {
+      "recipe": "resources/cards/00EC.json",
+      "archive_offset": 18941952,
+      "size": 22528,
+      "original_sha256": "1c4479bab2d4303a9cc80f3305bfb06c7db456c9e1dcb95b297e841ba45f48ef"
+    },
+    "00EF": {
+      "recipe": "resources/cards/00EF.json",
+      "archive_offset": 19120128,
+      "size": 26624,
+      "original_sha256": "b1872d39684e1aa436518fc067af0b803956f15eb3fb3bb8d120f73a7089eb46"
+    },
+    "00F0": {
+      "recipe": "resources/cards/00F0.json",
+      "archive_offset": 19146752,
+      "size": 26624,
+      "original_sha256": "c091f8003543e21d7eedf2cd775cb87feb80b79040b09223b90ec69003912c59"
+    },
+    "0101": {
+      "recipe": "resources/cards/0101.json",
+      "archive_offset": 20635648,
+      "size": 30720,
+      "original_sha256": "dcc2788e3f68b7da2f2e2f50fa5fc339f8b8d257db03bfb1a10759c9b0161498"
+    },
     "02B9": {
       "recipe": "resources/02B9.json",
       "archive_offset": 37584896,

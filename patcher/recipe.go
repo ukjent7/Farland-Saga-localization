@@ -19,9 +19,9 @@ import (
 )
 
 const (
-	recipeMagic       = "FS2RECIPE1\n"
-	recipePlanFormat  = 2
-	maxRecipeHeader   = 16 << 20
+	recipeMagic      = "FS2RECIPE1\n"
+	recipePlanFormat = 2
+	maxRecipeHeader  = 16 << 20
 	// Texture layers are raw RGBA so their bytes do not depend on the host
 	// zlib. The three-language blob is about 120 MiB before the plan's gzip
 	// wrapper, so leave room for more labels while still bounding the read.
@@ -450,6 +450,10 @@ func validateRecipeResource(rid string, resource *recipeResource, plan *recipePl
 		if len(resource.AtlasSize) != 0 {
 			return fmt.Errorf("%s: 位图资源不应带 atlas_size", rid)
 		}
+	case "card_tilemap_8bpp":
+		if len(resource.AtlasSize) != 0 {
+			return fmt.Errorf("%s: 角色卡资源不应带 atlas_size", rid)
+		}
 	case "story_page_2bpp":
 		if len(resource.AtlasSize) != 0 {
 			return fmt.Errorf("%s: 剧情页不应带 atlas_size", rid)
@@ -476,6 +480,10 @@ func validateRecipeResource(rid string, resource *recipeResource, plan *recipePl
 			}
 		case "mono_bitmap_1bpp":
 			if err := validateMonoOperation(rid, language, operation, resource, plan); err != nil {
+				return err
+			}
+		case "card_tilemap_8bpp":
+			if err := validateCardOperation(rid, language, operation, resource, plan); err != nil {
 				return err
 			}
 		case "story_page_2bpp":
@@ -584,6 +592,29 @@ func validateMonoOperation(rid, language string, operation recipeOperation, reso
 	for _, write := range operation.Writes {
 		if write.Name == "" {
 			return fmt.Errorf("%s: 位图写入缺少名字", rid)
+		}
+		if write.Offset < 0 || write.DataLength <= 0 ||
+			write.Offset > resource.Size || write.DataLength > resource.Size-write.Offset {
+			return fmt.Errorf("%s/%s: 写入范围越过资源", rid, write.Name)
+		}
+		if write.DataOffset < 0 || write.DataOffset > len(plan.blob) ||
+			write.DataLength > len(plan.blob)-write.DataOffset {
+			return fmt.Errorf("%s/%s: 写入数据范围越过 plan", rid, write.Name)
+		}
+	}
+	return nil
+}
+
+func validateCardOperation(rid, language string, operation recipeOperation, resource *recipeResource, plan *recipePlan) error {
+	if operation.Type != "tilemap_writes" {
+		return fmt.Errorf("%s: %s 的操作类型 %q 不受支持", rid, language, operation.Type)
+	}
+	if len(operation.Writes) == 0 || len(operation.Labels) != 0 || len(operation.Erase) != 0 {
+		return fmt.Errorf("%s: %s 的角色卡操作内容不合法", rid, language)
+	}
+	for _, write := range operation.Writes {
+		if write.Name == "" {
+			return fmt.Errorf("%s: 角色卡写入缺少名字", rid)
 		}
 		if write.Offset < 0 || write.DataLength <= 0 ||
 			write.Offset > resource.Size || write.DataLength > resource.Size-write.Offset {

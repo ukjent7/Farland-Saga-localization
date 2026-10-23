@@ -1,0 +1,121 @@
+{
+  "accent_rgb": [
+    106,
+    0,
+    0
+  ],
+  "colors": {
+    "accent": 146,
+    "black": 225,
+    "shade": 178,
+    "shadow": 157
+  },
+  "deco": {
+    "en-US": "Mother",
+    "ko-KR": "현모",
+    "zh-CN": "良母"
+  },
+  "deco_height": {
+    "en-US": 40,
+    "ko-KR": 48,
+    "zh-CN": 48
+  },
+  "description": "Opening character card 00EF.",
+  "format": "card_tilemap_8bpp",
+  "layout": "standard",
+  "lines": {
+    "en-US": [
+      [
+        "Gender",
+        "Female"
+      ],
+      [
+        "Age",
+        "Unknown"
+      ],
+      [
+        "Class",
+        "Elf"
+      ],
+      [
+        "Likes",
+        "Lulu"
+      ],
+      [
+        "Dislikes",
+        "Men"
+      ]
+    ],
+    "ko-KR": [
+      [
+        "성별",
+        "여성"
+      ],
+      [
+        "나이",
+        "불명"
+      ],
+      [
+        "클래스",
+        "엘프"
+      ],
+      [
+        "좋아함",
+        "루루"
+      ],
+      [
+        "싫어함",
+        "남자"
+      ]
+    ],
+    "zh-CN": [
+      [
+        "性别",
+        "女性"
+      ],
+      [
+        "年龄",
+        "不详"
+      ],
+      [
+        "职业",
+        "精灵"
+      ],
+      [
+        "喜欢",
+        "露露"
+      ],
+      [
+        "讨厌",
+        "男人"
+      ]
+    ]
+  },
+  "resource": "00EF",
+  "tilemap": {
+    "graphics_offset": 1728,
+    "map_offset": 528,
+    "size_field": 23184,
+    "tiles_x": 20,
+    "tiles_y": 30
+  },
+  "title": {
+    "en-US": "Sophia",
+    "ko-KR": "소피아",
+    "zh-CN": "索菲亚"
+  },
+  "title_height": 32,
+  "title_spacing": {
+    "en-US": 4,
+    "ko-KR": 8,
+    "zh-CN": 8
+  },
+  "title_y": 20,
+  "ys": [
+    70,
+    92,
+    115,
+    138,
+    163
+  ]
+}

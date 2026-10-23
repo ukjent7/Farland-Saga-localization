@@ -16,7 +16,8 @@ SHA-256 hashes.
   texture recipes, and the resource index (archive offset, size, original hash).
 - `resources/<id>.json` — one recipe per generated resource. A tile atlas lists
   erase regions, label boxes and styles; a 1bpp text bank lists slot writes; a
-  description bitmap holds one wrapped paragraph.
+  description bitmap holds one wrapped paragraph; an opening character card
+  stores its tile geometry, palette indices and translated layout.
 - `story.json` — story-page layout, language fonts and timing constants.
 - `story_pages.json` — the story page index: page id, bank, archive offset,
   size and the original SHA-256 of every 4096-byte page.
@@ -100,6 +101,11 @@ backup, and dispatches on its format:
   voice timing table to the translated character count. The page tail, which
   holds voice data, is preserved byte for byte. Unifont 16px is tried first;
   pages that do not fit fall back to the language font at 14px down to 9px.
+- `card_tilemap_8bpp`: render one of the seven opening character cards into an
+  indexed 8-bit tilemap. The recipe stores the map/graphics offsets, the palette
+  indices used by the art and the translated layout; the compiler deduplicates
+  8x8 tiles and emits only the map and graphics regions. The original header,
+  palette and unused tail stay untouched.
 - `binary_patches`: copy the original executable, require each patch's original
   bytes at its offset, replace them, and verify the declared patched size and
   SHA-256. The sequel patch changes one two-byte branch so the frontend uses the
@@ -127,10 +133,11 @@ backup rather than layering one language over another.
 
 ## Phase scope
 
-Generated disc resources (3016: 359 UI resources and 2657 story pages):
+Generated disc resources (3023: 366 UI resources and 2657 story pages):
 
 | Group | Resources |
 | --- | --- |
+| Opening character cards | `00E2`, `00E4`, `00EA`, `00EC`, `00EF`, `00F0`, `0101` |
 | Mission banners | `02B9`–`02C8` |
 | Shared UI atlas | `02C9` |
 | 1bpp text bank | `02CB` |
@@ -155,8 +162,10 @@ keeps closing punctuation off the start of a line.
 
 `Texture.tex` contains 502 parts. Phase 3 changes 370 of them: 363 labels plus
 seven option panels. The atlas keeps its 2370x4394 dimensions and 2048-byte SSF
-header. The PNG is re-encoded without fixed-length padding, so the patched file
-is smaller than the original; its hash and size are recorded after generation.
+header. The re-encoded PNG is padded back to the original 1,374,158-byte
+section so the shell's fixed `Parts` offset (1,374,200) does not move; the
+container keeps its 1,392,384-byte size. Its hash and size are recorded after
+generation.
 
 The public fonts change the pixels relative to the old candidate ZIPs, so the
 recipe no longer requires byte parity with those payloads. `expected/` records
@@ -175,10 +184,10 @@ changed, and exercises switching, restore, determinism and rejected-plan paths.
 3. If the edit intentionally changes pixels, rerun with `--write-plan-lock`
    after reviewing the report.
 4. Run the private `fs2/work/tools/recipe_e2e.py` gate. It installs all three
-   languages into a throwaway game, decodes all 3016 resources plus
+   languages into a throwaway game, decodes all 3023 resources plus
    `FarlandSaga2.exe` and `Texture.tex` from the installed files, compares them
    with `expected/` and the recipe reference layers, checks every story page's
    timing table and preserved tail, proves that only recipe sectors changed,
    and exercises texture layers, switching, restore and rejected-plan paths.
-4. Update `expected/<language>.json` only when the new pixels are the intended
+5. Update `expected/<language>.json` only when the new pixels are the intended
    result, and record the new hashes in the change description.

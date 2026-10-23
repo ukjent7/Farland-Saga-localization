@@ -1,0 +1,121 @@
+{
+  "accent_rgb": [
+    106,
+    0,
+    0
+  ],
+  "colors": {
+    "accent": 146,
+    "black": 230,
+    "shade": 193,
+    "shadow": 164
+  },
+  "deco": {
+    "en-US": "Fist",
+    "ko-KR": "주먹",
+    "zh-CN": "拳"
+  },
+  "deco_height": {
+    "en-US": 56,
+    "ko-KR": 64,
+    "zh-CN": 64
+  },
+  "description": "Opening character card 00EC.",
+  "format": "card_tilemap_8bpp",
+  "layout": "standard",
+  "lines": {
+    "en-US": [
+      [
+        "Gender",
+        "Female"
+      ],
+      [
+        "Age",
+        "16"
+      ],
+      [
+        "Class",
+        "Pugilist"
+      ],
+      [
+        "Likes",
+        "Strong"
+      ],
+      [
+        "Dislikes",
+        "Weak"
+      ]
+    ],
+    "ko-KR": [
+      [
+        "성별",
+        "여성"
+      ],
+      [
+        "나이",
+        "16세"
+      ],
+      [
+        "클래스",
+        "격투가"
+      ],
+      [
+        "좋아함",
+        "강한 자"
+      ],
+      [
+        "싫어함",
+        "약한 자"
+      ]
+    ],
+    "zh-CN": [
+      [
+        "性别",
+        "女"
+      ],
+      [
+        "年龄",
+        "16岁"
+      ],
+      [
+        "职业",
+        "拳斗士"
+      ],
+      [
+        "喜欢",
+        "强者"
+      ],
+      [
+        "讨厌",
+        "弱者"
+      ]
+    ]
+  },
+  "resource": "00EC",
+  "tilemap": {
+    "graphics_offset": 1728,
+    "map_offset": 528,
+    "size_field": 20624,
+    "tiles_x": 20,
+    "tiles_y": 30
+  },
+  "title": {
+    "en-US": "Satella",
+    "ko-KR": "사테라",
+    "zh-CN": "萨特拉"
+  },
+  "title_height": 32,
+  "title_spacing": {
+    "en-US": 4,
+    "ko-KR": 8,
+    "zh-CN": 8
+  },
+  "title_y": 20,
+  "ys": [
+    70,
+    92,
+    115,
+    138,
+    163
+  ]
+}
