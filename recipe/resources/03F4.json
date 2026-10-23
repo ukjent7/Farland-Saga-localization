@@ -1,0 +1,40 @@
+{
+  "resource": "03F4",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "精通化学等领域。\n与其说是魔法师，更像学者。\n会使用恢复系魔法。",
+        "ko-KR": "주로 화학 등에 정통하다. 마법사라기보다 학자라는 느낌. 회복계 마법을 사용한다.",
+        "en-US": "Mainly knowledgeable in chemistry. It feels more like a scholar than a mage. It uses healing magic."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

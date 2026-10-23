@@ -1,0 +1,40 @@
+{
+  "resource": "03B4",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "瞬间激发全身斗志，\n在下回合的攻击中对敌人\n造成毁灭性伤害，打得痛快。",
+        "ko-KR": "온몸의 기력을 한꺼번에 끌어올려 다음 턴의 공격으로 적에게 괴멸적인 피해를 준다. 적을 마구 때려부수는 통쾌한 기술.",
+        "en-US": "Raises all the body's energy at once, dealing devastating damage with the next turn's attack. A refreshing technique that beats enemies to a pulp."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

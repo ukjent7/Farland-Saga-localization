@@ -1,0 +1,40 @@
+{
+  "resource": "0340",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "据说是伟大贤者创造的衣服。\n在服装中拥有最高防御力。",
+        "ko-KR": "위대한 현자가 만들어냈다고 하는 옷. 옷 중에서 최고의 방어력을 자랑한다.",
+        "en-US": "Clothing said to have been created by a great sage. It boasts the highest defense among clothes."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

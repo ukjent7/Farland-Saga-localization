@@ -1,0 +1,40 @@
+{
+  "resource": "03FE",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "来自遥远西方的永恒旅人。\n战斗力极强，却守着某座墓，\n一步也不肯离开。",
+        "ko-KR": "아주 먼 서방에서 온 영원한 여행자. 전투력은 극히 높지만 어느 무덤을 지키며 한 걸음도 움직이지 않는다.",
+        "en-US": "An eternal traveler who came from the far west. His combat power is extremely high, but he guards a certain grave and will not move a step."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

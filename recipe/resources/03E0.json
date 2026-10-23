@@ -1,0 +1,40 @@
+{
+  "resource": "03E0",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "骷髅士兵。防御力不算高，\n但攻击力强，先下手为强。",
+        "ko-KR": "해골 병사. 방어력은 그다지 높지 않지만 공격력이 높으니 선수를 치는 것이 필승.",
+        "en-US": "A skeleton soldier. Its defense is not particularly high, but its attack is strong, so strike first to win."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

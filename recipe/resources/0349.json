@@ -1,0 +1,40 @@
+{
+  "resource": "0349",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "封印着风之魔神吉恩的手镯。\n佩戴后身体会变轻，甚至能够飞行。",
+        "ko-KR": "바람의 마신 진이 봉인된 팔찌. 지니면 몸이 가벼워져 하늘을 날 수 있게 된다.",
+        "en-US": "A bracelet sealing the wind djinn, Shin. Wearing it makes the body light enough to fly."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

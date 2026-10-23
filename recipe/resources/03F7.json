@@ -1,0 +1,40 @@
+{
+  "resource": "03F7",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "底层喽啰，专跑腿的。\n总之，这是恶徒中的最底层，\n攻击力倒是不高。",
+        "ko-KR": "말단 졸개. 심부름꾼. 아무튼 모든 의미에서 악당의 최하층을 가리키지만 공격력은 꽤 낮다.",
+        "en-US": "A low-ranking underling and errand runner. In every sense, the bottom rung of villainy, though its attack power is quite low."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

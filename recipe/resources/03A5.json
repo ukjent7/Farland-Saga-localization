@@ -1,0 +1,40 @@
+{
+  "resource": "03A5",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "召来据说漂浮在遥远高空的岩块，\n砸向敌人头顶。",
+        "ko-KR": "아득히 높은 하늘에 떠 있다는 암석 덩어리를 불러 적의 머리 위에 떨어뜨린다.",
+        "en-US": "Calls down a mass of rock said to float high in the sky and slams it onto the heads of enemies."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

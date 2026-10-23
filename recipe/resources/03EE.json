@@ -1,0 +1,40 @@
+{
+  "resource": "03EE",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "从黑暗世界召唤而来的强大魔物。\n拥有吸取人类体力的能力。",
+        "ko-KR": "암흑 세계에서 소환된 극히 강력한 몬스터. 인간의 체력을 빨아들이는 힘을 지녔다.",
+        "en-US": "An extremely powerful monster summoned from the dark world. It has the power to drain human HP."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

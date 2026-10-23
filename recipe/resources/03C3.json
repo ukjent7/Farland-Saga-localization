@@ -1,0 +1,40 @@
+{
+  "resource": "03C3",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "她常在路上拦住像冒险者的男人\n发起挑战，实在令人头疼。\n败在她拳下的男人不计其数。",
+        "ko-KR": "길에서 모험가처럼 보이는 남자를 붙잡아 싸움을 거는, 실로 민폐인 소녀. 그 주먹 아래 쓰러진 남자는 수를 헤아릴 수 없다.",
+        "en-US": "A truly troublesome girl who stops men who look like adventurers on the road and challenges them to fights. Countless men have fallen beneath her fists."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

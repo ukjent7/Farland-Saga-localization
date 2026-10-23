@@ -1,0 +1,40 @@
+{
+  "resource": "03F1",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "八年前一直统治着阿托拉克塔的\n公会首领。\n能够操纵野生魔物。",
+        "ko-KR": "8년 전까지 아틀락타를 지배하던 길드의 두목. 야생 몬스터를 조종한다.",
+        "en-US": "The guild boss who ruled Attracta until eight years ago. He controls wild monsters."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

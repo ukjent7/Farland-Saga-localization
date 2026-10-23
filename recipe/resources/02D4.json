@@ -1,0 +1,40 @@
+{
+  "resource": "02D4",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "妻子寄来的酒。\n除了能让昏厥者苏醒，\n还能融化冻僵的人。\n完全恢复体力，并恢复少许魔力。",
+        "ko-KR": "아내가 보내온 술. 기절한 사람을 깨우는 것 외에 얼어붙은 사람을 녹이는 힘도 있다. 체력을 완전히, 마력을 조금 회복시킨다.",
+        "en-US": "A liquor sent by his wife. Besides waking the unconscious, it can thaw frozen people. Fully restores HP and restores some MP."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

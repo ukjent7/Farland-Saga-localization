@@ -1,0 +1,40 @@
+{
+  "resource": "0318",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "异国锻造的精炼短刀。\n凭借精湛的锻造技艺，\n据说蕴藏着光之魔力。",
+        "ko-KR": "이국에서 만들어 단련된 단도. 뛰어난 단련 기술로 빛의 마력을 깃들였다고 한다.",
+        "en-US": "A dagger forged and tempered in a foreign land. Its superb smithing is said to have imbued it with light magic."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

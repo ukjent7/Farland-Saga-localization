@@ -1,0 +1,40 @@
+{
+  "resource": "039E",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "以大地母亲的恩泽治愈疲惫的身体。\n大地母神似乎意外地小气，\n一次只肯治愈一个人。",
+        "ko-KR": "어머니 대지의 은혜로 지친 몸을 치유한다. 대지모신은 의외로 인색해서 한 번에 한 사람만 치유해 준다.",
+        "en-US": "Heals a tired body with the bounty of Mother Earth. The earth goddess is surprisingly stingy and heals only one person at a time."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

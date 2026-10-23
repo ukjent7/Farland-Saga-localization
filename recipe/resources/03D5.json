@@ -1,0 +1,40 @@
+{
+  "resource": "03D5",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "长着两个头的水生爬虫类。\n牙齿有毒，要小心。据说也能驯养。",
+        "ko-KR": "두 개의 머리를 가진 수생 파충류. 이빨에 독이 있으니 주의. 길들일 수도 있다고 한다.",
+        "en-US": "An aquatic reptile with two heads. Its fangs are poisonous, so be careful. It is apparently possible to tame."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

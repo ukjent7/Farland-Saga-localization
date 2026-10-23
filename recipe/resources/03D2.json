@@ -1,0 +1,40 @@
+{
+  "resource": "03D2",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "潜入民宅偷走值钱的东西。\n这种小恶棍终究只是杂鱼。",
+        "ko-KR": "민가에 들어가 값나가는 물건을 훔쳐 낸다. 그 정도의 악당이라 어차피 잡몹.",
+        "en-US": "It slips into houses and steals valuables. A small-time villain, and ultimately a minor foe."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

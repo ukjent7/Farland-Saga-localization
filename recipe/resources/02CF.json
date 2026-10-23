@@ -1,0 +1,40 @@
+{
+  "resource": "02CF",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "嚼起来咯吱作响，很有营养。\n最适合当下酒菜。\n恢复60点体力。",
+        "ko-KR": "아삭아삭하고 영양이 있다. 술안주로 최적. 체력을 60 회복한다.",
+        "en-US": "Crunchy and nutritious. Perfect as a snack with alcohol. Restores 60 HP."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

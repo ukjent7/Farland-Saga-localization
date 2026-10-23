@@ -1,0 +1,40 @@
+{
+  "resource": "03AA",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "用魔法之盾保护一名友军。\n受此咒保护的友军魔法抗性\n会大幅提升。可重复施放，\n但对武器攻击无效。",
+        "ko-KR": "아군 한 명을 마법의 방패로 지킨다. 이 주문을 받은 아군은 마법 저항력이 크게 올라간다. 중복 시전 유효지만 무기 공격에는 효과가 없다.",
+        "en-US": "Protects one ally with a magic shield. Allies under this spell gain a large increase in magic resistance. Stacking is effective, but it does not affect weapon attacks."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

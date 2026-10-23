@@ -1,0 +1,40 @@
+{
+  "resource": "02E5",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "据说能将武斗家理想的明镜止水之心\n赋予使用者，激发其潜藏的力量。",
+        "ko-KR": "무투가의 이상인 명경지수의 마음을 사용자에게 주어 숨은 힘을 끌어낸다고 한다.",
+        "en-US": "It is said to grant the user the serene heart of a master martial artist and draw out hidden power."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

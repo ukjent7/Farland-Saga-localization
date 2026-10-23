@@ -1,0 +1,40 @@
+{
+  "resource": "02E4",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "据说是龙爪的金属利爪。\n被它抓到会剧痛无比。",
+        "ko-KR": "용의 발톱이라 불리는 금속제 갈고리 발톱. 이걸로 할퀴면 격렬하게 아프다.",
+        "en-US": "Metal claws said to be a dragon's. Getting scratched by these hurts intensely."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

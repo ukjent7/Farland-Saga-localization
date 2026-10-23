@@ -1,0 +1,40 @@
+{
+  "resource": "03DC",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "强大的幽灵。它也只怕魔法，\n还会吸取我方体力，\n是个极其凶恶的魔物。",
+        "ko-KR": "강한 유령. 이것도 마법밖에 통하지 않는데다 이쪽의 체력을 빨아들이는 극악무도한 몬스터.",
+        "en-US": "A powerful ghost. Only magic works on it, and it drains your HP—a truly vicious monster."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

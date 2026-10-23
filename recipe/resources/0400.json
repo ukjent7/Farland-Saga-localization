@@ -1,0 +1,40 @@
+{
+  "resource": "0400",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "起初是形态不定的史莱姆状生物，\n一旦受到攻击，就会复制对手的\n外形和能力。",
+        "ko-KR": "처음에는 형태가 일정하지 않은 슬라임 같은 생물이지만, 한 번 공격받으면 상대의 모습과 능력을 복사한다.",
+        "en-US": "At first it is a formless slime-like creature, but once attacked it copies the opponent's appearance and abilities."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

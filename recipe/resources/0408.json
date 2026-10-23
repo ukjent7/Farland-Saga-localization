@@ -1,0 +1,40 @@
+{
+  "resource": "0408",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "天界天使阶级中位居最高阶者的称号。\n其中也有人肩负使命降临人间。",
+        "ko-KR": "천상계 천사 계급 중에서도 최고위에 위치하는 자의 칭호. 사명을 띠고 지상에 내려오는 자도 있다.",
+        "en-US": "A title for those at the highest rank of the heavenly angel hierarchy. Some descend to earth bearing a mission."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

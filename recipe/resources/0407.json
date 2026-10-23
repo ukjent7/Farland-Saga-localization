@@ -1,0 +1,40 @@
+{
+  "resource": "0407",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "曾在北海横行一时的海盗一族。\n如今虽已没落，实力仍不可小觑。\n瘦死的骆驼比马大。",
+        "ko-KR": "한때 북쪽 바다에서 맹위를 떨친 해적 일족. 몰락한 지금도 그 힘은 건재하다. 늙어도 호랑이.",
+        "en-US": "A pirate clan that once terrorized the northern seas. Even now, fallen on hard times, their strength remains. Old tigers keep their claws."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

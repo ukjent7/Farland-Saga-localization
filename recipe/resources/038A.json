@@ -1,0 +1,40 @@
+{
+  "resource": "038A",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "以自身为中心卷起猛烈暴风雪。\n附近迟钝的敌人会被冻住。\n对石化、魅惑等状态也有效。",
+        "ko-KR": "자신을 중심으로 맹렬한 눈보라를 일으킨다. 주위의 둔한 적은 얼어붙는다. 석화나 매료 등에도 유효.",
+        "en-US": "Raises a fierce blizzard centered on the caster. Nearby sluggish enemies freeze. Also effective against petrification and charm."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

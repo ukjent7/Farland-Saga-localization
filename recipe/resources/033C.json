@@ -1,0 +1,40 @@
+{
+  "resource": "033C",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "中级魔术师穿着的法衣。\n蕴含魔力，防御力比普通衣服\n高出不少。",
+        "ko-KR": "중급 마술사가 입는 마도복. 마법이 담겨 있어 평범한 옷보다 높은 방어력을 기대할 수 있다.",
+        "en-US": "A magical robe worn by mid-ranking wizards. Imbued with magic, it offers better defense than ordinary clothes."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

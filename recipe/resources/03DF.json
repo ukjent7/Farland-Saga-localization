@@ -1,0 +1,40 @@
+{
+  "resource": "03DF",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "能操纵所有不死族的邪恶魔导师。\n他的面容让所有见到的人\n都不禁心生恐惧。",
+        "ko-KR": "모든 언데드를 조종하는 극악무도한 마도사. 그 얼굴은 보는 모든 이에게 공포를 안겨준다.",
+        "en-US": "A villainous mage who controls all undead. His face fills everyone who sees it with dread."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

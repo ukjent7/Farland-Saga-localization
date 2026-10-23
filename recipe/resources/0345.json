@@ -1,0 +1,40 @@
+{
+  "resource": "0345",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "戴上后，移动力会快如疾风。\n顺带一提，此处“疾风”读作「はやて」，\n而非「しっぷう」。",
+        "ko-KR": "이것을 지닌 사람은 말 그대로 질풍 같은 이동력을 얻는다. 참고로 \"질풍\"은 \"하야테\"라고 읽는다.",
+        "en-US": "The wearer gains movement as swift as a gale. Incidentally, the word for gale here is read \"hayate.\""
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

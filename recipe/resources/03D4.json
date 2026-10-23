@@ -1,0 +1,40 @@
+{
+  "resource": "03D4",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "有虎纹的猫。\n不知道是否接近老虎，但稍微强一些。",
+        "ko-KR": "호랑이 줄무늬 고양이. 호랑이에 가까운지는 모르겠지만 조금 강하다.",
+        "en-US": "A cat with tiger stripes. Whether it is close to a tiger is unknown, but it is a little strong."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

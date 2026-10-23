@@ -1,0 +1,40 @@
+{
+  "resource": "03C0",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "打着消灭变态的旗号，\n对阿尔燃起怒火的（自称）正义美少女。\n如今已无人能阻止她。",
+        "ko-KR": "변태 퇴치의 깃발 아래, 알에게 분노를 불태우는 (자칭) 정의의 미소녀. 이제 아무도 그녀를 막을 수 없다.",
+        "en-US": "A self-proclaimed beauty of justice who burns with anger at Al under the banner of eradicating perverts. No one can stop her now."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

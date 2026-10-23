@@ -1,0 +1,40 @@
+{
+  "resource": "03EF",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "头部和胸部是人类女性，其余部分都是猛禽，\n会成群袭击并猎捕猎物。",
+        "ko-KR": "머리와 가슴은 인간 여성, 나머지는 맹금류인 몬스터. 무리 지어 습격해 먹잇감을 사냥한다.",
+        "en-US": "A monster with a human woman's head and chest and a bird of prey's body. It attacks in flocks to hunt prey."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

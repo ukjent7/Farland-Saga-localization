@@ -1,0 +1,40 @@
+{
+  "resource": "0393",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "用风包裹一名友军，提升其敏捷。\n施展此咒后，会觉得自己的\n身体仿佛变轻了一般。\n可重复施放。",
+        "ko-KR": "아군 한 명을 바람으로 감싸 민첩성을 올린다. 이 주문을 받으면 자신의 몸무게가 가벼워진 것처럼 느껴질 것이다. 중복 시전 유효.",
+        "en-US": "Wraps one ally in wind and raises agility. Anyone under this spell will feel as if their body has become lighter. Stacking is effective."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

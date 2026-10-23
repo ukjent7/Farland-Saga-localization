@@ -1,0 +1,40 @@
+{
+  "resource": "0388",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "净化血液，治愈中毒的身体。\n等级提升后，效果范围也会扩大。",
+        "ko-KR": "피를 정화하고 독에 침식된 몸을 치유한다. 레벨이 오르면 효과 범위도 넓어진다.",
+        "en-US": "Purifies the blood and heals a body poisoned by toxins. The area of effect grows with level."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resource": "03F9",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "栖息在深海的螃蟹。\n它很少上岸，但身带剧毒，\n见到就该逃走。",
+        "ko-KR": "심해에 사는 게. 좀처럼 육지에 올라오지 않지만 독을 지니고 있으니 발견하면 도망쳐야 한다.",
+        "en-US": "A crab living in the deep sea. It rarely comes ashore, but it is poisonous, so flee if you see one."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

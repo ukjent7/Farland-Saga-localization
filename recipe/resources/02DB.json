@@ -1,0 +1,40 @@
+{
+  "resource": "02DB",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "施有冰系魔法的剑。\n剑身凉凉的，摸起来很舒服。\n对火属性魔物能发挥威力。",
+        "ko-KR": "얼음 마법이 걸린 검. 날이 서늘해서 기분이 좋다. 화 속성 마물에게 위력을 발휘한다.",
+        "en-US": "A sword enchanted with ice magic. The blade is cool and pleasant to the touch. Effective against fire-attribute monsters."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

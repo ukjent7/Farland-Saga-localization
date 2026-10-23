@@ -1,0 +1,40 @@
+{
+  "resource": "038C",
+  "description": "Skill or magic description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "暂时激发人类所能拥有的爆发力，\n以快到肉眼无法捕捉的连招\n连续攻击对手。\n因此被称为“死亡之舞”。",
+        "ko-KR": "인간이 지닌 순발력을 일시적으로 높여, 눈에도 보이지 않는 속도로 연속기를 상대에게 퍼붓는다. 그래서 \"죽음의 춤\"이라 불린다.",
+        "en-US": "Temporarily heightens human reaction speed and rains a combo on the opponent too fast for the eye to follow. That is why it is called the Dance of Death."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

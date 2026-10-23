@@ -1,0 +1,40 @@
+{
+  "resource": "036D",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "据说吃下后能恢复失去的魔力，\n这是魔界中盛开的花。\n恢复100点魔力。",
+        "ko-KR": "먹으면 잃어버린 마력이 되살아난다고 하는, 마계에 피는 꽃. 마력을 100 회복한다.",
+        "en-US": "A flower blooming in the demon realm that is said to restore lost MP when eaten. Restores 100 MP."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resource": "03C2",
+  "description": "Class or monster description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "她是个不谙世事、总是慌慌张张的少女。\n不过贸然接近她，\n可是会吃苦头的。",
+        "ko-KR": "정체도 모른 채 어쩔 줄 몰라 하는 세상 물정 모르는 소녀. 하지만 함부로 다가가면 아픈 꼴을 보게 될 것이다.",
+        "en-US": "A sheltered girl who frets about without really understanding anything. But approach her carelessly and you will get hurt."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resource": "02D9",
+  "description": "Item description bitmap.",
+  "format": "mono_bitmap_1bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "thresholds": {
+    "zh-CN": 128,
+    "ko-KR": 128,
+    "en-US": 128
+  },
+  "writes": [
+    {
+      "name": "description",
+      "generator": "canvas",
+      "wrap": true,
+      "offset": 0,
+      "width": 288,
+      "height": 64,
+      "text": {
+        "zh-CN": "刀身呈波浪形的巨剑。\n能造成如同反复割伤般的\n极其凶残的裂伤。",
+        "ko-KR": "물결 모양 날을 가진 대형 검. 여러 번 베인 듯한 열상을 입히는 매우 흉악한 검.",
+        "en-US": "A large sword with a wavy blade. A brutal weapon that inflicts deep, repeated lacerations."
+      },
+      "background": 1,
+      "ink": 0,
+      "max_size": 15,
+      "min_size": 9,
+      "line_height": 16,
+      "max_lines": 4,
+      "reserve": 2,
+      "align": "left",
+      "left": 0,
+      "top": 0
+    }
+  ]
+}

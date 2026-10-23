@@ -1,0 +1,25 @@
+{
+  "format": "story_page_2bpp",
+  "sources": {
+    "zh-CN": "translation/fs2/zh-CN/story.json",
+    "ko-KR": "translation/fs2/ko-KR/story.json",
+    "en-US": "translation/fs2/en-US/story.json"
+  },
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "width": 196,
+  "height": 48,
+  "line_height": 16,
+  "max_lines": 3,
+  "max_width": 195,
+  "unifont_size": 16,
+  "max_ttf_size": 14,
+  "min_ttf_size": 9,
+  "columns_per_character": 14,
+  "timing_offset": 2354,
+  "timing_table_offset": 2356,
+  "timing_end": 2528
+}
