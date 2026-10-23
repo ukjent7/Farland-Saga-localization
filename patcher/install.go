@@ -52,6 +52,7 @@ type installRecord struct {
 	Kind         string `json:"kind"`
 	Version      string `json:"version"`
 	Language     string `json:"language"`
+	Engine       string `json:"engine,omitempty"`
 	InstalledUTC string `json:"installed_utc"`
 	// BackupDirectory 恒为 backupDirName。旧版本写入的是带时间戳的目录名，
 	// loadRecord 照旧接受，安装时会迁移成固定名。
@@ -75,6 +76,7 @@ type installResult struct {
 	AlreadyInstalled bool   `json:"already_installed"`
 	Version          string `json:"version"`
 	Language         string `json:"language"`
+	Engine           string `json:"engine"`
 	BackupDirectory  string `json:"backup_directory"`
 	// CleanedUp 与 ReclaimedBytes 记录这次安装清扫掉的旧式目录，供命令行告知
 	// 用户腾出了多少空间。GUI 不展示，JSON 里留着便于排查。
@@ -528,8 +530,8 @@ func checkWritable(game string, info *manifest) error {
 
 // installPatch 执行一次安装：核对身份、备份、回放差异、原子改名、写安装记录，
 // 任何失败都从刚建立的备份回滚已替换的文件。
-func installPatch(game string, loaded *payload, progress func(fileEntry, int64)) (*installResult, error) {
-	info := loaded.info
+func installPatch(game string, loaded patchSource, progress func(fileEntry, int64)) (*installResult, error) {
+	info := loaded.sourceInfo()
 	prior, err := loadRecord(game)
 	if err != nil {
 		return nil, err
@@ -555,6 +557,7 @@ func installPatch(game string, loaded *payload, progress func(fileEntry, int64))
 		}
 		if installed {
 			return &installResult{AlreadyInstalled: true, Version: info.Version, Language: info.Language,
+				Engine:          loaded.engineName(),
 				BackupDirectory: effectiveBackupName(game, backupTargetsFromManifest(info), prior.BackupDirectory),
 				Files:           statuses, Record: prior}, nil
 		}
@@ -667,7 +670,7 @@ func installPatch(game string, loaded *payload, progress func(fileEntry, int64))
 
 	record := &installRecord{
 		Format: recordFormat, Kind: recordKind,
-		Version: info.Version, Language: info.Language,
+		Version: info.Version, Language: info.Language, Engine: loaded.engineName(),
 		InstalledUTC: time.Now().UTC().Format(stampLayout),
 		Files:        map[string]fileRecord{},
 		Status:       statusInstalled,
@@ -687,8 +690,9 @@ func installPatch(game string, loaded *payload, progress func(fileEntry, int64))
 	if err != nil {
 		return nil, err
 	}
-	return &installResult{Version: info.Version, Language: info.Language, BackupDirectory: record.BackupDirectory,
-		CleanedUp: cleaned, ReclaimedBytes: reclaimed, Files: statuses, Record: record}, nil
+	return &installResult{Version: info.Version, Language: info.Language, Engine: loaded.engineName(),
+		BackupDirectory: record.BackupDirectory,
+		CleanedUp:       cleaned, ReclaimedBytes: reclaimed, Files: statuses, Record: record}, nil
 }
 
 // restoreOriginal 用原版备份覆盖已安装的补丁文件；全部成功后才把安装记录标记

@@ -6,6 +6,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"compress/gzip"
 	"crypto/sha256"
 	"encoding/binary"
@@ -33,10 +34,15 @@ func makeSectorHeader(lba uint32) []byte {
 	}
 }
 
-// replaySectors 把 Format 3 扇区对象回放成完整的游戏镜像文件。
-// 仅凭借原版 SSF 容器文件与游戏可执行文件，运行时现场完成扇区混淆、EDC 算号、
-// 容器块解密、切片覆盖与 SSF 重新加密，逐字节重建出目标 PatchedSHA256 镜像。
+// replaySectors 是只含载荷扇区的回放入口，保留给 GUI 和既有调用方。
 func (p *payload) replaySectors(entry fileEntry, basePath string, exePath string, output io.Writer, progress func(int64)) error {
+	return p.replaySectorsMerged(entry, basePath, exePath, output, progress, nil)
+}
+
+// replaySectorsMerged 在载荷扇区之上叠加 recipe 生成的扇区。recipe 扇区优先；
+// 若它和载荷里同一 LBA 的内容不同，就立即中止——Phase 0 的合并哈希直接
+// 沿用载荷声明，只有逐字节一致时这个声明才成立。
+func (p *payload) replaySectorsMerged(entry fileEntry, basePath string, exePath string, output io.Writer, progress func(int64), overrides map[uint32][]byte) error {
 	if exePath == "" {
 		dir := filepath.Dir(basePath)
 		candidate := filepath.Join(dir, gameExecutable)
@@ -85,24 +91,15 @@ func (p *payload) replaySectors(entry fileEntry, basePath string, exePath string
 	hdrBuf := make([]byte, 8)
 	sectorBuf := make([]byte, 2352)
 
-	for {
-		if _, err := io.ReadFull(gzReader, hdrBuf); err != nil {
-			if errors.Is(err, io.EOF) {
-				break
-			}
-			return fmt.Errorf("读取扇区头失败: %w", err)
+	// addData 把一个逻辑 LBA 的明文载荷写进 2352 字节扇区流。edits 以
+	// 2048 字节块为键，因为 SSF 容器按 2048 字节块加密。
+	addData := func(lba uint32, data []byte) error {
+		if len(data) != 2048 {
+			return fmt.Errorf("不支持的扇区载荷长度 %d (LBA %d)", len(data), lba)
 		}
-		lba := binary.LittleEndian.Uint32(hdrBuf[0:4])
-		length := binary.LittleEndian.Uint32(hdrBuf[4:8])
-		if length != 2048 {
-			return fmt.Errorf("不支持的扇区载荷长度 %d (LBA %d)", length, lba)
-		}
-
 		copy(sectorBuf[:12], cdSyncPrefix)
 		copy(sectorBuf[12:16], makeSectorHeader(lba))
-		if _, err := io.ReadFull(gzReader, sectorBuf[16:2064]); err != nil {
-			return fmt.Errorf("读取扇区数据失败 (LBA %d): %w", lba, err)
-		}
+		copy(sectorBuf[16:2064], data)
 		if err := FinishSectorZeroECC(sectorBuf); err != nil {
 			return fmt.Errorf("扇区 EDC 计算失败 (LBA %d): %w", lba, err)
 		}
@@ -111,7 +108,7 @@ func (p *payload) replaySectors(entry fileEntry, basePath string, exePath string
 
 		permIdx := 2*283840 + int(lba)
 		if permIdx >= len(discTables.Permutation) {
-			return fmt.Errorf("LBA 置换索引越界: %d", permIdx)
+			return fmt.Errorf("LBA 置换索引越界: %d", lba)
 		}
 		target := (int(lba) & ^63) + int(discTables.Permutation[permIdx])
 		offset := int64(target) * 2352
@@ -136,6 +133,39 @@ func (p *payload) replaySectors(entry fileEntry, basePath string, exePath string
 			copy(plainBlock[within:within+sz], rem[:sz])
 			rem = rem[sz:]
 			offset += int64(sz)
+		}
+		return nil
+	}
+
+	for {
+		if _, err := io.ReadFull(gzReader, hdrBuf); err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			return fmt.Errorf("读取扇区头失败: %w", err)
+		}
+		lba := binary.LittleEndian.Uint32(hdrBuf[0:4])
+		length := binary.LittleEndian.Uint32(hdrBuf[4:8])
+		if length != 2048 {
+			return fmt.Errorf("不支持的扇区载荷长度 %d (LBA %d)", length, lba)
+		}
+		if _, err := io.ReadFull(gzReader, sectorBuf[16:2064]); err != nil {
+			return fmt.Errorf("读取扇区数据失败 (LBA %d): %w", lba, err)
+		}
+		if want, ok := overrides[lba]; ok {
+			if !bytes.Equal(want, sectorBuf[16:2064]) {
+				return fmt.Errorf("recipe 扇区 LBA %d 与载荷不一致", lba)
+			}
+			continue
+		}
+		if err := addData(lba, sectorBuf[16:2064]); err != nil {
+			return err
+		}
+	}
+
+	for lba, data := range overrides {
+		if err := addData(lba, data); err != nil {
+			return err
 		}
 	}
 
