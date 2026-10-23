@@ -74,6 +74,16 @@ func applyRecipeResource(rid string, resource *recipeResource, blob []byte, lang
 			return nil, fmt.Errorf("%s: %w", rid, err)
 		}
 		return generated, nil
+	case "card_tilemap_8bpp":
+		operations, err := planOperations(resource, language)
+		if err != nil {
+			return nil, err
+		}
+		generated, err := applyTilemapWrites(original, operations, blob)
+		if err != nil {
+			return nil, fmt.Errorf("%s: %w", rid, err)
+		}
+		return generated, nil
 	case "story_page_2bpp":
 		operations, err := planOperations(resource, language)
 		if err != nil {

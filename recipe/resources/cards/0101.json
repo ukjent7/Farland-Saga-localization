@@ -1,0 +1,147 @@
+{
+  "accent_rgb": [
+    115,
+    0,
+    0
+  ],
+  "colors": {
+    "accent": 125,
+    "black": 230,
+    "shade": 184,
+    "shadow": 155
+  },
+  "deco": {
+    "en-US": "Energy",
+    "ko-KR": "활기",
+    "zh-CN": "元气"
+  },
+  "deco_height": {
+    "en-US": 40,
+    "ko-KR": 48,
+    "zh-CN": 48
+  },
+  "description": "Opening character card 0101.",
+  "format": "card_tilemap_8bpp",
+  "layout": "standard",
+  "lines": {
+    "en-US": [
+      [
+        "Gender",
+        "Girl"
+      ],
+      [
+        "Age",
+        "16"
+      ],
+      [
+        "Class",
+        "Super-cute"
+      ],
+      [
+        "",
+        "mage"
+      ],
+      [
+        "Likes",
+        "Shopping"
+      ],
+      [
+        "Dislikes",
+        "Dark, cramped"
+      ],
+      [
+        "",
+        "places"
+      ]
+    ],
+    "ko-KR": [
+      [
+        "성별",
+        "여자아이"
+      ],
+      [
+        "나이",
+        "16세"
+      ],
+      [
+        "클래스",
+        "엄청 귀여운"
+      ],
+      [
+        "",
+        "마법사"
+      ],
+      [
+        "좋아함",
+        "쇼핑"
+      ],
+      [
+        "싫어함",
+        "어둡고 좁은"
+      ],
+      [
+        "",
+        "곳"
+      ]
+    ],
+    "zh-CN": [
+      [
+        "性别",
+        "女孩"
+      ],
+      [
+        "年龄",
+        "16岁"
+      ],
+      [
+        "职业",
+        "超级可爱的"
+      ],
+      [
+        "",
+        "魔法师"
+      ],
+      [
+        "喜欢",
+        "购物"
+      ],
+      [
+        "讨厌",
+        "昏暗狭窄的"
+      ],
+      [
+        "",
+        "地方"
+      ]
+    ]
+  },
+  "resource": "0101",
+  "tilemap": {
+    "graphics_offset": 1728,
+    "map_offset": 528,
+    "size_field": 27984,
+    "tiles_x": 20,
+    "tiles_y": 30
+  },
+  "title": {
+    "en-US": "Karin",
+    "ko-KR": "카린",
+    "zh-CN": "卡琳"
+  },
+  "title_height": 32,
+  "title_spacing": {
+    "en-US": 4,
+    "ko-KR": 8,
+    "zh-CN": 8
+  },
+  "title_y": 18,
+  "ys": [
+    67,
+    89,
+    111,
+    133,
+    155,
+    177,
+    199
+  ]
+}

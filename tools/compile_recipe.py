@@ -15,8 +15,9 @@ Plan layout (little-endian):
 
 Tile-atlas masks are one byte per pixel: 0 keeps the erased background, 1 is
 the outline/shadow colour, 2 is the body colour.  Mono writes are already
-packed 1bpp rows, one byte per eight pixels, MSB first.  Story pages store a
-196x48 2bpp image plus the character count for the timing table.
+packed 1bpp rows, one byte per eight pixels, MSB first.  Card writes carry the
+finished tile map and tile graphics for the opening character cards.  Story
+pages store a 196x48 2bpp image plus the character count for the timing table.
 """
 import argparse
 import gzip
@@ -31,6 +32,8 @@ from pathlib import Path
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
+import card_tilemap
+
 MAGIC = b'FS2RECIPE1\n'
 RECIPE_FORMAT = 1
 PLAN_FORMAT = 2
@@ -39,6 +42,7 @@ DEFAULT_RECIPE = REPO / 'recipe'
 DEFAULT_OUTPUT = REPO / 'patcher' / 'plan' / 'plan.bin'
 TILE_FORMAT = 'tile_atlas_8bpp'
 MONO_FORMAT = 'mono_bitmap_1bpp'
+CARD_FORMAT = 'card_tilemap_8bpp'
 STORY_FORMAT = 'story_page_2bpp'
 TEXTURE_FORMAT = 'texture_atlas_rgba'
 BINARY_FORMAT = 'binary_patches'
@@ -900,6 +904,124 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
     return header, report
 
 
+def validate_card_recipe(rid, recipe, languages, meta):
+    if recipe.get('format') != CARD_FORMAT:
+        raise SystemExit(f'{rid}: expected format {CARD_FORMAT!r}')
+    tilemap = recipe.get('tilemap')
+    if not isinstance(tilemap, dict):
+        raise SystemExit(f'{rid}: card needs a tilemap block')
+    for key in ('tiles_x', 'tiles_y', 'map_offset', 'graphics_offset', 'size_field'):
+        value = tilemap.get(key)
+        if not isinstance(value, int) or value <= 0:
+            raise SystemExit(f'{rid}: tilemap.{key} must be a positive integer')
+    if tilemap['tiles_x'] % 1 or tilemap['tiles_y'] % 1:
+        raise SystemExit(f'{rid}: tilemap dimensions must be whole tiles')
+    map_entries = tilemap['tiles_x'] * tilemap['tiles_y']
+    if tilemap['map_offset'] + 2 * map_entries != tilemap['graphics_offset']:
+        raise SystemExit(f'{rid}: tile map is not directly followed by tile graphics')
+    if tilemap['graphics_offset'] + tilemap['size_field'] > meta['size']:
+        raise SystemExit(f'{rid}: tile graphics extend past the resource')
+    colors = recipe.get('colors')
+    if not isinstance(colors, dict):
+        raise SystemExit(f'{rid}: card needs a colors block')
+    required = ['black', 'shadow', 'accent', 'shade']
+    if recipe.get('layout') == 'lulu':
+        required += ['red', 'green', 'dark']
+    for key in required:
+        value = colors.get(key)
+        if not isinstance(value, int) or not 0 <= value <= 255:
+            raise SystemExit(f'{rid}: colors.{key} must be a palette index')
+    accent = recipe.get('accent_rgb')
+    if not (isinstance(accent, list) and len(accent) == 3 and
+            all(isinstance(value, int) and 0 <= value <= 255 for value in accent)):
+        raise SystemExit(f'{rid}: accent_rgb must be an RGB triple')
+    layout = recipe.get('layout')
+    if layout not in ('standard', 'wide', 'lulu'):
+        raise SystemExit(f'{rid}: unknown card layout {layout!r}')
+    for key in ('title_height', 'title_y'):
+        if not isinstance(recipe.get(key), int) or recipe[key] < 0:
+            raise SystemExit(f'{rid}: {key} must be a non-negative integer')
+    height_fields = ['title_spacing']
+    if layout != 'lulu':
+        height_fields.append('deco_height')
+    for key in height_fields:
+        value = recipe.get(key)
+        if not isinstance(value, dict):
+            raise SystemExit(f'{rid}: {key} must be a per-language object')
+        for language in languages:
+            if not isinstance(value.get(language), int) or value[language] < 0:
+                raise SystemExit(f'{rid}: {key}.{language} must be a non-negative integer')
+    for language in languages:
+        for key in ('title', 'deco'):
+            if layout == 'lulu' and key == 'deco':
+                continue
+            value = recipe.get(key)
+            if not isinstance(value, dict) or not isinstance(value.get(language), str):
+                raise SystemExit(f'{rid}: {key}.{language} must be a string')
+        if layout == 'wide':
+            for key in ('left', 'right'):
+                value = recipe.get(key)
+                if not isinstance(value, dict) or not isinstance(value.get(language), list) or \
+                        len(value[language]) != 3:
+                    raise SystemExit(f'{rid}: {key}.{language} must have three rows')
+                for pair in value[language]:
+                    if not (isinstance(pair, list) and len(pair) == 2 and
+                            all(isinstance(item, str) for item in pair)):
+                        raise SystemExit(f'{rid}: {key}.{language} rows must be text pairs')
+        else:
+            value = recipe.get('lines')
+            if not isinstance(value, dict) or not isinstance(value.get(language), list):
+                raise SystemExit(f'{rid}: lines.{language} must be a list')
+            ys = recipe.get('ys')
+            if not isinstance(ys, list) or len(ys) != len(value[language]):
+                raise SystemExit(f'{rid}: ys must match the {language} line count')
+            for pair in value[language]:
+                if not (isinstance(pair, list) and len(pair) == 2 and
+                        all(isinstance(item, str) for item in pair)):
+                    raise SystemExit(f'{rid}: lines.{language} rows must be text pairs')
+
+
+def compile_card(rid, meta, recipe, languages, unifont, oracle, blob, preview_dir):
+    operations = {}
+    report = {'format': recipe['format'], 'tiles': {}}
+    tilemap = recipe['tilemap']
+    for language in languages:
+        try:
+            image = card_tilemap.render(unifont, recipe, language)
+            map_bytes, graphics, tiles = card_tilemap.encode(recipe, image)
+        except ValueError as error:
+            raise SystemExit(f'{rid}/{language}: {error}') from None
+        map_offset = tilemap['map_offset']
+        graphics_offset = tilemap['graphics_offset']
+        map_data_offset = len(blob)
+        blob.extend(map_bytes)
+        graphics_data_offset = len(blob)
+        blob.extend(graphics)
+        writes = [
+            {'name': 'map', 'offset': map_offset, 'data_offset': map_data_offset,
+             'data_length': len(map_bytes)},
+            {'name': 'graphics', 'offset': graphics_offset,
+             'data_offset': graphics_data_offset, 'data_length': len(graphics)},
+        ]
+        operations[language] = [{'type': 'tilemap_writes', 'writes': writes}]
+        report['tiles'][language] = {
+            'tiles': tiles,
+            'capacity': tilemap['size_field'] // 64,
+        }
+        if preview_dir:
+            preview_dir.mkdir(parents=True, exist_ok=True)
+            card_tilemap.preview(recipe, image, preview_dir / f'{language}-{rid}.png')
+    header = {
+        'format': recipe['format'],
+        'archive_offset': meta['archive_offset'],
+        'size': meta['size'],
+        'original_sha256': meta['original_sha256'],
+        'expected': {language: oracle.get(rid, {}).get(language, '') for language in languages},
+        'operations': operations,
+    }
+    return header, report
+
+
 _UNIFONT_CELLS = {}
 
 
@@ -1645,6 +1767,12 @@ def compile_plan(recipe_dir, output, report_path, preview_dir, allow_missing=Fal
                 oracle.setdefault(rid, {})
             resource_header, resource_report = compile_mono(
                 rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
+        elif fmt == CARD_FORMAT:
+            validate_card_recipe(rid, recipe, languages, meta)
+            if allow_missing:
+                oracle.setdefault(rid, {})
+            resource_header, resource_report = compile_card(
+                rid, meta, recipe, languages, unifont, oracle, blob, preview_dir)
         else:
             raise SystemExit(f'{rid}: unsupported recipe format {fmt!r}')
         header['resources'][rid] = resource_header

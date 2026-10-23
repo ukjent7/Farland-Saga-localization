@@ -1,0 +1,114 @@
+{
+  "accent_rgb": [
+    106,
+    0,
+    0
+  ],
+  "colors": {
+    "accent": 146,
+    "black": 225,
+    "dark": 178,
+    "green": 220,
+    "red": 146,
+    "shade": 178,
+    "shadow": 157
+  },
+  "description": "Opening character card 00F0.",
+  "format": "card_tilemap_8bpp",
+  "layout": "lulu",
+  "lines": {
+    "en-US": [
+      [
+        "Gender",
+        "Girl"
+      ],
+      [
+        "Age",
+        "7"
+      ],
+      [
+        "Class",
+        "Half-Elf"
+      ],
+      [
+        "Likes",
+        "Mommy"
+      ],
+      [
+        "Dislikes",
+        "Carrots"
+      ]
+    ],
+    "ko-KR": [
+      [
+        "성별",
+        "여자아이"
+      ],
+      [
+        "나이",
+        "7세"
+      ],
+      [
+        "클래스",
+        "하프 엘프"
+      ],
+      [
+        "좋아함",
+        "엄마"
+      ],
+      [
+        "싫어함",
+        "당근"
+      ]
+    ],
+    "zh-CN": [
+      [
+        "性别",
+        "女孩"
+      ],
+      [
+        "年龄",
+        "7岁"
+      ],
+      [
+        "职业",
+        "半精灵"
+      ],
+      [
+        "喜欢",
+        "妈妈"
+      ],
+      [
+        "讨厌",
+        "胡萝卜"
+      ]
+    ]
+  },
+  "resource": "00F0",
+  "tilemap": {
+    "graphics_offset": 1728,
+    "map_offset": 528,
+    "size_field": 24208,
+    "tiles_x": 20,
+    "tiles_y": 30
+  },
+  "title": {
+    "en-US": "Lulu",
+    "ko-KR": "루루",
+    "zh-CN": "露露"
+  },
+  "title_height": 32,
+  "title_spacing": {
+    "en-US": 4,
+    "ko-KR": 8,
+    "zh-CN": 8
+  },
+  "title_y": 20,
+  "ys": [
+    70,
+    92,
+    115,
+    138,
+    163
+  ]
+}

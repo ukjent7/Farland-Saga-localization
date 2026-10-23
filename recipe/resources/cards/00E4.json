@@ -1,0 +1,134 @@
+{
+  "accent_rgb": [
+    0,
+    74,
+    148
+  ],
+  "colors": {
+    "accent": 223,
+    "black": 221,
+    "shade": 225,
+    "shadow": 166
+  },
+  "deco": {
+    "en-US": "Carefree",
+    "ko-KR": "낙천적",
+    "zh-CN": "乐天派"
+  },
+  "deco_height": {
+    "en-US": 28,
+    "ko-KR": 34,
+    "zh-CN": 34
+  },
+  "description": "Opening character card 00E4.",
+  "format": "card_tilemap_8bpp",
+  "layout": "wide",
+  "left": {
+    "en-US": [
+      [
+        "Gender",
+        "Female"
+      ],
+      [
+        "Age",
+        "39"
+      ],
+      [
+        "Class",
+        "Siren"
+      ]
+    ],
+    "ko-KR": [
+      [
+        "성별",
+        "여성"
+      ],
+      [
+        "나이",
+        "39세"
+      ],
+      [
+        "클래스",
+        "세이렌"
+      ]
+    ],
+    "zh-CN": [
+      [
+        "性别",
+        "女"
+      ],
+      [
+        "年龄",
+        "39岁"
+      ],
+      [
+        "职业",
+        "塞壬"
+      ]
+    ]
+  },
+  "resource": "00E4",
+  "right": {
+    "en-US": [
+      [
+        "Likes",
+        "Reading"
+      ],
+      [
+        "Dislikes",
+        "Singing"
+      ],
+      [
+        "Looks",
+        "About 20"
+      ]
+    ],
+    "ko-KR": [
+      [
+        "좋아함",
+        "독서"
+      ],
+      [
+        "싫어함",
+        "노래"
+      ],
+      [
+        "외모",
+        "20세 전후"
+      ]
+    ],
+    "zh-CN": [
+      [
+        "喜欢",
+        "读书"
+      ],
+      [
+        "讨厌",
+        "唱歌"
+      ],
+      [
+        "外貌",
+        "约20岁"
+      ]
+    ]
+  },
+  "tilemap": {
+    "graphics_offset": 1728,
+    "map_offset": 528,
+    "size_field": 26640,
+    "tiles_x": 40,
+    "tiles_y": 15
+  },
+  "title": {
+    "en-US": "Radish",
+    "ko-KR": "라디쉬",
+    "zh-CN": "拉蒂修"
+  },
+  "title_height": 40,
+  "title_spacing": {
+    "en-US": 6,
+    "ko-KR": 12,
+    "zh-CN": 12
+  },
+  "title_y": 14
+}

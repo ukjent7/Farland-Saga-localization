@@ -1,0 +1,121 @@
+{
+  "accent_rgb": [
+    8,
+    0,
+    180
+  ],
+  "colors": {
+    "accent": 215,
+    "black": 219,
+    "shade": 213,
+    "shadow": 159
+  },
+  "deco": {
+    "en-US": "Big Shot",
+    "ko-KR": "대인물",
+    "zh-CN": "大人物"
+  },
+  "deco_height": {
+    "en-US": 32,
+    "ko-KR": 40,
+    "zh-CN": 40
+  },
+  "description": "Opening character card 00EA.",
+  "format": "card_tilemap_8bpp",
+  "layout": "standard",
+  "lines": {
+    "en-US": [
+      [
+        "Gender",
+        "Male"
+      ],
+      [
+        "Age",
+        "16 (?)"
+      ],
+      [
+        "Class",
+        "Swordsman"
+      ],
+      [
+        "Likes",
+        "Karin"
+      ],
+      [
+        "Dislikes",
+        "Monsters"
+      ]
+    ],
+    "ko-KR": [
+      [
+        "성별",
+        "남성"
+      ],
+      [
+        "나이",
+        "16세 (?)"
+      ],
+      [
+        "클래스",
+        "검사"
+      ],
+      [
+        "좋아함",
+        "카린"
+      ],
+      [
+        "싫어함",
+        "마물"
+      ]
+    ],
+    "zh-CN": [
+      [
+        "性别",
+        "男"
+      ],
+      [
+        "年龄",
+        "16岁（？）"
+      ],
+      [
+        "职业",
+        "剑士"
+      ],
+      [
+        "喜欢",
+        "卡琳"
+      ],
+      [
+        "讨厌",
+        "魔物"
+      ]
+    ]
+  },
+  "resource": "00EA",
+  "tilemap": {
+    "graphics_offset": 1728,
+    "map_offset": 528,
+    "size_field": 26832,
+    "tiles_x": 20,
+    "tiles_y": 30
+  },
+  "title": {
+    "en-US": "Azur",
+    "ko-KR": "아즈루",
+    "zh-CN": "阿兹尔"
+  },
+  "title_height": 32,
+  "title_spacing": {
+    "en-US": 4,
+    "ko-KR": 8,
+    "zh-CN": 8
+  },
+  "title_y": 20,
+  "ys": [
+    70,
+    92,
+    114,
+    138,
+    163
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "accent_rgb": [
+    16,
+    0,
+    139
+  ],
+  "colors": {
+    "accent": 215,
+    "black": 227,
+    "shade": 222,
+    "shadow": 144
+  },
+  "deco": {
+    "en-US": "Runaway",
+    "ko-KR": "가출 중",
+    "zh-CN": "离家出走中"
+  },
+  "deco_height": {
+    "en-US": 24,
+    "ko-KR": 36,
+    "zh-CN": 28
+  },
+  "description": "Opening character card 00E2.",
+  "format": "card_tilemap_8bpp",
+  "layout": "standard",
+  "lines": {
+    "en-US": [
+      [
+        "Gender",
+        "Girl"
+      ],
+      [
+        "Age",
+        "17"
+      ],
+      [
+        "Class",
+        "Healer"
+      ],
+      [
+        "Likes",
+        "Cute dresses"
+      ],
+      [
+        "Dislikes",
+        "Snakes, frogs"
+      ]
+    ],
+    "ko-KR": [
+      [
+        "성별",
+        "여자아이"
+      ],
+      [
+        "나이",
+        "17세"
+      ],
+      [
+        "클래스",
+        "치유사"
+      ],
+      [
+        "좋아함",
+        "예쁜 드레스"
+      ],
+      [
+        "싫어함",
+        "뱀, 개구리"
+      ]
+    ],
+    "zh-CN": [
+      [
+        "性别",
+        "女孩"
+      ],
+      [
+        "年龄",
+        "17岁"
+      ],
+      [
+        "职业",
+        "治愈师"
+      ],
+      [
+        "喜欢",
+        "可爱的连衣裙"
+      ],
+      [
+        "讨厌",
+        "蛇和青蛙"
+      ]
+    ]
+  },
+  "resource": "00E2",
+  "tilemap": {
+    "graphics_offset": 1728,
+    "map_offset": 528,
+    "size_field": 28816,
+    "tiles_x": 20,
+    "tiles_y": 30
+  },
+  "title": {
+    "en-US": "Alice",
+    "ko-KR": "앨리스",
+    "zh-CN": "爱丽丝"
+  },
+  "title_height": 32,
+  "title_spacing": {
+    "en-US": 4,
+    "ko-KR": 8,
+    "zh-CN": 8
+  },
+  "title_y": 20,
+  "ys": [
+    70,
+    92,
+    114,
+    138,
+    163
+  ]
+}
