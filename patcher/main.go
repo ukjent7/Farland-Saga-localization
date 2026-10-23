@@ -92,6 +92,8 @@ func runCommand(command string, arguments []string) error {
 	set.SetOutput(io.Discard)
 	game := set.String("game", "", "游戏安装目录")
 	payloadPath := set.String("payload", "", "补丁载荷 ZIP 路径")
+	planPath := set.String("plan", "", "recipe plan 路径")
+	engine := set.String("engine", "", "生成方式：recipe 或 payload")
 	yes := set.Bool("yes", false, "跳过交互确认")
 	asJSON := set.Bool("json", false, "输出 JSON")
 	if err := set.Parse(arguments); err != nil {
@@ -105,9 +107,14 @@ func runCommand(command string, arguments []string) error {
 		return fmt.Errorf("无法识别的参数: %s", strings.Join(set.Args(), " "))
 	}
 	allowPrompt := interactive() && !*yes
+	switch *engine {
+	case "", "recipe", "payload":
+	default:
+		return fmt.Errorf("未知的生成方式 %q（可用 recipe 或 payload）", *engine)
+	}
 	switch command {
 	case "install":
-		return commandInstall(*game, *payloadPath, *yes, *asJSON, allowPrompt)
+		return commandInstall(*game, *payloadPath, *planPath, *engine, *yes, *asJSON, allowPrompt)
 	case "restore":
 		return commandRestore(*game, *yes, *asJSON, allowPrompt)
 	case "status":
@@ -117,13 +124,24 @@ func runCommand(command string, arguments []string) error {
 	}
 }
 
-func commandInstall(game, payloadPath string, yes, asJSON, allowPrompt bool) error {
+func commandInstall(game, payloadPath, planPath, engine string, yes, asJSON, allowPrompt bool) error {
 	loaded, err := resolvePayload(payloadPath)
 	if err != nil {
 		return err
 	}
-	defer loaded.close()
-	game, err = resolveGame(game, loaded.info, allowPrompt)
+	planData, planSource, err := resolvePlanData(planPath, engine)
+	if err != nil {
+		loaded.close()
+		return err
+	}
+	source, err := wrapRecipeSource(loaded, planData)
+	if err != nil {
+		loaded.close()
+		return err
+	}
+	defer source.close()
+	info := source.sourceInfo()
+	game, err = resolveGame(game, info, allowPrompt)
 	if err != nil {
 		return err
 	}
@@ -131,20 +149,25 @@ func commandInstall(game, payloadPath string, yes, asJSON, allowPrompt bool) err
 	if err != nil {
 		return err
 	}
-	statuses := inspectAll(game, loaded.info, prior)
+	statuses := inspectAll(game, info, prior)
 	if !asJSON {
 		fmt.Printf("补丁载荷：%s\n", filepath.Base(loaded.path))
-		fmt.Printf("版本：%s（%s）\n", loaded.info.Version, loaded.info.Language)
+		fmt.Printf("版本：%s（%s）\n", info.Version, info.Language)
+		if planSource != "" {
+			fmt.Printf("生成方式：%s（%s）\n", source.engineName(), planSource)
+		} else {
+			fmt.Printf("生成方式：%s\n", source.engineName())
+		}
 		fmt.Printf("游戏目录：%s\n", game)
 		printStatusTable(statuses)
 	}
 	if !yes && !allowPrompt {
 		return errors.New("非交互环境请加 --yes 确认安装")
 	}
-	if !yes && !confirm(fmt.Sprintf("现在安装 %s（%s）吗？", loaded.info.Version, loaded.info.Language)) {
+	if !yes && !confirm(fmt.Sprintf("现在安装 %s（%s）吗？", info.Version, info.Language)) {
 		return errors.New("已取消")
 	}
-	result, err := installPatch(game, loaded, progressReporter(asJSON))
+	result, err := installPatch(game, source, progressReporter(asJSON))
 	if err != nil {
 		return err
 	}
@@ -156,6 +179,7 @@ func commandInstall(game, payloadPath string, yes, asJSON, allowPrompt bool) err
 		return nil
 	}
 	fmt.Printf("\n已安装 %s（%s），共 %d 个文件。\n", result.Version, result.Language, len(result.Files))
+	fmt.Printf("生成方式：%s\n", result.Engine)
 	fmt.Printf("原版备份：%s\n", result.BackupDirectory)
 	if len(result.CleanedUp) > 0 {
 		fmt.Printf("已清理残留目录 %d 个，腾出 %s：%s\n",
@@ -163,6 +187,32 @@ func commandInstall(game, payloadPath string, yes, asJSON, allowPrompt bool) err
 	}
 	fmt.Println("如需恢复原版，再次运行本程序并选择「恢复原版」。请勿删除备份目录。")
 	return nil
+}
+
+// resolvePlanData 读取显式 plan；没有显式路径时优先使用内嵌 plan，最后
+// 退回纯载荷安装。engine 为空时自动选择，recipe 要求 plan 存在，payload
+// 强制忽略 plan。planSource 只用于命令行展示来源。
+func resolvePlanData(path, engine string) ([]byte, string, error) {
+	if engine == "payload" {
+		if path != "" {
+			return nil, "", errors.New("--engine payload 不能与 --plan 同时使用")
+		}
+		return nil, "", nil
+	}
+	if path != "" {
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return nil, "", fmt.Errorf("无法读取 recipe plan %s: %w", path, err)
+		}
+		return data, path, nil
+	}
+	if data := embeddedPlanData(); len(data) > 0 {
+		return data, "内嵌", nil
+	}
+	if engine == "recipe" {
+		return nil, "", errors.New("没有可用的 recipe plan：请用 --plan 指定，或使用 --engine payload")
+	}
+	return nil, "", nil
 }
 
 func commandRestore(game string, yes, asJSON, allowPrompt bool) error {
@@ -247,6 +297,9 @@ func commandStatus(game, payloadPath string, asJSON, allowPrompt bool) error {
 	}
 	if record != nil {
 		fmt.Printf("安装记录：%s（%s），状态 %s\n", record.Version, record.Language, record.Status)
+		if record.Engine != "" {
+			fmt.Printf("生成方式：%s\n", record.Engine)
+		}
 		if record.Status == statusInstalled {
 			switch {
 			case !health.Present:
@@ -847,6 +900,8 @@ func printUsage() {
 选项：
   --game <目录>     游戏安装目录（也可用环境变量 `+"`%s`"+`）
   --payload <文件>  补丁载荷 ZIP（默认取本程序所在目录的 farland-patch-*.zip）
+  --plan <文件>     recipe plan；默认用内嵌 plan，没有内嵌 plan 时退回载荷
+  --engine <方式>   recipe 或 payload；默认自动选择
   --yes             跳过交互确认
   --json            输出 JSON
   -h, --help        显示本帮助

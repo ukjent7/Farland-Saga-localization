@@ -1,0 +1,326 @@
+{
+  "resource": "043F",
+  "description": "Save and load screen labels and status messages.",
+  "format": "tile_atlas_8bpp",
+  "atlas_size": [512, 144],
+  "palette": {
+    "resource": "0281",
+    "offset": 512
+  },
+  "fonts": {
+    "zh-CN": "MicrosoftYaHei",
+    "ko-KR": "Galmuri11",
+    "en-US": "Arial"
+  },
+  "thresholds": {
+    "zh-CN": 1,
+    "ko-KR": 128,
+    "en-US": 1
+  },
+  "styles": {
+    "label": {
+      "body": 2,
+      "outline": 255
+    },
+    "load": {
+      "body": 93,
+      "outline": 255
+    },
+    "save": {
+      "body": 96,
+      "outline": 255
+    },
+    "solid": {
+      "body": 255,
+      "outline": 255
+    }
+  },
+  "strings": {
+    "new_save": {
+      "zh-CN": "新建存档",
+      "ko-KR": "새로 저장",
+      "en-US": "Save New"
+    },
+    "time": {
+      "zh-CN": "小时",
+      "ko-KR": "시간",
+      "en-US": "h"
+    },
+    "min": {
+      "zh-CN": "分",
+      "ko-KR": "분",
+      "en-US": "m"
+    },
+    "no_data": {
+      "zh-CN": "没有存档数据",
+      "ko-KR": "저장 데이터 없음",
+      "en-US": "No save data"
+    },
+    "load": {
+      "zh-CN": "读取游戏",
+      "ko-KR": "불러오기",
+      "en-US": "Load Game"
+    },
+    "save": {
+      "zh-CN": "保存游戏",
+      "ko-KR": "저장하기",
+      "en-US": "Save Game"
+    },
+    "folder1": {
+      "zh-CN": "文件夹1",
+      "ko-KR": "폴더1",
+      "en-US": "Folder 1"
+    },
+    "folder2": {
+      "zh-CN": "文件夹2",
+      "ko-KR": "폴더2",
+      "en-US": "Folder 2"
+    },
+    "cancel": {
+      "zh-CN": "取消",
+      "ko-KR": "취소",
+      "en-US": "Cancel"
+    },
+    "attractor": {
+      "zh-CN": "未命名",
+      "ko-KR": "무제",
+      "en-US": "Untitled"
+    },
+    "day": {
+      "zh-CN": "天",
+      "ko-KR": "일",
+      "en-US": "Day"
+    },
+    "msg_l1": {
+      "zh-CN": "正在保存游戏记录。关闭电源可能",
+      "ko-KR": "게임 기록을 저장하는 중입니다. 전원을",
+      "en-US": "Saving game data. Turning off the power"
+    },
+    "msg_l2": {
+      "zh-CN": "导致记录无法正确保存。",
+      "ko-KR": "끄면 저장되지 않을 수 있습니다.",
+      "en-US": "may prevent it from saving correctly."
+    },
+    "msg_l3": {
+      "zh-CN": "无法使用此存档。",
+      "ko-KR": "이 기록은 사용할 수 없습니다.",
+      "en-US": "This save cannot be used."
+    },
+    "msg_l4": {
+      "zh-CN": "已保存记录。",
+      "ko-KR": "기록을 저장했습니다.",
+      "en-US": "Game saved."
+    },
+    "msg_l5": {
+      "zh-CN": "请在存档管理画面中删除。",
+      "ko-KR": "저장 데이터 관리 화면에서 삭제하세요.",
+      "en-US": "Delete it from the save-data manager."
+    },
+    "msg_r1": {
+      "zh-CN": "无法正确保存记录。",
+      "ko-KR": "기록을 올바르게 저장할 수 없습니다.",
+      "en-US": "The game could not be saved correctly."
+    },
+    "msg_r2": {
+      "zh-CN": "请再试一次。",
+      "ko-KR": "다시 한 번 시도해 주세요.",
+      "en-US": "Please try again."
+    },
+    "msg_r3": {
+      "zh-CN": "要更新存档吗？",
+      "ko-KR": "저장 데이터를 갱신하시겠습니까?",
+      "en-US": "Update this save?"
+    },
+    "msg_r4": {
+      "zh-CN": "要读取存档吗？",
+      "ko-KR": "저장 데이터를 불러오시겠습니까?",
+      "en-US": "Load this save?"
+    }
+  },
+  "labels": [
+    {
+      "name": "new_save_hi",
+      "text": "new_save",
+      "box": [71, 1, 100, 15],
+      "style": "label",
+      "max_size": 16,
+      "align": "center"
+    },
+    {
+      "name": "new_save",
+      "text": "new_save",
+      "box": [71, 17, 100, 15],
+      "style": "label",
+      "max_size": 16,
+      "align": "center"
+    },
+    {
+      "name": "time_hi",
+      "text": "time",
+      "box": [424, 2, 31, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "center"
+    },
+    {
+      "name": "min_hi",
+      "text": "min",
+      "box": [471, 2, 17, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "center"
+    },
+    {
+      "name": "time",
+      "text": "time",
+      "box": [424, 18, 31, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "center"
+    },
+    {
+      "name": "min",
+      "text": "min",
+      "box": [471, 18, 17, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "center"
+    },
+    {
+      "name": "no_data",
+      "text": "no_data",
+      "box": [58, 33, 129, 15],
+      "style": "label",
+      "max_size": 16,
+      "align": "center"
+    },
+    {
+      "name": "load",
+      "text": "load",
+      "box": [250, 33, 84, 15],
+      "style": "load",
+      "max_size": 16,
+      "align": "center"
+    },
+    {
+      "name": "save",
+      "text": "save",
+      "box": [337, 33, 85, 15],
+      "style": "save",
+      "max_size": 16,
+      "align": "center"
+    },
+    {
+      "name": "folder1",
+      "text": "folder1",
+      "box": [20, 49, 68, 15],
+      "style": "solid",
+      "max_size": 15,
+      "align": "center"
+    },
+    {
+      "name": "folder2",
+      "text": "folder2",
+      "box": [132, 49, 68, 15],
+      "style": "solid",
+      "max_size": 15,
+      "align": "center"
+    },
+    {
+      "name": "cancel",
+      "text": "cancel",
+      "box": [246, 49, 73, 15],
+      "style": "solid",
+      "max_size": 16,
+      "align": "center"
+    },
+    {
+      "name": "attractor",
+      "text": "attractor",
+      "box": [337, 49, 70, 15],
+      "style": "label",
+      "max_size": 16,
+      "align": "center"
+    },
+    {
+      "name": "day",
+      "text": "day",
+      "box": [487, 49, 24, 15],
+      "style": "label",
+      "max_size": 13,
+      "align": "left"
+    },
+    {
+      "name": "msg_l1",
+      "text": "msg_l1",
+      "box": [2, 65, 254, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "left"
+    },
+    {
+      "name": "msg_l2",
+      "text": "msg_l2",
+      "box": [2, 81, 254, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "left"
+    },
+    {
+      "name": "msg_l3",
+      "text": "msg_l3",
+      "box": [2, 97, 254, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "left"
+    },
+    {
+      "name": "msg_l4",
+      "text": "msg_l4",
+      "box": [2, 113, 254, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "left"
+    },
+    {
+      "name": "msg_l5",
+      "text": "msg_l5",
+      "box": [2, 129, 254, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "left"
+    },
+    {
+      "name": "msg_r1",
+      "text": "msg_r1",
+      "box": [258, 65, 254, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "left"
+    },
+    {
+      "name": "msg_r2",
+      "text": "msg_r2",
+      "box": [258, 81, 254, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "left"
+    },
+    {
+      "name": "msg_r3",
+      "text": "msg_r3",
+      "box": [258, 97, 254, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "left"
+    },
+    {
+      "name": "msg_r4",
+      "text": "msg_r4",
+      "box": [258, 113, 254, 15],
+      "style": "label",
+      "max_size": 14,
+      "align": "left"
+    }
+  ]
+}

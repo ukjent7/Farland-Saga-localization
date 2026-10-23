@@ -92,6 +92,19 @@ type payload struct {
 	objects map[string]*zip.File
 }
 
+// patchSource 是安装器需要的补丁来源。*payload 直接回放预生成对象；
+// *recipeSource 用用户的原版资源现场生成 recipe 覆盖的扇区。
+type patchSource interface {
+	sourceInfo() *manifest
+	engineName() string
+	replayEntry(entry fileEntry, basePath, exePath string, output io.Writer, progress func(int64)) error
+	close() error
+}
+
+func (p *payload) sourceInfo() *manifest { return p.info }
+
+func (p *payload) engineName() string { return "payload" }
+
 // safeRelativePath 只接受 POSIX 相对路径：拒绝绝对路径、盘符、反斜杠、
 // 空段与上级跳转，和安装器对游戏内路径的约束保持一致。
 func safeRelativePath(name string) (string, error) {
