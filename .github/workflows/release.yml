@@ -50,6 +50,16 @@ jobs:
           echo "=== 正在校验二代补丁器（-tags saga2）==="
           go vet -tags saga2 ./...
           go test -tags saga2 ./...
+      # 发布前把不需要游戏文件的门禁再跑一遍：plan 与 recipe 一致、公开目录
+      # 没有遗留文件、编译器拒绝坏配方。全量 E2E 需要真实镜像，在本地跑。
+      - name: recipe 门禁（无需游戏文件）
+        env:
+          FARLAND_WORK: ${{ runner.temp }}/work
+          UV_PYTHON_DOWNLOADS: automatic
+          UV_PYTHON_PREFERENCE: managed
+        run: |
+          echo "=== 正在校验 plan 与 recipe 的一致性、目录卫生与编译器反例 ==="
+          bash uv.sh run --locked python tools/recipe_checks.py --jobs 4
       - name: 构建 Windows 可执行文件
         run: |
           # 两代共用一个模块，只有 game_saga*.go / payload_saga*.go 等少数

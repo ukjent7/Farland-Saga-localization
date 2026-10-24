@@ -53,6 +53,19 @@ jobs:
           echo "=== 正在从公开 recipe 与 OFL 字体编译二代安装计划 ==="
           bash uv.sh run --locked python tools/compile_recipe.py
 
+      # 不需要游戏文件的那部分端到端门禁。全量 E2E 需要一份真实的光盘镜像
+      # （约 512 MiB，版权受限，不进公开仓库），只能在有游戏文件的机器上跑；
+      # 这里覆盖 plan 与 recipe 的一致性、公开目录卫生，以及编译器对 14 种
+      # 坏配方的拒绝。私有 recipe_e2e.py 复用同一份实现。
+      - name: recipe 门禁（无需游戏文件）
+        env:
+          FARLAND_WORK: ${{ runner.temp }}/work
+          UV_PYTHON_DOWNLOADS: automatic
+          UV_PYTHON_PREFERENCE: managed
+        run: |
+          echo "=== 正在校验 plan 与 recipe 的一致性、目录卫生与编译器反例 ==="
+          bash uv.sh run --locked python tools/recipe_checks.py --jobs 4
+
       - name: 翻译容量边界与语料完整性校验
         env:
           FARLAND_WORK: ${{ runner.temp }}/work

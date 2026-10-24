@@ -234,6 +234,13 @@ three languages, decodes every resource, executable and texture, compares them
 with the committed references, proves that only declared sectors and regions
 changed, and exercises switching, restore, determinism and rejected-plan paths.
 
+Full E2E needs a pristine copy of the three game files (512 MiB) and only runs
+where they live. `tools/recipe_checks.py` covers the part that needs no game
+data, so CI runs it on every push: the plan is gated against the recipe, the
+public tree is checked for stray game data, and the compiler must reject
+fourteen malformed recipes. The private E2E imports that module, so each rule
+lives in one place.
+
 ## Changing text
 
 1. Edit the string or box in the matching `resources/<id>.json`, `story.json`
@@ -243,13 +250,10 @@ changed, and exercises switching, restore, determinism and rejected-plan paths.
    bytes that differ from `plan.lock.json`.
 3. If the edit intentionally changes pixels, rerun with `--write-plan-lock`
    after reviewing the report.
-4. Run the private `fs2/work/tools/recipe_e2e.py` gate. It installs all three
-   languages into a throwaway game, decodes all 3046 resources plus
-   `FarlandSaga2.exe` and `Texture.tex` from the installed files, compares them
-   with `expected/` and the recipe reference layers, checks every story page's
-   timing table and preserved tail, proves that only recipe sectors changed,
-   renders the cook nameplate and every speaker nameplate, records the
-   restaurant speaker words, and exercises texture layers, switching, restore
-   and rejected-plan paths.
-5. Update `expected/<language>.json` only when the new pixels are the intended
+4. Run `tools/recipe_checks.py` — CI runs it too, and it needs no game files.
+5. Run the private `fs2/work/tools/recipe_e2e.py` gate. `--fast` installs one
+   language, checks the disc, executable and texture against the references and
+   stops after restore (about 35 seconds); a full run installs all three, and
+   also exercises determinism, upgrade, rejected plans and the compiler cases.
+6. Update `expected/<language>.json` only when the new pixels are the intended
    result, and record the new hashes in the change description.
