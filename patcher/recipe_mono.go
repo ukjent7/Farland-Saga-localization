@@ -20,6 +20,13 @@ func applyTilemapWrites(original []byte, operations []recipeOperation, blob []by
 	return applyWrites(original, operations, blob, "tilemap_writes")
 }
 
+// applyPlateOperations copies one 72x48 palette-index nameplate over the
+// pristine image. The engine blits the canvas verbatim, so nothing else in the
+// resource needs touching; the 640-byte tail stays as shipped.
+func applyPlateOperations(original []byte, operations []recipeOperation, blob []byte) ([]byte, error) {
+	return applyWrites(original, operations, blob, "plate_bitmap")
+}
+
 func applyWrites(original []byte, operations []recipeOperation, blob []byte, kind string) ([]byte, error) {
 	out := append([]byte(nil), original...)
 	for _, operation := range operations {

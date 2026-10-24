@@ -1,0 +1,33 @@
+{
+  "resource": "1053",
+  "description": "Crewman nameplate.",
+  "format": "plate_bitmap_8bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "canvas": {
+    "width": 72,
+    "height": 48,
+    "offset": 0,
+    "background": 0,
+    "body": 77,
+    "shadow": 1
+  },
+  "bands": [
+    {
+      "y": 0,
+      "height": 13
+    }
+  ],
+  "left": 1,
+  "max_size": 14,
+  "min_size": 7,
+  "threshold": 128,
+  "text": {
+    "zh-CN": "船员",
+    "ko-KR": "선원",
+    "en-US": "Crewman"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "resource": "1044",
+  "description": "Cook nameplate. 0117 now draws the text name from 02CB, so this art is a fallback for any remaining path that selects plate 1.",
+  "format": "plate_bitmap_8bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "canvas": {
+    "width": 72,
+    "height": 48,
+    "offset": 0,
+    "background": 0,
+    "body": 77,
+    "shadow": 1
+  },
+  "bands": [
+    {
+      "y": 0,
+      "height": 13
+    }
+  ],
+  "left": 3,
+  "max_size": 14,
+  "min_size": 7,
+  "threshold": 128,
+  "text": {
+    "zh-CN": "厨师",
+    "ko-KR": "요리사",
+    "en-US": "Cook"
+  }
+}

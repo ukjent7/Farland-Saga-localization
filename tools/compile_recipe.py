@@ -18,6 +18,8 @@ the outline/shadow colour, 2 is the body colour.  Mono writes are already
 packed 1bpp rows, one byte per eight pixels, MSB first.  Card writes carry the
 finished tile map and tile graphics for the opening character cards.  Story
 pages store a 196x48 2bpp image plus the character count for the timing table.
+Nameplate writes are 72x48 8bpp palette-index images: the engine blits them
+verbatim, so the compiler paints text into that fixed canvas.
 """
 import argparse
 import gzip
@@ -47,6 +49,7 @@ STORY_FORMAT = 'story_page_2bpp'
 TEXTURE_FORMAT = 'texture_atlas_rgba'
 BINARY_FORMAT = 'binary_patches'
 WORD_FORMAT = 'word_patches_16be'
+PLATE_FORMAT = 'plate_bitmap_8bpp'
 
 
 def digest(data):
@@ -608,6 +611,158 @@ def validate_mono_recipe(rid, recipe, languages, fonts, size):
                         raise SystemExit(f'{rid}/{name}[{index}]: {key} must be at least 7')
                 if line['min_size'] > line['max_size']:
                     raise SystemExit(f'{rid}/{name}[{index}]: min_size exceeds max_size')
+
+
+def validate_plate_recipe(rid, recipe, languages, fonts, size):
+    """Nameplate art: a fixed 72x48 index canvas the engine blits verbatim.
+
+    The shell copies the whole canvas to the screen, so the recipe owns every
+    pixel. Bands come from the pristine art and keep each line on its original
+    rows; the tail past the canvas stays untouched.
+    """
+    if recipe.get('format') != PLATE_FORMAT:
+        raise SystemExit(f'{rid}: expected format {PLATE_FORMAT!r}')
+    canvas = recipe.get('canvas')
+    if not isinstance(canvas, dict):
+        raise SystemExit(f'{rid}: plate needs a canvas block')
+    for key in ('width', 'height', 'offset'):
+        if not isinstance(canvas.get(key), int) or canvas[key] < 0:
+            raise SystemExit(f'{rid}: canvas.{key} must be a non-negative integer')
+    if canvas['width'] <= 0 or canvas['height'] <= 0:
+        raise SystemExit(f'{rid}: canvas must have a positive size')
+    if canvas['offset'] + canvas['width'] * canvas['height'] > size:
+        raise SystemExit(f'{rid}: canvas leaves the resource')
+    for key in ('background', 'body', 'shadow'):
+        if not isinstance(canvas.get(key), int) or not 0 <= canvas[key] <= 255:
+            raise SystemExit(f'{rid}: canvas.{key} must be a byte')
+    if len({canvas['background'], canvas['body'], canvas['shadow']}) != 3:
+        raise SystemExit(f'{rid}: background, body and shadow must differ')
+    threshold = recipe.get('threshold', 128)
+    if not isinstance(threshold, int) or not 1 <= threshold <= 255:
+        raise SystemExit(f'{rid}: threshold must be between 1 and 255')
+    bands = recipe.get('bands')
+    if not isinstance(bands, list) or not bands:
+        raise SystemExit(f'{rid}: plate needs at least one band')
+    previous = -1
+    for index, band in enumerate(bands):
+        if not isinstance(band, dict):
+            raise SystemExit(f'{rid}: band {index} must be an object')
+        for key in ('y', 'height'):
+            if not isinstance(band.get(key), int) or band[key] < 0:
+                raise SystemExit(f'{rid}: band {index} {key} must be a non-negative integer')
+        if band['height'] <= 0 or band['y'] + band['height'] > canvas['height']:
+            raise SystemExit(f'{rid}: band {index} leaves the canvas')
+        if band['y'] <= previous:
+            raise SystemExit(f'{rid}: bands must be ordered and disjoint')
+        previous = band['y'] + band['height']
+    left = recipe.get('left', 0)
+    if not isinstance(left, int) or left < 0:
+        raise SystemExit(f'{rid}: left must be a non-negative integer')
+    if left + 2 > canvas['width']:
+        raise SystemExit(f'{rid}: left leaves no room for text')
+    for key in ('max_size', 'min_size'):
+        if not isinstance(recipe.get(key), int) or recipe[key] < 7:
+            raise SystemExit(f'{rid}: {key} must be at least 7')
+    if recipe['min_size'] > recipe['max_size']:
+        raise SystemExit(f'{rid}: min_size exceeds max_size')
+    for language in languages:
+        text = recipe.get('text', {}).get(language)
+        if not isinstance(text, str) or not text.strip():
+            raise SystemExit(f'{rid}: missing {language} text')
+        font_path_for(recipe, language, fonts, 'pillow')
+        check_font_coverage(recipe, language, fonts, text, rid, 'plate')
+
+
+def plate_lines(probe, path, text, language, recipe, width):
+    """Wrap a nameplate label and centre each line on its original band.
+
+    The engine blits the canvas without clipping, so the only real limits are
+    the canvas edge and the neighbouring lines' ink. Bands come from the
+    pristine art; a line is centred on its band and rejected when its ink
+    would collide with the line above or below.
+    """
+    limit = width - recipe['left'] - 1  # keep room for the drop shadow
+    for size in range(recipe['max_size'], recipe['min_size'] - 1, -1):
+        font = font_at(path, size)
+        lines = wrap_paragraphs(probe, text, font, limit, language)
+        if len(lines) > len(recipe['bands']):
+            continue
+        boxes = [probe.textbbox((0, 0), line, font=font) for line in lines]
+        if any(box[2] - box[0] > limit for box in boxes):
+            continue
+        placed = []
+        for index, box in enumerate(boxes):
+            band = recipe['bands'][index]
+            height = box[3] - box[1]
+            top = band['y'] + (band['height'] - height) // 2
+            placed.append((top, top + height))
+        if any(top < 0 or bottom > recipe['canvas']['height']
+               for top, bottom in placed):
+            continue
+        if any(lower[0] < upper[1] for upper, lower in zip(placed, placed[1:])):
+            continue
+        return size, font, lines, boxes, placed
+    return None
+
+
+def compile_plate(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir):
+    operations = {}
+    report = {'format': recipe['format'], 'writes': {}}
+    canvas = recipe['canvas']
+    width, height, offset = canvas['width'], canvas['height'], canvas['offset']
+    for language in languages:
+        path = font_path_for(recipe, language, fonts, 'pillow')
+        text = recipe['text'][language]
+        probe = ImageDraw.Draw(Image.new('L', (1, 1)))
+        chosen = plate_lines(probe, path, text, language, recipe, width)
+        if chosen is None:
+            raise SystemExit(
+                f'{rid}: {text!r} needs more than {len(recipe["bands"])} lines '
+                f'at {recipe["min_size"]}px')
+        size, font, lines, boxes, placed = chosen
+        mask = Image.new('L', (width, height), 0)
+        draw = ImageDraw.Draw(mask)
+        for index, line in enumerate(lines):
+            box = boxes[index]
+            top = placed[index][0]
+            x = recipe['left'] - box[0]
+            y = top - box[1]
+            draw.text((x, y), line, font=font, fill=255)
+            report['writes'].setdefault(language, {})[f'line[{index}]'] = {
+                'text': line, 'font': recipe['fonts'][language],
+                'font_size': size, 'x': recipe['left'], 'y': top,
+            }
+        # The canvas holds palette indices, so every pixel is either background,
+        # body or shadow. Threshold the antialiased mask before it becomes an
+        # index; a grey level would select an unrelated palette entry.
+        threshold = recipe.get('threshold', 128)
+        body = bytearray(canvas['background'] if value < threshold else canvas['body']
+                         for value in mask.tobytes())
+        ink = [index for index, value in enumerate(body) if value == canvas['body']]
+        for index in ink:
+            x, y = index % width, index // width
+            if x + 1 < width and y + 1 < height:
+                target = index + width + 1
+                if body[target] != canvas['body']:
+                    body[target] = canvas['shadow']
+        writes = [{'name': 'plate', 'offset': offset,
+                   'data_offset': len(blob), 'data_length': width * height}]
+        blob.extend(body)
+        operations[language] = [{'type': 'plate_bitmap', 'writes': writes}]
+        if preview_dir:
+            preview_dir.mkdir(parents=True, exist_ok=True)
+            preview = Image.frombytes('L', (width, height), bytes(body)).convert('RGB')
+            preview.resize((width * 4, height * 4), Image.Resampling.NEAREST).save(
+                preview_dir / f'{language}-{rid}-plate.png')
+    header = {
+        'format': recipe['format'],
+        'archive_offset': meta['archive_offset'],
+        'size': meta['size'],
+        'original_sha256': meta['original_sha256'],
+        'expected': {language: oracle.get(rid, {}).get(language, '') for language in languages},
+        'operations': operations,
+    }
+    return header, report
 
 
 def validate_manifest(manifest, recipe_dir):
@@ -1845,6 +2000,12 @@ def compile_plan(recipe_dir, output, report_path, preview_dir, allow_missing=Fal
                 oracle.setdefault(rid, {})
             resource_header, resource_report = compile_word(
                 rid, meta, recipe, languages, oracle)
+        elif fmt == PLATE_FORMAT:
+            validate_plate_recipe(rid, recipe, languages, fonts, meta['size'])
+            if allow_missing:
+                oracle.setdefault(rid, {})
+            resource_header, resource_report = compile_plate(
+                rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
         else:
             raise SystemExit(f'{rid}: unsupported recipe format {fmt!r}')
         header['resources'][rid] = resource_header
