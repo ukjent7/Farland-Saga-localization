@@ -1,0 +1,41 @@
+{
+  "resource": "104E",
+  "description": "Meera, Alice and Radish nameplate, three lines.",
+  "format": "plate_bitmap_8bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "canvas": {
+    "width": 72,
+    "height": 48,
+    "offset": 0,
+    "background": 0,
+    "body": 77,
+    "shadow": 1
+  },
+  "bands": [
+    {
+      "y": 1,
+      "height": 11
+    },
+    {
+      "y": 17,
+      "height": 12
+    },
+    {
+      "y": 32,
+      "height": 13
+    }
+  ],
+  "left": 2,
+  "max_size": 14,
+  "min_size": 7,
+  "threshold": 128,
+  "text": {
+    "zh-CN": "米拉&\n爱丽丝&\n莱迪修",
+    "ko-KR": "미라&\n앨리스&\n라디쉬",
+    "en-US": "Meera &\nAlice &\nRadish"
+  }
+}

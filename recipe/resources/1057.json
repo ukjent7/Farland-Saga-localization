@@ -1,0 +1,33 @@
+{
+  "resource": "1057",
+  "description": "Champira B nameplate.",
+  "format": "plate_bitmap_8bpp",
+  "fonts": {
+    "zh-CN": "NotoSansSC",
+    "ko-KR": "Galmuri11",
+    "en-US": "LiberationSans"
+  },
+  "canvas": {
+    "width": 72,
+    "height": 48,
+    "offset": 0,
+    "background": 0,
+    "body": 77,
+    "shadow": 1
+  },
+  "bands": [
+    {
+      "y": 0,
+      "height": 12
+    }
+  ],
+  "left": 2,
+  "max_size": 12,
+  "min_size": 7,
+  "threshold": 128,
+  "text": {
+    "zh-CN": "夏皮拉B",
+    "ko-KR": "챔피라B",
+    "en-US": "Champira B"
+  }
+}

@@ -18,7 +18,8 @@ SHA-256 hashes.
   erase regions, label boxes and styles; a 1bpp text bank lists slot writes; a
   description bitmap holds one wrapped paragraph; an opening character card
   stores its tile geometry, palette indices and translated layout; a script
-  resource lists the big-endian u16 words to repoint.
+  resource lists the big-endian u16 words to repoint; a nameplate stores its
+  canvas, line bands and translated name.
 - `story.json` — story-page layout, language fonts and timing constants.
 - `story_pages.json` — the story page index: page id, bank, archive offset,
   size and the original SHA-256 of every 4096-byte page.
@@ -111,9 +112,16 @@ backup, and dispatches on its format:
   patch declares its offset, the pristine value and the new value; the
   installer refuses a resource whose current word is not the declared original
   and leaves every other byte alone. Resource `0117` uses this to move the
-  cook's four restaurant lines from speaker index 14, which the shell draws
+  cook's five restaurant lines from speaker index 14, which the shell draws
   from a baked Japanese sprite, to index 30, which draws 02CB slot 29 with the
   translated name (厨师 / 요리사 / Cook).
+- `plate_bitmap_8bpp`: replace one pre-rendered 72x48, 8bpp speaker nameplate.
+  The shell blits the canvas at RAM `0x2EB080` without clipping and never
+  redraws it as text, so the recipe owns every pixel. `canvas` fixes the size,
+  offset and the three legal palette indices (0 transparent, 1 shadow, 77
+  body); `bands` are the original line rows, and each line is centred on its
+  band with the largest font size that fits both the band and the canvas. The
+  640-byte tail past the canvas stays as shipped.
 - `binary_patches`: copy the original executable, require each patch's original
   bytes at its offset, replace them, and verify the declared patched size and
   SHA-256. The sequel patch changes one two-byte branch so the frontend uses the
@@ -141,7 +149,7 @@ backup rather than layering one language over another.
 
 ## Phase scope
 
-Generated disc resources (3024: 367 UI resources and 2657 story pages):
+Generated disc resources (3046: 389 UI resources and 2657 story pages):
 
 | Group | Resources |
 | --- | --- |
@@ -156,6 +164,7 @@ Generated disc resources (3024: 367 UI resources and 2657 story pages):
 | Job prompt | `0439` |
 | Save/load screen | `043F` |
 | Title panels | `0444`, `0445` |
+| Speaker nameplates | `1044`–`105C` (22 used plates) |
 | Story pages | `P1001`–`P17220` (2657 nonblank pages) |
 
 The 318 description bitmaps are item, special-command, skill/magic and
@@ -186,6 +195,31 @@ y=33..55 band. Both bands use `max_size: 22`, the size that fills the original
 22-pixel line height. Canvas writes accept per-line `align` and `left`; a line
 without them inherits the write-level values.
 
+## Speaker nameplates
+
+Twenty-two speaker plates cover 124 dialogue lines across twelve script banks.
+Opcode 61 loads one of the resources `1044`–`105C` into a 72x48 8bpp staging
+buffer at RAM `0x2EB080`, and opcode 4/5 with variant 42 blits that buffer. The
+same speaker index therefore shows コック in some scenes and 厨师 in others: the
+restaurant script's five lines use index 14 (baked art) while the 02CB slot 29
+path draws text. `0117` now repoints all five lines, and the art is translated
+so every remaining site shows the localised name.
+
+Each `plate_bitmap_8bpp` recipe fixes the 72x48 canvas at offset 0 with three
+palette indices: 0 transparent, 1 drop shadow at +1,+1 and 77 body. `bands`
+copies the original line rows (for example y=0..13 and y=16..29), and `left`
+keeps the original x origin. The compiler wraps each name, centres every line on
+its band and picks the largest size from `max_size` down to `min_size` whose ink
+fits the canvas width minus one shadow pixel and does not collide with the line
+above or below. Pillow antialiases the mask, so `threshold` (default 128) turns
+it into the two legal ink indices before the shadow is added. The 640 zero bytes
+after the canvas are not part of the write.
+
+Eighteen further speaker sites use variants 67–71. Those take the other branch,
+`0x1043 + tableIndex` loaded through the 148-entry whitelist in the boot image;
+their art lives in `10B7`–`10BB`, whose encoding is still unidentified, so those
+scenes keep the Japanese plate for now.
+
 `Texture.tex` contains 502 parts. Phase 3 changes 370 of them: 363 labels plus
 seven option panels. The atlas keeps its 2370x4394 dimensions and 2048-byte SSF
 header. The re-encoded PNG is padded back to the original 1,374,158-byte
@@ -210,11 +244,12 @@ changed, and exercises switching, restore, determinism and rejected-plan paths.
 3. If the edit intentionally changes pixels, rerun with `--write-plan-lock`
    after reviewing the report.
 4. Run the private `fs2/work/tools/recipe_e2e.py` gate. It installs all three
-   languages into a throwaway game, decodes all 3024 resources plus
+   languages into a throwaway game, decodes all 3046 resources plus
    `FarlandSaga2.exe` and `Texture.tex` from the installed files, compares them
    with `expected/` and the recipe reference layers, checks every story page's
    timing table and preserved tail, proves that only recipe sectors changed,
-   renders the cook nameplate and records the restaurant speaker words, and
-   exercises texture layers, switching, restore and rejected-plan paths.
+   renders the cook nameplate and every speaker nameplate, records the
+   restaurant speaker words, and exercises texture layers, switching, restore
+   and rejected-plan paths.
 5. Update `expected/<language>.json` only when the new pixels are the intended
    result, and record the new hashes in the change description.

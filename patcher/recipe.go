@@ -27,6 +27,9 @@ const (
 	// wrapper, so leave room for more labels while still bounding the read.
 	maxRecipeMaskData = 256 << 20
 	maxRecipeCells    = 1 << 20
+	// Nameplates are one 72x48 8bpp image staged at 0x2EB080; the shell copies
+	// the full canvas to the screen, so every byte of it comes from the plan.
+	plateCanvasBytes = 72 * 48
 )
 
 type recipePlan struct {
@@ -475,6 +478,10 @@ func validateRecipeResource(rid string, resource *recipeResource, plan *recipePl
 		if len(resource.AtlasSize) != 0 {
 			return fmt.Errorf("%s: 脚本词补丁不应带 atlas_size", rid)
 		}
+	case "plate_bitmap_8bpp":
+		if len(resource.AtlasSize) != 0 {
+			return fmt.Errorf("%s: 名字图不应带 atlas_size", rid)
+		}
 	default:
 		return fmt.Errorf("%s: 不支持的 recipe 资源格式 %q", rid, resource.Format)
 	}
@@ -506,6 +513,10 @@ func validateRecipeResource(rid string, resource *recipeResource, plan *recipePl
 			}
 		case "word_patches_16be":
 			if err := validateWordOperation(rid, language, operation, resource); err != nil {
+				return err
+			}
+		case "plate_bitmap_8bpp":
+			if err := validatePlateOperation(rid, language, operation, resource, plan); err != nil {
 				return err
 			}
 		}
@@ -653,6 +664,30 @@ func validateMonoOperation(rid, language string, operation recipeOperation, reso
 			write.DataLength > len(plan.blob)-write.DataOffset {
 			return fmt.Errorf("%s/%s: 写入数据范围越过 plan", rid, write.Name)
 		}
+	}
+	return nil
+}
+
+func validatePlateOperation(rid, language string, operation recipeOperation, resource *recipeResource, plan *recipePlan) error {
+	if operation.Type != "plate_bitmap" {
+		return fmt.Errorf("%s: %s 的操作类型 %q 不受支持", rid, language, operation.Type)
+	}
+	if len(operation.Writes) != 1 || len(operation.Labels) != 0 || len(operation.Erase) != 0 {
+		return fmt.Errorf("%s: %s 的名字图操作内容不合法", rid, language)
+	}
+	// The shell blits the whole 72x48 canvas, so a write must cover exactly
+	// that image and stay inside the resource's declared bytes.
+	write := operation.Writes[0]
+	if write.Name == "" {
+		return fmt.Errorf("%s: 名字图写入缺少名字", rid)
+	}
+	if write.Offset < 0 || write.DataLength != plateCanvasBytes ||
+		write.Offset > resource.Size || write.DataLength > resource.Size-write.Offset {
+		return fmt.Errorf("%s/%s: 写入范围越过资源", rid, write.Name)
+	}
+	if write.DataOffset < 0 || write.DataOffset > len(plan.blob) ||
+		write.DataLength > len(plan.blob)-write.DataOffset {
+		return fmt.Errorf("%s/%s: 写入数据范围越过 plan", rid, write.Name)
 	}
 	return nil
 }

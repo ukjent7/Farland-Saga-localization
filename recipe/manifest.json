@@ -1,7 +1,7 @@
 {
   "format": 1,
   "kind": "farland-saga-recipe",
-  "version": "recipe06",
+  "version": "recipe07",
   "game": "saga2",
   "title": "FARLAND SAGA II Saturn Tribute",
   "languages": [
@@ -2225,6 +2225,138 @@
       "archive_offset": 39651328,
       "size": 8192,
       "original_sha256": "23503f786398e6a51b03d7a6bc34b239d507f11a4a8b32c5341a1e170acb3e86"
+    },
+    "1044": {
+      "recipe": "resources/1044.json",
+      "archive_offset": 57520128,
+      "size": 4096,
+      "original_sha256": "31e6dc9bf6fe49c5ad89fa70c5b5a724c3da821c1a9ed7da3921f1af2b62bdfc"
+    },
+    "1046": {
+      "recipe": "resources/1046.json",
+      "archive_offset": 57528320,
+      "size": 4096,
+      "original_sha256": "ae0e6fa35c1a4436efa346c1b44b4b1a39dff1da8cefdba03bcec5119ebaf64c"
+    },
+    "1047": {
+      "recipe": "resources/1047.json",
+      "archive_offset": 57532416,
+      "size": 4096,
+      "original_sha256": "559e5394a2a8d0d7b8837f111a03381e6d9eb41173c200b14455bf05358b3c20"
+    },
+    "1048": {
+      "recipe": "resources/1048.json",
+      "archive_offset": 57536512,
+      "size": 4096,
+      "original_sha256": "fbe34010042d25f5661c2702184db4314d7dc9d59aeef68022f357273f099d80"
+    },
+    "1049": {
+      "recipe": "resources/1049.json",
+      "archive_offset": 57540608,
+      "size": 4096,
+      "original_sha256": "ed0370fe13314ff27244caba50b6e25d2591640959c423a7df2897650af34a6f"
+    },
+    "104A": {
+      "recipe": "resources/104A.json",
+      "archive_offset": 57544704,
+      "size": 4096,
+      "original_sha256": "d1b0f1c031e15380d8a82475ba2c781aeda5fc4ddbfbbb2a5df306f8d90e31f9"
+    },
+    "104B": {
+      "recipe": "resources/104B.json",
+      "archive_offset": 57548800,
+      "size": 4096,
+      "original_sha256": "3b4580b1ebad5867fae961833faee46aceeffe7cc3e65e11855e17cf0e3044c2"
+    },
+    "104C": {
+      "recipe": "resources/104C.json",
+      "archive_offset": 57552896,
+      "size": 4096,
+      "original_sha256": "83ac088a7343d3b45b2ef68d3aa0eec0c3006767f4268dd58c0bc583ebb4610b"
+    },
+    "104D": {
+      "recipe": "resources/104D.json",
+      "archive_offset": 57556992,
+      "size": 4096,
+      "original_sha256": "fca64331f729a385bd982a179e26981ec3b688b7afc0aceb60aee0fbcf19f951"
+    },
+    "104E": {
+      "recipe": "resources/104E.json",
+      "archive_offset": 57561088,
+      "size": 4096,
+      "original_sha256": "74d506a9f2879f4cd2595f022d56ff1a8638762bb3b7e0e9cfed035aaded6d6b"
+    },
+    "104F": {
+      "recipe": "resources/104F.json",
+      "archive_offset": 57565184,
+      "size": 4096,
+      "original_sha256": "39440e05460542093267ae5a9595dcba2b7ff89ad505c49c25f1a0db869e248c"
+    },
+    "1051": {
+      "recipe": "resources/1051.json",
+      "archive_offset": 57573376,
+      "size": 4096,
+      "original_sha256": "439f789d1090d52870bc09f07d2cbf45b0e1270434d5ddeb509135dcdc8d7fc4"
+    },
+    "1053": {
+      "recipe": "resources/1053.json",
+      "archive_offset": 57581568,
+      "size": 4096,
+      "original_sha256": "4f193eb36cfae8a4757cf56467a3ad585f269f548e602b94cc2737e4f9a77681"
+    },
+    "1054": {
+      "recipe": "resources/1054.json",
+      "archive_offset": 57585664,
+      "size": 4096,
+      "original_sha256": "17341c6926806b3c4fc63e25cf92391521263fe9a3f69c5515ebebf8303a3c35"
+    },
+    "1055": {
+      "recipe": "resources/1055.json",
+      "archive_offset": 57589760,
+      "size": 4096,
+      "original_sha256": "b7b16e4661e9d50ca7e0ed20e528ea3cfd2f1146028efdf90a5ee55776a3ac30"
+    },
+    "1056": {
+      "recipe": "resources/1056.json",
+      "archive_offset": 57593856,
+      "size": 4096,
+      "original_sha256": "1e5d802f0717ee189d2edaf847517529f86b5c88e833799cae4a9f461e14c36b"
+    },
+    "1057": {
+      "recipe": "resources/1057.json",
+      "archive_offset": 57597952,
+      "size": 4096,
+      "original_sha256": "a76e4387a12d6b9f3e7c27250a31767ab64dfdcb1b5fdd2db007d94e50df8b11"
+    },
+    "1058": {
+      "recipe": "resources/1058.json",
+      "archive_offset": 57602048,
+      "size": 4096,
+      "original_sha256": "11c57f6d45c423f8a870f82a83f4edfbc9cfdc922e16ece6bb5454bab382ce9d"
+    },
+    "1059": {
+      "recipe": "resources/1059.json",
+      "archive_offset": 57606144,
+      "size": 4096,
+      "original_sha256": "8a0a5bf69ab0336ae773c88b0033690e36c016317fa89a59b121349bb3b3727f"
+    },
+    "105A": {
+      "recipe": "resources/105A.json",
+      "archive_offset": 57610240,
+      "size": 4096,
+      "original_sha256": "342a683f7dc8c61fa3cbc7704321a093b5b550dc3f75a6fe6b29e8b08a5ceab7"
+    },
+    "105B": {
+      "recipe": "resources/105B.json",
+      "archive_offset": 57614336,
+      "size": 4096,
+      "original_sha256": "f7133027ed586aadd6f7eb615b13991d0f94c1bd741897391bf772df9942c8e8"
+    },
+    "105C": {
+      "recipe": "resources/105C.json",
+      "archive_offset": 57618432,
+      "size": 4096,
+      "original_sha256": "e79704eff79d064220032477ee2153896c25bb1a5874cdd8266175ecb5081130"
     }
   },
   "story": {
