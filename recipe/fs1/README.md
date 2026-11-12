@@ -26,6 +26,18 @@ reproducibility:
   plus each language's expected `patched_sha256`/`size`.
 - `unity.json` — the Unity files' declarations: per language, per file, the
   named UTF-8 text patches and the expected `patched_sha256`/`size`.
+- `disc.json` — the disc's declarations: per language, the event-script
+  rebuilds (glyph-pair sequences per translated line plus each file's added
+  table pairs), `SYSTEM/KANJI.FON` glyph cells (Unifont renderings), and the
+  fixed-capacity byte patches for the menu/item/system data files — together
+  with the structural facts (per-file LBA and size, and the container-offset
+  ranges of the sectors the operations regenerate). The installer rebuilds
+  these files from the user's pristine disc, so the repository carries no
+  game-derived bytes for them. Title sprites, theme files, directory-sector
+  bytes and a few parity-only rewrites still travel as diff records until
+  their recipes exist; `tools/derive_fs1_disc.py verify` is the golden gate
+  proving that pristine + declarations + the pruned records reproduce every
+  language's shipped container byte for byte.
 - `payload/farland-patch-<version>.zip` — the committed per-language diff
   payloads. Each ZIP carries a `manifest.json` and one diff object per target
   file, exactly as `fls.storage.package_release` wrote them. The compiler
@@ -74,8 +86,13 @@ bash uv.sh run --locked python tools/derive_fs1_ops.py verify  --backup <pristin
 
 `extract` re-derives `exe.json`/`unity.json` from the originals; `verify`
 rebuilds every language's exe and Unity files from the declarations alone and
-compares the hashes against them. End users and CI never run this: compiling
-the plan needs only the committed files.
+compares the hashes against them. The disc counterpart is
+`tools/derive_fs1_disc.py`: `extract --backup <dir> --patched-bin <container>`
+re-derives `disc.json` from the pristine and patched discs, and
+`verify --backup <dir>` rebuilds every language's shipped container from the
+pristine disc, the declarations and the pruned ZIP records, requiring the
+container SHA-256 to match the payload manifests. End users and CI never run
+these: compiling the plan needs only the committed files.
 
 ## Install-time replay
 
