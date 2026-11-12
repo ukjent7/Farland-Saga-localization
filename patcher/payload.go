@@ -32,6 +32,8 @@ const (
 	manifestName        = "manifest.json"
 	objectPrefix        = "objects/"
 	blockSize           = 4096
+	sectorPayload       = 2048 // MODE1 数据载荷与 SSF 加密块的大小
+	sectorSize          = 2352 // 原始 MODE1 扇区大小
 	objectFormatChunked = 2
 	recordSize          = 12 // struct.pack('<QI')：偏移 u64 小端 + 长度 u32 小端
 	maxHeaderLine       = 65536
@@ -500,7 +502,9 @@ func replayRecordStream(records io.Reader, streamLength int64, maxRecord int64, 
 	if position != patchedSize {
 		return errors.New("差异记录重建长度不符")
 	}
-	if hex.EncodeToString(hash.Sum(nil)) != patchedSHA256 {
+	// patchedSHA256 为空表示记录流只是中间态（盘片条目的记录流后面还有
+	// 声明式操作），最终哈希由操作完成后的整体核对承担。
+	if patchedSHA256 != "" && hex.EncodeToString(hash.Sum(nil)) != patchedSHA256 {
 		return errors.New("差异记录重建哈希不符")
 	}
 	return nil

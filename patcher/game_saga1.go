@@ -30,4 +30,6 @@ const (
 	discLeftVA  uint64 = 0x14118DDB0
 	discRightVA uint64 = 0x14118EDB0
 	discBlobVA  uint64 = 0x140D2D2D0
+	// 一代盘片镜像的置换映像序号（二代是第 2 张，一代是第 1 张）。
+	discPermIndex int = 1
 )

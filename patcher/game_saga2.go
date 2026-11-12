@@ -26,9 +26,10 @@ var payloadFormats = []int{1, 3}
 
 // 二代可执行文件里的加密表地址，见 ssf.go 与 cdrom.go。
 const (
-	ssfTableVA  uint64 = 0x1410F8770
-	ssfRawVA    uint64 = 0x1410F8B70
-	discLeftVA  uint64 = 0x1411CCDD0
-	discRightVA uint64 = 0x1411CDDD0
-	discBlobVA  uint64 = 0x140D6BE88
+	ssfTableVA    uint64 = 0x1410F8770
+	ssfRawVA      uint64 = 0x1410F8B70
+	discLeftVA    uint64 = 0x1411CCDD0
+	discRightVA   uint64 = 0x1411CDDD0
+	discBlobVA    uint64 = 0x140D6BE88
+	discPermIndex int    = 2
 )

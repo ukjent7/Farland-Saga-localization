@@ -45,9 +45,10 @@ type fs1PlanFile struct {
 	Size           int64  `json:"size"`
 }
 
-// fs1PlanEntry 是一个语言对一个目标文件的补丁身份与数据段引用。
-// 记录流（records_*）与声明式操作（ops）二选一：记录流回放预计算的差异
-// 块，操作在安装期从原版现场生成。
+// fs1PlanEntry 是一个语言对一个目标文件的补丁身份与数据段引用。记录流
+// （records_*）与声明式操作（ops）可以按文件二选一；盘片条目例外——裁剪后
+// 的记录流（标题图等仍按差异携带的区域）与盘片操作（event/splice/discfont）
+// 允许共存，安装期先回放记录再应用操作。
 type fs1PlanEntry struct {
 	PatchedSHA256 string      `json:"patched_sha256"`
 	PatchedSize   int64       `json:"patched_size"`
@@ -58,26 +59,73 @@ type fs1PlanEntry struct {
 
 // fs1PlanOp 是一条声明式操作。patch 把计划携带的本地化字节写到原版的指定
 // 偏移；font 把 Unifont 派生的字形槽位叠加到原版 exe 内压缩的 overlay
-// 字体上（先解包、替换槽位、重打包，输出必须落回保留区）。
+// 字体上（先解包、替换槽位、重打包，输出必须落回保留区）。盘片操作作用于
+// 光盘镜像内的 ISO 文件：event 按声明行重建事件脚本，splice 做定长字节
+// 拼接，discfont 替换 KANJI.FON 的字形槽位；三者都从用户原版盘现场生成。
 type fs1PlanOp struct {
-	Type         string `json:"type"`
-	Name         string `json:"name"`
-	Offset       int64  `json:"offset"`
-	DataOffset   int64  `json:"data_offset"`
-	DataLength   int64  `json:"data_length"`
-	Start        int64  `json:"start"`
-	Limit        int64  `json:"limit"`
-	Cells        int    `json:"cells"`
-	Slots        []int  `json:"slots"`
-	GlyphsOffset int64  `json:"glyphs_offset"`
+	Type         string         `json:"type"`
+	Name         string         `json:"name"`
+	Offset       int64          `json:"offset"`
+	DataOffset   int64          `json:"data_offset"`
+	DataLength   int64          `json:"data_length"`
+	Start        int64          `json:"start"`
+	Limit        int64          `json:"limit"`
+	Cells        int            `json:"cells"`
+	Slots        []int          `json:"slots"`
+	GlyphsOffset int64          `json:"glyphs_offset"`
+	LBA          int64          `json:"lba,omitempty"`
+	Size         int64          `json:"size,omitempty"`
+	SizePatched  int64          `json:"size_patched,omitempty"`
+	PairsOffset  int64          `json:"pairs_offset,omitempty"`
+	PairsLength  int64          `json:"pairs_length,omitempty"`
+	RelocateLBA  int64          `json:"relocate_lba,omitempty"`
+	Lines        []fs1PlanLine  `json:"lines,omitempty"`
+	Patches      []fs1PlanPatch `json:"patches,omitempty"`
 }
 
-// span 返回操作写出的字节区间，供重叠校验使用。
+// fs1PlanLine 是 event 操作里一条已翻译行的声明：行号（与脚本里 0x22 文本
+// 行的顺序一致）加上数据段里的替换字形对序列。
+type fs1PlanLine struct {
+	Line       int   `json:"line"`
+	DataOffset int64 `json:"data_offset"`
+	DataLength int64 `json:"data_length"`
+}
+
+// fs1PlanPatch 是 splice 操作里的一处定长字节拼接。
+type fs1PlanPatch struct {
+	Offset     int64 `json:"offset"`
+	DataOffset int64 `json:"data_offset"`
+	DataLength int64 `json:"data_length"`
+}
+
+// span 返回操作写出的字节区间，供重叠校验使用。盘片操作作用于镜像内的
+// ISO 文件，其区间由 LBA 扇区范围另行校验，这里返回空区间跳过。
 func (op *fs1PlanOp) span() (int64, int64) {
-	if op.Type == "font" {
+	switch op.Type {
+	case "font":
 		return op.Start, op.Limit
+	case "patch":
+		return op.Offset, op.Offset + op.DataLength
 	}
-	return op.Offset, op.Offset + op.DataLength
+	return 0, 0
+}
+
+// allocation 返回盘片操作覆盖的逻辑扇区范围 [起始 LBA, 末尾 LBA)。原位文件
+// 重写整个压制分配（载荷零填充到它并重算校验位），重定位文件只占用新扇区段。
+func (op *fs1PlanOp) allocation() (int64, int64, bool) {
+	switch op.Type {
+	case "event":
+		if op.RelocateLBA > 0 {
+			sectors := (op.SizePatched + sectorPayload - 1) / sectorPayload
+			return op.RelocateLBA, op.RelocateLBA + sectors, true
+		}
+		sectors := (op.Size + sectorPayload - 1) / sectorPayload
+		return op.LBA, op.LBA + sectors, true
+	case "splice", "discfont":
+		sectors := (op.Size + sectorPayload - 1) / sectorPayload
+		return op.LBA, op.LBA + sectors, true
+	}
+	return 0, 0, false
 }
 
 // fs1PlanLanguage 携带一个语言的版本号与全部目标文件的条目。
@@ -246,8 +294,8 @@ func validateFS1PlanEntry(format int, file *fs1PlanFile, entry *fs1PlanEntry, bl
 		return errors.New("差异记录范围越过数据段")
 	}
 	if entry.RecordsLength > 0 {
-		if len(entry.Ops) > 0 {
-			return errors.New("记录流与声明式操作不能同时使用")
+		if hasReplayOps(entry.Ops) {
+			return errors.New("记录流与可执行文件的操作不能同时使用")
 		}
 		if err := validateRecordStream(entry, blob); err != nil {
 			return err
@@ -264,11 +312,13 @@ func validateFS1PlanEntry(format int, file *fs1PlanFile, entry *fs1PlanEntry, bl
 		}
 	}
 	// 操作区间两两不得重叠：安装期按顺序原地应用，重叠意味着两次写入
-	// 争夺同一段字节，结果顺序相关。
+	// 争夺同一段字节，结果顺序相关。盘片操作的扇区范围单独校验。
 	spans := make([][2]int64, 0, len(entry.Ops))
 	for index := range entry.Ops {
 		low, high := entry.Ops[index].span()
-		spans = append(spans, [2]int64{low, high})
+		if low < high {
+			spans = append(spans, [2]int64{low, high})
+		}
 	}
 	for i := 0; i < len(spans); i++ {
 		for j := i + 1; j < len(spans); j++ {
@@ -278,7 +328,52 @@ func validateFS1PlanEntry(format int, file *fs1PlanFile, entry *fs1PlanEntry, bl
 			}
 		}
 	}
+	// 盘片操作的扇区范围两两不得重叠，且必须落在镜像数据区内。
+	discSpans := make([][2]int64, 0, len(entry.Ops))
+	dataSectors := (file.Size - 2048) / 2352
+	for index := range entry.Ops {
+		low, high, ok := entry.Ops[index].allocation()
+		if !ok {
+			continue
+		}
+		if low <= 0 || high > dataSectors {
+			return fmt.Errorf("操作 %d (%s): 扇区范围 [%d,%d) 越出镜像数据区",
+				index, entry.Ops[index].Name, low, high)
+		}
+		discSpans = append(discSpans, [2]int64{low, high})
+	}
+	for i := 0; i < len(discSpans); i++ {
+		for j := i + 1; j < len(discSpans); j++ {
+			if discSpans[i][0] < discSpans[j][1] && discSpans[j][0] < discSpans[i][1] {
+				return fmt.Errorf("盘片操作扇区范围重叠: [%d,%d) 与 [%d,%d)",
+					discSpans[i][0], discSpans[i][1], discSpans[j][0], discSpans[j][1])
+			}
+		}
+	}
 	return nil
+}
+
+// hasReplayOps 判断操作列表里是否有可执行文件类操作（patch/font）。盘片
+// 操作（event/splice/discfont）允许与裁剪后的记录流共存。
+func hasReplayOps(ops []fs1PlanOp) bool {
+	for index := range ops {
+		switch ops[index].Type {
+		case "patch", "font":
+			return true
+		}
+	}
+	return false
+}
+
+// hasDiscOps 判断操作列表里是否含盘片操作。
+func hasDiscOps(ops []fs1PlanOp) bool {
+	for index := range ops {
+		switch ops[index].Type {
+		case "event", "splice", "discfont":
+			return true
+		}
+	}
+	return false
 }
 
 func validateRecordStream(entry *fs1PlanEntry, blob []byte) error {
@@ -319,6 +414,23 @@ func validateFS1PlanOp(format int, file *fs1PlanFile, op *fs1PlanOp, entry *fs1P
 	if op.Name == "" {
 		return errors.New("缺少名字")
 	}
+	discFile := file.Kind == "disc"
+	switch op.Type {
+	case "patch", "font":
+		if discFile {
+			return fmt.Errorf("%s 类型操作不能用于盘片目标", op.Type)
+		}
+	case "event", "splice", "discfont":
+		if !discFile {
+			return fmt.Errorf("%s 类型操作只能用于盘片目标", op.Type)
+		}
+		if op.LBA <= 0 || op.Size <= 0 || op.LBA > file.Size ||
+			op.Size > file.Size-op.LBA*sectorSize+2048 {
+			return errors.New("盘片文件的 LBA 或原版大小不合法")
+		}
+	default:
+		return fmt.Errorf("不支持的操作类型 %q", op.Type)
+	}
 	switch op.Type {
 	case "patch":
 		if op.Offset < 0 || op.DataLength <= 0 ||
@@ -331,6 +443,9 @@ func validateFS1PlanOp(format int, file *fs1PlanFile, op *fs1PlanOp, entry *fs1P
 		}
 		if op.Start != 0 || op.Limit != 0 || op.Cells != 0 || op.Slots != nil || op.GlyphsOffset != 0 {
 			return errors.New("patch 操作携带了多余字段")
+		}
+		if err := rejectDiscFields(op); err != nil {
+			return err
 		}
 	case "font":
 		if op.Start < 0 || op.Limit <= op.Start || op.Limit > file.Size {
@@ -356,8 +471,100 @@ func validateFS1PlanOp(format int, file *fs1PlanFile, op *fs1PlanOp, entry *fs1P
 		if op.Offset != 0 || op.DataOffset != 0 || op.DataLength != 0 {
 			return errors.New("font 操作携带了多余字段")
 		}
-	default:
-		return fmt.Errorf("不支持的操作类型 %q", op.Type)
+		if err := rejectDiscFields(op); err != nil {
+			return err
+		}
+	case "event":
+		if op.SizePatched <= 0 {
+			return errors.New("事件文件缺少补丁后大小")
+		}
+		if op.PairsLength < 0 || op.PairsLength%2 != 0 ||
+			op.PairsOffset > int64(len(blob)) ||
+			op.PairsLength > int64(len(blob))-op.PairsOffset {
+			return errors.New("新增字形对的数据范围越过数据段")
+		}
+		if op.RelocateLBA < 0 || (op.RelocateLBA != 0 && op.RelocateLBA == op.LBA) {
+			return errors.New("重定位目标 LBA 不合法")
+		}
+		if len(op.Lines) == 0 {
+			return errors.New("事件操作没有已翻译行")
+		}
+		previous := 0
+		for _, line := range op.Lines {
+			if line.Line <= previous {
+				return fmt.Errorf("行 %d 越界或乱序", line.Line)
+			}
+			if line.DataLength <= 0 || line.DataLength%2 != 0 ||
+				line.DataOffset > int64(len(blob)) ||
+				line.DataLength > int64(len(blob))-line.DataOffset {
+				return fmt.Errorf("行 %d 的替换数据范围越过数据段", line.Line)
+			}
+			previous = line.Line
+		}
+		if err := rejectReplayFields(op); err != nil {
+			return err
+		}
+	case "splice":
+		if len(op.Patches) == 0 {
+			return errors.New("拼接操作没有补丁")
+		}
+		previous := int64(-1)
+		for _, patch := range op.Patches {
+			if patch.Offset < 0 || patch.DataLength <= 0 ||
+				patch.Offset > op.Size || patch.DataLength > op.Size-patch.Offset {
+				return errors.New("拼接范围越过文件")
+			}
+			if patch.Offset <= previous {
+				return fmt.Errorf("拼接偏移 %d 乱序或重叠", patch.Offset)
+			}
+			if patch.DataOffset < 0 || patch.DataOffset > int64(len(blob)) ||
+				patch.DataLength > int64(len(blob))-patch.DataOffset {
+				return errors.New("拼接数据范围越过数据段")
+			}
+			previous = patch.Offset + patch.DataLength - 1
+		}
+		if err := rejectReplayFields(op); err != nil {
+			return err
+		}
+	case "discfont":
+		if op.Cells <= 0 || int64(op.Cells)*32 != op.Size {
+			return errors.New("盘片字库的槽位数与文件大小不符")
+		}
+		if len(op.Slots) == 0 {
+			return errors.New("盘片字库操作没有槽位")
+		}
+		previous := -1
+		for _, slot := range op.Slots {
+			if slot <= previous || slot >= op.Cells {
+				return fmt.Errorf("槽位 %d 越界或乱序", slot)
+			}
+			previous = slot
+		}
+		glyphs := int64(len(op.Slots)) * 32
+		if op.GlyphsOffset < 0 || op.GlyphsOffset > int64(len(blob)) || glyphs > int64(len(blob))-op.GlyphsOffset {
+			return errors.New("字形数据范围越过数据段")
+		}
+		if err := rejectReplayFields(op); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// rejectDiscFields 确保 patch/font 操作不带盘片专用字段。
+func rejectDiscFields(op *fs1PlanOp) error {
+	if op.LBA != 0 || op.Size != 0 || op.SizePatched != 0 || op.PairsOffset != 0 ||
+		op.PairsLength != 0 || op.RelocateLBA != 0 || op.Lines != nil || op.Patches != nil {
+		return errors.New("操作携带了盘片专用字段")
+	}
+	return nil
+}
+
+// rejectReplayFields 确保盘片操作不带可执行文件专用字段。
+func rejectReplayFields(op *fs1PlanOp) error {
+	if op.Offset != 0 || op.DataOffset != 0 || op.DataLength != 0 ||
+		op.Start != 0 || op.Limit != 0 || op.GlyphsOffset != 0 && op.Type != "discfont" {
+		return errors.New("盘片操作携带了多余字段")
 	}
 	return nil
 }
@@ -438,12 +645,17 @@ func (s *fs1PlanSource) patchedSize(path string) (int64, bool) {
 	return entry.PatchedSize, true
 }
 
-func (s *fs1PlanSource) replayEntry(entry fileEntry, basePath string, _ string, output io.Writer, progress func(int64)) error {
+func (s *fs1PlanSource) replayEntry(entry fileEntry, basePath string, exePath string, output io.Writer, progress func(int64)) error {
 	planEntry, ok := s.plan.entries[s.language][entry.Path]
 	if !ok {
 		return fmt.Errorf("安装计划没有 %s 的 %s 数据", s.language, entry.Path)
 	}
-	if len(planEntry.Ops) > 0 {
+	if len(planEntry.Ops) == 0 {
+		return replayRecordStream(
+			bytes.NewReader(s.plan.blob[planEntry.RecordsOffset:planEntry.RecordsOffset+planEntry.RecordsLength]),
+			planEntry.RecordsLength, blockSize, true, entry.PatchedSHA256, entry.PatchedSize, basePath, output, progress)
+	}
+	if !hasDiscOps(planEntry.Ops) {
 		data, err := s.generateFromOps(planEntry, entry, basePath)
 		if err != nil {
 			return err
@@ -458,9 +670,26 @@ func (s *fs1PlanSource) replayEntry(entry fileEntry, basePath string, _ string, 
 		}
 		return nil
 	}
-	return replayRecordStream(
-		bytes.NewReader(s.plan.blob[planEntry.RecordsOffset:planEntry.RecordsOffset+planEntry.RecordsLength]),
-		planEntry.RecordsLength, blockSize, true, entry.PatchedSHA256, entry.PatchedSize, basePath, output, progress)
+	// 盘片条目与黄金门禁（tools/derive_fs1_disc.py）同序：先把原版容器整
+	// 体复制为输出底版，在纯原版状态的容器块上应用盘片操作，最后把保留
+	// 区域的记录片按容器偏移裸写覆盖。SSF 容器变换是链式密码：解码输入
+	// 必须是单一会话的密文，记录先落的混合会话块会被操作的重加密经链传
+	// 播改写，所以记录必须在操作全部完成之后原样落盘。
+	file, ok := output.(*os.File)
+	if !ok {
+		return fmt.Errorf("%s: 盘片操作需要可随机访问的输出文件", entry.Path)
+	}
+	if err := seedDiscOutput(file, basePath, progress); err != nil {
+		return err
+	}
+	if err := s.applyDiscOps(planEntry, entry, basePath, exePath, file); err != nil {
+		return err
+	}
+	if planEntry.RecordsLength > 0 {
+		return writeDiscRecords(file,
+			s.plan.blob[planEntry.RecordsOffset:planEntry.RecordsOffset+planEntry.RecordsLength], progress)
+	}
+	return nil
 }
 
 // generateFromOps 从用户原版现场生成目标文件：核对原版身份，按序应用

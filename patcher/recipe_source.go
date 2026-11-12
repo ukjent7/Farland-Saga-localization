@@ -281,7 +281,7 @@ func readOriginalResource(imagePath, exePath string, plan *recipePlan, resource 
 	first := int64(plan.ArchiveLBA) + resource.ArchiveOffset/int64(plan.SectorSize)
 	for offset := 0; offset < resource.Size; offset += plan.SectorSize {
 		lba := first + int64(offset/plan.SectorSize)
-		permIndex := 2*283840 + int(lba)
+		permIndex := discPermIndex*283840 + int(lba)
 		if permIndex < 0 || permIndex >= len(tables.Permutation) {
 			return nil, fmt.Errorf("LBA %d 的置换索引越界", lba)
 		}

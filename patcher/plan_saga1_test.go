@@ -5,12 +5,17 @@
 package main
 
 import (
+	"archive/zip"
 	"bytes"
 	"compress/gzip"
 	"encoding/binary"
+	"encoding/hex"
 	"encoding/json"
+	"io"
 	"os"
 	"path/filepath"
+	"sort"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -552,4 +557,379 @@ func TestFS1PlanOpsRejectsCorruption(t *testing.T) {
 	}
 
 	_ = entry
+}
+
+// fs1EventVector 是一条合成事件脚本的金标向量：原版字节、每条已翻译行的
+// 字形对序列，以及由已验证重建算法算出的期望字节。
+type fs1EventVector struct {
+	Name        string `json:"name"`
+	OriginalHex string `json:"original_hex"`
+	Lines       []struct {
+		Line  int    `json:"line"`
+		Codes string `json:"codes"`
+	} `json:"lines"`
+	ExpectedHex string `json:"expected_hex"`
+	Compacted   bool   `json:"compacted"`
+}
+
+func TestFS1EventRebuildGolden(t *testing.T) {
+	raw, err := os.ReadFile(filepath.Join("..", "test-data", "fs1-evt-vectors.json"))
+	if err != nil {
+		t.Skipf("金标向量缺失: %v", err)
+	}
+	var doc struct {
+		Vectors []fs1EventVector `json:"vectors"`
+	}
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		t.Fatal(err)
+	}
+	for _, vector := range doc.Vectors {
+		vector := vector
+		t.Run(vector.Name, func(t *testing.T) {
+			data, err := hex.DecodeString(vector.OriginalHex)
+			if err != nil {
+				t.Fatal(err)
+			}
+			expected, err := hex.DecodeString(vector.ExpectedHex)
+			if err != nil {
+				t.Fatal(err)
+			}
+			// 把各行的替换字形对拼进一个数据段，行条目引用段内偏移。
+			var blobData []byte
+			lines := make([]fs1PlanLine, 0, len(vector.Lines))
+			for _, line := range vector.Lines {
+				codes, err := hex.DecodeString(line.Codes)
+				if err != nil {
+					t.Fatal(err)
+				}
+				lines = append(lines, fs1PlanLine{Line: line.Line,
+					DataOffset: int64(len(blobData)), DataLength: int64(len(codes))})
+				blobData = append(blobData, codes...)
+			}
+			op := fs1PlanOp{Type: "event", Name: vector.Name, LBA: 1,
+				Size: int64(len(data)), SizePatched: int64(len(expected)), Lines: lines}
+			patched, err := rebuildFS1EventBytes(data, &op, blobData)
+			if err != nil {
+				t.Fatalf("重建失败: %v", err)
+			}
+			if !bytes.Equal(patched, expected) {
+				t.Fatalf("重建结果与金标不符（compacted=%v）", vector.Compacted)
+			}
+		})
+	}
+}
+
+// fs1DiscDeclarations 是 recipe/fs1/disc.json 的测试解码结构。
+type fs1DiscDeclarations struct {
+	Schema int    `json:"schema"`
+	File   string `json:"file"`
+	Files  map[string]struct {
+		LBA  int64 `json:"lba"`
+		Size int64 `json:"size"`
+	} `json:"files"`
+	Languages map[string]struct {
+		Events map[string]struct {
+			PairsAdded string `json:"pairs_added"`
+			Lines      []struct {
+				Line  int    `json:"line"`
+				Codes string `json:"codes"`
+			} `json:"lines"`
+			SizePatched int64 `json:"size_patched"`
+			Relocate    *struct {
+				LBA int64 `json:"lba"`
+			} `json:"relocate"`
+		} `json:"events"`
+		Splices map[string][]struct {
+			Offset string `json:"offset"`
+			Hex    string `json:"hex"`
+		} `json:"splices"`
+		Font map[string]struct {
+			Cells [][]any `json:"cells"`
+		} `json:"font"`
+		Ranges [][2]int64 `json:"ranges"`
+	} `json:"languages"`
+}
+
+// fs1RealDiscBackup 定位原版备份（私有工作区优先，其次环境变量指定的目录），
+// 并核对镜像哈希与声明一致；找不到就返回空串让测试跳过。
+func fs1RealDiscBackup(t *testing.T, originalSHA string) string {
+	t.Helper()
+	candidates := []string{
+		filepath.Join("..", "..", "work", "backups", referenceBackup),
+		os.Getenv("FARLAND_FS1_DISC_BACKUP"),
+	}
+	for _, dir := range candidates {
+		if dir == "" {
+			continue
+		}
+		bin := filepath.Join(dir, "FarlandSaga.bin")
+		if _, err := os.Stat(bin); err != nil {
+			continue
+		}
+		if _, err := os.Stat(filepath.Join(dir, "FarlandSaga.exe")); err != nil {
+			continue
+		}
+		if hash, _, err := digestFile(bin); err != nil || hash != originalSHA {
+			continue
+		}
+		return dir
+	}
+	return ""
+}
+
+// TestFS1DiscOpsRealContainer 在原版备份可用时，用声明文件重建真实盘片
+// 容器：裁剪后的记录流先回放，盘片操作再就地应用，最终哈希必须与载荷
+// 清单一致——这正是安装器将要走的路径。
+func TestFS1DiscOpsRealContainer(t *testing.T) {
+	declRaw, err := os.ReadFile(filepath.Join("..", "recipe", "fs1", "disc.json"))
+	if err != nil {
+		t.Skipf("盘片声明缺失: %v", err)
+	}
+	var decl fs1DiscDeclarations
+	if err := json.Unmarshal(declRaw, &decl); err != nil {
+		t.Fatal(err)
+	}
+	if decl.Schema != 1 || decl.File != gameDiscImage {
+		t.Fatalf("声明文件结构不符: schema=%d file=%s", decl.Schema, decl.File)
+	}
+	for _, language := range []string{"zh-CN", "ko-KR", "en-US"} {
+		t.Run(language, func(t *testing.T) {
+			_, entry, recordsRaw := fs1DiscZipRecords(t, language)
+			backup := fs1RealDiscBackup(t, entry.OriginalSHA256)
+			if backup == "" {
+				t.Skip("本地无原版备份，跳过真实盘片重建")
+			}
+			section, ok := decl.Languages[language]
+			if !ok {
+				t.Fatalf("声明缺少 %s", language)
+			}
+
+			// 组装操作与数据段：每条操作的数据顺次进数据段，偏移按操作内相对。
+			var blob []byte
+			var ops []fs1PlanOp
+			appendData := func(data []byte) (int64, int64) {
+				offset := int64(len(blob))
+				blob = append(blob, data...)
+				return offset, int64(len(data))
+			}
+			for _, path := range sortedPaths(section.Events) {
+				event := section.Events[path]
+				ident := decl.Files[path]
+				op := fs1PlanOp{Type: "event", Name: path, LBA: ident.LBA, Size: ident.Size,
+					SizePatched: event.SizePatched}
+				if event.Relocate != nil {
+					op.RelocateLBA = event.Relocate.LBA
+				}
+				pairs, err := hex.DecodeString(event.PairsAdded)
+				if err != nil {
+					t.Fatal(err)
+				}
+				op.PairsOffset, op.PairsLength = appendData(pairs)
+				for _, line := range event.Lines {
+					codes, err := hex.DecodeString(line.Codes)
+					if err != nil {
+						t.Fatal(err)
+					}
+					offset, length := appendData(codes)
+					op.Lines = append(op.Lines, fs1PlanLine{Line: line.Line,
+						DataOffset: int64(offset), DataLength: int64(length)})
+				}
+				ops = append(ops, op)
+			}
+			for _, path := range sortedPaths(section.Splices) {
+				ident := decl.Files[path]
+				op := fs1PlanOp{Type: "splice", Name: path, LBA: ident.LBA, Size: ident.Size}
+				for _, patch := range section.Splices[path] {
+					data, err := hex.DecodeString(patch.Hex)
+					if err != nil {
+						t.Fatal(err)
+					}
+					offsetValue, _ := strconv.ParseInt(patch.Offset, 0, 64)
+					offset, length := appendData(data)
+					op.Patches = append(op.Patches, fs1PlanPatch{Offset: offsetValue,
+						DataOffset: int64(offset), DataLength: int64(length)})
+				}
+				ops = append(ops, op)
+			}
+			for _, path := range sortedPaths(section.Font) {
+				ident := decl.Files[path]
+				op := fs1PlanOp{Type: "discfont", Name: path, LBA: ident.LBA, Size: ident.Size,
+					Cells: len(section.Font[path].Cells)}
+				for _, cell := range section.Font[path].Cells {
+					slot, ok := cell[0].(float64)
+					if !ok {
+						t.Fatal("字形槽位不是数字")
+					}
+					glyph, ok := cell[1].(string)
+					if !ok {
+						t.Fatal("字形数据不是字符串")
+					}
+					data, err := hex.DecodeString(glyph)
+					if err != nil {
+						t.Fatal(err)
+					}
+					offset, length := appendData(data)
+					op.Slots = append(op.Slots, int(slot))
+					if len(op.Slots) == 1 {
+						op.GlyphsOffset = int64(offset)
+					} else if int64(length) != 32 {
+						t.Fatal("字形不是 32 字节")
+					}
+				}
+				ops = append(ops, op)
+			}
+
+			// 裁剪记录流：完全落在声明区间里的记录由操作替代。
+			var kept []byte
+			dropped := 0
+			index := 0
+			for index < len(recordsRaw) {
+				offset := int64(binary.LittleEndian.Uint64(recordsRaw[index : index+8]))
+				length := int64(binary.LittleEndian.Uint32(recordsRaw[index+8 : index+12]))
+				data := recordsRaw[index+12 : index+12+int(length)]
+				inside := false
+				for _, r := range section.Ranges {
+					if r[0] <= offset && offset+length <= r[1] {
+						inside = true
+						break
+					}
+				}
+				if !inside {
+					var header [recordSize]byte
+					binary.LittleEndian.PutUint64(header[0:8], uint64(offset))
+					binary.LittleEndian.PutUint32(header[8:12], uint32(length))
+					kept = append(kept, header[:]...)
+					kept = append(kept, data...)
+				} else {
+					dropped++
+				}
+				index += recordSize + int(length)
+			}
+			t.Logf("记录流: 保留 %d 字节的 %d 条之外替换了 %d 条",
+				len(kept), len(kept)/12-dropped, dropped)
+
+			// 原版镜像写进临时输出，先在纯原版状态上应用盘片操作，最后裸写
+			// 保留记录片（与安装器同序：链式容器变换的读改写要求操作先于
+			// 记录，否则记录字节会被操作的链传播改写）。
+			pristine := filepath.Join(backup, "FarlandSaga.bin")
+			out, err := os.Create(filepath.Join(t.TempDir(), "FarlandSaga.bin"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			base, err := os.Open(pristine)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := io.Copy(out, base); err != nil {
+				t.Fatal(err)
+			}
+			base.Close()
+			// 回卷到文件头：盘片操作与保留记录都按偏移重写整个镜像。
+			if _, err := out.Seek(0, io.SeekStart); err != nil {
+				t.Fatal(err)
+			}
+			source := &fs1PlanSource{plan: &fs1Plan{blob: blob}, language: language}
+			planEntry := &fs1PlanEntry{Ops: ops}
+			discEntry := fileEntry{Path: gameDiscImage, OriginalSHA256: entry.OriginalSHA256,
+				OriginalSize: entry.PatchedSize}
+			if err := source.applyDiscOps(planEntry, discEntry, pristine,
+				filepath.Join(backup, "FarlandSaga.exe"), out); err != nil {
+				t.Fatalf("盘片操作失败: %v", err)
+			}
+			if len(kept) > 0 {
+				if err := writeDiscRecords(out, kept, nil); err != nil {
+					t.Fatalf("保留记录写回失败: %v", err)
+				}
+			}
+			hash, _, err := digestFile(out.Name())
+			if err != nil {
+				t.Fatal(err)
+			}
+			if hash != entry.PatchedSHA256 {
+				t.Fatalf("重建容器哈希不符：期望 %s，实际 %s", entry.PatchedSHA256, hash)
+			}
+			out.Close()
+		})
+	}
+}
+
+func sortedPaths[V any](table map[string]V) []string {
+	paths := make([]string, 0, len(table))
+	for path := range table {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths)
+	return paths
+}
+
+// fs1DiscZipRecords 读语言载荷里盘片差异对象的记录流与清单条目。
+func fs1DiscZipRecords(t *testing.T, language string) (manifest, fileEntry, []byte) {
+	t.Helper()
+	name := "farland-patch-" + language + "-unifont08.zip"
+	if language != "zh-CN" {
+		name = "farland-patch-" + language + "-unifont-full07.zip"
+	}
+	archive, err := zip.OpenReader(filepath.Join("..", "recipe", "fs1", "payload", name))
+	if err != nil {
+		t.Skipf("语言载荷缺失: %v", err)
+	}
+	defer archive.Close()
+	var manifestFile *zip.File
+	for _, f := range archive.File {
+		if f.Name == manifestName {
+			manifestFile = f
+		}
+	}
+	if manifestFile == nil {
+		t.Fatalf("%s 缺少清单", name)
+	}
+	reader, err := manifestFile.Open()
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := io.ReadAll(reader)
+	reader.Close()
+	if err != nil {
+		t.Fatal(err)
+	}
+	var loaded manifest
+	if err := json.Unmarshal(raw, &loaded); err != nil {
+		t.Fatal(err)
+	}
+	for _, f := range loaded.Files {
+		if f.Path != gameDiscImage {
+			continue
+		}
+		for _, obj := range archive.File {
+			if obj.Name != f.Object {
+				continue
+			}
+			objectReader, err := obj.Open()
+			if err != nil {
+				t.Fatal(err)
+			}
+			raw, err := io.ReadAll(objectReader)
+			objectReader.Close()
+			if err != nil {
+				t.Fatal(err)
+			}
+			gz, err := gzip.NewReader(bytes.NewReader(raw))
+			if err != nil {
+				t.Fatal(err)
+			}
+			body, err := io.ReadAll(gz)
+			gz.Close()
+			if err != nil {
+				t.Fatal(err)
+			}
+			newline := bytes.IndexByte(body, '\n')
+			if newline < 0 {
+				t.Fatal("差异对象缺头部")
+			}
+			return loaded, f, body[newline+1:]
+		}
+		t.Fatalf("%s 缺少盘片差异对象 %s", name, f.Object)
+	}
+	t.Fatalf("%s 清单缺少盘片条目", name)
+	return loaded, fileEntry{}, nil
 }

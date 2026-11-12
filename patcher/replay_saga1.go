@@ -14,10 +14,11 @@ func supportsSectors() bool {
 	return false
 }
 
-// replayEntry 重建一个目标文件。exePath 在一代用不到，忽略。
-func (p *payload) replayEntry(entry fileEntry, basePath string, _ string, output io.Writer, progress func(int64)) error {
+// replayEntry 重建一个目标文件。exePath 为游戏可执行文件，盘片操作的
+// 扇区变换与置换表要从它的 PE 映像里取；留空时由盘片回放就近查找。
+func (p *payload) replayEntry(entry fileEntry, basePath string, exePath string, output io.Writer, progress func(int64)) error {
 	if p.recipe != nil {
-		return p.recipe.replayEntry(entry, basePath, "", output, progress)
+		return p.recipe.replayEntry(entry, basePath, exePath, output, progress)
 	}
 	if entry.SectorsObject != "" {
 		return errors.New("一代补丁不支持扇区对象")

@@ -44,6 +44,7 @@ PLAN_GAME = 'saga1'
 DECL_DIR = REPO / 'recipe' / 'fs1'
 DECL_EXE = DECL_DIR / 'exe.json'
 DECL_UNITY = DECL_DIR / 'unity.json'
+DECL_DISC = DECL_DIR / 'disc.json'
 LANGUAGES = ['zh-CN', 'ko-KR', 'en-US']
 # 一代差异对象的记录格式：<偏移 u64 小端, 长度 u32 小端> + 块数据，单块上限
 # 与 payload.go 的 blockSize 一致。
@@ -226,8 +227,129 @@ def load_declarations(font, decl_exe: Path = DECL_EXE,
     return declarations
 
 
+def load_disc_declarations(decl_disc: Path) -> tuple[dict, dict]:
+    """读取盘片声明：共享的文件身份（LBA/尺寸）与每语言的盘片操作。
+
+    事件操作携带新增字形对与每条已翻译行的替换序列；拼接操作携带定长
+    字节补丁；字库操作携带 Unifont 字形槽位。每个语言的数据段独立成段，
+    各操作的数据偏移按段内相对计算，拼进全局数据段时再整体平移。
+    """
+    document = read_json(decl_disc)
+    if document.get('schema') != 1 or document.get('file') != DISC_IMAGE:
+        fail(f'{decl_disc}: 结构不符')
+    shared = document.get('files')
+    if not isinstance(shared, dict) or not shared:
+        fail(f'{decl_disc}: 缺少文件身份')
+    languages = document.get('languages')
+    if not isinstance(languages, dict):
+        fail(f'{decl_disc}: 缺少语言')
+    for language in LANGUAGES:
+        if language not in languages:
+            fail(f'{decl_disc}: 缺少语言 {language}')
+    for language, section in languages.items():
+        if language not in LANGUAGES:
+            fail(f'{decl_disc}: 未知语言 {language}')
+        if not section.get('events'):
+            fail(f'{decl_disc}: {language} 没有事件操作')
+        ranges = section.get('ranges')
+        if not ranges:
+            fail(f'{decl_disc}: {language} 缺少记录裁剪区间')
+
+    declarations = {}
+    for language in LANGUAGES:
+        section = languages[language]
+        ops: list[dict] = []
+        data = bytearray()
+        for path in sorted(section['events']):
+            event = section['events'][path]
+            ident = shared.get(path)
+            if ident is None:
+                fail(f'{decl_disc}: {path} 缺少文件身份')
+            op = {'type': 'event', 'name': path, 'lba': ident['lba'], 'size': ident['size'],
+                  'size_patched': event['size_patched']}
+            if event.get('relocate'):
+                op['relocate_lba'] = event['relocate']['lba']
+            pairs = bytes.fromhex(event['pairs_added'])
+            if not pairs:
+                fail(f'{decl_disc}: {language}/{path} 缺少新增字形对')
+            offset, length = len(data), len(pairs)
+            op['pairs_offset'], op['pairs_length'] = offset, length
+            data += pairs
+            lines = []
+            for line in sorted(event['lines'], key=lambda row: row['line']):
+                payload = bytes.fromhex(line['codes'])
+                if not payload:
+                    fail(f'{decl_disc}: {language}/{path} 行 {line["line"]} 没有数据')
+                offset, length = len(data), len(payload)
+                lines.append({'line': line['line'], 'data_offset': offset, 'data_length': length})
+                data += payload
+            op['lines'] = lines
+            ops.append(op)
+        for path in sorted(section.get('splices', {})):
+            patches_decl = section['splices'][path]
+            ident = shared.get(path)
+            if ident is None:
+                fail(f'{decl_disc}: {path} 缺少文件身份')
+            op = {'type': 'splice', 'name': path, 'lba': ident['lba'], 'size': ident['size']}
+            patches = []
+            for patch in patches_decl:
+                payload = bytes.fromhex(patch['hex'])
+                offset, length = len(data), len(payload)
+                patches.append({'offset': int(patch['offset'], 16),
+                                'data_offset': offset, 'data_length': length})
+                data += payload
+            op['patches'] = patches
+            ops.append(op)
+        for path in sorted(section.get('font', {})):
+            cells = section['font'][path]['cells']
+            ident = shared.get(path)
+            if ident is None:
+                fail(f'{decl_disc}: {path} 缺少文件身份')
+            op = {'type': 'discfont', 'name': path, 'lba': ident['lba'], 'size': ident['size'],
+                  'cells': ident['size'] // 32}
+            slots = []
+            glyphs_offset = None
+            for cell in cells:
+                slot, glyph = cell[0], bytes.fromhex(cell[1])
+                if len(glyph) != 32:
+                    fail(f'{decl_disc}: {language}/{path} 字形不是 32 字节')
+                if glyphs_offset is None:
+                    glyphs_offset = len(data)
+                slots.append(int(slot))
+                data += glyph
+            op['slots'] = slots
+            op['glyphs_offset'] = glyphs_offset
+            ops.append(op)
+        declarations[language] = {'ops': ops, 'data': bytes(data),
+                                  'ranges': section['ranges']}
+    return shared, declarations
+
+
+def prune_disc_records(records: bytes, ranges: list[list[int]]) -> bytes:
+    """丢弃完全落在声明扇区区间里的记录：那些字节由操作在安装期重建。
+
+    跨越区间边界的记录整条保留。容器层 SSF 密文是链式密码，块内字节的
+    密文依赖同一 SSF 块里相邻字节的真实历史；操作从纯原版镜像重建声明
+    扇区时，共享块里未声明部分的链状态与真实补丁器不一致，产生的密文与
+    真实容器逐字节不同（cdrom 层明文一致，容器层密文带恒定偏移）。跨界
+    记录携带的原始容器字节（含相邻未声明扇区的密文）必须在操作完成后
+    原样落盘才能收敛到真实容器。"""
+    kept = bytearray()
+    index = 0
+    while index < len(records):
+        offset = int.from_bytes(records[index:index + 8], 'little')
+        length = int.from_bytes(records[index + 8:index + 12], 'little')
+        end = offset + length
+        inside = any(lo <= offset and end <= hi for lo, hi in ranges)
+        if not inside:
+            kept.extend(records[index:index + 12 + length])
+        index += 12 + length
+    return bytes(kept)
+
+
 def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
-                  decl_unity: Path = DECL_UNITY) -> tuple[list[dict], dict, dict, bytes]:
+                  decl_unity: Path = DECL_UNITY,
+                  decl_disc: Path = DECL_DISC) -> tuple[list[dict], dict, dict, bytes]:
     """Load every language ZIP and the declarations; return the plan parts.
 
     Files covered by declarations become install-time operations and their
@@ -245,6 +367,7 @@ def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
         fail(f'{payload_dir}: 存在未知文件 {sorted(strays)}，语言载荷目录必须只包含 *.zip')
 
     declarations = load_declarations(font, decl_exe, decl_unity)
+    disc_files, disc_declarations = load_disc_declarations(decl_disc)
     declared_paths = set()
     for language in LANGUAGES:
         declared_paths.update(declarations[language])
@@ -291,6 +414,38 @@ def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
             for name in sorted(declared):
                 entry = dict(declared[name])
                 label = f'{language}/{name}'
+                if name == DISC_IMAGE:
+                    # 盘片条目：裁剪后的记录流（标题图等仍按差异携带）与盘片
+                    # 操作共存；清单仍然是容器身份的权威。
+                    records = object_records(archive, entry, label)
+                    pruned = prune_disc_records(records, disc_declarations[language]['ranges'])
+                    # 操作的数据段排在裁剪记录流之后，平移基址要加上它的长度。
+                    shift = blob_length + len(pruned)
+                    disc_ops = []
+                    for op in disc_declarations[language]['ops']:
+                        moved = dict(op)
+                        if moved['type'] == 'event':
+                            moved['pairs_offset'] += shift
+                            moved['lines'] = [dict(line, data_offset=line['data_offset'] + shift)
+                                              for line in moved['lines']]
+                        elif moved['type'] == 'splice':
+                            moved['patches'] = [dict(patch, data_offset=patch['data_offset'] + shift)
+                                                for patch in moved['patches']]
+                        else:
+                            moved['glyphs_offset'] += shift
+                        disc_ops.append(moved)
+                    per_language[name] = {
+                        'patched_sha256': entry['patched_sha256'],
+                        'patched_size': entry['patched_size'],
+                        'records_offset': blob_length,
+                        'records_length': len(pruned),
+                        'ops': disc_ops,
+                    }
+                    blob_parts.append(pruned)
+                    blob_length += len(pruned)
+                    blob_parts.append(disc_declarations[language]['data'])
+                    blob_length += len(disc_declarations[language]['data'])
+                    continue
                 if name in declarations[language]:
                     declaration = declarations[language][name]
                     if entry['patched_sha256'] != declaration['patched_sha256']:
@@ -375,7 +530,8 @@ def compile_plan(payload_dir: Path, output: Path, lock_path: Path,
     decl_dir = declarations_dir or DECL_DIR
     from fls.containers.unifont_bitmap import Unifont
     languages, files, entries, blob = load_payloads(
-        payload_dir, Unifont(), decl_dir / 'exe.json', decl_dir / 'unity.json')
+        payload_dir, Unifont(), decl_dir / 'exe.json', decl_dir / 'unity.json',
+        decl_dir / 'disc.json')
     digest = hashlib.sha256(blob).hexdigest()
 
     header = {
@@ -442,7 +598,7 @@ def main() -> None:
     parser.add_argument('--lock', type=Path, default=DEFAULT_LOCK,
                         help='plan lock 路径（默认 recipe/fs1/plan.lock.json）')
     parser.add_argument('--declarations', type=Path, default=None,
-                        help=f'声明目录（默认 {DECL_DIR}，含 exe.json 与 unity.json）')
+                        help=f'声明目录（默认 {DECL_DIR}，含 exe.json、unity.json 与 disc.json）')
     parser.add_argument('--write-plan-lock', action='store_true',
                         help='接受本次编译的字节并改写 plan lock')
     parser.add_argument('--report', type=Path,

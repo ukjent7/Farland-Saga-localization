@@ -105,6 +105,16 @@ declared bytes into place and re-encoding the font region through the LZ
 format — and finally verify the rebuilt length and SHA-256 against the plan.
 A tampered original is refused before any write.
 
+The disc image combines both: the installer seeds the output with a pristine
+copy, applies the disc operations in place (so the SSF block transforms see
+a single-encryption-session container), and writes the kept diff records raw
+over the result, mirroring `tools/derive_fs1_disc.py verify`. Records fully
+inside the declared sectors' container ranges are dropped at compile time;
+records that straddle a range boundary travel whole, because the container
+cipher chains within each 2048-byte SSF block and the operations cannot
+reproduce the ciphertext of blocks whose untouched half belongs to a
+neighboring rewritten sector.
+
 ## Later phases
 
 The remaining record streams are the disc image and the texture. The

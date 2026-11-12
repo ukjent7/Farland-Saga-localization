@@ -108,7 +108,7 @@ func replaySectorStream(entry fileEntry, basePath string, exePath string, output
 
 		cipher := SectorTransform(sectorBuf, int(lba), discTables.Dwords, discTables.Qwords, true)
 
-		permIdx := 2*283840 + int(lba)
+		permIdx := discPermIndex*283840 + int(lba)
 		if permIdx >= len(discTables.Permutation) {
 			return fmt.Errorf("LBA 置换索引越界: %d", lba)
 		}
