@@ -365,18 +365,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     patcher = commands.add_parser(
         'build-patcher',
-        help='Build the self-contained Windows patcher with payloads embedded',
+        help='Compile the install plan and build the self-contained Windows patcher',
     )
     patcher.add_argument(
         '--output',
         default='release/FarlandSagaPatcher-windows-amd64.exe',
         help='输出路径（相对于 work/），或绝对路径',
-    )
-    patcher.add_argument(
-        '--stage',
-        action='append',
-        dest='stages',
-        help='要内嵌的候选目录名，可重复；默认中、韩、英三个',
     )
 
     build = commands.add_parser('build', help='Rebuild full text or selected native UI resources')
@@ -713,7 +707,7 @@ def main() -> None:
 
     elif args.command == 'build-patcher':
         from fls.builders.build_patcher import build
-        result = build(args.output, args.stages)
+        result = build(args.output)
         print(json.dumps(result, ensure_ascii=False, indent=2))
 
     elif args.command == 'build':

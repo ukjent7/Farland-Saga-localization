@@ -55,7 +55,7 @@ SHA-256 hashes.
 
 The compiler rasterises text with Pillow, packs 1bpp slots, emits one mask per
 label, renders the three texture languages, and writes
-`patcher/plan/plan.bin`. Every font load pins `ImageFont.Layout.BASIC`: when
+`patcher/plan/saga2/plan.bin`. Every font load pins `ImageFont.Layout.BASIC`: when
 libraqm is installed, Pillow otherwise switches to Raqm/HarfBuzz, which changes
 shaping and bytes for some strings. The expected reference bytes use the basic
 layout, so the pin keeps every machine on the same renderer.
@@ -69,7 +69,7 @@ plan and rerun with `--write-plan-lock` to accept the new blob. Pass
 game, so a clean checkout produces the same rendered blob byte for byte. The
 gzip wrapper can differ with the host zlib, so the lock covers the uncompressed
 blob rather than the plan file. `go build -tags saga2` embeds the plan;
-`patcher/plan/plan.bin` is ignored by git.
+`patcher/plan/saga2/plan.bin` is ignored by git.
 
 Texture label and panel layers are stored as raw RGBA in the blob. Pillow's PNG
 encoder uses the host zlib, which changed the plan bytes between Fedora and the

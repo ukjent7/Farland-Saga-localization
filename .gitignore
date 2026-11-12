@@ -21,6 +21,12 @@ SHA256SUMS
 # 私有工作区约定：游戏数据、候选、备份与存储都放这里，不进入公开仓库
 /work/
 
-# Compiled recipe plan and report are private build artifacts.
+# Compiled recipe plans and reports are private build artifacts. Each game
+# embeds its own subdirectory, so only the .gitkeep markers stay tracked.
 /patcher/plan/*
-!/patcher/plan/.gitkeep
+!/patcher/plan/saga1/
+!/patcher/plan/saga2/
+/patcher/plan/saga1/*
+!/patcher/plan/saga1/.gitkeep
+/patcher/plan/saga2/*
+!/patcher/plan/saga2/.gitkeep

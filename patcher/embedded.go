@@ -1,9 +1,9 @@
-// 编译期内嵌的补丁载荷。
+// 编译期内嵌的补丁来源。
 //
-// 发布形态是单个可执行文件。二代把公开仓库里的 recipe 编译成 plan.bin 后
-// 由 go:embed 内嵌；一代仍按语言把 farland-patch-*.zip 放进 payload/saga1
-// 再嵌入。两个作品的内嵌来源由 embedded_saga*.go 按构建标签二选一，这段
-// 代码只负责统一顺序和解析结果。
+// 发布形态是单个可执行文件。两个作品都把编译期生成的 plan.bin 交由
+// go:embed 内嵌——二代来自公开仓库的 recipe，一代来自 recipe/fs1 的语言
+// 载荷。内嵌来源由 embedded_saga*.go 按构建标签二选一，这段代码只负责
+// 统一顺序和解析结果。
 package main
 
 // loadEmbedded 读取编译期内嵌的全部补丁载荷。整包读进内存，按中、韩、英

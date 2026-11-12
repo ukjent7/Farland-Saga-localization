@@ -1,47 +1,27 @@
 //go:build !saga2
 
-// 一代内嵌的补丁载荷目录。embed 指令要求路径是字面量，所以每个作品各写
-// 一份；payloadDir 在 game_saga1.go 里与之对应。
+// 一代的内嵌补丁来源：编译期生成的安装计划，按语言展开成 payload 列表。
+// 语言 ZIP 不再进入发布构建；差异数据由安装计划携带。
 package main
 
-import (
-	"embed"
-	"io/fs"
-	"path/filepath"
-	"sort"
-	"strings"
-)
-
-//go:embed all:payload/saga1
-var embeddedPayloads embed.FS
-
-func embeddedPlanPayloads() ([]*payload, []string) { return nil, nil }
-
-func embeddedZipPayloads() ([]*payload, []string) {
-	entries, err := fs.ReadDir(embeddedPayloads, payloadDir)
+func embeddedPlanPayloads() ([]*payload, []string) {
+	data := embeddedPlanData()
+	if len(data) == 0 {
+		return nil, nil
+	}
+	plan, err := loadFS1Plan(data)
 	if err != nil {
-		return nil, []string{err.Error()}
+		return nil, []string{"内嵌安装计划: " + err.Error()}
 	}
-	var loaded []*payload
-	var problems []string
-	for _, entry := range entries {
-		if entry.IsDir() || !strings.EqualFold(filepath.Ext(entry.Name()), ".zip") {
-			continue
-		}
-		data, err := fs.ReadFile(embeddedPayloads, payloadDir+"/"+entry.Name())
+	payloads := make([]*payload, 0, len(plan.languages))
+	for _, language := range plan.languages {
+		loaded, err := newFS1PlanPayload(plan, language)
 		if err != nil {
-			problems = append(problems, entry.Name()+": "+err.Error())
-			continue
+			return nil, []string{"内嵌安装计划: " + err.Error()}
 		}
-		item, err := openPayloadData(entry.Name(), data)
-		if err != nil {
-			problems = append(problems, entry.Name()+": "+err.Error())
-			continue
-		}
-		loaded = append(loaded, item)
+		payloads = append(payloads, loaded)
 	}
-	sort.Slice(loaded, func(i, j int) bool {
-		return languageRank(loaded[i].info.Language) < languageRank(loaded[j].info.Language)
-	})
-	return loaded, problems
+	return payloads, nil
 }
+
+func embeddedZipPayloads() ([]*payload, []string) { return nil, nil }

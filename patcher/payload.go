@@ -1,12 +1,13 @@
 // 补丁载荷的读取与差异回放。
 //
-// 一代载荷由 fls.storage.package_release 写出，与 version_storage 的差异对象
+// ZIP 载荷由 fls.storage.package_release 写出，与 version_storage 的差异对象
 // 格式一致：ZIP 内一个 manifest.json 描述每个目标文件的原版/补丁身份，
 // objects/<sha256>.gz 是相对原版的差异块（gzip：一行 JSON 头 + 连续的
 // <偏移 u64, 长度 u32> 记录与块数据）。回放时空隙从原版文件读取，重建结果的
-// SHA-256 必须等于对象名，任何不符都视为损坏。二代不再使用 ZIP 载荷：内嵌的
-// recipe plan 由 recipe_source.go 从用户原版现场生成，Format 3 历史载荷仍由
-// payload_saga2.go 支持。
+// SHA-256 必须等于对象名，任何不符都视为损坏。发布构建不再内嵌 ZIP：两个
+// 作品都安装编译期生成的 plan——一代 plan 由 plan_saga1.go 回放，二代 recipe
+// plan 由 recipe_source.go 从用户原版现场生成，Format 3 历史载荷仍由
+// payload_saga2.go 支持。ZIP 载荷保留给 --payload 外部排障包。
 package main
 
 import (
@@ -358,15 +359,27 @@ func (p *payload) replay(entry fileEntry, basePath string, output io.Writer, pro
 	if header.Base != nil && (header.Base.SHA256 != entry.OriginalSHA256 || header.Base.Size != entry.OriginalSize) {
 		return fmt.Errorf("差异对象 %s 的原版基准与 manifest 不一致", entry.Object)
 	}
-	var base *os.File
-	if header.Base != nil {
-		opened, err := os.Open(basePath)
-		if err != nil {
-			return fmt.Errorf("无法读取原版文件 %s: %w", basePath, err)
-		}
-		defer opened.Close()
-		base = opened
+	maxRecord := int64(blockSize)
+	if header.Format == objectFormatChunked {
+		maxRecord = 64 * 1024 * 1024
 	}
+	// 差异对象声明了原版基准时空隙从基准补齐；未声明基准的对象必须覆盖
+	// 整个文件。记录流的回放、长度与哈希核对由共用的 replayRecordStream
+	// 完成，安装计划（plan.bin）走同一实现。
+	if err := replayRecordStream(reader, -1, maxRecord, header.Base != nil,
+		header.SHA256, header.Size, basePath, output, progress); err != nil {
+		return fmt.Errorf("差异对象 %s: %w", entry.Object, err)
+	}
+	return nil
+}
+
+// replayRecordStream 把一段差异记录流回放到原版基准文件上：记录按顺序供给
+// 变更块，空隙从 basePath 读取，边写边哈希，最终长度与哈希逐一核对。
+// streamLength 小于零表示读到流结束；maxRecord 限定单块长度上限；allowBase
+// 为假时空隙一律拒绝（声明无基准的差异对象必须覆盖整个文件）。
+func replayRecordStream(records io.Reader, streamLength int64, maxRecord int64, allowBase bool,
+	patchedSHA256 string, patchedSize int64, basePath string, output io.Writer, progress func(int64)) error {
+	reader := bufio.NewReaderSize(records, readChunk)
 	hash := sha256.New()
 	var position int64
 	write := func(data []byte) error {
@@ -382,16 +395,39 @@ func (p *payload) replay(entry fileEntry, basePath string, output io.Writer, pro
 		}
 		return nil
 	}
+	// 基准文件惰性打开：记录流覆盖整个文件的条目（如 Texture.tex 整体重写）
+	// 不需要原版文件在场。
+	var base *os.File
+	openBase := func() error {
+		if base != nil {
+			return nil
+		}
+		opened, err := os.Open(basePath)
+		if err != nil {
+			return fmt.Errorf("无法读取原版文件 %s: %w", basePath, err)
+		}
+		base = opened
+		return nil
+	}
+	defer func() {
+		if base != nil {
+			base.Close()
+		}
+	}()
 	gap := func(end int64) error {
-		if end > position && base == nil {
+		if end <= position {
+			return nil
+		}
+		if !allowBase {
 			return errors.New("完整差异对象缺少原版基准块")
 		}
-		if base != nil {
-			// 写入差异记录时输出位置会越过基准文件的读取位置，每次补空档前
-			// 都必须先把基准文件定位到输出位置，和 version_storage.replay 一致。
-			if _, err := base.Seek(position, io.SeekStart); err != nil {
-				return err
-			}
+		if err := openBase(); err != nil {
+			return err
+		}
+		// 写入差异记录时输出位置会越过基准文件的读取位置，每次补空档前
+		// 都必须先把基准文件定位到输出位置，和 version_storage.replay 一致。
+		if _, err := base.Seek(position, io.SeekStart); err != nil {
+			return err
 		}
 		for position < end {
 			buffer := make([]byte, min(readChunk, end-position))
@@ -403,7 +439,7 @@ func (p *payload) replay(entry fileEntry, basePath string, output io.Writer, pro
 			}
 			if read == 0 {
 				if errors.Is(err, io.EOF) {
-					return errors.New("原版文件比差异对象基准短")
+					return errors.New("原版文件比差异记录的基准短")
 				}
 				if err == nil {
 					return errors.New("原版文件读取没有进展")
@@ -417,49 +453,65 @@ func (p *payload) replay(entry fileEntry, basePath string, output io.Writer, pro
 		return nil
 	}
 	record := make([]byte, recordSize)
+	bounded := streamLength >= 0
+	remaining := streamLength
 	for {
+		if bounded && remaining == 0 {
+			break
+		}
 		if _, err := io.ReadFull(reader, record); err != nil {
-			if errors.Is(err, io.EOF) {
-				break
+			if errors.Is(err, io.EOF) && !bounded {
+				break // 未定长流（差异对象）在记录流结尾正常结束
 			}
-			if errors.Is(err, io.ErrUnexpectedEOF) {
-				return fmt.Errorf("差异对象 %s 的记录被截断", entry.Object)
+			if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
+				return errors.New("记录被截断")
 			}
-			return fmt.Errorf("差异对象 %s 读取失败: %w", entry.Object, err)
+			return fmt.Errorf("差异记录读取失败: %w", err)
+		}
+		if bounded {
+			remaining -= recordSize
 		}
 		offset := int64(binary.LittleEndian.Uint64(record[0:8]))
-		size := binary.LittleEndian.Uint32(record[8:12])
-		maxRecordSize := uint32(blockSize)
-		if header.Format == objectFormatChunked {
-			maxRecordSize = 64 * 1024 * 1024
-		}
-		if offset < position || size == 0 || size > maxRecordSize || offset+int64(size) > header.Size {
-			return fmt.Errorf("差异对象 %s 的记录范围非法", entry.Object)
+		size := int64(binary.LittleEndian.Uint32(record[8:12]))
+		if offset < position || size == 0 || size > maxRecord || offset+size > patchedSize {
+			return errors.New("记录范围非法")
 		}
 		if err := gap(offset); err != nil {
 			return err
 		}
-		remaining := int64(size)
-		for remaining > 0 {
-			chunkSize := int(min(readChunk, remaining))
-			block := make([]byte, chunkSize)
-			if _, err := io.ReadFull(reader, block); err != nil {
-				return fmt.Errorf("差异对象 %s 的数据块被截断: %w", entry.Object, err)
-			}
-			if err := write(block); err != nil {
-				return err
-			}
-			remaining -= int64(chunkSize)
+		if bounded && remaining < size {
+			return errors.New("记录被截断")
+		}
+		written, err := io.Copy(writerFunc(write), io.LimitReader(reader, size))
+		if err != nil {
+			return fmt.Errorf("数据块读取失败: %w", err)
+		}
+		if written != size {
+			return errors.New("数据块被截断")
+		}
+		if bounded {
+			remaining -= size
 		}
 	}
-	if err := gap(header.Size); err != nil {
+	// 记录流结束后的尾段全部来自原版基准。
+	if err := gap(patchedSize); err != nil {
 		return err
 	}
-	if position != header.Size {
-		return fmt.Errorf("差异对象 %s 重建长度不符", entry.Object)
+	if position != patchedSize {
+		return errors.New("差异记录重建长度不符")
 	}
-	if hex.EncodeToString(hash.Sum(nil)) != header.SHA256 {
-		return fmt.Errorf("差异对象 %s 重建哈希不符", entry.Object)
+	if hex.EncodeToString(hash.Sum(nil)) != patchedSHA256 {
+		return errors.New("差异记录重建哈希不符")
 	}
 	return nil
+}
+
+// writerFunc 把写函数适配成 io.Writer，供回放管线直接消费记录数据。
+type writerFunc func(data []byte) error
+
+func (fn writerFunc) Write(data []byte) (int, error) {
+	if err := fn(data); err != nil {
+		return 0, err
+	}
+	return len(data), nil
 }

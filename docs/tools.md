@@ -150,14 +150,17 @@ bash flow.sh restore-original --game-is-closed
 bash flow.sh package-release --stage zh-CN-unifont08
 bash flow.sh package-release --stage ko-KR-unifont-full07
 bash flow.sh package-release --stage en-US-unifont-full07
+#    Review the ZIPs, then commit them into recipe/fs1/payload/ — the
+#    committed language payloads supply the disc-image and texture record
+#    streams and the authority on every file's original/patched identity.
 
-# 2. Embed all patches and cross-compile the single-file patcher
+# 2. Compile the install plan and cross-compile the single-file patcher
 bash flow.sh build-patcher
 ```
 
 `package-release` first verifies identity file by file against the candidate report, then writes each file's 4 KiB diff blocks against the original backup into a payload ZIP (default `work/release/farland-patch-<version>.zip`); diff objects enter the cold store and are shared with the historical archive. `--output` changes the output directory. With `--patcher` it also produces the end-user bundle `FarlandSagaPatcher-<version>-win64.zip` (patcher plus GUI-only usage notes), ready to attach to a GitHub release. Repeated packaging of the same candidate is byte-identical. Windows is the only target: the game is a Windows-only Steam build, so no Linux bundle is produced.
 
-`build-patcher` is the final form for end users: it copies each language's payload ZIP into `patcher/payload/saga1/`, embeds them via the patcher's `go:embed`, and cross-compiles the Windows build, producing a single executable (about 75 MB, of which about 71 MB is patch data). It embeds the zh-CN, ko-KR, and en-US candidates by default; `--stage` can be repeated to choose which to embed, and `--output` changes the output location. Missing payloads are packaged automatically first. `patcher/payload/saga1/*.zip` is committed so the release build is self-contained. The sequel no longer ships payload ZIPs: `tools/compile_recipe.py` compiles the public recipe and OFL fonts into `patcher/plan/plan.bin`, which the `-tags saga2` build embeds. The patcher's own build, commands, and security boundary are in [../patcher/README.md](../patcher/README.md).
+`build-patcher` is the final form for end users: it runs `tools/compile_recipe_fs1.py`, which compiles `patcher/plan/saga1/plan.bin` from two committed sources — the declarations in `recipe/fs1/exe.json`/`unity.json` (rendered through Unifont into exe font/patch operations and Unity text operations, carrying no game-derived bytes) and the committed language ZIPs in `recipe/fs1/payload/` (the disc-image and texture record streams plus every file's identity manifest) — verified against `recipe/fs1/plan.lock.json`, embeds the plan via the patcher's `go:embed`, and cross-compiles the Windows build, producing a single executable. The three languages are always embedded together; `--output` changes the output location. The compiler reads only committed files, so the release build needs no game files. Refreshing the declarations from pristine originals is a maintainer step (`tools/derive_fs1_ops.py extract|verify --backup <dir>`, see `recipe/fs1/README.md`) and is only needed when the underlying exe/Unity patches change. The sequel no longer ships payload ZIPs: `tools/compile_recipe.py` compiles the public recipe and OFL fonts into `patcher/plan/saga2/plan.bin`, which the `-tags saga2` build embeds. Both plans are gitignored and compiled by CI before every test and release build. The patcher's own build, commands, and security boundary are in [../patcher/README.md](../patcher/README.md).
 
 ## Shared Modules
 

@@ -52,6 +52,8 @@ jobs:
           mkdir -p "$FARLAND_WORK"
           echo "=== 正在从公开 recipe 与 OFL 字体编译二代安装计划 ==="
           bash uv.sh run --locked python tools/compile_recipe.py
+          echo "=== 正在从提交的语言载荷编译一代安装计划 ==="
+          bash uv.sh run --locked python tools/compile_recipe_fs1.py
 
       # 不需要游戏文件的那部分端到端门禁。全量 E2E 需要一份真实的光盘镜像
       # （约 512 MiB，版权受限，不进公开仓库），只能在有游戏文件的机器上跑；

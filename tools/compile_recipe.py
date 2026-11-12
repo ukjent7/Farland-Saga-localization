@@ -41,7 +41,7 @@ RECIPE_FORMAT = 1
 PLAN_FORMAT = 2
 REPO = Path(__file__).resolve().parents[1]
 DEFAULT_RECIPE = REPO / 'recipe'
-DEFAULT_OUTPUT = REPO / 'patcher' / 'plan' / 'plan.bin'
+DEFAULT_OUTPUT = REPO / 'patcher' / 'plan' / 'saga2' / 'plan.bin'
 TILE_FORMAT = 'tile_atlas_8bpp'
 MONO_FORMAT = 'mono_bitmap_1bpp'
 CARD_FORMAT = 'card_tilemap_8bpp'
@@ -2078,9 +2078,9 @@ def main():
     parser.add_argument('--recipe-dir', type=Path, default=DEFAULT_RECIPE,
                         help='directory holding manifest.json (default: recipe/)')
     parser.add_argument('--output', type=Path, default=DEFAULT_OUTPUT,
-                        help='plan path (default: patcher/plan/plan.bin)')
+                        help='plan path (default: patcher/plan/saga2/plan.bin)')
     parser.add_argument('--report', type=Path,
-                        help='optional JSON build report; keep it outside patcher/plan/')
+                        help='optional JSON build report; keep it outside patcher/plan/saga2/')
     parser.add_argument('--preview-dir', type=Path,
                         help='optional directory for per-language mask previews')
     parser.add_argument('--allow-missing-expected', action='store_true',

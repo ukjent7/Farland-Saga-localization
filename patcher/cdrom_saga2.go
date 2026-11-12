@@ -1,14 +1,13 @@
 //go:build saga2
 
 // 二代专用的光盘镜像重建：Steam Saturn 扇区变换、可执行文件里的置换表，
-// 以及零 ECC 扇区。一代补丁只回放预计算的差异块，用不到这些。
+// 以及零 ECC 扇区。LZ 表解包在共享的 lz.go。
 package main
 
 import (
 	"debug/pe"
 	"encoding/binary"
 	"errors"
-	"fmt"
 )
 
 // FinishSectorZeroECC 计算并填充 2352 字节 MODE1 扇区的 EDC，ECC 部分填 0。
@@ -54,58 +53,6 @@ func SectorTransform(data []byte, lba int, dwords []uint32, qwords []uint64, enc
 		}
 	}
 	return output
-}
-
-// UnpackLZ 解压可执行文件里以 LZ 压缩保存的表数据。
-func UnpackLZ(data []byte) ([]byte, error) {
-	if len(data) < 12 {
-		return nil, errors.New("LZ 数据过短")
-	}
-	size := binary.BigEndian.Uint32(data[0:4])
-	tokens := binary.BigEndian.Uint32(data[4:8])
-	literalOffset := binary.BigEndian.Uint32(data[8:12])
-
-	control := 12
-	literal := int(literalOffset)
-	output := make([]byte, 0, size)
-	var mask byte
-	var flags byte
-
-	for i := uint32(0); i < tokens; i++ {
-		if mask == 0 {
-			if control >= len(data) {
-				return nil, errors.New("LZ 控制流越界")
-			}
-			flags = data[control]
-			control++
-			mask = 128
-		}
-		if flags&mask != 0 {
-			if literal+1 >= len(data) {
-				return nil, errors.New("LZ 引用流越界")
-			}
-			distance := int(data[literal])
-			count := int(data[literal+1]) + 3
-			literal += 2
-			if distance == 0 || distance > len(output) {
-				return nil, errors.New("无效的 LZ 回溯距离")
-			}
-			for c := 0; c < count; c++ {
-				output = append(output, output[len(output)-distance])
-			}
-		} else {
-			if literal >= len(data) {
-				return nil, errors.New("LZ 字面流越界")
-			}
-			output = append(output, data[literal])
-			literal++
-		}
-		mask >>= 1
-	}
-	if uint32(len(output)) != size {
-		return nil, fmt.Errorf("LZ 解压大小不符: 期望 %d, 实际 %d", size, len(output))
-	}
-	return output, nil
 }
 
 // DiscTables 保存扇区混淆与置换表。

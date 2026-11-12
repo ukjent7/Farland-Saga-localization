@@ -186,12 +186,13 @@ def check_hygiene(repo):
         zips = sorted(path.name for path in payload.glob('*.zip'))
         if zips:
             problems.append(f'patcher/payload/saga2 still has ZIPs: {zips}')
-    plan_dir = repo / 'patcher/plan'
-    if plan_dir.is_dir():
-        extras = sorted(path.name for path in plan_dir.iterdir()
-                        if path.name not in ('plan.bin', '.gitkeep'))
-        if extras:
-            problems.append(f'patcher/plan has files that would be embedded: {extras}')
+    for game, plan_dir in (('saga1', repo / 'patcher/plan/saga1'),
+                           ('saga2', repo / 'patcher/plan/saga2')):
+        if plan_dir.is_dir():
+            extras = sorted(path.name for path in plan_dir.iterdir()
+                            if path.name not in ('plan.bin', '.gitkeep'))
+            if extras:
+                problems.append(f'patcher/plan/{game} has files that would be embedded: {extras}')
     if problems:
         raise SystemExit('\n'.join(problems))
     return {'payload_zips': [], 'plan_extras': []}
@@ -346,14 +347,14 @@ def main():
     parser.add_argument('--repo', type=Path, default=DEFAULT_REPO,
                         help='repository root (default: beside this script)')
     parser.add_argument('--plan', type=Path,
-                        help='compiled plan (default: patcher/plan/plan.bin)')
+                        help='compiled plan (default: patcher/plan/saga2/plan.bin)')
     parser.add_argument('--skip-compiler', action='store_true',
                         help='only check the compiled plan and tree hygiene')
     parser.add_argument('--jobs', type=int,
                         help='parallel compiler cases (default: CPU count)')
     args = parser.parse_args()
     repo = args.repo.resolve()
-    plan = args.plan or repo / 'patcher/plan/plan.bin'
+    plan = args.plan or repo / 'patcher/plan/saga2/plan.bin'
     if not plan.is_file():
         raise SystemExit(f'{plan} is missing; compile the recipe first')
 

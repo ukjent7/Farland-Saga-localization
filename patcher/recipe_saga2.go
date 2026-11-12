@@ -9,14 +9,14 @@ import (
 	"fmt"
 )
 
-// plan/.gitkeep keeps the embed directive valid in a clean public checkout;
+// plan/saga2/.gitkeep keeps the embed directive valid in a clean public checkout;
 // private builds replace it with plan.bin compiled from recipe/.
 //
-//go:embed all:plan
+//go:embed all:plan/saga2
 var embeddedPlanFS embed.FS
 
 func embeddedPlanData() []byte {
-	data, err := embeddedPlanFS.ReadFile("plan/plan.bin")
+	data, err := embeddedPlanFS.ReadFile("plan/saga2/plan.bin")
 	if err != nil {
 		return nil
 	}

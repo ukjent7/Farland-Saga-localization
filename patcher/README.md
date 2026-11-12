@@ -6,7 +6,16 @@ The install engine, restore path, verification, backup policy, and interface are
 
 The Windows build ships a GUI that works on double-click; every platform keeps the command line and the interactive wizard.
 
-The release form is a **single executable**. The first game embeds the Simplified Chinese, Korean, and English ZIP payloads from `payload/saga1/` via `go:embed`. The sequel embeds `plan/plan.bin`, a compact plan compiled from the public `recipe/` and its OFL fonts; the installer reads the user's pristine files and generates the patched resources locally. Neither build needs a separate archive or a directory picker.
+The release form is a **single executable**. Both games embed a compiled
+install plan via `go:embed`: the first game carries
+`plan/saga1/plan.bin`, compiled by `tools/compile_recipe_fs1.py` from the
+public declarations in `recipe/fs1/` (exe glyph slots and patches, Unity text
+patches) plus the committed language payloads in `recipe/fs1/payload/`
+(disc-image and texture record streams); the sequel carries
+`plan/saga2/plan.bin`, compiled from the public `recipe/` and its OFL fonts.
+The installer reads the user's pristine files, verifies their identity, and
+replays the plan locally. Neither build needs a separate archive or a
+directory picker.
 
 ```bash
 FarlandSagaPatcher.exe                  # GUI: pick a language, then install or restore
@@ -41,14 +50,18 @@ Windows is the only release target: the game is a Windows-only Steam build, so a
 The commands above produce a first-game program without patches; its language buttons show "(not provided)". For the single-file version aimed at users, use the unified entry point's `build-patcher`:
 
 ```bash
-bash flow.sh build-patcher                                  # Embeds the zh-CN, ko-KR, and en-US candidates
-bash flow.sh build-patcher --stage zh-CN-unifont08          # Embed only the named candidate; repeatable
+bash flow.sh build-patcher                                  # Compiles the plan and cross-compiles
 bash flow.sh build-patcher --output release/patcher.exe     # Custom output location
 ```
 
-This command copies `work/release/farland-patch-<candidate>.zip` into `patcher/payload/saga1/` (missing candidates are packaged first) and then cross-compiles. The artifact is about 75 MB, of which about 71 MB is patch data. `patcher/payload/saga1/*.zip` is a packaging artifact kept in the repository so the release build is self-contained.
+This command runs `tools/compile_recipe_fs1.py` (which renders the exe/Unity
+declarations in `recipe/fs1/` into operations and packs the committed
+language payloads in `recipe/fs1/payload/` into `plan/saga1/plan.bin`,
+verified against `recipe/fs1/plan.lock.json`) and then cross-compiles. The
+compiler reads only the committed declarations and language ZIPs, so the
+release build needs no game files.
 
-The sequel needs no payload ZIP. Compile the plan, then build:
+The sequel's plan comes from the public recipe:
 
 ```bash
 ./uv.sh run --locked python tools/compile_recipe.py
@@ -56,7 +69,7 @@ cd patcher
 go build -tags saga2 -o FarlandSaga2Patcher .
 ```
 
-`tools/compile_recipe.py` reads only `recipe/` and the committed OFL font subsets, so a clean checkout rebuilds the same plan byte for byte. The plan contains label layers, story-page images, texture layers, the executable patch, and original-file hashes; it contains no game bytes. `patcher/plan/plan.bin` is ignored by git and produced by CI before every test and release build.
+`tools/compile_recipe.py` reads only `recipe/` and the committed OFL font subsets, so a clean checkout rebuilds the same plan byte for byte. That plan contains label layers, story-page images, texture layers, the executable patch, and original-file hashes; it contains no game bytes. Both `patcher/plan/saga1/plan.bin` and `patcher/plan/saga2/plan.bin` are ignored by git and produced by CI before every test and release build.
 
 The Windows artifact adds `-H windowsgui`: it declares the GUI subsystem so a double-click runs without a console window, while standard output remains available when subcommands are called from a terminal. `.github/workflows/release.yml` performs the same steps for both build tags on a pushed tag or manual confirmation and uploads the two executables plus `SHA256SUMS` as release assets. The patch data is compiled in, so CI never touches the private workspace.
 
@@ -115,7 +128,26 @@ The command line targets scripts and troubleshooting: it accepts any plan, patch
 
 ## Patch Payload Format
 
-The sequel's release build carries no ZIP. Its `plan/plan.bin` format is described in [../recipe/README.md](../recipe/README.md); the installer replays the disc image from the pristine base and generates `FarlandSaga2.exe` and `Texture.tex` from the recipe. The ZIP format below remains in use for the first game and for external troubleshooting bundles:
+Neither game's release build carries a ZIP. The sequel's `plan/saga2/plan.bin` format is described in [../recipe/README.md](../recipe/README.md); its installer replays the disc image from the pristine base and generates `FarlandSaga2.exe` and `Texture.tex` from the recipe. The first game's `plan/saga1/plan.bin` starts with `FS1PLAN1\n`, a
+little-endian u32 header length, a compact JSON header, and a gzip blob. The
+header declares the game (`saga1`), the language list with each candidate
+version, every target file's kind (`disc` or `binary`) and original identity,
+and each language's per-file patched identity plus either a blob range or an
+operation list. Each file entry carries exactly one of the two
+representations: a **record stream** (blob range of 4 KiB diff blocks, used
+for `FarlandSaga.bin` and `Texture.tex`) or a list of **declarative
+operations** (used for `FarlandSaga.exe` and the Unity files). A `patch` op
+copies declared bytes to a file offset; a `font` op re-encodes the exe's
+LZ-compressed overlay font region with rendered Unifont glyph cells. Ops
+carry no game-derived bytes: the glyphs are rendered from Unifont at compile
+time and the patch bytes are public translation text. The installer fully
+validates the plan — blob hash, path safety, hashes, op bounds and
+non-overlap, and a complete walk of every record stream — before the game
+directory is touched, then rebuilds each file from the original backup:
+record files replay their records, operation files verify the original's
+identity, apply the ops in order, and verify the rebuilt hash. A tampered
+original is refused before any write. `recipe/fs1/README.md` documents the
+plan's sources and lock. The ZIP format below remains in use for external troubleshooting bundles via `--payload`:
 
 ```
 manifest.json            Manifest: version, language, and each target file's original/patched identity
