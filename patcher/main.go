@@ -82,6 +82,12 @@ func run(argv []string) error {
 	switch argv[0] {
 	case "install", "restore", "status", "verify":
 		return runCommand(argv[0], argv[1:])
+	case "texture-identity":
+		// 维护辅助命令：按新墨迹声明计算各语言重建容器身份。
+		if textureIdentityAvailable() {
+			return runTextureIdentity(argv[1:])
+		}
+		return errors.New("texture-identity 仅适用于一代补丁器")
 	case "gui":
 		return runGUI()
 	case "wizard", "cli":

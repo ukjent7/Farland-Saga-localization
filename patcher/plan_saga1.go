@@ -445,12 +445,12 @@ func validateFS1PlanOp(format int, file *fs1PlanFile, op *fs1PlanOp, entry *fs1P
 		if !textureFile {
 			return errors.New("texture 类型操作只能用于 Texture 目标")
 		}
-		if op.DataLength <= 0 || op.DataOffset < 0 || op.DataOffset > int64(len(blob)) ||
+		// 数据段布局：[JSON 声明][mask PNG][ink PNG]；op.Size 是声明
+		// 的长度，DataLength 是整段长度。
+		if op.DataLength <= 0 || op.Size <= 0 || op.Size > op.DataLength ||
+			op.DataOffset < 0 || op.DataOffset > int64(len(blob)) ||
 			op.DataLength > int64(len(blob))-op.DataOffset {
 			return errors.New("texture 数据范围越过数据段")
-		}
-		if op.Size <= 0 || op.DataLength+op.Size > int64(len(blob))-op.DataOffset {
-			return errors.New("texture 元数据范围越过数据段")
 		}
 		if op.Start != 0 || op.Limit != 0 || op.Cells != 0 || op.Slots != nil ||
 			op.GlyphsOffset != 0 || op.LBA != 0 || op.SizePatched != 0 ||

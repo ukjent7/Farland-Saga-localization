@@ -234,58 +234,131 @@ def load_declarations(font, decl_exe: Path = DECL_EXE,
 
 
 def load_texture_declarations(decl_texture: Path = DECL_TEXTURE) -> dict[str, dict]:
-    """Turn the committed texture declaration into per-language plan ops.
+    """Turn the committed texture declaration (schema 2) into plan ops.
 
-    The declaration carries each language's localized PNG (base64). The plan
-    stores the PNG bytes in the shared blob; the installer rebuilds the SSF
-    container from the user's pristine Texture.tex: original 2048-byte header,
-    the localized PNG, 4-byte alignment, and the untouched Parts metadata.
+    The declaration carries NO game artwork: structural facts (part boxes,
+    declared label regions, panel rules) plus, per language, a sparse mask and
+    ink layer holding only the localized text pixels. Each language's plan
+    data segment is [compact JSON declaration][mask PNG][ink PNG]; op.Size is
+    the declaration length. The installer decodes the user's own pristine
+    atlas and overlays the ink, so the rebuilt container identity is computed
+    by the patcher and pinned in identities.json.
     """
-    if not DECL_TEXTURE.exists():
-        fail(f'{DECL_TEXTURE}: 缺少 Texture 声明')
-    decl = read_json(DECL_TEXTURE)
-    if decl.get('schema') != 1 or decl.get('file') != TEXTURE_FILE:
-        fail(f'{DECL_TEXTURE}: 结构不符')
-    try:
-        suffix = base64.b64decode(decl['languages'][LANGUAGES[0]]['suffix'],
-                                  validate=True)
-    except (KeyError, ValueError) as error:
-        fail(f'{DECL_TEXTURE}: suffix 不合法: {error}')
-    if len(suffix) < 28 or not suffix.startswith(b'Parts'.ljust(20)):
-        fail(f'{DECL_TEXTURE}: suffix 缺少 Parts 元数据')
-    count = struct.unpack_from('<I', suffix, 24)[0]
-    if struct.unpack_from('<I', suffix, 20)[0] != 28 + count * 32:
-        fail(f'{DECL_TEXTURE}: Parts 元数据长度与 part 数不符')
-    if len(suffix) < 28 + count * 32:
-        fail(f'{DECL_TEXTURE}: suffix 被 Parts 元数据截断')
-    trailer = suffix[28 + count * 32:]
-    if trailer[:4] != b'\0\0\0\0' or not trailer[4:24].startswith(b'Anime'):
-        fail(f'{DECL_TEXTURE}: Parts 之后的附加元数据不可识别')
+    if not decl_texture.exists():
+        fail(f'{decl_texture}: 缺少 Texture 声明')
+    decl = read_json(decl_texture)
+    if decl.get('schema') != 2 or decl.get('file') != TEXTURE_FILE:
+        fail(f'{decl_texture}: 结构不符')
+    image_size = decl.get('image_size')
+    if (not isinstance(image_size, list) or len(image_size) != 2
+            or any(not isinstance(v, int) or v <= 0 for v in image_size)):
+        fail(f'{decl_texture}: image_size 不合法')
+    part_count = decl.get('part_count')
+    if not isinstance(part_count, int) or part_count != 499:
+        fail(f'{decl_texture}: part_count 不合法')
+    labels = decl.get('labels')
+    if not isinstance(labels, list) or len(labels) != 371:
+        fail(f'{decl_texture}: 标签声明应有 371 项')
+    compact_labels = []
+    parts_seen = set()
+    for item in labels:
+        if not isinstance(item, dict) or not isinstance(item.get('part'), int):
+            fail(f'{decl_texture}: 标签条目缺少 part')
+        part = item['part']
+        if part in parts_seen or not 0 <= part < part_count:
+            fail(f'{decl_texture}: 标签 part {part} 重复或越界')
+        parts_seen.add(part)
+        box = item.get('box')
+        if not isinstance(box, list) or len(box) != 4 or any(
+                not isinstance(v, int) for v in box) or box[2] <= box[0] or box[3] <= box[1]:
+            fail(f'{decl_texture}: 标签 part {part} 的 box 不合法')
+        background = item.get('background', [255, 255, 255, 0])
+        if not isinstance(background, list) or len(background) != 4 or any(
+                not isinstance(v, int) or not 0 <= v <= 255 for v in background):
+            fail(f'{decl_texture}: 标签 part {part} 的 background 不合法')
+        compact = {'part': part, 'box': box, 'background': background}
+        region = item.get('region')
+        if region is not None:
+            if not isinstance(region, list) or len(region) != 4 or any(
+                    not isinstance(v, int) for v in region):
+                fail(f'{decl_texture}: 标签 part {part} 的 region 不合法')
+            compact['region'] = region
+        compact_labels.append(compact)
+    panels = decl.get('panels')
+    if not isinstance(panels, dict) or panels.get('parts') != [104, 105, 106, 107, 108, 109, 110]:
+        fail(f'{decl_texture}: 面板部件清单不合法')
+    compact_panels = {
+        'parts': panels['parts'],
+        'header_box': panels['header_box'],
+        'body_box': panels['body_box'],
+        'strip_row': panels['strip_row'],
+        'strip_x': panels['strip_x'],
+    }
+    for key in ('header_box', 'body_box'):
+        box = panels.get(key)
+        if not isinstance(box, list) or len(box) != 4 or any(
+                not isinstance(v, int) for v in box):
+            fail(f'{decl_texture}: 面板 {key} 不合法')
+    for key in ('strip_row',):
+        if not isinstance(panels.get(key), int):
+            fail(f'{decl_texture}: 面板 {key} 不合法')
+    strip_x = panels.get('strip_x')
+    if not isinstance(strip_x, list) or len(strip_x) != 2:
+        fail(f'{decl_texture}: 面板 strip_x 不合法')
 
     sections: dict[str, dict] = {}
     for language in LANGUAGES:
         section = decl['languages'].get(language)
-        if section is None:
-            fail(f'{DECL_TEXTURE}: 缺少语言 {language}')
-        try:
-            png = base64.b64decode(section['png'], validate=True)
-        except (KeyError, ValueError) as error:
-            fail(f'{DECL_TEXTURE}: {language} png 不合法: {error}')
-        if not png.startswith(b'\x89PNG\r\n\x1a\n'):
-            fail(f'{DECL_TEXTURE}: {language} png 缺少 PNG 签名')
-        if hashlib.sha256(png).hexdigest() != section.get('png_sha256'):
-            fail(f'{DECL_TEXTURE}: {language} png 哈希不符')
-        if len(png) != section.get('png_size'):
-            fail(f'{DECL_TEXTURE}: {language} png 大小不符')
-        ops = [{'type': 'texture', 'name': 'localized_atlas',
-                'data_offset': 0, 'data_length': len(png),
-                'size': len(suffix)}]
+        if not isinstance(section, dict):
+            fail(f'{decl_texture}: 缺少语言 {language}')
+        layers = {}
+        for key in ('mask', 'ink'):
+            try:
+                data = base64.b64decode(section[key], validate=True)
+            except (KeyError, ValueError) as error:
+                fail(f'{decl_texture}: {language} {key} 不合法: {error}')
+            if not data.startswith(b'\x89PNG\r\n\x1a\n'):
+                fail(f'{decl_texture}: {language} {key} 缺少 PNG 签名')
+            if hashlib.sha256(data).hexdigest() != section.get(f'{key}_sha256'):
+                fail(f'{decl_texture}: {language} {key} 哈希不符')
+            layers[key] = data
+        declaration = {
+            'image_size': image_size,
+            'part_count': part_count,
+            'panels': compact_panels,
+            'labels': compact_labels,
+            'mask_offset': 0, 'mask_length': 0,
+            'ink_offset': 0, 'ink_length': 0,
+        }
+        # 声明长度取决于自身数值的位数；迭代到自洽。
+        for _ in range(4):
+            header = json.dumps(declaration, separators=(',', ':'),
+                                ensure_ascii=False).encode()
+            declaration['mask_offset'] = len(header)
+            declaration['mask_length'] = len(layers['mask'])
+            declaration['ink_offset'] = len(header) + len(layers['mask'])
+            declaration['ink_length'] = len(layers['ink'])
+            final = json.dumps(declaration, separators=(',', ':'),
+                               ensure_ascii=False).encode()
+            if len(final) == len(header):
+                break
+        else:
+            fail(f'{decl_texture}: {language} 声明长度不自洽')
+        header = final
+        data = header + layers['mask'] + layers['ink']
+        ops = [{
+            'type': 'texture', 'name': 'localized_ink',
+            'data_offset': 0, 'data_length': len(data),
+            'size': len(header),
+        }]
         sections[language] = {
             'ops': ops,
-            'data': png + suffix,
+            'data': data,
             'patched_sha256': section['patched_sha256'],
             'size': section['patched_size'],
         }
+        if not section['patched_sha256'] or not section['patched_size']:
+            fail(f'{decl_texture}: {language} 尚未回填容器身份')
     return sections
 
 

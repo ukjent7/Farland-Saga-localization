@@ -116,7 +116,14 @@ def merge(intervals):
     return out
 
 
-def diff_ranges(before, after, gap=8):
+def diff_ranges(before, after, gap=0):
+    """Byte ranges where `after` differs from `before`.
+
+    gap=0 keeps only truly changed bytes: the installer copies the user's
+    pristine disc and rewrites just these spans, so unchanged artwork bytes
+    never enter the repository. (The historical gap=8 merged nearby runs and
+    dragged ~0.3 MB of unchanged sprite pixels into the declarations.)
+    """
     spans, current = [], None
     for index in range(len(before)):
         if before[index] != after[index]:

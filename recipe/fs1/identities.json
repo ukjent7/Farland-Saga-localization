@@ -37,8 +37,8 @@
      "path": "Texture.tex",
      "original_sha256": "dd484f4315a9f79fc63ad3dc746581df8f6394195e05a3c931f162b21613536e",
      "original_size": 1406736,
-     "patched_sha256": "c75428932be0f33f0d8b4335dc47a16d8d7e19eace328418a783792fe209507f",
-     "patched_size": 990888
+     "patched_sha256": "49196a4422944f49fa756fea05eb0bdc3ae064b92e38e328fe853b8f23c16e58",
+     "patched_size": 1113028
     }
    ]
   },
@@ -77,8 +77,8 @@
      "path": "Texture.tex",
      "original_sha256": "dd484f4315a9f79fc63ad3dc746581df8f6394195e05a3c931f162b21613536e",
      "original_size": 1406736,
-     "patched_sha256": "cf4064533d0794adb79ef59848d888f75af98651a2d9f8b8b5458364b193fab3",
-     "patched_size": 1406736
+     "patched_sha256": "281d688f429cfb69152969e2680b8fe4c02222fa3d24b4ef23baa2e53b19c969",
+     "patched_size": 1023136
     }
    ]
   },
@@ -117,8 +117,8 @@
      "path": "Texture.tex",
      "original_sha256": "dd484f4315a9f79fc63ad3dc746581df8f6394195e05a3c931f162b21613536e",
      "original_size": 1406736,
-     "patched_sha256": "fd55e17778af7667d3281ce23f6c1fd1addfb9040eb3d870ef8a7f09581d8d8a",
-     "patched_size": 1144184
+     "patched_sha256": "43ac337b7aa17df67fbdb8b928bb4d719d0a0415ab40ab49a9a5b258d47d3596",
+     "patched_size": 1326848
     }
    ]
   }
