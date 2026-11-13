@@ -23,9 +23,9 @@ Built with declarative in-place injection engines: 100% free of commercial copyr
 
 ## In-Game Preview
 
-Screenshots are not hosted in this repository (the game's imagery stays with
-the game). Each release's asset archive and the private workspace keep
-previews for reviewers; see the release notes for what changed per language.
+| English | 简体中文 | 한국어 |
+| :---: | :---: | :---: |
+| ![English Preview](docs/images/preview_en-US.webp) | ![Chinese Preview](docs/images/preview_zh-CN.webp) | ![Korean Preview](docs/images/preview_ko-KR.webp) |
 
 ---
 
