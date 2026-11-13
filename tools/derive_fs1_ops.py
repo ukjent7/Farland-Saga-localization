@@ -24,7 +24,9 @@ operations, so the plan no longer carries any exe or Unity game bytes.
 Run modes:
 
 - ``extract`` (default) needs the pristine originals (a Steam backup
-  directory) plus the committed payload ZIPs; it writes the declarations.
+  directory) plus the historical payload ZIPs (kept in the private
+  workspace; the repository no longer carries them); it writes the
+  declarations. ``--payloads`` names the ZIP directory.
 - ``verify`` needs only the declarations and the pristine originals; it
   rebuilds every language's exe and Unity files and checks their SHA-256
   against the declared expectations. No payload ZIPs are read.
@@ -514,24 +516,24 @@ def originals_from(backup: Path) -> dict[str, bytes]:
     return data
 
 
-def payload_map() -> dict[str, Path]:
+def payload_map(payload_dir: Path = PAYLOAD_DIR) -> dict[str, Path]:
     paths = {}
     for language in LANGUAGES:
-        path = PAYLOAD_DIR / f'farland-patch-{STAGES[language]}.zip'
+        path = payload_dir / f'farland-patch-{STAGES[language]}.zip'
         if not path.is_file():
             fail(f'缺少语言载荷 {path}')
         paths[language] = path
     return paths
 
 
-def cmd_extract(backup: Path) -> None:
+def cmd_extract(backup: Path, payload_dir: Path = PAYLOAD_DIR) -> None:
     font = Unifont()
     full_map, ascii_map = build_reverse_maps(font)
     vocab = load_vocabularies()
     zh_slots = read_json(REPO / 'config' / 'glyph-slots.zh-CN.json')['added']
     save_folder = read_json(REPO / 'config' / 'patches' / 'save-folder.json')['runtime_word_writes']
     originals = originals_from(backup)
-    payloads = payload_map()
+    payloads = payload_map(payload_dir)
 
     exe_original = originals[EXE_NAME]
     exe_decl = {
@@ -597,10 +599,13 @@ def main() -> None:
     parser.add_argument('mode', nargs='?', default='extract', choices=['extract', 'verify'])
     parser.add_argument('--backup', required=True,
                         help='原版备份目录（含 FarlandSaga.exe、level0、resources.assets）')
+    parser.add_argument('--payloads', type=Path, default=PAYLOAD_DIR,
+                        help='历史语言载荷目录（extract 需要；默认 recipe/fs1/payload，'
+                             'ZIP 已从仓库移除时指向私有工作区里的副本）')
     arguments = parser.parse_args()
     backup = Path(arguments.backup)
     if arguments.mode == 'extract':
-        cmd_extract(backup)
+        cmd_extract(backup, arguments.payloads)
     else:
         cmd_verify(backup)
 

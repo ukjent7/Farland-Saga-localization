@@ -9,7 +9,8 @@ language payloads are the inputs; nothing here runs at install time):
         --payloads recipe/fs1/payload --output recipe/fs1/texture.json
 
 The tool decodes the pristine SSF container, reconstructs each language's
-patched container from its committed diff object, verifies the manifest
+patched container from its diff object (kept in the private workspace; the
+repository no longer carries the ZIPs), verifies the manifest
 hash, and records the localized PNG plus the shared Parts metadata. The
 compiler embeds those bytes into the plan's texture operation.
 """
@@ -59,7 +60,8 @@ def main() -> None:
     parser.add_argument('--backup', required=True, type=Path,
                         help='原版备份目录（含 Texture.tex 与 FarlandSaga.exe）')
     parser.add_argument('--payloads', required=True, type=Path,
-                        help='提交的语言载荷目录')
+                        help='历史语言载荷目录（含 diff 对象；ZIP 已从仓库移除，'
+                             '放在私有工作区即可）')
     parser.add_argument('--output', type=Path,
                         default=REPO / 'recipe' / 'fs1' / 'texture.json')
     args = parser.parse_args()

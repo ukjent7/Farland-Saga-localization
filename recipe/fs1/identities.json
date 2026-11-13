@@ -1,0 +1,126 @@
+{
+ "schema": 1,
+ "kind": "farland-saga-identity",
+ "languages": {
+  "en-US": {
+   "version": "en-US-unifont-full07",
+   "files": [
+    {
+     "path": "FarlandSaga.bin",
+     "original_sha256": "093f741c0d6aee9166bc2efbba30ee693dadec9c6d2024c681c1025c824de162",
+     "original_size": 301359116,
+     "patched_sha256": "2a0121819438b6d8f10e0de580160325f80f09cb40022596d8c4b18649174a15",
+     "patched_size": 301359116
+    },
+    {
+     "path": "FarlandSaga.exe",
+     "original_sha256": "fafcc8cbd0c48d22948012999f7a6cffa804e574bb7dc0dcc220497ed3619b67",
+     "original_size": 18964480,
+     "patched_sha256": "aad0831f17e38c6c6b235ac682f0d0b5e6d762d00905739871c4b85250d7dc2b",
+     "patched_size": 18964480
+    },
+    {
+     "path": "S-Tribute_Data/level0",
+     "original_sha256": "f5bdd11ef00b0351912b27017eade91031cacc978f2aa870eae4ff642e504b15",
+     "original_size": 21872,
+     "patched_sha256": "cc3269640e027c6c9292c24acfe119b131f29d4500d098946181875f1bba1917",
+     "patched_size": 21872
+    },
+    {
+     "path": "S-Tribute_Data/resources.assets",
+     "original_sha256": "5e41276bb7220a45afd75a0daefd2b6a427ef70c9839a4d4dd9c9e2add84965c",
+     "original_size": 31986652,
+     "patched_sha256": "c1ea0a8965299a312ae27271bf32f8f8052d8327b2775896d1124d118bad2a34",
+     "patched_size": 31986652
+    },
+    {
+     "path": "Texture.tex",
+     "original_sha256": "dd484f4315a9f79fc63ad3dc746581df8f6394195e05a3c931f162b21613536e",
+     "original_size": 1406736,
+     "patched_sha256": "c75428932be0f33f0d8b4335dc47a16d8d7e19eace328418a783792fe209507f",
+     "patched_size": 990888
+    }
+   ]
+  },
+  "ko-KR": {
+   "version": "ko-KR-unifont-full07",
+   "files": [
+    {
+     "path": "FarlandSaga.bin",
+     "original_sha256": "093f741c0d6aee9166bc2efbba30ee693dadec9c6d2024c681c1025c824de162",
+     "original_size": 301359116,
+     "patched_sha256": "49f4899fdf79dd0a5f5e9c118c94c2de76a890797393b5320021bfbce6662350",
+     "patched_size": 301359116
+    },
+    {
+     "path": "FarlandSaga.exe",
+     "original_sha256": "fafcc8cbd0c48d22948012999f7a6cffa804e574bb7dc0dcc220497ed3619b67",
+     "original_size": 18964480,
+     "patched_sha256": "6f04b47907ff26fcf35a44e3242129727386fec0c1c1c6a8e1384e7a94cb8915",
+     "patched_size": 18964480
+    },
+    {
+     "path": "S-Tribute_Data/level0",
+     "original_sha256": "f5bdd11ef00b0351912b27017eade91031cacc978f2aa870eae4ff642e504b15",
+     "original_size": 21872,
+     "patched_sha256": "9ac2f8fa4a363ef2bb1979a4f5bdc507c0e0dff5dbb2a1be1a3182f6532f261e",
+     "patched_size": 21872
+    },
+    {
+     "path": "S-Tribute_Data/resources.assets",
+     "original_sha256": "5e41276bb7220a45afd75a0daefd2b6a427ef70c9839a4d4dd9c9e2add84965c",
+     "original_size": 31986652,
+     "patched_sha256": "8ce8162d789db2bbdecaabb9631b33102f471a513f216031d2a25c21d0a054fc",
+     "patched_size": 31986652
+    },
+    {
+     "path": "Texture.tex",
+     "original_sha256": "dd484f4315a9f79fc63ad3dc746581df8f6394195e05a3c931f162b21613536e",
+     "original_size": 1406736,
+     "patched_sha256": "cf4064533d0794adb79ef59848d888f75af98651a2d9f8b8b5458364b193fab3",
+     "patched_size": 1406736
+    }
+   ]
+  },
+  "zh-CN": {
+   "version": "zh-CN-unifont08",
+   "files": [
+    {
+     "path": "FarlandSaga.bin",
+     "original_sha256": "093f741c0d6aee9166bc2efbba30ee693dadec9c6d2024c681c1025c824de162",
+     "original_size": 301359116,
+     "patched_sha256": "8a0b1e6eb1a8a6f5ac5640cd861992740764241e16930031c24e75ec3433ef5c",
+     "patched_size": 301359116
+    },
+    {
+     "path": "FarlandSaga.exe",
+     "original_sha256": "fafcc8cbd0c48d22948012999f7a6cffa804e574bb7dc0dcc220497ed3619b67",
+     "original_size": 18964480,
+     "patched_sha256": "e0ef3f35e512ced0d1178420acee852ced2b4667b0f709569240b4d02fe596a8",
+     "patched_size": 18964480
+    },
+    {
+     "path": "S-Tribute_Data/level0",
+     "original_sha256": "f5bdd11ef00b0351912b27017eade91031cacc978f2aa870eae4ff642e504b15",
+     "original_size": 21872,
+     "patched_sha256": "7e95f2ae5903d012e62fbf7db816f46f476c92a96c29785ba21522eda04a6252",
+     "patched_size": 21872
+    },
+    {
+     "path": "S-Tribute_Data/resources.assets",
+     "original_sha256": "5e41276bb7220a45afd75a0daefd2b6a427ef70c9839a4d4dd9c9e2add84965c",
+     "original_size": 31986652,
+     "patched_sha256": "ddc7c5f48d2c14418337b8bec1f30d5570029ab40a093f9d24d95e72933a4a7f",
+     "patched_size": 31986652
+    },
+    {
+     "path": "Texture.tex",
+     "original_sha256": "dd484f4315a9f79fc63ad3dc746581df8f6394195e05a3c931f162b21613536e",
+     "original_size": 1406736,
+     "patched_sha256": "fd55e17778af7667d3281ce23f6c1fd1addfb9040eb3d870ef8a7f09581d8d8a",
+     "patched_size": 1144184
+    }
+   ]
+  }
+ }
+}

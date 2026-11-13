@@ -18,9 +18,11 @@ Modes:
       Merge the per-language extract documents into recipe/fs1/disc.json.
   verify --backup <pristine backup dir> [--language <code>]
       Golden gate with no patched disc: rebuild every declared file from the
-      pristine container and the declarations, apply the pruned ZIP records,
-      and require the container SHA-256 to match the payload manifest. This
-      is what the Go installer must reproduce byte for byte.
+      pristine container and the declarations, apply the pruned records, and
+      require the container SHA-256 to match the identity manifest. The
+      records come from the legacy payload ZIP when present, otherwise from
+      the compiled plan's own record range. This is what the Go installer
+      must reproduce byte for byte.
 """
 import argparse
 import hashlib
@@ -40,6 +42,7 @@ from fls.text.extract_text import event_header, event_strings
 
 DISC_JSON = REPO / 'recipe/fs1/disc.json'
 PAYLOAD_DIR = REPO / 'recipe/fs1/payload'
+PLAN_BIN = REPO / 'patcher/plan/saga1/plan.bin'
 PERM_BASE = 283840  # the FS1 disc's permutation-image index inside the exe tables
 LANGUAGES = ('zh-CN', 'ko-KR', 'en-US')
 SPLICE_FILES = {'SYSTEM/ITEM.DAT', 'SYSTEM/MAGIC.DAT', 'SYSTEM/MENUINFO.DAT',
@@ -54,16 +57,43 @@ def fail(message):
 
 
 def zip_disc_entry(language):
-    name = (f'farland-patch-{language}-unifont08.zip' if language == 'zh-CN'
-            else f'farland-patch-{language}-unifont-full07.zip')
+    """The disc entry's identity and its raw record stream.
+
+    The record stream lives only in the legacy payload ZIP; the identity
+    comes from the committed identity manifest either way. With the ZIPs gone
+    (or --records given) verify replays the compiled plan's own record range,
+    which is the same bytes the installer ships.
+    """
     import gzip
     import zipfile
-    with zipfile.ZipFile(PAYLOAD_DIR / name) as archive:
-        manifest = json.loads(archive.read('manifest.json'))
-        entry = next(f for f in manifest['files'] if f['path'] == 'FarlandSaga.bin')
-        text = gzip.decompress(archive.read(entry['object']))
-    newline = text.index(b'\n')
-    return manifest, entry, text[newline + 1:]
+    manifest = json.loads((REPO / 'recipe/fs1/identities.json').read_text())
+    entry = next(f for f in manifest['languages'][language]['files']
+                 if f['path'] == 'FarlandSaga.bin')
+    records = None
+    zip_path = PAYLOAD_DIR / (
+        f'farland-patch-{language}-unifont08.zip' if language == 'zh-CN'
+        else f'farland-patch-{language}-unifont-full07.zip')
+    if zip_path.is_file():
+        with zipfile.ZipFile(zip_path) as archive:
+            zip_manifest = json.loads(archive.read('manifest.json'))
+            zip_entry = next(f for f in zip_manifest['files']
+                             if f['path'] == 'FarlandSaga.bin')
+            text = gzip.decompress(archive.read(zip_entry['object']))
+        records = text[text.index(b'\n') + 1:]
+    elif PLAN_BIN.is_file():
+        import struct as _struct
+        raw = PLAN_BIN.read_bytes()
+        magic = b'FS1PLAN1\n'
+        length = _struct.unpack_from('<I', raw, len(magic))[0]
+        start = len(magic) + 4
+        plan_header = json.loads(raw[start:start + length])
+        blob = gzip.decompress(raw[start + length:])
+        plan_entry = plan_header['languages_data'][language]['files']['FarlandSaga.bin']
+        records = blob[plan_entry['records_offset']:
+                       plan_entry['records_offset'] + plan_entry['records_length']]
+    if records is None:
+        fail(f'{language}: 没有记录流来源（载荷 ZIP 或已编译 plan.bin 都不在）')
+    return manifest, entry, records
 
 
 def is_event(path):

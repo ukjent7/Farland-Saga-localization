@@ -47,6 +47,7 @@ DECL_EXE = DECL_DIR / 'exe.json'
 DECL_UNITY = DECL_DIR / 'unity.json'
 DECL_DISC = DECL_DIR / 'disc.json'
 DECL_TEXTURE = DECL_DIR / 'texture.json'
+DECL_IDENTITIES = DECL_DIR / 'identities.json'
 TEXTURE_FILE = 'Texture.tex'
 # load_payloads 运行时置位：Texture 声明存在时目标文件 kind 才是 texture。
 TEXTURE_DECLARED = False
@@ -427,25 +428,69 @@ def prune_disc_records(records: bytes, ranges: list[list[int]]) -> bytes:
     return bytes(kept)
 
 
+def load_identities(decl_dir: Path) -> dict:
+    """Load the committed identity manifest: per language, the version and
+    every target file's original/patched identity. This is the authority that
+    the payload ZIPs used to provide; the ZIPs themselves are gone."""
+    path = decl_dir / 'identities.json'
+    if not path.exists():
+        fail(f'{path}: 缺少身份清单（原版/补丁后哈希与大小的权威来源）')
+    doc = read_json(path)
+    if doc.get('schema') != 1 or doc.get('kind') != 'farland-saga-identity':
+        fail(f'{path}: 结构不符')
+    if (not isinstance(doc.get('languages'), dict)
+            or set(doc['languages']) != set(LANGUAGES)):
+        fail(f'{path}: languages 必须恰好覆盖 {LANGUAGES}')
+    languages = doc['languages']
+    files_declared = None
+    for language in LANGUAGES:
+        section = languages[language]
+        if not isinstance(section, dict) or not section.get('version'):
+            fail(f'{path}: 缺少语言 {language} 的版本')
+        files = section.get('files')
+        if not isinstance(files, list) or not files:
+            fail(f'{path}: 缺少语言 {language} 的文件清单')
+        items = {}
+        for item in files:
+            if not isinstance(item, dict) or not item.get('path'):
+                fail(f'{path}: {language} 文件条目缺少 path')
+            name = item['path']
+            if name in items:
+                fail(f'{path}: {language} 文件 {name} 重复')
+            for key in ('original_sha256', 'patched_sha256'):
+                if len(str(item.get(key, ''))) != 64:
+                    fail(f'{path}: {language}/{name} 的 {key} 不合法')
+            for key in ('original_size', 'patched_size'):
+                if not isinstance(item.get(key), int) or item[key] <= 0:
+                    fail(f'{path}: {language}/{name} 的 {key} 不合法')
+            items[name] = item
+        if files_declared is None:
+            files_declared = items
+        else:
+            check_same_files(files_declared, items, language, LANGUAGES[0])
+    return languages
+
+
 def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
                   decl_unity: Path = DECL_UNITY,
                   decl_disc: Path = DECL_DISC,
-                  decl_texture: Path | None = None) -> tuple[list[dict], dict, dict, bytes]:
-    """Load every language ZIP and the declarations; return the plan parts.
+                  decl_texture: Path | None = None,
+                  decl_dir: Path | None = None) -> tuple[list[dict], dict, dict, bytes]:
+    """Load the identity manifest, the declarations and any payload ZIPs.
 
-    Files covered by declarations become install-time operations and their
-    diff records are dropped; every other file keeps its record stream. The
-    ZIP manifests stay the authority for original identities and patched
-    sizes, and the declarations must agree with them on the patched hash.
+    The identity manifest is the authority for original identities, patched
+    sizes and per-language versions. Payload ZIPs are optional legacy input:
+    files covered by declarations become install-time operations and their
+    diff records are dropped; every other file keeps its record stream.
     """
-    zips = sorted(payload_dir.glob('*.zip'))
-    if not zips:
-        fail(f'{payload_dir}: 没有语言载荷')
+    zips = sorted(payload_dir.glob('*.zip')) if payload_dir.exists() else []
     known = {path.name for path in zips}
     strays = [path.name for path in payload_dir.iterdir()
-              if path.is_file() and path.name not in known]
+              if path.is_file() and path.name not in known] if payload_dir.exists() else []
     if strays:
         fail(f'{payload_dir}: 存在未知文件 {sorted(strays)}，语言载荷目录必须只包含 *.zip')
+
+    identities = load_identities(decl_dir or DECL_DIR)
 
     declarations = load_declarations(font, decl_exe, decl_unity)
     # 声明目录可以只有 exe/unity：此时盘片差异保持记录流形态。
@@ -470,22 +515,36 @@ def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
             if path not in declarations[language]:
                 fail(f'{path}: 声明缺少语言 {language}')
 
-    # 先逐个读 manifest 确定语言，再按固定的中、韩、英顺序处理，保证头部
-    # 与数据段的字节顺序与压缩包文件名无关。
-    manifests: dict[str, tuple[Path, dict]] = {}
+    # 语言身份来自提交的身份清单；载荷 ZIP 是可选的历史输入（仍提供未声明
+    # 文件的记录流与版本号）。语言顺序固定为中、韩、英，保证头部与数据段
+    # 字节顺序稳定。
+    manifests: dict[str, dict] = {}
+    for language in LANGUAGES:
+        manifests[language] = {'version': identities[language]['version'],
+                               'files': {item['path']: item
+                                         for item in identities[language]['files']}}
     for zip_path in zips:
-        with zipfile.ZipFile(zip_path) as archive:
-            manifest = read_manifest(archive, zip_path)
+        manifest = read_manifest(zip_path)
         language = manifest['language']
-        if language in manifests:
+        if language not in LANGUAGES:
+            fail(f'{zip_path.name}: 未知的语言载荷 {language}')
+        if language in manifests and 'zip' in manifests[language]:
             fail(f'{zip_path.name}: 语言 {language} 有多个载荷')
-        manifests[language] = (zip_path, manifest)
-    missing = [language for language in LANGUAGES if language not in manifests]
-    if missing:
-        fail(f'缺少语言载荷：{missing}')
-    extra = [language for language in manifests if language not in LANGUAGES]
-    if extra:
-        fail(f'未知的语言载荷：{extra}')
+        manifests[language]['zip'] = zip_path
+        # ZIP 清单必须与身份清单一致；它是载荷自身的原始声明，任何漂移都
+        # 意味着两份来源有一份过期。
+        zip_files = {item['path']: item for item in manifest['files']}
+        for name, item in zip_files.items():
+            known_item = manifests[language]['files'].get(name)
+            if known_item is None:
+                fail(f'{zip_path.name}: 载荷出现身份清单没有的文件 {name}')
+            for key in ('original_sha256', 'original_size',
+                        'patched_sha256', 'patched_size'):
+                if item.get(key) != known_item.get(key):
+                    fail(f'{zip_path.name}/{name}: 载荷清单与身份清单的 {key} 不一致')
+        for name in manifests[language]['files']:
+            if name not in zip_files:
+                fail(f'{zip_path.name}: 载荷缺少身份清单里的文件 {name}')
 
     languages: list[dict] = []
     files_declared: dict[str, dict] = {}
@@ -494,89 +553,28 @@ def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
     blob_length = 0
 
     for language in LANGUAGES:
-        zip_path, manifest = manifests[language]
-        with zipfile.ZipFile(zip_path) as archive:
-            declared = {item['path']: item for item in manifest['files']}
-            if not entries:
-                files_declared = declared
-            else:
-                check_same_files(files_declared, declared, language, LANGUAGES[0])
-            absent = sorted(declared_paths - set(declared))
-            if absent:
-                fail(f'{language}: 载荷缺少声明覆盖的文件 {absent}')
-            per_language: dict[str, dict] = {}
-            for name in sorted(declared):
-                entry = dict(declared[name])
-                label = f'{language}/{name}'
-                if name == DISC_IMAGE:
-                    # 盘片条目：裁剪后的记录流（标题图等仍按差异携带）与盘片
-                    # 操作共存；清单仍然是容器身份的权威。
-                    records = object_records(archive, entry, label)
-                    pruned = prune_disc_records(records, disc_declarations[language]['ranges'])
-                    # 操作的数据段排在裁剪记录流之后，平移基址要加上它的长度。
-                    shift = blob_length + len(pruned)
-                    disc_ops = []
-                    for op in disc_declarations[language]['ops']:
-                        moved = dict(op)
-                        if moved['type'] == 'event':
-                            moved['pairs_offset'] += shift
-                            moved['lines'] = [dict(line, data_offset=line['data_offset'] + shift)
-                                              for line in moved['lines']]
-                        elif moved['type'] == 'splice':
-                            moved['patches'] = [dict(patch, data_offset=patch['data_offset'] + shift)
-                                                for patch in moved['patches']]
-                        elif moved['type'] == 'dirop':
-                            pass  # 目录记录改写全部内联在操作里，不占数据段
-                        else:
-                            moved['glyphs_offset'] += shift
-                        disc_ops.append(moved)
-                    per_language[name] = {
-                        'patched_sha256': entry['patched_sha256'],
-                        'patched_size': entry['patched_size'],
-                        'records_offset': blob_length,
-                        'records_length': len(pruned),
-                        'ops': disc_ops,
-                    }
-                    blob_parts.append(pruned)
-                    blob_length += len(pruned)
-                    blob_parts.append(disc_declarations[language]['data'])
-                    blob_length += len(disc_declarations[language]['data'])
-                    continue
-                if name in declarations[language]:
-                    declaration = declarations[language][name]
-                    if entry['patched_sha256'] != declaration['patched_sha256']:
-                        fail(f'{label}: 声明的补丁后哈希与载荷不一致')
-                    if entry['patched_size'] != declaration['size']:
-                        fail(f'{label}: 声明的补丁后大小与载荷不一致')
-                    # 声明内的数据偏移按每文件独立数据段计算；拼进全局数据段
-                    # 时必须整体平移到本文件的段基址。
-                    shift = blob_length
-                    for op in declaration['ops']:
-                        if op['type'] == 'font':
-                            op['glyphs_offset'] += shift
-                        else:
-                            op['data_offset'] += shift
-                    per_language[name] = {
-                        'patched_sha256': declaration['patched_sha256'],
-                        'patched_size': entry['patched_size'],
-                        'records_offset': 0,
-                        'records_length': 0,
-                        'ops': declaration['ops'],
-                    }
-                    blob_parts.append(declaration['data'])
-                    blob_length += len(declaration['data'])
-                    continue
-                records = object_records(archive, entry, label)
-                per_language[name] = {
-                    'patched_sha256': entry['patched_sha256'],
-                    'patched_size': entry['patched_size'],
-                    'records_offset': blob_length,
-                    'records_length': len(records),
-                }
-                blob_parts.append(records)
-                blob_length += len(records)
-            entries[language] = {'version': manifest['version'], 'files': per_language}
-            languages.append({'code': language, 'version': manifest['version']})
+        manifest = manifests[language]
+        declared = manifest['files']
+        if not entries:
+            files_declared = declared
+        else:
+            check_same_files(files_declared, declared, language, LANGUAGES[0])
+        absent = sorted(declared_paths - set(declared))
+        if absent:
+            fail(f'{language}: 身份清单缺少声明覆盖的文件 {absent}')
+        archive = (zipfile.ZipFile(manifest['zip'])
+                   if 'zip' in manifest else None)
+        if archive is not None:
+            with archive:
+                per_language, blob_parts, blob_length = build_language_entries(
+                    language, declared, archive, declarations,
+                    disc_declarations, blob_parts, blob_length)
+        else:
+            per_language, blob_parts, blob_length = build_language_entries(
+                language, declared, None, declarations,
+                disc_declarations, blob_parts, blob_length)
+        entries[language] = {'version': manifest['version'], 'files': per_language}
+        languages.append({'code': language, 'version': manifest['version']})
 
     files = {
         name: {
@@ -593,9 +591,28 @@ def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
     return languages, files, entries, blob
 
 
-def read_manifest(archive: zipfile.ZipFile, zip_path: Path) -> dict:
+def read_manifest_files(archive: zipfile.ZipFile) -> list[dict]:
+    """One legacy ZIP's manifest files: the only place `object` names live."""
     try:
         data = archive.read('manifest.json')
+    except (KeyError, zipfile.BadZipFile, OSError) as error:
+        fail(f'无法读取载荷 manifest.json: {error}')
+    try:
+        manifest = json.loads(data)
+    except json.JSONDecodeError as error:
+        fail(f'manifest.json 解析失败: {error}')
+    files = manifest.get('files')
+    if not isinstance(files, list) or not files:
+        fail('manifest 没有列出任何文件')
+    return files
+
+
+def read_manifest(zip_path: Path) -> dict:
+    try:
+        with zipfile.ZipFile(zip_path) as archive:
+            data = archive.read('manifest.json')
+    except (zipfile.BadZipFile, OSError) as error:
+        fail(f'{zip_path.name}: 无法读取载荷: {error}')
     except KeyError as error:
         fail(f'{zip_path.name}: 缺少 manifest.json: {error}')
     try:
@@ -611,6 +628,107 @@ def read_manifest(archive: zipfile.ZipFile, zip_path: Path) -> dict:
     if not manifest.get('files'):
         fail(f'{zip_path.name}: manifest 没有列出任何文件')
     return manifest
+
+
+def build_language_entries(language: str, declared: dict[str, dict],
+                           archive: zipfile.ZipFile | None,
+                           declarations: dict[str, dict[str, dict]],
+                           disc_declarations: dict[str, dict],
+                           blob_parts: list[bytes],
+                           blob_length: int) -> tuple[dict[str, dict], list[bytes], int]:
+    """Build one language's plan entries, appending op data to the blob.
+
+    Declared files (exe/Unity/texture) and the disc's declared sectors become
+    install-time operations; the disc entry also keeps its pruned record
+    stream, and any undeclared file keeps its full record stream. Both record
+    sources live only in the legacy payload ZIPs — a compile without them
+    fails here rather than emitting an incomplete plan.
+    """
+    per_language: dict[str, dict] = {}
+    for name in sorted(declared):
+        entry = dict(declared[name])
+        label = f'{language}/{name}'
+        if name == DISC_IMAGE:
+            if archive is None:
+                fail(f'{label}: 盘片条目需要载荷 ZIP 提供记录流'
+                     f'（声明只覆盖被重建的扇区）')
+            zip_entry = next((item for item in read_manifest_files(archive)
+                              if item.get('path') == name), None)
+            if zip_entry is None:
+                fail(f'{label}: 载荷缺少差异对象条目')
+            # 盘片条目：裁剪后的记录流（标题图等仍按差异携带）与盘片
+            # 操作共存；身份清单仍然是容器身份的权威。
+            records = object_records(archive, zip_entry, label)
+            pruned = prune_disc_records(records, disc_declarations[language]['ranges'])
+            # 操作的数据段排在裁剪记录流之后，平移基址要加上它的长度。
+            shift = blob_length + len(pruned)
+            disc_ops = []
+            for op in disc_declarations[language]['ops']:
+                moved = dict(op)
+                if moved['type'] == 'event':
+                    moved['pairs_offset'] += shift
+                    moved['lines'] = [dict(line, data_offset=line['data_offset'] + shift)
+                                      for line in moved['lines']]
+                elif moved['type'] == 'splice':
+                    moved['patches'] = [dict(patch, data_offset=patch['data_offset'] + shift)
+                                        for patch in moved['patches']]
+                elif moved['type'] == 'dirop':
+                    pass  # 目录记录改写全部内联在操作里，不占数据段
+                else:
+                    moved['glyphs_offset'] += shift
+                disc_ops.append(moved)
+            per_language[name] = {
+                'patched_sha256': entry['patched_sha256'],
+                'patched_size': entry['patched_size'],
+                'records_offset': blob_length,
+                'records_length': len(pruned),
+                'ops': disc_ops,
+            }
+            blob_parts.append(pruned)
+            blob_length += len(pruned)
+            blob_parts.append(disc_declarations[language]['data'])
+            blob_length += len(disc_declarations[language]['data'])
+            continue
+        if name in declarations[language]:
+            declaration = declarations[language][name]
+            if entry['patched_sha256'] != declaration['patched_sha256']:
+                fail(f'{label}: 声明的补丁后哈希与身份清单不一致')
+            if entry['patched_size'] != declaration['size']:
+                fail(f'{label}: 声明的补丁后大小与身份清单不一致')
+            # 声明内的数据偏移按每文件独立数据段计算；拼进全局数据段
+            # 时必须整体平移到本文件的段基址。
+            shift = blob_length
+            for op in declaration['ops']:
+                if op['type'] == 'font':
+                    op['glyphs_offset'] += shift
+                else:
+                    op['data_offset'] += shift
+            per_language[name] = {
+                'patched_sha256': declaration['patched_sha256'],
+                'patched_size': entry['patched_size'],
+                'records_offset': 0,
+                'records_length': 0,
+                'ops': declaration['ops'],
+            }
+            blob_parts.append(declaration['data'])
+            blob_length += len(declaration['data'])
+            continue
+        if archive is None:
+            fail(f'{label}: 未声明的文件需要载荷 ZIP 提供记录流')
+        zip_entry = next((item for item in read_manifest_files(archive)
+                          if item.get('path') == name), None)
+        if zip_entry is None:
+            fail(f'{label}: 载荷缺少差异对象条目')
+        records = object_records(archive, zip_entry, label)
+        per_language[name] = {
+            'patched_sha256': entry['patched_sha256'],
+            'patched_size': entry['patched_size'],
+            'records_offset': blob_length,
+            'records_length': len(records),
+        }
+        blob_parts.append(records)
+        blob_length += len(records)
+    return per_language, blob_parts, blob_length
 
 
 def check_same_files(expected: dict, actual: dict, language: str, first_language: str) -> None:
@@ -629,7 +747,7 @@ def compile_plan(payload_dir: Path, output: Path, lock_path: Path,
     from fls.containers.unifont_bitmap import Unifont
     languages, files, entries, blob = load_payloads(
         payload_dir, Unifont(), decl_dir / 'exe.json', decl_dir / 'unity.json',
-        decl_dir / 'disc.json', decl_dir / 'texture.json')
+        decl_dir / 'disc.json', decl_dir / 'texture.json', decl_dir)
     digest = hashlib.sha256(blob).hexdigest()
 
     header = {

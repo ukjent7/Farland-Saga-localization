@@ -55,16 +55,16 @@ reproducibility:
   `patched_sha256`/`patched_size` of the rebuilt container, and the shared
   original Parts metadata (base64) that follows the PNG in the container.
   Regenerate it with `tools/derive_fs1_texture.py` from a pristine backup
-  and the committed language payloads.
-- `payload/farland-patch-<version>.zip` — the committed per-language diff
-  payloads. Each ZIP carries a `manifest.json` and one diff object per target
-  file, exactly as `fls.storage.package_release` wrote them. The compiler
-  uses them for the disc record-stream pruning baseline and as the authority
-  on every file's original and patched identity; the exe/Unity/texture diff
-  objects inside them are no longer read.
+  and the historical language payloads (private workspace).
+- `identities.json` — the identity manifest: per language, the candidate
+  version and every target file's `original_sha256`/`original_size`/
+  `patched_sha256`/`patched_size`. This is the authority on every file's
+  original and patched identity; the compiler refuses a plan whose entries
+  disagree with it. It was extracted from the historical payload manifests
+  (`package-release` output).
 - `plan.lock.json` — the uncompressed plan blob's length and SHA-256. The
-  compiler refuses to emit a plan with different bytes, so a payload or
-  declaration change cannot reach a release by accident; rerun
+  compiler refuses to emit a plan with different bytes, so a declaration
+  change cannot reach a release by accident; rerun
   `tools/compile_recipe_fs1.py --write-plan-lock` after reviewing one.
 
 ## Compiling the plan
@@ -74,11 +74,10 @@ bash uv.sh run --locked python tools/compile_recipe_fs1.py
 ```
 
 The compiler renders every declared glyph token through Unifont (failing on
-render errors), sorts and validates the declared patches, packs the committed
-language ZIPs for the record-stream files, cross-checks the three languages'
-original identities, and reconciles the declarations against the ZIP
-manifests: a declared file must agree on `patched_sha256` and `size`, and the
-manifest stays the authority for original identities and patched sizes.
+render errors), sorts and validates the declared patches, takes the file
+identities and versions from `identities.json`, and reconciles the
+declarations against it: a declared file must agree on `patched_sha256` and
+`size`.
 The result is `patcher/plan/saga1/plan.bin`, which the default build embeds
 via `go:embed`. The plan starts with `FS1PLAN1\n`, a little-endian u32 header
 length, a compact JSON header, and a gzip blob. The header declares file
@@ -89,8 +88,8 @@ LZ-compressed overlay font region) — never both. The gzip wrapper depends on
 the host zlib, so the lock covers the uncompressed blob. CI compiles the plan
 before every test and release build, and the compiler never reads the game.
 
-`--declarations <dir>` points at a different `exe.json`/`unity.json` pair;
-the tests use it to compile synthetic declarations.
+`--declarations <dir>` points at a different declarations directory; the
+tests use it to compile synthetic declarations.
 
 ## Maintainer tooling
 
@@ -98,21 +97,22 @@ The declarations are derived from pristine originals, a maintainer step that
 needs the game:
 
 ```sh
-bash uv.sh run --locked python tools/derive_fs1_ops.py extract --backup <pristine backup dir>
+bash uv.sh run --locked python tools/derive_fs1_ops.py extract --backup <pristine backup dir> --payloads <historical payload dir>
 bash uv.sh run --locked python tools/derive_fs1_ops.py verify  --backup <pristine backup dir>
 ```
 
-`extract` re-derives `exe.json`/`unity.json` from the originals; `verify`
-rebuilds every language's exe and Unity files from the declarations alone and
-compares the hashes against them. The disc counterpart is
-`tools/derive_fs1_disc.py`: `extract --backup <dir> --patched-bin <container>
---language <code>` re-derives one language's disc declarations from the
-pristine and that language's patched disc, `merge` combines the three
-partial documents into `disc.json`, and `verify --backup <dir>` rebuilds
-every language's shipped container from the pristine disc and the
-declarations alone, requiring the container SHA-256 to match the payload
-manifests. End users and CI never run these: compiling the plan needs only
-the committed files.
+`extract` re-derives `exe.json`/`unity.json` from the originals (the
+historical payload ZIPs live in the private workspace; the repository no
+longer carries them); `verify` rebuilds every language's exe and Unity files
+from the declarations alone and compares the hashes against them. The disc
+counterpart is `tools/derive_fs1_disc.py`: `extract --backup <dir>
+--patched-bin <container> --language <code>` re-derives one language's disc
+declarations from the pristine and that language's patched disc, `merge`
+combines the three partial documents into `disc.json`, and
+`verify --backup <dir>` rebuilds every language's shipped container from the
+pristine disc and the declarations alone, requiring the container SHA-256 to
+match `identities.json`. End users and CI never run these: compiling the
+plan needs only the committed files.
 
 ## Install-time replay
 
@@ -142,7 +142,7 @@ whole stream, and verifies the container hash against the plan.
 
 ## Later phases
 
-No record streams remain: every target file is plan-built. The committed
-payload ZIPs stay only as the manifests' authority (original identities)
-and could be dropped in a later cleanup once the manifests move into the
-declarations. `plan.lock.json` keeps every step pinned and reviewable.
+No record streams remain: every target file is plan-built, and the
+repository carries no game-derived bytes at all — the historical payload
+ZIPs are gone, with `identities.json` as the identity authority.
+`plan.lock.json` keeps every step pinned and reviewable.

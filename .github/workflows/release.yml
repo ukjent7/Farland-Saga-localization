@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "=== 正在从公开 recipe 与 OFL 字体编译二代安装计划 ==="
           bash uv.sh run --locked python tools/compile_recipe.py
-          echo "=== 正在从提交的语言载荷编译一代安装计划 ==="
+          echo "=== 正在从一代声明与身份清单编译安装计划 ==="
           bash uv.sh run --locked python tools/compile_recipe_fs1.py
       - name: 静态检查与单元测试
         run: |

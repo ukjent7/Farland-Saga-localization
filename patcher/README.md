@@ -11,8 +11,8 @@ install plan via `go:embed`: the first game carries
 `plan/saga1/plan.bin`, compiled by `tools/compile_recipe_fs1.py` from the
 public declarations in `recipe/fs1/` (exe glyph slots and patches, Unity text
 patches, disc event/font/graphics/directory operations, texture atlas) plus
-the committed language payloads in `recipe/fs1/payload/` (every file's
-identity manifest); the sequel carries
+the identity manifest `recipe/fs1/identities.json` (every file's
+original/patched identity); the sequel carries
 `plan/saga2/plan.bin`, compiled from the public `recipe/` and its OFL fonts.
 The installer reads the user's pristine files, verifies their identity, and
 replays the plan locally. Neither build needs a separate archive or a
@@ -56,10 +56,10 @@ bash flow.sh build-patcher --output release/patcher.exe     # Custom output loca
 ```
 
 This command runs `tools/compile_recipe_fs1.py` (which renders the exe/Unity
-declarations in `recipe/fs1/` into operations and packs the committed
-language payloads in `recipe/fs1/payload/` into `plan/saga1/plan.bin`,
-verified against `recipe/fs1/plan.lock.json`) and then cross-compiles. The
-compiler reads only the committed declarations and language ZIPs, so the
+declarations in `recipe/fs1/` into operations and compiles
+`plan/saga1/plan.bin` from them plus `identities.json`, verified against
+`recipe/fs1/plan.lock.json`) and then cross-compiles. The
+compiler reads only committed files, so the
 release build needs no game files.
 
 The sequel's plan comes from the public recipe:

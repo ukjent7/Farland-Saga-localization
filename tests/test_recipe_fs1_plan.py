@@ -126,6 +126,30 @@ def write_payload_set(directory: Path, files=None, versions=None,
     return directory
 
 
+def write_identities(directory: Path, files=None,
+                     versions=None,
+                     languages=('zh-CN', 'ko-KR', 'en-US')) -> Path:
+    """Write identities.json matching the fixture's manifest identities."""
+    directory.mkdir(parents=True, exist_ok=True)
+    files = files if files is not None else sample_files()
+    versions = versions or {language: f'{language}-plan01' for language in languages}
+    doc = {'schema': 1, 'kind': 'farland-saga-identity', 'languages': {}}
+    for language in languages:
+        doc['languages'][language] = {
+            'version': versions[language],
+            'files': [{
+                'path': item['name'],
+                'original_sha256': sha256_hex(item['original']),
+                'original_size': len(item['original']),
+                'patched_sha256': sha256_hex(item['patched']),
+                'patched_size': len(item['patched']),
+            } for item in files],
+        }
+    (directory / 'identities.json').write_text(
+        json.dumps(doc, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+    return directory
+
+
 def write_declarations(directory: Path, files=None,
                        languages=('zh-CN', 'ko-KR', 'en-US')) -> Path:
     """Write minimal exe/Unity declarations matching the fixture's exe change.
@@ -136,6 +160,7 @@ def write_declarations(directory: Path, files=None,
     """
     directory.mkdir(parents=True, exist_ok=True)
     files = files if files is not None else sample_files()
+    write_identities(directory, files, languages=languages)
     exe = next(item for item in files if item['name'] == 'FarlandSaga.exe')
     exe_decl = {
         'schema': 1, 'file': 'FarlandSaga.exe',
@@ -221,10 +246,11 @@ class CompilePlanTests(unittest.TestCase):
                     offset += entry['records_length']
             self.assertEqual(offset, len(blob))
 
-            # lock 校验幂等；载荷变化后应当拒绝。
+            # lock 校验幂等；身份清单变化后应当拒绝。
             compile_to(payloads, output, lock, declarations_dir=decls)
-            (payloads / 'farland-patch-zh-CN-plan01.zip').unlink()
-            write_language_zip(payloads, 'zh-CN', 'zh-CN-plan02', files)
+            write_identities(decls, versions={'zh-CN': 'zh-CN-plan09',
+                                              'ko-KR': 'ko-KR-plan01',
+                                              'en-US': 'en-US-plan01'})
             with self.assertRaises(SystemExit) as caught:
                 compile_to(payloads, output, lock, declarations_dir=decls)
             self.assertIn('plan does not match', str(caught.exception))
@@ -238,17 +264,47 @@ class CompilePlanTests(unittest.TestCase):
             compile_to(payloads, output, lock, write_lock=True, declarations_dir=decls)
             (payloads / 'farland-patch-zh-CN-plan01.zip').unlink()
             write_language_zip(payloads, 'zh-CN', 'zh-CN-plan02', sample_files())
+            write_identities(decls, versions={'zh-CN': 'zh-CN-plan02',
+                                              'ko-KR': 'ko-KR-plan01',
+                                              'en-US': 'en-US-plan01'})
             compile_to(payloads, output, lock, write_lock=True, declarations_dir=decls)
             locked = json.loads(lock.read_text(encoding='utf-8'))
             self.assertEqual(locked['versions']['zh-CN'], 'zh-CN-plan02')
 
     def test_missing_language_rejected(self):
+        """A language ZIP missing while its identity section exists fails hard:
+        the disc's pruned record stream has no other source."""
         with tempfile.TemporaryDirectory() as temp:
             payloads = write_payload_set(Path(temp) / 'payload', skip=('ko-KR',))
             with self.assertRaises(SystemExit) as caught:
                 compile_to(payloads, Path(temp) / 'plan.bin', Path(temp) / 'lock.json',
                            declarations_dir=write_declarations(Path(temp) / 'decls'))
-            self.assertIn('缺少语言载荷', str(caught.exception))
+            self.assertIn('盘片条目需要载荷 ZIP', str(caught.exception))
+
+    def test_missing_identity_language_rejected(self):
+        """identities.json must cover every language before any compile."""
+        with tempfile.TemporaryDirectory() as temp:
+            payloads = write_payload_set(Path(temp) / 'payload')
+            with self.assertRaises(SystemExit) as caught:
+                compile_to(payloads, Path(temp) / 'plan.bin', Path(temp) / 'lock.json',
+                           declarations_dir=write_declarations(
+                               Path(temp) / 'decls', languages=('zh-CN', 'en-US')))
+            self.assertIn('languages 必须恰好覆盖', str(caught.exception))
+
+    def test_compile_without_zips_fails_on_records(self):
+        """Without the legacy ZIPs the compile fails instead of dropping the
+        disc's pruned record stream — the plan stays provably complete."""
+        with tempfile.TemporaryDirectory() as temp:
+            payloads = write_payload_set(Path(temp) / 'payload')
+            decls = write_declarations(Path(temp) / 'decls')
+            output = Path(temp) / 'plan.bin'
+            lock = Path(temp) / 'plan.lock.json'
+            compile_to(payloads, output, lock, write_lock=True, declarations_dir=decls)
+            for zip_path in sorted(payloads.glob('*.zip')):
+                zip_path.unlink()
+            with self.assertRaises(SystemExit) as caught:
+                compile_to(payloads, output, lock, declarations_dir=decls)
+            self.assertIn('盘片条目需要载荷 ZIP', str(caught.exception))
 
     def test_unknown_language_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -271,7 +327,22 @@ class CompilePlanTests(unittest.TestCase):
             with self.assertRaises(SystemExit) as caught:
                 compile_to(payloads, Path(temp) / 'plan.bin', Path(temp) / 'lock.json',
                            declarations_dir=write_declarations(Path(temp) / 'decls'))
-            self.assertIn('原版身份', str(caught.exception))
+            self.assertIn('载荷清单与身份清单', str(caught.exception))
+
+    def test_zip_identity_conflict_rejected(self):
+        """The ZIP manifest may not drift from the committed identity manifest."""
+        def mutate_ko_texture(language, entry):
+            if language == 'ko-KR' and entry['path'] == 'Texture.tex':
+                entry['patched_sha256'] = sha256_hex(pattern(78, 32))
+            return entry
+
+        with tempfile.TemporaryDirectory() as temp:
+            payloads = write_payload_set(Path(temp) / 'payload',
+                                         mutate_entry=mutate_ko_texture)
+            with self.assertRaises(SystemExit) as caught:
+                compile_to(payloads, Path(temp) / 'plan.bin', Path(temp) / 'lock.json',
+                           declarations_dir=write_declarations(Path(temp) / 'decls'))
+            self.assertIn('载荷清单与身份清单', str(caught.exception))
 
     def test_stray_file_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
