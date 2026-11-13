@@ -640,25 +640,30 @@ def build_language_entries(language: str, declared: dict[str, dict],
 
     Declared files (exe/Unity/texture) and the disc's declared sectors become
     install-time operations; the disc entry also keeps its pruned record
-    stream, and any undeclared file keeps its full record stream. Both record
-    sources live only in the legacy payload ZIPs — a compile without them
-    fails here rather than emitting an incomplete plan.
+    stream, and any undeclared file keeps its full record stream. Record
+    sources live only in the legacy payload ZIPs. The disc needs no ZIP once
+    disc.json covers it: extract fails on any undeclared container change and
+    the golden gate proves the ops-only rebuild byte-exact, so the pruned
+    stream is empty and omitting it is provably complete. A compile without
+    ZIPs still fails here rather than silently dropping bytes for anything
+    the declarations do not rebuild.
     """
     per_language: dict[str, dict] = {}
     for name in sorted(declared):
         entry = dict(declared[name])
         label = f'{language}/{name}'
         if name == DISC_IMAGE:
-            if archive is None:
-                fail(f'{label}: 盘片条目需要载荷 ZIP 提供记录流'
-                     f'（声明只覆盖被重建的扇区）')
-            zip_entry = next((item for item in read_manifest_files(archive)
-                              if item.get('path') == name), None)
-            if zip_entry is None:
-                fail(f'{label}: 载荷缺少差异对象条目')
-            # 盘片条目：裁剪后的记录流（标题图等仍按差异携带）与盘片
-            # 操作共存；身份清单仍然是容器身份的权威。
-            records = object_records(archive, zip_entry, label)
+            if archive is None and not disc_declarations[language]['ops']:
+                fail(f'{label}: 没有盘片声明也没有载荷 ZIP，无法携带盘片差异')
+            records = b''
+            if archive is not None:
+                zip_entry = next((item for item in read_manifest_files(archive)
+                                  if item.get('path') == name), None)
+                if zip_entry is None:
+                    fail(f'{label}: 载荷缺少差异对象条目')
+                # 盘片条目：裁剪后的记录流（标题图等仍按差异携带）与盘片
+                # 操作共存；身份清单仍然是容器身份的权威。
+                records = object_records(archive, zip_entry, label)
             pruned = prune_disc_records(records, disc_declarations[language]['ranges'])
             # 操作的数据段排在裁剪记录流之后，平移基址要加上它的长度。
             shift = blob_length + len(pruned)

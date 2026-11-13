@@ -273,13 +273,13 @@ class CompilePlanTests(unittest.TestCase):
 
     def test_missing_language_rejected(self):
         """A language ZIP missing while its identity section exists fails hard:
-        the disc's pruned record stream has no other source."""
+        the fixture has no disc declaration, so the disc has no data source."""
         with tempfile.TemporaryDirectory() as temp:
             payloads = write_payload_set(Path(temp) / 'payload', skip=('ko-KR',))
             with self.assertRaises(SystemExit) as caught:
                 compile_to(payloads, Path(temp) / 'plan.bin', Path(temp) / 'lock.json',
                            declarations_dir=write_declarations(Path(temp) / 'decls'))
-            self.assertIn('盘片条目需要载荷 ZIP', str(caught.exception))
+            self.assertIn('没有盘片声明也没有载荷 ZIP', str(caught.exception))
 
     def test_missing_identity_language_rejected(self):
         """identities.json must cover every language before any compile."""
@@ -292,8 +292,10 @@ class CompilePlanTests(unittest.TestCase):
             self.assertIn('languages 必须恰好覆盖', str(caught.exception))
 
     def test_compile_without_zips_fails_on_records(self):
-        """Without the legacy ZIPs the compile fails instead of dropping the
-        disc's pruned record stream — the plan stays provably complete."""
+        """Without the legacy ZIPs and without a disc declaration the compile
+        fails instead of dropping the disc's record stream — the plan stays
+        provably complete. (The real declarations rebuild the whole disc, so
+        the committed compile runs ZIP-less with an empty record stream.)"""
         with tempfile.TemporaryDirectory() as temp:
             payloads = write_payload_set(Path(temp) / 'payload')
             decls = write_declarations(Path(temp) / 'decls')
@@ -304,7 +306,7 @@ class CompilePlanTests(unittest.TestCase):
                 zip_path.unlink()
             with self.assertRaises(SystemExit) as caught:
                 compile_to(payloads, output, lock, declarations_dir=decls)
-            self.assertIn('盘片条目需要载荷 ZIP', str(caught.exception))
+            self.assertIn('没有盘片声明也没有载荷 ZIP', str(caught.exception))
 
     def test_unknown_language_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
