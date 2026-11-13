@@ -64,7 +64,13 @@
         31,
         15
       ],
-      "mode": "row_background"
+      "mode": "row_background",
+      "sample": [
+        455,
+        2,
+        16,
+        15
+      ]
     },
     {
       "box": [
@@ -73,7 +79,13 @@
         17,
         15
       ],
-      "mode": "row_background"
+      "mode": "row_background",
+      "sample": [
+        455,
+        2,
+        16,
+        15
+      ]
     },
     {
       "box": [
@@ -82,7 +94,13 @@
         31,
         15
       ],
-      "mode": "row_background"
+      "mode": "row_background",
+      "sample": [
+        455,
+        18,
+        16,
+        15
+      ]
     },
     {
       "box": [
@@ -91,7 +109,13 @@
         17,
         15
       ],
-      "mode": "row_background"
+      "mode": "row_background",
+      "sample": [
+        455,
+        18,
+        16,
+        15
+      ]
     },
     {
       "box": [
@@ -160,10 +184,16 @@
       "box": [
         487,
         49,
-        24,
+        25,
         15
       ],
-      "mode": "row_background"
+      "mode": "row_background",
+      "sample": [
+        448,
+        49,
+        32,
+        15
+      ]
     },
     {
       "box": [
