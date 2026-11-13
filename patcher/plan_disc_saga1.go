@@ -194,8 +194,49 @@ func (s *fs1PlanSource) applyDiscOps(planEntry *fs1PlanEntry, entry fileEntry, b
 			if err := applyFS1DiscFont(disc, op, s.plan.blob); err != nil {
 				return fmt.Errorf("%s/%s: %w", entry.Path, op.Name, err)
 			}
+		case "dirop":
+			if err := applyFS1DiscDirectory(disc, op); err != nil {
+				return fmt.Errorf("%s/%s: %w", entry.Path, op.Name, err)
+			}
 		default:
 			return fmt.Errorf("%s: 不支持的操作类型 %q", entry.Path, op.Type)
+		}
+	}
+	return nil
+}
+
+// applyFS1DiscDirectory 改写 ISO 目录记录：增长或迁移的事件文件在目录里
+// 的 size/extent 字段（双端字节序）按声明更新。多条记录常共用一个目录
+// 扇区，按扇区分组读改写，保持原位扇区的 MSF 头并重算完整 EDC/ECC。
+func applyFS1DiscDirectory(disc *fs1DiscIO, op *fs1PlanOp) error {
+	groups := make(map[int64][]*fs1PlanDirEntry, len(op.Entries))
+	for index := range op.Entries {
+		record := &op.Entries[index]
+		if record.Offset < 16 || record.Offset+34 > 16+sectorPayload {
+			return fmt.Errorf("目录记录偏移越界: (%d, %d)", record.Sector, record.Offset)
+		}
+		groups[record.Sector] = append(groups[record.Sector], record)
+	}
+	sectors := make([]int64, 0, len(groups))
+	for sector := range groups {
+		sectors = append(sectors, sector)
+	}
+	sort.Slice(sectors, func(i, j int) bool { return sectors[i] < sectors[j] })
+	for _, sector := range sectors {
+		plain, err := disc.readSector(sector)
+		if err != nil {
+			return err
+		}
+		payload := append([]byte(nil), plain[16:2064]...)
+		for _, record := range groups[sector] {
+			within := record.Offset - 16
+			binary.LittleEndian.PutUint32(payload[within+2:], uint32(record.Extent))
+			binary.BigEndian.PutUint32(payload[within+6:], uint32(record.Extent))
+			binary.LittleEndian.PutUint32(payload[within+10:], uint32(record.Size))
+			binary.BigEndian.PutUint32(payload[within+14:], uint32(record.Size))
+		}
+		if err := disc.writeSector(sector, payload, false); err != nil {
+			return err
 		}
 	}
 	return nil

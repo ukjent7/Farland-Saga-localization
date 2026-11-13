@@ -627,7 +627,8 @@ type fs1DiscDeclarations struct {
 		LBA  int64 `json:"lba"`
 		Size int64 `json:"size"`
 	} `json:"files"`
-	Languages map[string]struct {
+	DirRecords map[string][2]int64 `json:"dir_records"`
+	Languages  map[string]struct {
 		Events map[string]struct {
 			PairsAdded string `json:"pairs_added"`
 			Lines      []struct {
@@ -779,7 +780,30 @@ func TestFS1DiscOpsRealContainer(t *testing.T) {
 				ops = append(ops, op)
 			}
 
-			// 裁剪记录流：完全落在声明区间里的记录由操作替代。
+			// 目录操作：增长或迁移的事件同步改写 ISO 目录记录。
+			var dirEntries []fs1PlanDirEntry
+			for _, path := range sortedPaths(section.Events) {
+				event := section.Events[path]
+				ident := decl.Files[path]
+				if event.SizePatched == ident.Size && event.Relocate == nil {
+					continue
+				}
+				record, ok := decl.DirRecords[path]
+				if !ok {
+					t.Fatalf("声明缺少 %s 的目录记录位置", path)
+				}
+				extent := ident.LBA
+				if event.Relocate != nil {
+					extent = event.Relocate.LBA
+				}
+				dirEntries = append(dirEntries, fs1PlanDirEntry{Sector: record[0],
+					Offset: record[1], Size: event.SizePatched, Extent: extent})
+			}
+			if len(dirEntries) > 0 {
+				ops = append(ops, fs1PlanOp{Type: "dirop", Name: "<ISO目录>", Entries: dirEntries})
+			}
+
+			// 裁剪记录流：与声明区间相交的记录由操作替代。
 			var kept []byte
 			dropped := 0
 			index := 0
@@ -789,7 +813,7 @@ func TestFS1DiscOpsRealContainer(t *testing.T) {
 				data := recordsRaw[index+12 : index+12+int(length)]
 				inside := false
 				for _, r := range section.Ranges {
-					if r[0] <= offset && offset+length <= r[1] {
+					if r[0] < offset+length && offset < r[1] {
 						inside = true
 						break
 					}

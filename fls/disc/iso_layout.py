@@ -29,16 +29,23 @@ def _extent(raw, lba, size):
                      for i in range(lba, lba+(size+PAYLOAD-1)//PAYLOAD))[:size]
 
 
-def scan_directories():
+def scan_directories(track=None):
     """Walk the volume descriptors, path tables and directory records.
 
-    Returns ``(records, claimed)``: ``records`` maps a POSIX path to the
+    ``track`` is the decoded 2352-byte-sector data track, as bytes or as a
+    path to it; it defaults to the workspace decode. Returns
+    ``(records, claimed)``: ``records`` maps a POSIX path to the
     ``(sector, offset)`` of its directory record, and ``claimed`` lists every
     ``(start_lba, sector_count)`` run the filesystem occupies. Both endian
     size fields are read and the larger one is claimed, so a record whose
     big-endian size disagrees still reserves the space it may describe.
     """
-    raw = read_track()
+    if track is None:
+        raw = read_track()
+    elif isinstance(track, (str, Path)):
+        raw = Path(track).read_bytes()
+    else:
+        raw = track
     records, claimed = {}, []
 
     def claim(start, sectors):

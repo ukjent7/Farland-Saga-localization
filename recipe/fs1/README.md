@@ -12,10 +12,14 @@ reproducibility:
   `S-Tribute_Data/resources.assets`) are **declarative operations**: font
   glyphs re-rendered from Unifont and small public patches. The repository
   carries no game-derived bytes for them.
-- `FarlandSaga.bin` (the disc image, ~3.4 MB of text-bank diff records) and
-  `Texture.tex` (a size-changing SSF atlas re-encode) are still **diff
-  record streams** taken from the committed language payloads. Compiling
-  these from recipes is later work.
+- `FarlandSaga.bin` (the disc image) is **fully declarative**: event
+  scripts, the disc font bank, the fixed-capacity data files, the title
+  sprites, the translated menu graphics and the ISO directory updates are
+  all install-time operations over the user's pristine disc. The plan
+  carries no game-derived bytes for it.
+- `Texture.tex` (a size-changing SSF atlas re-encode) is still a **diff
+  record stream** taken from the committed language payloads. Compiling it
+  from a texture recipe is later work.
 
 ## Layout
 
@@ -28,16 +32,20 @@ reproducibility:
   named UTF-8 text patches and the expected `patched_sha256`/`size`.
 - `disc.json` — the disc's declarations: per language, the event-script
   rebuilds (glyph-pair sequences per translated line plus each file's added
-  table pairs), `SYSTEM/KANJI.FON` glyph cells (Unifont renderings), and the
-  fixed-capacity byte patches for the menu/item/system data files — together
-  with the structural facts (per-file LBA and size, and the container-offset
-  ranges of the sectors the operations regenerate). The installer rebuilds
-  these files from the user's pristine disc, so the repository carries no
-  game-derived bytes for them. Title sprites, theme files, directory-sector
-  bytes and a few parity-only rewrites still travel as diff records until
-  their recipes exist; `tools/derive_fs1_disc.py verify` is the golden gate
-  proving that pristine + declarations + the pruned records reproduce every
-  language's shipped container byte for byte.
+  table pairs), `SYSTEM/KANJI.FON` glyph cells (Unifont renderings), the
+  fixed-capacity byte patches for the menu/item/system data files, the
+  same-size graphics patches (the 50 `TITLE/TITLE*.SPR` title sprites and,
+  for Korean and English, the translated `MENU.CEL`/`MENU_S.SPR`/
+  `N_MENU.DAT`/`RESET.DAT` menu graphics), and the ISO directory-record
+  updates (`dir_records` maps each grown or relocated event to its record's
+  sector and offset; the `dirop` rewrites the record's extent/size fields in
+  both endians). Together with the structural facts (per-file LBA and size,
+  and the container-offset ranges of the sectors the operations regenerate)
+  the installer rebuilds the whole disc from the user's pristine image, so
+  the repository carries no game-derived disc bytes.
+  `tools/derive_fs1_disc.py verify` is the golden gate proving that pristine
+  + declarations alone reproduce every language's shipped container byte for
+  byte.
 - `payload/farland-patch-<version>.zip` — the committed per-language diff
   payloads. Each ZIP carries a `manifest.json` and one diff object per target
   file, exactly as `fls.storage.package_release` wrote them. The compiler
@@ -87,12 +95,14 @@ bash uv.sh run --locked python tools/derive_fs1_ops.py verify  --backup <pristin
 `extract` re-derives `exe.json`/`unity.json` from the originals; `verify`
 rebuilds every language's exe and Unity files from the declarations alone and
 compares the hashes against them. The disc counterpart is
-`tools/derive_fs1_disc.py`: `extract --backup <dir> --patched-bin <container>`
-re-derives `disc.json` from the pristine and patched discs, and
-`verify --backup <dir>` rebuilds every language's shipped container from the
-pristine disc, the declarations and the pruned ZIP records, requiring the
-container SHA-256 to match the payload manifests. End users and CI never run
-these: compiling the plan needs only the committed files.
+`tools/derive_fs1_disc.py`: `extract --backup <dir> --patched-bin <container>
+--language <code>` re-derives one language's disc declarations from the
+pristine and that language's patched disc, `merge` combines the three
+partial documents into `disc.json`, and `verify --backup <dir>` rebuilds
+every language's shipped container from the pristine disc and the
+declarations alone, requiring the container SHA-256 to match the payload
+manifests. End users and CI never run these: compiling the plan needs only
+the committed files.
 
 ## Install-time replay
 
@@ -105,20 +115,18 @@ declared bytes into place and re-encoding the font region through the LZ
 format — and finally verify the rebuilt length and SHA-256 against the plan.
 A tampered original is refused before any write.
 
-The disc image combines both: the installer seeds the output with a pristine
-copy, applies the disc operations in place (so the SSF block transforms see
-a single-encryption-session container), and writes the kept diff records raw
-over the result, mirroring `tools/derive_fs1_disc.py verify`. Records fully
-inside the declared sectors' container ranges are dropped at compile time;
-records that straddle a range boundary travel whole, because the container
-cipher chains within each 2048-byte SSF block and the operations cannot
-reproduce the ciphertext of blocks whose untouched half belongs to a
-neighboring rewritten sector.
+The disc image is rebuilt the same way the golden gate proves it: the
+installer seeds the output with a pristine copy and applies the disc
+operations in place, so the SSF block transforms always see a
+single-encryption-session container. Every changed byte lies inside a
+declared sector (the extractor refuses undeclared changes), so the compiler
+drops every record intersecting the declared ranges and the disc entry
+carries operations only. Records would still be replayed raw after the
+operations if any existed, mirroring `tools/derive_fs1_disc.py verify`.
 
 ## Later phases
 
-The remaining record streams are the disc image and the texture. The
-follow-up work mirrors the sequel's recipe migration: compile the disc text
-banks from `translation/corpus.json` and express the texture as a texture
-recipe, so the committed payloads can eventually be dropped.
+The remaining record stream is the texture. The follow-up work mirrors the
+sequel's recipe migration: express the texture as a texture recipe, so the
+committed payloads can eventually be dropped.
 `plan.lock.json` keeps every intermediate step pinned and reviewable.

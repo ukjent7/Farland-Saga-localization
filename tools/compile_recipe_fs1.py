@@ -254,6 +254,9 @@ def load_disc_declarations(decl_disc: Path) -> tuple[dict, dict]:
         ranges = section.get('ranges')
         if not ranges:
             fail(f'{decl_disc}: {language} 缺少记录裁剪区间')
+    dir_records = document.get('dir_records')
+    if not isinstance(dir_records, dict):
+        fail(f'{decl_disc}: 缺少目录记录位置')
 
     declarations = {}
     for language in LANGUAGES:
@@ -320,28 +323,44 @@ def load_disc_declarations(decl_disc: Path) -> tuple[dict, dict]:
             op['slots'] = slots
             op['glyphs_offset'] = glyphs_offset
             ops.append(op)
+        # 目录操作：增长或迁移的事件要同步改写 ISO 目录记录的 size/extent
+        # 字段。位置是原版镜像的结构事实，值来自事件声明本身。
+        entries = []
+        for path in sorted(section['events']):
+            event = section['events'][path]
+            ident = shared.get(path)
+            if ident is None:
+                fail(f'{decl_disc}: {path} 缺少文件身份')
+            if event['size_patched'] == ident['size'] and not event.get('relocate'):
+                continue
+            record = dir_records.get(path)
+            if record is None:
+                fail(f'{decl_disc}: {language}/{path} 缺少目录记录位置')
+            entries.append({'sector': int(record[0]), 'offset': int(record[1]),
+                            'size': event['size_patched'],
+                            'extent': event['relocate']['lba'] if event.get('relocate')
+                            else ident['lba']})
+        if entries:
+            ops.append({'type': 'dirop', 'name': '<ISO目录>', 'entries': entries})
         declarations[language] = {'ops': ops, 'data': bytes(data),
                                   'ranges': section['ranges']}
     return shared, declarations
 
 
 def prune_disc_records(records: bytes, ranges: list[list[int]]) -> bytes:
-    """丢弃完全落在声明扇区区间里的记录：那些字节由操作在安装期重建。
+    """丢弃与声明扇区区间相交的全部记录：那些字节由操作在安装期重建。
 
-    跨越区间边界的记录整条保留。容器层 SSF 密文是链式密码，块内字节的
-    密文依赖同一 SSF 块里相邻字节的真实历史；操作从纯原版镜像重建声明
-    扇区时，共享块里未声明部分的链状态与真实补丁器不一致，产生的密文与
-    真实容器逐字节不同（cdrom 层明文一致，容器层密文带恒定偏移）。跨界
-    记录携带的原始容器字节（含相邻未声明扇区的密文）必须在操作完成后
-    原样落盘才能收敛到真实容器。"""
+    操作从纯原版镜像出发就地重建声明扇区；共享 SSF 块里相邻扇区的明文
+    未变（extract 对任何未声明的明文差异直接失败），因此整块重加密后的
+    密文与真实容器逐字节一致，跨界记录无需保留。完全落在声明区间之外
+    的记录意味着存在未声明的容器差异，编译直接失败。"""
     kept = bytearray()
     index = 0
     while index < len(records):
         offset = int.from_bytes(records[index:index + 8], 'little')
         length = int.from_bytes(records[index + 8:index + 12], 'little')
         end = offset + length
-        inside = any(lo <= offset and end <= hi for lo, hi in ranges)
-        if not inside:
+        if not any(offset < hi and lo < end for lo, hi in ranges):
             kept.extend(records[index:index + 12 + length])
         index += 12 + length
     return bytes(kept)
@@ -367,7 +386,12 @@ def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
         fail(f'{payload_dir}: 存在未知文件 {sorted(strays)}，语言载荷目录必须只包含 *.zip')
 
     declarations = load_declarations(font, decl_exe, decl_unity)
-    disc_files, disc_declarations = load_disc_declarations(decl_disc)
+    # 声明目录可以只有 exe/unity：此时盘片差异保持记录流形态。
+    if decl_disc.exists():
+        disc_files, disc_declarations = load_disc_declarations(decl_disc)
+    else:
+        disc_declarations = {language: {'ops': [], 'data': b'', 'ranges': []}
+                             for language in LANGUAGES}
     declared_paths = set()
     for language in LANGUAGES:
         declared_paths.update(declarations[language])
@@ -431,6 +455,8 @@ def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
                         elif moved['type'] == 'splice':
                             moved['patches'] = [dict(patch, data_offset=patch['data_offset'] + shift)
                                                 for patch in moved['patches']]
+                        elif moved['type'] == 'dirop':
+                            pass  # 目录记录改写全部内联在操作里，不占数据段
                         else:
                             moved['glyphs_offset'] += shift
                         disc_ops.append(moved)

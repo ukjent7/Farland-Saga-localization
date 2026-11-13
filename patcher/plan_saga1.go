@@ -63,24 +63,34 @@ type fs1PlanEntry struct {
 // 光盘镜像内的 ISO 文件：event 按声明行重建事件脚本，splice 做定长字节
 // 拼接，discfont 替换 KANJI.FON 的字形槽位；三者都从用户原版盘现场生成。
 type fs1PlanOp struct {
-	Type         string         `json:"type"`
-	Name         string         `json:"name"`
-	Offset       int64          `json:"offset"`
-	DataOffset   int64          `json:"data_offset"`
-	DataLength   int64          `json:"data_length"`
-	Start        int64          `json:"start"`
-	Limit        int64          `json:"limit"`
-	Cells        int            `json:"cells"`
-	Slots        []int          `json:"slots"`
-	GlyphsOffset int64          `json:"glyphs_offset"`
-	LBA          int64          `json:"lba,omitempty"`
-	Size         int64          `json:"size,omitempty"`
-	SizePatched  int64          `json:"size_patched,omitempty"`
-	PairsOffset  int64          `json:"pairs_offset,omitempty"`
-	PairsLength  int64          `json:"pairs_length,omitempty"`
-	RelocateLBA  int64          `json:"relocate_lba,omitempty"`
-	Lines        []fs1PlanLine  `json:"lines,omitempty"`
-	Patches      []fs1PlanPatch `json:"patches,omitempty"`
+	Type         string            `json:"type"`
+	Name         string            `json:"name"`
+	Offset       int64             `json:"offset"`
+	DataOffset   int64             `json:"data_offset"`
+	DataLength   int64             `json:"data_length"`
+	Start        int64             `json:"start"`
+	Limit        int64             `json:"limit"`
+	Cells        int               `json:"cells"`
+	Slots        []int             `json:"slots"`
+	GlyphsOffset int64             `json:"glyphs_offset"`
+	LBA          int64             `json:"lba,omitempty"`
+	Size         int64             `json:"size,omitempty"`
+	SizePatched  int64             `json:"size_patched,omitempty"`
+	PairsOffset  int64             `json:"pairs_offset,omitempty"`
+	PairsLength  int64             `json:"pairs_length,omitempty"`
+	RelocateLBA  int64             `json:"relocate_lba,omitempty"`
+	Lines        []fs1PlanLine     `json:"lines,omitempty"`
+	Patches      []fs1PlanPatch    `json:"patches,omitempty"`
+	Entries      []fs1PlanDirEntry `json:"entries,omitempty"`
+}
+
+// fs1PlanDirEntry 是 dirop 操作里一条 ISO 目录记录改写：记录在哪个目录
+// 扇区、扇区内偏移，以及补丁后的文件尺寸与起始 LBA。
+type fs1PlanDirEntry struct {
+	Sector int64 `json:"sector"`
+	Offset int64 `json:"offset"`
+	Size   int64 `json:"size"`
+	Extent int64 `json:"extent"`
 }
 
 // fs1PlanLine 是 event 操作里一条已翻译行的声明：行号（与脚本里 0x22 文本
@@ -369,7 +379,7 @@ func hasReplayOps(ops []fs1PlanOp) bool {
 func hasDiscOps(ops []fs1PlanOp) bool {
 	for index := range ops {
 		switch ops[index].Type {
-		case "event", "splice", "discfont":
+		case "event", "splice", "discfont", "dirop":
 			return true
 		}
 	}
@@ -427,6 +437,10 @@ func validateFS1PlanOp(format int, file *fs1PlanFile, op *fs1PlanOp, entry *fs1P
 		if op.LBA <= 0 || op.Size <= 0 || op.LBA > file.Size ||
 			op.Size > file.Size-op.LBA*sectorSize+2048 {
 			return errors.New("盘片文件的 LBA 或原版大小不合法")
+		}
+	case "dirop":
+		if !discFile {
+			return errors.New("dirop 类型操作只能用于盘片目标")
 		}
 	default:
 		return fmt.Errorf("不支持的操作类型 %q", op.Type)
@@ -546,6 +560,33 @@ func validateFS1PlanOp(format int, file *fs1PlanFile, op *fs1PlanOp, entry *fs1P
 		}
 		if err := rejectReplayFields(op); err != nil {
 			return err
+		}
+	case "dirop":
+		if len(op.Entries) == 0 {
+			return errors.New("目录操作没有记录改写")
+		}
+		if op.Offset != 0 || op.DataOffset != 0 || op.DataLength != 0 ||
+			op.Start != 0 || op.Limit != 0 || op.Cells != 0 || op.Slots != nil ||
+			op.GlyphsOffset != 0 || op.PairsOffset != 0 || op.PairsLength != 0 ||
+			op.RelocateLBA != 0 || op.Lines != nil || op.Patches != nil {
+			return errors.New("dirop 操作携带了多余字段")
+		}
+		previous := int64(-1)
+		for _, record := range op.Entries {
+			if record.Sector <= 0 || record.Sector > file.Size/sectorSize {
+				return errors.New("目录记录扇区越界")
+			}
+			if record.Offset < 16 || record.Offset+34 > 16+sectorPayload {
+				return errors.New("目录记录偏移越界")
+			}
+			if record.Size <= 0 || record.Extent <= 0 {
+				return errors.New("目录记录的尺寸或 LBA 不合法")
+			}
+			key := record.Sector*sectorSize + record.Offset
+			if key <= previous {
+				return errors.New("目录记录乱序或重复")
+			}
+			previous = key
 		}
 	}
 	return nil
