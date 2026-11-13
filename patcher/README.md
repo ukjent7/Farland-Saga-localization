@@ -10,8 +10,9 @@ The release form is a **single executable**. Both games embed a compiled
 install plan via `go:embed`: the first game carries
 `plan/saga1/plan.bin`, compiled by `tools/compile_recipe_fs1.py` from the
 public declarations in `recipe/fs1/` (exe glyph slots and patches, Unity text
-patches) plus the committed language payloads in `recipe/fs1/payload/`
-(disc-image and texture record streams); the sequel carries
+patches, disc event/font/graphics/directory operations, texture atlas) plus
+the committed language payloads in `recipe/fs1/payload/` (every file's
+identity manifest); the sequel carries
 `plan/saga2/plan.bin`, compiled from the public `recipe/` and its OFL fonts.
 The installer reads the user's pristine files, verifies their identity, and
 replays the plan locally. Neither build needs a separate archive or a

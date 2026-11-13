@@ -284,7 +284,7 @@ func validateFS1PlanFile(file *fs1PlanFile) error {
 		return errors.New("原版哈希或大小不合法")
 	}
 	switch file.Kind {
-	case "disc", "binary":
+	case "disc", "binary", "texture":
 		return nil
 	default:
 		return fmt.Errorf("不支持的文件类型 %q", file.Kind)
@@ -386,6 +386,16 @@ func hasDiscOps(ops []fs1PlanOp) bool {
 	return false
 }
 
+// hasTextureOp 判断操作列表里是否含 SSF 容器整体重建操作。
+func hasTextureOp(ops []fs1PlanOp) bool {
+	for index := range ops {
+		if ops[index].Type == "texture" {
+			return true
+		}
+	}
+	return false
+}
+
 func validateRecordStream(entry *fs1PlanEntry, blob []byte) error {
 	if entry.RecordsLength < recordSize ||
 		entry.RecordsOffset > int64(len(blob)) ||
@@ -425,10 +435,28 @@ func validateFS1PlanOp(format int, file *fs1PlanFile, op *fs1PlanOp, entry *fs1P
 		return errors.New("缺少名字")
 	}
 	discFile := file.Kind == "disc"
+	textureFile := file.Kind == "texture"
 	switch op.Type {
 	case "patch", "font":
-		if discFile {
-			return fmt.Errorf("%s 类型操作不能用于盘片目标", op.Type)
+		if discFile || textureFile {
+			return fmt.Errorf("%s 类型操作不能用于 %s 目标", op.Type, file.Kind)
+		}
+	case "texture":
+		if !textureFile {
+			return errors.New("texture 类型操作只能用于 Texture 目标")
+		}
+		if op.DataLength <= 0 || op.DataOffset < 0 || op.DataOffset > int64(len(blob)) ||
+			op.DataLength > int64(len(blob))-op.DataOffset {
+			return errors.New("texture 数据范围越过数据段")
+		}
+		if op.Size <= 0 || op.DataLength+op.Size > int64(len(blob))-op.DataOffset {
+			return errors.New("texture 元数据范围越过数据段")
+		}
+		if op.Start != 0 || op.Limit != 0 || op.Cells != 0 || op.Slots != nil ||
+			op.GlyphsOffset != 0 || op.LBA != 0 || op.SizePatched != 0 ||
+			op.PairsOffset != 0 || op.PairsLength != 0 || op.RelocateLBA != 0 ||
+			op.Lines != nil || op.Patches != nil || op.Entries != nil {
+			return errors.New("texture 操作携带了多余字段")
 		}
 	case "event", "splice", "discfont":
 		if !discFile {
@@ -697,7 +725,7 @@ func (s *fs1PlanSource) replayEntry(entry fileEntry, basePath string, exePath st
 			planEntry.RecordsLength, blockSize, true, entry.PatchedSHA256, entry.PatchedSize, basePath, output, progress)
 	}
 	if !hasDiscOps(planEntry.Ops) {
-		data, err := s.generateFromOps(planEntry, entry, basePath)
+		data, err := s.generateFromOps(planEntry, entry, basePath, exePath)
 		if err != nil {
 			return err
 		}
@@ -735,7 +763,7 @@ func (s *fs1PlanSource) replayEntry(entry fileEntry, basePath string, exePath st
 
 // generateFromOps 从用户原版现场生成目标文件：核对原版身份，按序应用
 // 声明式操作，最终长度与哈希必须与计划声明一致。
-func (s *fs1PlanSource) generateFromOps(planEntry *fs1PlanEntry, entry fileEntry, basePath string) ([]byte, error) {
+func (s *fs1PlanSource) generateFromOps(planEntry *fs1PlanEntry, entry fileEntry, basePath string, exePath string) ([]byte, error) {
 	original, err := os.ReadFile(basePath)
 	if err != nil {
 		return nil, fmt.Errorf("无法读取原版文件 %s: %w", basePath, err)
@@ -758,6 +786,12 @@ func (s *fs1PlanSource) generateFromOps(planEntry *fs1PlanEntry, entry fileEntry
 			if err := applyFontOp(buffer, op, s.plan.blob); err != nil {
 				return nil, err
 			}
+		case "texture":
+			rebuilt, err := applyTextureOp(original, op, planEntry, s.plan.blob, basePath, exePath)
+			if err != nil {
+				return nil, err
+			}
+			buffer = rebuilt
 		default:
 			return nil, fmt.Errorf("%s: 不支持的操作类型 %q", entry.Path, op.Type)
 		}

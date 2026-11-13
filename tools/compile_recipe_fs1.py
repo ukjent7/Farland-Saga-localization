@@ -25,6 +25,7 @@ CI and a clean checkout produce the same blob byte for byte.
 from __future__ import annotations
 
 import argparse
+import base64
 import gzip
 import hashlib
 import io
@@ -45,6 +46,10 @@ DECL_DIR = REPO / 'recipe' / 'fs1'
 DECL_EXE = DECL_DIR / 'exe.json'
 DECL_UNITY = DECL_DIR / 'unity.json'
 DECL_DISC = DECL_DIR / 'disc.json'
+DECL_TEXTURE = DECL_DIR / 'texture.json'
+TEXTURE_FILE = 'Texture.tex'
+# load_payloads 运行时置位：Texture 声明存在时目标文件 kind 才是 texture。
+TEXTURE_DECLARED = False
 LANGUAGES = ['zh-CN', 'ko-KR', 'en-US']
 # 一代差异对象的记录格式：<偏移 u64 小端, 长度 u32 小端> + 块数据，单块上限
 # 与 payload.go 的 blockSize 一致。
@@ -227,6 +232,62 @@ def load_declarations(font, decl_exe: Path = DECL_EXE,
     return declarations
 
 
+def load_texture_declarations(decl_texture: Path = DECL_TEXTURE) -> dict[str, dict]:
+    """Turn the committed texture declaration into per-language plan ops.
+
+    The declaration carries each language's localized PNG (base64). The plan
+    stores the PNG bytes in the shared blob; the installer rebuilds the SSF
+    container from the user's pristine Texture.tex: original 2048-byte header,
+    the localized PNG, 4-byte alignment, and the untouched Parts metadata.
+    """
+    if not DECL_TEXTURE.exists():
+        fail(f'{DECL_TEXTURE}: 缺少 Texture 声明')
+    decl = read_json(DECL_TEXTURE)
+    if decl.get('schema') != 1 or decl.get('file') != TEXTURE_FILE:
+        fail(f'{DECL_TEXTURE}: 结构不符')
+    try:
+        suffix = base64.b64decode(decl['languages'][LANGUAGES[0]]['suffix'],
+                                  validate=True)
+    except (KeyError, ValueError) as error:
+        fail(f'{DECL_TEXTURE}: suffix 不合法: {error}')
+    if len(suffix) < 28 or not suffix.startswith(b'Parts'.ljust(20)):
+        fail(f'{DECL_TEXTURE}: suffix 缺少 Parts 元数据')
+    count = struct.unpack_from('<I', suffix, 24)[0]
+    if struct.unpack_from('<I', suffix, 20)[0] != 28 + count * 32:
+        fail(f'{DECL_TEXTURE}: Parts 元数据长度与 part 数不符')
+    if len(suffix) < 28 + count * 32:
+        fail(f'{DECL_TEXTURE}: suffix 被 Parts 元数据截断')
+    trailer = suffix[28 + count * 32:]
+    if trailer[:4] != b'\0\0\0\0' or not trailer[4:24].startswith(b'Anime'):
+        fail(f'{DECL_TEXTURE}: Parts 之后的附加元数据不可识别')
+
+    sections: dict[str, dict] = {}
+    for language in LANGUAGES:
+        section = decl['languages'].get(language)
+        if section is None:
+            fail(f'{DECL_TEXTURE}: 缺少语言 {language}')
+        try:
+            png = base64.b64decode(section['png'], validate=True)
+        except (KeyError, ValueError) as error:
+            fail(f'{DECL_TEXTURE}: {language} png 不合法: {error}')
+        if not png.startswith(b'\x89PNG\r\n\x1a\n'):
+            fail(f'{DECL_TEXTURE}: {language} png 缺少 PNG 签名')
+        if hashlib.sha256(png).hexdigest() != section.get('png_sha256'):
+            fail(f'{DECL_TEXTURE}: {language} png 哈希不符')
+        if len(png) != section.get('png_size'):
+            fail(f'{DECL_TEXTURE}: {language} png 大小不符')
+        ops = [{'type': 'texture', 'name': 'localized_atlas',
+                'data_offset': 0, 'data_length': len(png),
+                'size': len(suffix)}]
+        sections[language] = {
+            'ops': ops,
+            'data': png + suffix,
+            'patched_sha256': section['patched_sha256'],
+            'size': section['patched_size'],
+        }
+    return sections
+
+
 def load_disc_declarations(decl_disc: Path) -> tuple[dict, dict]:
     """读取盘片声明：共享的文件身份（LBA/尺寸）与每语言的盘片操作。
 
@@ -368,7 +429,8 @@ def prune_disc_records(records: bytes, ranges: list[list[int]]) -> bytes:
 
 def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
                   decl_unity: Path = DECL_UNITY,
-                  decl_disc: Path = DECL_DISC) -> tuple[list[dict], dict, dict, bytes]:
+                  decl_disc: Path = DECL_DISC,
+                  decl_texture: Path | None = None) -> tuple[list[dict], dict, dict, bytes]:
     """Load every language ZIP and the declarations; return the plan parts.
 
     Files covered by declarations become install-time operations and their
@@ -392,6 +454,14 @@ def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
     else:
         disc_declarations = {language: {'ops': [], 'data': b'', 'ranges': []}
                              for language in LANGUAGES}
+    texture_declarations = (load_texture_declarations(decl_texture)
+                            if decl_texture is not None and decl_texture.exists()
+                            else {})
+    global TEXTURE_DECLARED
+    TEXTURE_DECLARED = bool(texture_declarations)
+    for language in LANGUAGES:
+        if language in texture_declarations:
+            declarations[language][TEXTURE_FILE] = texture_declarations[language]
     declared_paths = set()
     for language in LANGUAGES:
         declared_paths.update(declarations[language])
@@ -510,7 +580,9 @@ def load_payloads(payload_dir: Path, font, decl_exe: Path = DECL_EXE,
 
     files = {
         name: {
-            'kind': 'disc' if name == DISC_IMAGE else 'binary',
+            'kind': ('disc' if name == DISC_IMAGE
+                     else 'texture' if (name == TEXTURE_FILE and TEXTURE_DECLARED)
+                     else 'binary'),
             'path': name,
             'original_sha256': item['original_sha256'],
             'size': item['original_size'],
@@ -557,7 +629,7 @@ def compile_plan(payload_dir: Path, output: Path, lock_path: Path,
     from fls.containers.unifont_bitmap import Unifont
     languages, files, entries, blob = load_payloads(
         payload_dir, Unifont(), decl_dir / 'exe.json', decl_dir / 'unity.json',
-        decl_dir / 'disc.json')
+        decl_dir / 'disc.json', decl_dir / 'texture.json')
     digest = hashlib.sha256(blob).hexdigest()
 
     header = {

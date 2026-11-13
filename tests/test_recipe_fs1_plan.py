@@ -185,6 +185,7 @@ class CompilePlanTests(unittest.TestCase):
             self.assertEqual(header['game'], 'saga1')
             self.assertEqual(header['languages'], ['zh-CN', 'ko-KR', 'en-US'])
             self.assertEqual(header['files']['FarlandSaga.bin']['kind'], 'disc')
+            # 没有 texture.json 声明时，Texture.tex 仍是记录流形态。
             self.assertEqual(header['files']['Texture.tex']['kind'], 'binary')
 
             blob = gzip.decompress(plan[start + header_length:])
