@@ -61,8 +61,12 @@ func decodeTileAtlas(raw []byte) (*tileAtlas, error) {
 	if tiles > 1<<15 {
 		return nil, errors.New("tile atlas 的 tile 数量过多")
 	}
+	// raw 必须拷贝：repackTileAtlas 会把重分配的 tile 字节与 map 表写回
+	// atlas.raw，别名调用方的缓冲区会静默改写调用方手里的原版字节，让
+	// 复用同一份原版数据的后续生成（例如逐语言循环）吃到上一次的结果。
+	rawCopy := append([]byte(nil), raw...)
 	atlas := &tileAtlas{
-		raw:         raw,
+		raw:         rawCopy,
 		width:       width,
 		height:      height,
 		graphics:    graphics,
