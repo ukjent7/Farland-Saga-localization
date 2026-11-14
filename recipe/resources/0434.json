@@ -1,0 +1,87 @@
+{
+ "resource": "0434",
+ "description": "save-memory message box",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  160,
+  72
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    11,
+    17,
+    138,
+    15
+   ],
+   "mode": "color",
+   "color": 12
+  },
+  {
+   "box": [
+    38,
+    42,
+    85,
+    15
+   ],
+   "mode": "color",
+   "color": 12
+  }
+ ],
+ "labels": [
+  {
+   "name": "m1",
+   "box": [
+    11,
+    17,
+    138,
+    15
+   ],
+   "style": "label",
+   "align": "center",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "没有可用于",
+    "ko-KR": "세이브에 필요한",
+    "en-US": "No free memory"
+   }
+  },
+  {
+   "name": "m2",
+   "box": [
+    38,
+    42,
+    85,
+    15
+   ],
+   "style": "label",
+   "align": "center",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "存档的空间。",
+    "ko-KR": "빈 메모리가 없다",
+    "en-US": "for saving."
+   }
+  }
+ ]
+}

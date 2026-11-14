@@ -1,0 +1,865 @@
+{
+ "resource": "0436",
+ "description": "settings menu 512x240 (selected/normal variants)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  512,
+  240
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    8,
+    1,
+    85,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    100,
+    1,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    152,
+    1,
+    85,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    244,
+    1,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    7,
+    17,
+    69,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    83,
+    17,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    151,
+    17,
+    69,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    227,
+    17,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    7,
+    33,
+    69,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    83,
+    33,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    151,
+    33,
+    69,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    227,
+    33,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    7,
+    49,
+    97,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    111,
+    49,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    151,
+    49,
+    97,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    255,
+    49,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    7,
+    65,
+    83,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    97,
+    65,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    151,
+    65,
+    83,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    241,
+    65,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    8,
+    78,
+    90,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    105,
+    80,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    152,
+    78,
+    90,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    249,
+    80,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    8,
+    98,
+    56,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    71,
+    98,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    152,
+    98,
+    56,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    215,
+    98,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    8,
+    113,
+    42,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    57,
+    113,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    152,
+    113,
+    42,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    201,
+    113,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    8,
+    129,
+    86,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    99,
+    129,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    152,
+    129,
+    84,
+    15
+   ],
+   "mode": "row_background",
+   "sample": [
+    243,
+    129,
+    30,
+    14
+   ]
+  },
+  {
+   "box": [
+    88,
+    145,
+    56,
+    15
+   ],
+   "mode": "row_background",
+   "sample": [
+    160,
+    143,
+    60,
+    19
+   ]
+  },
+  {
+   "box": [
+    88,
+    161,
+    56,
+    15
+   ],
+   "mode": "row_background",
+   "sample": [
+    160,
+    159,
+    60,
+    19
+   ]
+  },
+  {
+   "box": [
+    3,
+    177,
+    43,
+    14
+   ],
+   "mode": "row_background",
+   "sample": [
+    160,
+    174,
+    15,
+    17
+   ]
+  },
+  {
+   "box": [
+    55,
+    173,
+    44,
+    18
+   ],
+   "mode": "row_background",
+   "sample": [
+    160,
+    174,
+    15,
+    17
+   ]
+  }
+ ],
+ "labels": [
+  {
+   "name": "g0",
+   "box": [
+    8,
+    1,
+    130,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "A 键设置",
+    "ko-KR": "A 버튼 설정",
+    "en-US": "A Button Setup"
+   }
+  },
+  {
+   "name": "b0",
+   "box": [
+    152,
+    1,
+    126,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "A 键设置",
+    "ko-KR": "A 버튼 설정",
+    "en-US": "A Button Setup"
+   }
+  },
+  {
+   "name": "g1",
+   "box": [
+    7,
+    17,
+    131,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "移动动画",
+    "ko-KR": "이동 애니메",
+    "en-US": "Move Anim"
+   }
+  },
+  {
+   "name": "b1",
+   "box": [
+    151,
+    17,
+    127,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "移动动画",
+    "ko-KR": "이동 애니메",
+    "en-US": "Move Anim"
+   }
+  },
+  {
+   "name": "g2",
+   "box": [
+    7,
+    33,
+    131,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "效果动画",
+    "ko-KR": "효과 애니메",
+    "en-US": "Effect Anim"
+   }
+  },
+  {
+   "name": "b2",
+   "box": [
+    151,
+    33,
+    127,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "效果动画",
+    "ko-KR": "효과 애니메",
+    "en-US": "Effect Anim"
+   }
+  },
+  {
+   "name": "g3",
+   "box": [
+    7,
+    49,
+    131,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "我方战斗动画",
+    "ko-KR": "아군 전투 애니메",
+    "en-US": "Ally Battle Anim"
+   }
+  },
+  {
+   "name": "b3",
+   "box": [
+    151,
+    49,
+    127,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "我方战斗动画",
+    "ko-KR": "아군 전투 애니메",
+    "en-US": "Ally Battle Anim"
+   }
+  },
+  {
+   "name": "g4",
+   "box": [
+    7,
+    65,
+    131,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "敌方战斗动画",
+    "ko-KR": "적군 전투 애니메",
+    "en-US": "Enemy Battle Anim"
+   }
+  },
+  {
+   "name": "b4",
+   "box": [
+    151,
+    65,
+    127,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "敌方战斗动画",
+    "ko-KR": "적군 전투 애니메",
+    "en-US": "Enemy Battle Anim"
+   }
+  },
+  {
+   "name": "g5",
+   "box": [
+    8,
+    78,
+    130,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "自动播放信息",
+    "ko-KR": "메시지 자동 넘기기",
+    "en-US": "Auto Message"
+   }
+  },
+  {
+   "name": "b5",
+   "box": [
+    152,
+    78,
+    126,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "自动播放信息",
+    "ko-KR": "메시지 자동 넘기기",
+    "en-US": "Auto Message"
+   }
+  },
+  {
+   "name": "g6",
+   "box": [
+    8,
+    98,
+    130,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "音效",
+    "ko-KR": "사운드",
+    "en-US": "Sound"
+   }
+  },
+  {
+   "name": "b6",
+   "box": [
+    152,
+    98,
+    126,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "音效",
+    "ko-KR": "사운드",
+    "en-US": "Sound"
+   }
+  },
+  {
+   "name": "g7",
+   "box": [
+    8,
+    113,
+    130,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "语音",
+    "ko-KR": "보이스",
+    "en-US": "Voice"
+   }
+  },
+  {
+   "name": "b7",
+   "box": [
+    152,
+    113,
+    126,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "语音",
+    "ko-KR": "보이스",
+    "en-US": "Voice"
+   }
+  },
+  {
+   "name": "g8",
+   "box": [
+    8,
+    129,
+    130,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "语音音量",
+    "ko-KR": "보이스 볼륨",
+    "en-US": "Voice Volume"
+   }
+  },
+  {
+   "name": "b8",
+   "box": [
+    152,
+    129,
+    126,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "语音音量",
+    "ko-KR": "보이스 볼륨",
+    "en-US": "Voice Volume"
+   }
+  },
+  {
+   "name": "done_g",
+   "box": [
+    88,
+    145,
+    56,
+    15
+   ],
+   "style": "label",
+   "align": "center",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "完成设置",
+    "ko-KR": "설정 종료",
+    "en-US": "Done"
+   }
+  },
+  {
+   "name": "done_b",
+   "box": [
+    88,
+    161,
+    56,
+    15
+   ],
+   "style": "label",
+   "align": "center",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "完成设置",
+    "ko-KR": "설정 종료",
+    "en-US": "Done"
+   }
+  },
+  {
+   "name": "kettei",
+   "box": [
+    3,
+    177,
+    43,
+    14
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "确定",
+    "ko-KR": "결정",
+    "en-US": "OK"
+   }
+  },
+  {
+   "name": "cancel",
+   "box": [
+    55,
+    173,
+    44,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "取消",
+    "ko-KR": "취소",
+    "en-US": "Cancel"
+   }
+  }
+ ]
+}

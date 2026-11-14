@@ -1,0 +1,174 @@
+{
+ "resource": "0425",
+ "description": "shop sell window (売りますか)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    59,
+    57,
+    140,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    96,
+    97,
+    44,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    31,
+    137,
+    82,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    142,
+    139,
+    28,
+    13
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    137,
+    163,
+    38,
+    13
+   ],
+   "mode": "color",
+   "color": 4
+  }
+ ],
+ "labels": [
+  {
+   "name": "cansell",
+   "box": [
+    59,
+    57,
+    140,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "可以出售。",
+    "ko-KR": "판매할 수 있다",
+    "en-US": "can be sold."
+   }
+  },
+  {
+   "name": "shoji",
+   "box": [
+    96,
+    97,
+    44,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "现金",
+    "ko-KR": "소지금",
+    "en-US": "Funds"
+   }
+  },
+  {
+   "name": "ask",
+   "box": [
+    31,
+    137,
+    82,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "要卖吗？",
+    "ko-KR": "팔까요?",
+    "en-US": "Sell?"
+   }
+  },
+  {
+   "name": "hai",
+   "box": [
+    142,
+    139,
+    28,
+    13
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "是",
+    "ko-KR": "예",
+    "en-US": "Yes"
+   }
+  },
+  {
+   "name": "iie",
+   "box": [
+    137,
+    163,
+    38,
+    13
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "否",
+    "ko-KR": "아니요",
+    "en-US": "No"
+   }
+  }
+ ]
+}

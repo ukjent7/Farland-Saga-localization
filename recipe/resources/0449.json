@@ -1,0 +1,260 @@
+{
+ "resource": "0449",
+ "description": "memory-card warning screen (cartridge RAM)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    25,
+    31,
+    267,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    12,
+    47,
+    280,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    25,
+    79,
+    271,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    10,
+    95,
+    282,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    16,
+    127,
+    274,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    143,
+    277,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    11,
+    159,
+    175,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "l0",
+   "box": [
+    25,
+    31,
+    265,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "卡带RAM的备份尚未准备就绪",
+    "ko-KR": "카트리지 RAM의 백업 준비가 아직",
+    "en-US": "The cartridge RAM backup is"
+   }
+  },
+  {
+   "name": "l1",
+   "box": [
+    12,
+    47,
+    278,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "（尚未初始化）。请在世嘉",
+    "ko-KR": "끝나지 않았습니다. (초기화되지 않음)",
+    "en-US": "not ready yet (not initialized)."
+   }
+  },
+  {
+   "name": "l3",
+   "box": [
+    25,
+    79,
+    265,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "土星主机的保存数据管理画面",
+    "ko-KR": "세가 새턴 본체의 저장 데이터 관리",
+    "en-US": "Delete all data in the Saturn"
+   }
+  },
+  {
+   "name": "l4",
+   "box": [
+    10,
+    95,
+    280,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "中删除全部记录（进行初始化）。",
+    "ko-KR": "화면에서 모든 기록을 지워 주세요. (초기화)",
+    "en-US": "save-data manager (initialize it)."
+   }
+  },
+  {
+   "name": "l6",
+   "box": [
+    16,
+    127,
+    274,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "按住Ｌ键或Ｒ键的同时按下",
+    "ko-KR": "L 버튼 또는 R 버튼을 누른 채",
+    "en-US": "Holding L or R while pressing"
+   }
+  },
+  {
+   "name": "l7",
+   "box": [
+    15,
+    143,
+    275,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "重置键，即可进入世嘉土星",
+    "ko-KR": "리셋 버튼을 누르면 세가 새턴 본체의",
+    "en-US": "Reset opens the Saturn"
+   }
+  },
+  {
+   "name": "l8",
+   "box": [
+    11,
+    159,
+    279,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "主机的保存数据管理画面。",
+    "ko-KR": "저장 데이터 관리 화면으로 이동합니다.",
+    "en-US": "save-data manager."
+   }
+  }
+ ]
+}

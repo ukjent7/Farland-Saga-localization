@@ -1,0 +1,242 @@
+{
+ "resource": "0426",
+ "description": "equip menu window (装備/渡す/売る/情報/キャンセル)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    21,
+    65,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    22,
+    89,
+    29,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    22,
+    113,
+    29,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    21,
+    137,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    17,
+    161,
+    37,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    79,
+    48,
+    57,
+    14
+   ],
+   "mode": "row_background",
+   "sample": [
+    150,
+    46,
+    40,
+    20
+   ]
+  },
+  {
+   "box": [
+    79,
+    120,
+    28,
+    13
+   ],
+   "mode": "row_background",
+   "sample": [
+    150,
+    112,
+    40,
+    20
+   ]
+  }
+ ],
+ "labels": [
+  {
+   "name": "b1",
+   "box": [
+    21,
+    65,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "装备",
+    "ko-KR": "장비",
+    "en-US": "Gear"
+   }
+  },
+  {
+   "name": "b2",
+   "box": [
+    22,
+    89,
+    29,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "交付",
+    "ko-KR": "건네기",
+    "en-US": "Give"
+   }
+  },
+  {
+   "name": "b3",
+   "box": [
+    22,
+    113,
+    29,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "出售",
+    "ko-KR": "팔기",
+    "en-US": "Sell"
+   }
+  },
+  {
+   "name": "b4",
+   "box": [
+    21,
+    137,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "情报",
+    "ko-KR": "정보",
+    "en-US": "Info"
+   }
+  },
+  {
+   "name": "b5",
+   "box": [
+    17,
+    161,
+    37,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "取消",
+    "ko-KR": "취소",
+    "en-US": "Cancel"
+   }
+  },
+  {
+   "name": "sophou",
+   "box": [
+    79,
+    48,
+    57,
+    14
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "可装备",
+    "ko-KR": "장비가능",
+    "en-US": "Can equip"
+   }
+  },
+  {
+   "name": "nouryoku",
+   "box": [
+    79,
+    120,
+    28,
+    13
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "能力",
+    "ko-KR": "능력",
+    "en-US": "Stats"
+   }
+  }
+ ]
+}

@@ -1,0 +1,348 @@
+{
+ "resource": "0435",
+ "description": "settings menu (環境設定)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    123,
+    10,
+    58,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    40,
+    33,
+    85,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    39,
+    49,
+    69,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    39,
+    65,
+    69,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    39,
+    81,
+    97,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    39,
+    97,
+    83,
+    17
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    40,
+    112,
+    90,
+    16
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    40,
+    130,
+    56,
+    17
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    40,
+    145,
+    42,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    40,
+    161,
+    84,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    120,
+    177,
+    56,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  }
+ ],
+ "labels": [
+  {
+   "name": "title",
+   "box": [
+    123,
+    10,
+    58,
+    15
+   ],
+   "style": "label",
+   "align": "center",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "环境设置",
+    "ko-KR": "환경 설정",
+    "en-US": "Options"
+   }
+  },
+  {
+   "name": "m1",
+   "box": [
+    40,
+    33,
+    85,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "A 键设置",
+    "ko-KR": "A 버튼 설정",
+    "en-US": "A Button Setup"
+   }
+  },
+  {
+   "name": "m2",
+   "box": [
+    39,
+    49,
+    69,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "移动动画",
+    "ko-KR": "이동 애니메",
+    "en-US": "Move Anim"
+   }
+  },
+  {
+   "name": "m3",
+   "box": [
+    39,
+    65,
+    69,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "效果动画",
+    "ko-KR": "효과 애니메",
+    "en-US": "Effect Anim"
+   }
+  },
+  {
+   "name": "m4",
+   "box": [
+    39,
+    81,
+    97,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "我方战斗动画",
+    "ko-KR": "아군 전투 애니메",
+    "en-US": "Ally Battle Anim"
+   }
+  },
+  {
+   "name": "m5",
+   "box": [
+    39,
+    97,
+    83,
+    17
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "敌方战斗动画",
+    "ko-KR": "적군 전투 애니메",
+    "en-US": "Enemy Battle Anim"
+   }
+  },
+  {
+   "name": "m6",
+   "box": [
+    40,
+    112,
+    90,
+    16
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "自动播放信息",
+    "ko-KR": "메시지 자동 넘기기",
+    "en-US": "Auto Message"
+   }
+  },
+  {
+   "name": "m7",
+   "box": [
+    40,
+    130,
+    56,
+    17
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "音效",
+    "ko-KR": "사운드",
+    "en-US": "Sound"
+   }
+  },
+  {
+   "name": "m8",
+   "box": [
+    40,
+    145,
+    42,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "语音",
+    "ko-KR": "보이스",
+    "en-US": "Voice"
+   }
+  },
+  {
+   "name": "m9",
+   "box": [
+    40,
+    161,
+    84,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "语音音量",
+    "ko-KR": "보이스 볼륨",
+    "en-US": "Voice Volume"
+   }
+  },
+  {
+   "name": "done",
+   "box": [
+    120,
+    177,
+    56,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "完成设置",
+    "ko-KR": "설정 종료",
+    "en-US": "Done"
+   }
+  }
+ ]
+}

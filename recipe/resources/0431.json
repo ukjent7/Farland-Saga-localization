@@ -1,0 +1,174 @@
+{
+ "resource": "0431",
+ "description": "character tabs window (能力/装備/特技/道具/その他)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  160
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    45,
+    129,
+    29,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    93,
+    129,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    141,
+    129,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    189,
+    129,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    233,
+    129,
+    37,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "tab1",
+   "box": [
+    45,
+    129,
+    29,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "能力",
+    "ko-KR": "능력",
+    "en-US": "Stats"
+   }
+  },
+  {
+   "name": "tab2",
+   "box": [
+    93,
+    129,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "装备",
+    "ko-KR": "장비",
+    "en-US": "Gear"
+   }
+  },
+  {
+   "name": "tab3",
+   "box": [
+    141,
+    129,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "特技",
+    "ko-KR": "기술",
+    "en-US": "Skill"
+   }
+  },
+  {
+   "name": "tab4",
+   "box": [
+    189,
+    129,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "道具",
+    "ko-KR": "아이템",
+    "en-US": "Items"
+   }
+  },
+  {
+   "name": "tab5",
+   "box": [
+    233,
+    129,
+    37,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "其他",
+    "ko-KR": "기타",
+    "en-US": "Other"
+   }
+  }
+ ]
+}

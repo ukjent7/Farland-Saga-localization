@@ -1,0 +1,319 @@
+{
+ "resource": "0446",
+ "description": "memory-card warning screen (save space)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    25,
+    9,
+    265,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    9,
+    25,
+    282,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    9,
+    41,
+    282,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    24,
+    73,
+    267,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    9,
+    89,
+    288,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    10,
+    105,
+    287,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    121,
+    274,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    14,
+    137,
+    277,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    10,
+    153,
+    175,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    24,
+    178,
+    151,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "l0",
+   "box": [
+    25,
+    9,
+    265,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "要保存本游戏的记录，需要101",
+    "ko-KR": "이 게임의 기록을 저장하려면 101",
+    "en-US": "Saving this game's records"
+   }
+  },
+  {
+   "name": "l1",
+   "box": [
+    9,
+    25,
+    281,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "个空闲容量单元。就这样开始",
+    "ko-KR": "블록의 빈 용량이 필요합니다.",
+    "en-US": "requires 101 free blocks. If"
+   }
+  },
+  {
+   "name": "l2",
+   "box": [
+    9,
+    41,
+    281,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "游戏的话，将无法保存记录。",
+    "ko-KR": "이대로 게임을 시작해도 기록을",
+    "en-US": "you start the game as is, records"
+   }
+  },
+  {
+   "name": "l4",
+   "box": [
+    24,
+    73,
+    266,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "请在世嘉土星主机的保存数据",
+    "ko-KR": "저장할 수 없습니다. 세가 새턴",
+    "en-US": "cannot be saved. Delete other"
+   }
+  },
+  {
+   "name": "l5",
+   "box": [
+    9,
+    89,
+    281,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "管理画面中删除其他游戏的记录，",
+    "ko-KR": "본체의 저장 데이터 관리 화면에서",
+    "en-US": "games' data from the Saturn"
+   }
+  },
+  {
+   "name": "l6",
+   "box": [
+    10,
+    105,
+    280,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "或将记录复制到卡带RAM后",
+    "ko-KR": "다른 게임의 기록을 지우거나 커",
+    "en-US": "save-data manager, or copy it"
+   }
+  },
+  {
+   "name": "l7",
+   "box": [
+    15,
+    121,
+    275,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "重新启动游戏。按住Ｌ键或Ｒ键",
+    "ko-KR": "트리지 RAM으로 복사한 뒤 게임을",
+    "en-US": "to the cartridge RAM and restart."
+   }
+  },
+  {
+   "name": "l8",
+   "box": [
+    14,
+    137,
+    276,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "的同时按下重置键，即可进入",
+    "ko-KR": "다시 시작해 주세요. L 버튼 또는",
+    "en-US": "Holding L or R while pressing"
+   }
+  },
+  {
+   "name": "l9",
+   "box": [
+    10,
+    153,
+    280,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "世嘉土星主机的保存数据管理画面。",
+    "ko-KR": "R 버튼을 누른 채 리셋하면 이동합니다.",
+    "en-US": "Reset opens the manager."
+   }
+  },
+  {
+   "name": "l10",
+   "box": [
+    24,
+    178,
+    266,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "要开始游戏吗？",
+    "ko-KR": "게임을 시작할까요?",
+    "en-US": "Start the game?"
+   }
+  }
+ ]
+}

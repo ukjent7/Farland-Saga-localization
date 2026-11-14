@@ -1,0 +1,203 @@
+{
+ "resource": "0429",
+ "description": "shop sell-amount window (いくつ売りますか)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    59,
+    57,
+    140,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    96,
+    97,
+    44,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    32,
+    137,
+    123,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    73,
+    161,
+    16,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    102,
+    161,
+    29,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    145,
+    161,
+    37,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  }
+ ],
+ "labels": [
+  {
+   "name": "cansell",
+   "box": [
+    59,
+    57,
+    140,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "可以出售。",
+    "ko-KR": "판매할 수 있다",
+    "en-US": "can be sold."
+   }
+  },
+  {
+   "name": "shoji",
+   "box": [
+    96,
+    97,
+    44,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "现金",
+    "ko-KR": "소지금",
+    "en-US": "Funds"
+   }
+  },
+  {
+   "name": "ikutsu",
+   "box": [
+    32,
+    137,
+    123,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "要卖几个？",
+    "ko-KR": "몇 개 팔까요?",
+    "en-US": "How many?"
+   }
+  },
+  {
+   "name": "ko1",
+   "box": [
+    73,
+    161,
+    16,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "个",
+    "ko-KR": "개",
+    "en-US": "×"
+   }
+  },
+  {
+   "name": "uru",
+   "box": [
+    102,
+    161,
+    29,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "出售",
+    "ko-KR": "팔기",
+    "en-US": "Sell"
+   }
+  },
+  {
+   "name": "cancel",
+   "box": [
+    145,
+    161,
+    37,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "取消",
+    "ko-KR": "취소",
+    "en-US": "Cancel"
+   }
+  }
+ ]
+}

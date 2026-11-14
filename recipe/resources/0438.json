@@ -1,0 +1,145 @@
+{
+ "resource": "0438",
+ "description": "bonus allocation window (自動/手動配分)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    31,
+    168,
+    58,
+    16
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    95,
+    168,
+    58,
+    16
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    159,
+    169,
+    58,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    225,
+    169,
+    56,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  }
+ ],
+ "labels": [
+  {
+   "name": "q1",
+   "box": [
+    31,
+    168,
+    58,
+    16
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "自动分配",
+    "ko-KR": "자동 배분",
+    "en-US": "Auto"
+   }
+  },
+  {
+   "name": "q2",
+   "box": [
+    95,
+    168,
+    58,
+    16
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "自动分配",
+    "ko-KR": "자동 배분",
+    "en-US": "Auto"
+   }
+  },
+  {
+   "name": "manual",
+   "box": [
+    159,
+    169,
+    58,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "手动分配",
+    "ko-KR": "수동 배분",
+    "en-US": "Manual"
+   }
+  },
+  {
+   "name": "done",
+   "box": [
+    225,
+    169,
+    56,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "完成设置",
+    "ko-KR": "설정 종료",
+    "en-US": "Done"
+   }
+  }
+ ]
+}

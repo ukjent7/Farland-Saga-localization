@@ -1,0 +1,261 @@
+{
+ "resource": "0428",
+ "description": "shop buy window (いくつ買いますか)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    32,
+    64,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    83,
+    64,
+    99,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    216,
+    78,
+    44,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    32,
+    137,
+    123,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    223,
+    142,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    73,
+    161,
+    16,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    104,
+    161,
+    27,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    145,
+    161,
+    37,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  }
+ ],
+ "labels": [
+  {
+   "name": "genzai",
+   "box": [
+    32,
+    64,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "现有",
+    "ko-KR": "현재",
+    "en-US": "Have"
+   }
+  },
+  {
+   "name": "motte",
+   "box": [
+    83,
+    64,
+    99,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "个",
+    "ko-KR": "개 보유",
+    "en-US": "in stock"
+   }
+  },
+  {
+   "name": "shoji",
+   "box": [
+    216,
+    78,
+    44,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "现金",
+    "ko-KR": "소지금",
+    "en-US": "Funds"
+   }
+  },
+  {
+   "name": "ikutsu",
+   "box": [
+    32,
+    137,
+    123,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "要买几个？",
+    "ko-KR": "몇 개 살까요?",
+    "en-US": "How many?"
+   }
+  },
+  {
+   "name": "goukei",
+   "box": [
+    223,
+    142,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "合计",
+    "ko-KR": "합계",
+    "en-US": "Total"
+   }
+  },
+  {
+   "name": "ko1",
+   "box": [
+    73,
+    161,
+    16,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "个",
+    "ko-KR": "개",
+    "en-US": "×"
+   }
+  },
+  {
+   "name": "kau",
+   "box": [
+    104,
+    161,
+    27,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "购买",
+    "ko-KR": "구입",
+    "en-US": "Buy"
+   }
+  },
+  {
+   "name": "cancel",
+   "box": [
+    145,
+    161,
+    37,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "取消",
+    "ko-KR": "취소",
+    "en-US": "Cancel"
+   }
+  }
+ ]
+}

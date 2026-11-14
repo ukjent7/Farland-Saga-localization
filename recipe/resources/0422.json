@@ -1,0 +1,319 @@
+{
+ "resource": "0422",
+ "description": "status window frame (stat list + 情報/キャンセル)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    159,
+    73,
+    29,
+    18
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    159,
+    89,
+    36,
+    18
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    159,
+    105,
+    43,
+    18
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    159,
+    121,
+    43,
+    18
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    159,
+    137,
+    36,
+    18
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    159,
+    153,
+    43,
+    18
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    159,
+    169,
+    43,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    114,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 4
+  },
+  {
+   "box": [
+    29,
+    177,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    82,
+    177,
+    37,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "st0",
+   "box": [
+    159,
+    73,
+    29,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "体力",
+    "ko-KR": "체력",
+    "en-US": "HP"
+   }
+  },
+  {
+   "name": "st1",
+   "box": [
+    159,
+    89,
+    36,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "魔力",
+    "ko-KR": "마력",
+    "en-US": "MP"
+   }
+  },
+  {
+   "name": "st2",
+   "box": [
+    159,
+    105,
+    43,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "攻击力",
+    "ko-KR": "공격력",
+    "en-US": "Attack"
+   }
+  },
+  {
+   "name": "st3",
+   "box": [
+    159,
+    121,
+    43,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "防御力",
+    "ko-KR": "방어력",
+    "en-US": "Defense"
+   }
+  },
+  {
+   "name": "st4",
+   "box": [
+    159,
+    137,
+    36,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "智力",
+    "ko-KR": "지력",
+    "en-US": "Intellect"
+   }
+  },
+  {
+   "name": "st5",
+   "box": [
+    159,
+    153,
+    43,
+    18
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "魔抗力",
+    "ko-KR": "마저",
+    "en-US": "Magic Res."
+   }
+  },
+  {
+   "name": "st6",
+   "box": [
+    159,
+    169,
+    43,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "敏捷度",
+    "ko-KR": "민첩성",
+    "en-US": "Agility"
+   }
+  },
+  {
+   "name": "zokusei",
+   "box": [
+    26,
+    114,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "属性",
+    "ko-KR": "속성",
+    "en-US": "Element"
+   }
+  },
+  {
+   "name": "jouhou",
+   "box": [
+    29,
+    177,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "情报",
+    "ko-KR": "정보",
+    "en-US": "Info"
+   }
+  },
+  {
+   "name": "cancel",
+   "box": [
+    82,
+    177,
+    37,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "取消",
+    "ko-KR": "취소",
+    "en-US": "Cancel"
+   }
+  }
+ ]
+}

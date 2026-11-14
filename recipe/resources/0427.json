@@ -1,0 +1,174 @@
+{
+ "resource": "0427",
+ "description": "equipment slots window (武器/防具/装備1/装備2/持物)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    11,
+    25,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    11,
+    49,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    10,
+    73,
+    34,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    10,
+    97,
+    36,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    11,
+    121,
+    30,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "buki",
+   "box": [
+    11,
+    25,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "武器",
+    "ko-KR": "무기",
+    "en-US": "Weapon"
+   }
+  },
+  {
+   "name": "bougu",
+   "box": [
+    11,
+    49,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "防具",
+    "ko-KR": "방어구",
+    "en-US": "Armor"
+   }
+  },
+  {
+   "name": "s1",
+   "box": [
+    10,
+    73,
+    34,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "装备1",
+    "ko-KR": "장비1",
+    "en-US": "Gear 1"
+   }
+  },
+  {
+   "name": "s2",
+   "box": [
+    10,
+    97,
+    36,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "装备2",
+    "ko-KR": "장비2",
+    "en-US": "Gear 2"
+   }
+  },
+  {
+   "name": "motsu",
+   "box": [
+    11,
+    121,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "道具",
+    "ko-KR": "소지품",
+    "en-US": "Item"
+   }
+  }
+ ]
+}

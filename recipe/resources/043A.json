@@ -1,0 +1,87 @@
+{
+ "resource": "043A",
+ "description": "level-up message box (レベルに上がった)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  176,
+  72
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    26,
+    41,
+    27,
+    14
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    82,
+    41,
+    71,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "lv",
+   "box": [
+    26,
+    41,
+    27,
+    14
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "升到",
+    "ko-KR": "레벨",
+    "en-US": "Lv"
+   }
+  },
+  {
+   "name": "up",
+   "box": [
+    82,
+    41,
+    71,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "级",
+    "ko-KR": "에 올랐다",
+    "en-US": "reached!"
+   }
+  }
+ ]
+}

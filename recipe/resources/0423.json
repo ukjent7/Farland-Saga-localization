@@ -1,0 +1,58 @@
+{
+ "resource": "0423",
+ "description": "give-item window (誰に渡しますか)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    24,
+    145,
+    110,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "give",
+   "box": [
+    24,
+    145,
+    110,
+    15
+   ],
+   "style": "label",
+   "align": "center",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "交给谁？",
+    "ko-KR": "누구에게 줄까요?",
+    "en-US": "Give to whom?"
+   }
+  }
+ ]
+}

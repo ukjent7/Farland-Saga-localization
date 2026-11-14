@@ -1,0 +1,58 @@
+{
+ "resource": "0443",
+ "description": "carry-limit message box",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  176,
+  72
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    19,
+    41,
+    140,
+    15
+   ],
+   "mode": "color",
+   "color": 12
+  }
+ ],
+ "labels": [
+  {
+   "name": "full",
+   "box": [
+    19,
+    41,
+    140,
+    15
+   ],
+   "style": "label",
+   "align": "center",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "已经拿不下了。",
+    "ko-KR": "더 이상 가질 수 없다",
+    "en-US": "Can't carry any more."
+   }
+  }
+ ]
+}

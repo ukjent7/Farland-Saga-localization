@@ -1,0 +1,425 @@
+{
+ "resource": "0447",
+ "description": "memory-card warning screen (new record)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    24,
+    9,
+    267,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    12,
+    25,
+    280,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    10,
+    41,
+    282,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    10,
+    57,
+    162,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    24,
+    73,
+    267,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    10,
+    89,
+    106,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    25,
+    105,
+    271,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    10,
+    121,
+    280,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    11,
+    137,
+    279,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    11,
+    153,
+    281,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    12,
+    169,
+    280,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    10,
+    185,
+    120,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "l0",
+   "box": [
+    24,
+    9,
+    266,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "没有保存新记录所需的空闲",
+    "ko-KR": "새 기록을 저장할 빈 용량이",
+    "en-US": "Not enough free blocks to save"
+   }
+  },
+  {
+   "name": "l1",
+   "box": [
+    12,
+    25,
+    278,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "容量单元。如果就这样开始",
+    "ko-KR": "없습니다. 이대로 게임을 시",
+    "en-US": "a new record. If you start"
+   }
+  },
+  {
+   "name": "l2",
+   "box": [
+    10,
+    41,
+    280,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "游戏，只要不删除之前的记录，",
+    "ko-KR": "작하면 이전 기록을 지우지 않는",
+    "en-US": "the game as is, no new record"
+   }
+  },
+  {
+   "name": "l3",
+   "box": [
+    10,
+    57,
+    280,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "就无法保存新的记录。",
+    "ko-KR": "한 새 기록을 저장할 수 없습니다.",
+    "en-US": "can be saved unless the old"
+   }
+  },
+  {
+   "name": "l4",
+   "box": [
+    24,
+    73,
+    266,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "保存新记录需要101个空闲",
+    "ko-KR": "새 기록을 저장하려면 101블록의",
+    "en-US": "one is deleted. 101 free blocks"
+   }
+  },
+  {
+   "name": "l5",
+   "box": [
+    10,
+    89,
+    280,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "容量单元。",
+    "ko-KR": "빈 용량이 필요합니다.",
+    "en-US": "are required."
+   }
+  },
+  {
+   "name": "l6",
+   "box": [
+    25,
+    105,
+    265,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "请在世嘉土星主机的保存数据",
+    "ko-KR": "세가 새턴 본체의 저장 데이터 관리",
+    "en-US": "Delete other games' data from"
+   }
+  },
+  {
+   "name": "l7",
+   "box": [
+    10,
+    121,
+    280,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "管理画面中删除其他游戏的记录，",
+    "ko-KR": "화면에서 다른 게임의 기록을 지우거나",
+    "en-US": "the Saturn save-data manager,"
+   }
+  },
+  {
+   "name": "l8",
+   "box": [
+    11,
+    137,
+    279,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "或将记录复制到卡带RAM后，",
+    "ko-KR": "카트리지 RAM으로 복사한 뒤,",
+    "en-US": "or copy it to the cartridge RAM,"
+   }
+  },
+  {
+   "name": "l9",
+   "box": [
+    11,
+    153,
+    279,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "重新启动游戏。按住Ｌ键或Ｒ键",
+    "ko-KR": "게임을 다시 시작해 주세요. L/R",
+    "en-US": "and restart the game. Holding"
+   }
+  },
+  {
+   "name": "l10",
+   "box": [
+    12,
+    169,
+    278,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "的同时按下重置键，即可进入",
+    "ko-KR": "버튼을 누른 채 리셋 버튼을 누르면",
+    "en-US": "L or R while pressing Reset"
+   }
+  },
+  {
+   "name": "l11",
+   "box": [
+    10,
+    185,
+    280,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 10,
+    "en-US": 12
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "保存数据管理画面。",
+    "ko-KR": "관리 화면으로 이동합니다.",
+    "en-US": "opens the save-data manager."
+   }
+  }
+ ]
+}

@@ -1,0 +1,116 @@
+{
+ "resource": "0440",
+ "description": "set-sail prompt box",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  160,
+  72
+ ],
+ "fonts": {
+  "zh-CN": "NotoSansSC",
+  "ko-KR": "Galmuri11",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    34,
+    17,
+    95,
+    15
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    38,
+    42,
+    28,
+    13
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    89,
+    42,
+    38,
+    13
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "ask",
+   "box": [
+    34,
+    17,
+    95,
+    15
+   ],
+   "style": "label",
+   "align": "center",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "要出航吗？",
+    "ko-KR": "출항할까요?",
+    "en-US": "Set sail?"
+   }
+  },
+  {
+   "name": "hai",
+   "box": [
+    38,
+    42,
+    28,
+    13
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "是",
+    "ko-KR": "예",
+    "en-US": "Yes"
+   }
+  },
+  {
+   "name": "iie",
+   "box": [
+    89,
+    42,
+    38,
+    13
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "否",
+    "ko-KR": "아니요",
+    "en-US": "No"
+   }
+  }
+ ]
+}
