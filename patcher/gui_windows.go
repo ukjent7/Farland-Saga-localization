@@ -927,9 +927,9 @@ func (a *guiApp) installedLanguage() string {
 	return ""
 }
 
-// installedFrom 判断已安装的补丁是否正是这个载荷。只看语言会把旧版本的
-// 同语言安装当成已完成，用户就拿不到新版修正。条件与 installPatch 判断
-// 「同一次安装」时用的版本、语言和引擎名保持一致。
+// installedFrom 判断已安装的补丁是否记录为这个载荷（版本、语言、引擎一致）。
+// 这只是语言按钮上的标注提示；安装是否跳过由 installPatch 按文件哈希与
+// 载荷补丁输出逐字节比对决定，同一版本串的新版构建会正常升级。
 func (a *guiApp) installedFrom(loaded *payload) bool {
 	if a.record == nil || a.record.Status != statusInstalled || loaded == nil {
 		return false

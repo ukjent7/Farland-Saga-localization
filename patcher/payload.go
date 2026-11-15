@@ -92,6 +92,9 @@ type payload struct {
 	// recipe is non-nil when this payload is one language of an embedded
 	// install-time recipe plan rather than a ZIP.
 	recipe recipeRunner
+	// manifestDigest 是 ZIP manifest 原始字节的 sha256，作为载荷内容身份
+	// 写进安装记录；recipe 载荷改用 recipe.contentDigest()。
+	manifestDigest string
 	// closer 在从磁盘路径打开时关闭底层文件句柄；从内存（go:embed）打开时
 	// 为 nil，没有需要释放的资源。
 	closer  io.Closer
@@ -103,6 +106,9 @@ type payload struct {
 type patchSource interface {
 	sourceInfo() *manifest
 	engineName() string
+	// contentDigest 返回载荷内容身份（plan 容器或 manifest 的 sha256）。
+	// 同一版本串的两个构建内容可以不同，安装记录的匹配只认这个摘要。
+	contentDigest() string
 	replayEntry(entry fileEntry, basePath, exePath string, output io.Writer, progress func(int64)) error
 	close() error
 }
@@ -112,12 +118,20 @@ type patchSource interface {
 // the saga2 build tag.
 type recipeRunner interface {
 	engineName() string
+	contentDigest() string
 	patchedHash(path string) (string, bool)
 	patchedSize(path string) (int64, bool)
 	replayEntry(entry fileEntry, basePath, exePath string, output io.Writer, progress func(int64)) error
 }
 
 func (p *payload) sourceInfo() *manifest { return p.info }
+
+func (p *payload) contentDigest() string {
+	if p.recipe != nil {
+		return p.recipe.contentDigest()
+	}
+	return p.manifestDigest
+}
 
 func (p *payload) engineName() string {
 	if p.recipe != nil {
@@ -293,6 +307,7 @@ func parsePayload(reader *zip.Reader) (*payload, error) {
 	if err != nil {
 		return nil, err
 	}
+	result.manifestDigest = digestBytes(data)
 	result.info = info
 	for _, entry := range info.Files {
 		if entry.Object != "" && result.objects[entry.Object] == nil {

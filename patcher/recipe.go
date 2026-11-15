@@ -43,6 +43,9 @@ type recipePlan struct {
 	ImagePatches []recipeImagePatch `json:"image_patches,omitempty"`
 	Files        map[string]*recipeFile
 	blob         []byte
+	// digest 是整个 plan 容器的 sha256，作为安装记录里的载荷内容身份：
+	// 同一版本串的两个构建内容可以不同，记录匹配必须按内容而不是版本串。
+	digest string
 }
 
 // recipeFile describes one non-resource target file. Disc images and texture
@@ -264,6 +267,7 @@ func loadRecipePlan(data []byte) (*recipePlan, error) {
 	if err := validateRecipeFiles(plan); err != nil {
 		return nil, err
 	}
+	plan.digest = digestBytes(data)
 	return plan, nil
 }
 

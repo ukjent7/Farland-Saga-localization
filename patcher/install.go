@@ -54,6 +54,10 @@ type installRecord struct {
 	Language     string `json:"language"`
 	Engine       string `json:"engine,omitempty"`
 	InstalledUTC string `json:"installed_utc"`
+	// PayloadSHA256 是产生这份安装的载荷内容摘要（plan 容器或 manifest 的
+	// sha256 + 语言）。同一版本串的构建内容可以不同，记录匹配只认摘要；
+	// 旧版记录没有这个字段，匹配失败会触发一次重建并写入新记录。
+	PayloadSHA256 string                `json:"payload_sha256,omitempty"`
 	// BackupDirectory 恒为 backupDirName。旧版本写入的是带时间戳的目录名，
 	// loadRecord 照旧接受，安装时会迁移成固定名。
 	BackupDirectory string                `json:"backup_directory"`
@@ -411,7 +415,7 @@ func writeRecord(game string, record *installRecord) error {
 
 // inspectFile 把游戏里的当前文件与 manifest 身份对照；priorHashes 提供上一版
 // 补丁的哈希，用于识别「已打补丁但属于另一版本」的状态。
-func inspectFile(game string, entry fileEntry, priorHashes map[string]string, priorIsCurrent bool) fileStatus {
+func inspectFile(game string, entry fileEntry, priorHashes map[string]string, recordMatchesPayload bool) fileStatus {
 	status := fileStatus{Path: entry.Path, OriginalSize: entry.OriginalSize, PatchedSize: entry.PatchedSize}
 	target := gameFilePath(game, entry.Path)
 	info, err := os.Stat(target)
@@ -442,9 +446,11 @@ func inspectFile(game string, entry fileEntry, priorHashes map[string]string, pr
 		status.State = statePatched
 	default:
 		if prior, ok := priorHashes[entry.Path]; ok && hash == prior {
-			if priorIsCurrent {
+			if recordMatchesPayload {
+				// 记录哈希匹配且记录就是本载荷写下的：文件已是本载荷的输出。
 				status.State = statePatched
 			} else {
+				// 与安装记录一致但不是本载荷的输出：以前某次安装留下的内容。
 				status.State = statePrevious
 			}
 			break
@@ -454,22 +460,18 @@ func inspectFile(game string, entry fileEntry, priorHashes map[string]string, pr
 	return status
 }
 
-func inspectAll(game string, info *manifest, prior *installRecord) []fileStatus {
+func inspectAll(game string, info *manifest, prior *installRecord, currentDigest string) []fileStatus {
 	priorHashes := map[string]string{}
+	recordMatchesPayload := false
 	if prior != nil {
 		for name, item := range prior.Files {
 			priorHashes[name] = item.PatchedSHA256
 		}
+		recordMatchesPayload = prior.PayloadSHA256 != "" && prior.PayloadSHA256 == currentDigest
 	}
-	// A file matching the install record is the version that record describes,
-	// even when the current payload is another language or was built by another
-	// engine. installPatch separately checks the engine before treating it as
-	// already installed; status and verify must not call a Korean install
-	// "previous" just because the embedded plan defaults to Chinese.
-	priorIsCurrent := prior != nil && prior.Version == info.Version
 	statuses := make([]fileStatus, 0, len(info.Files))
 	for _, entry := range info.Files {
-		statuses = append(statuses, inspectFile(game, entry, priorHashes, priorIsCurrent))
+		statuses = append(statuses, inspectFile(game, entry, priorHashes, recordMatchesPayload))
 	}
 	return statuses
 }
@@ -515,6 +517,20 @@ func blockedFiles(statuses []fileStatus) []string {
 	return blocked
 }
 
+// sameFileSet 判断安装记录覆盖的文件集合与当前载荷一致。记录缺了新版本
+// 引入的文件时不能走「已安装」捷径——记录和备份都必须补全新文件。
+func sameFileSet(recorded map[string]fileRecord, info *manifest) bool {
+	if len(recorded) != len(info.Files) {
+		return false
+	}
+	for _, entry := range info.Files {
+		if _, ok := recorded[entry.Path]; !ok {
+			return false
+		}
+	}
+	return true
+}
+
 // checkWritable 在写入前确认目标文件没有被占用（Windows 上运行中的游戏会锁住
 // 镜像文件），并确认游戏目录可写。
 func checkWritable(game string, info *manifest) error {
@@ -554,14 +570,21 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 	if err != nil {
 		return nil, err
 	}
-	statuses := inspectAll(game, info, prior)
+	currentDigest := loaded.contentDigest()
+	statuses := inspectAll(game, info, prior, currentDigest)
 	if blocked := blockedFiles(statuses); len(blocked) > 0 {
 		return nil, errors.New("以下文件既不是原版也不是本程序安装的补丁，已中止:\n" + strings.Join(blocked, "\n"))
 	}
-	if prior != nil && prior.Version == info.Version && prior.Language == info.Language &&
-		prior.Engine == loaded.engineName() {
-		// 已安装的判定：每个文件都达到补丁后状态；补丁不改变的文件（原版与
-		// 补丁后内容相同）保持原版也算达成，避免重复安装反复建备份。
+	// 已安装的判定以内容为准：记录的内容摘要与本载荷一致，且每个文件都已
+	// 是本载荷的补丁输出（补丁不改变内容的文件保持原版也算达成）。版本串
+	// 只是显示信息——同一 recipe 版本串的两个构建内容可以不同，绝不能据此
+	// 把升级当成已完成。语言与引擎仍需一致：切换语言（哪怕补丁字节相同）
+	// 要重写记录才能让界面反映新语言；记录还必须覆盖与载荷完全相同的文件
+	// 集合，新版引入的文件要让记录和备份补全，否则后续还原会漏掉它们。
+	// 记录状态异常时也不走捷径，让正常路径重放（全部跳过）并重写记录。
+	if prior != nil && prior.Status == statusInstalled && prior.PayloadSHA256 == currentDigest &&
+		prior.Language == info.Language &&
+		prior.Engine == loaded.engineName() && sameFileSet(prior.Files, info) {
 		installed := true
 		for index, status := range statuses {
 			entry := info.Files[index]
@@ -647,18 +670,16 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 		os.RemoveAll(rollbackDir)
 		return cause
 	}
-	// Files patched by this same source already hold the right bytes. A file
-	// patched by another engine (for example candidate16 before the recipe
-	// upgrade) must be rebuilt even though its state is "patched".
-	sameInstall := prior != nil && prior.Version == info.Version &&
-		prior.Language == info.Language && prior.Engine == loaded.engineName()
+	// 已是本载荷补丁输出的文件（哈希等于 PatchedSHA256）内容必然与重放结果
+	// 一致——生成是确定性的——直接跳过；其余状态（原版、其他版本补丁、缺失）
+	// 都要重建。
 	installedHashes := map[string]string{}
 	installedSizes := map[string]int64{}
 	for _, entry := range info.Files {
 		installedSizes[entry.Path] = entry.PatchedSize
 	}
 	for _, entry := range info.Files {
-		if sameInstall && stateOf(statuses, entry.Path) == statePatched {
+		if stateOf(statuses, entry.Path) == statePatched {
 			continue
 		}
 		target := gameFilePath(game, entry.Path)
@@ -712,6 +733,7 @@ func installPatch(game string, loaded patchSource, progress func(fileEntry, int6
 	record := &installRecord{
 		Format: recordFormat, Kind: recordKind,
 		Version: info.Version, Language: info.Language, Engine: loaded.engineName(),
+		PayloadSHA256: currentDigest,
 		InstalledUTC: time.Now().UTC().Format(stampLayout),
 		Files:        map[string]fileRecord{},
 		Status:       statusInstalled,
@@ -881,5 +903,5 @@ func verifyInstall(game string, loaded *payload) ([]fileStatus, error) {
 		}
 		return statuses, nil
 	}
-	return inspectAll(game, loaded.info, record), nil
+	return inspectAll(game, loaded.info, record, loaded.contentDigest()), nil
 }

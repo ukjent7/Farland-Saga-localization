@@ -163,6 +163,7 @@ type fs1Plan struct {
 	files     map[string]*fs1PlanFile
 	entries   map[string]map[string]*fs1PlanEntry
 	blob      []byte
+	digest    string
 }
 
 // loadFS1Plan 解析 plan 容器并做完整校验。
@@ -269,6 +270,9 @@ func loadFS1Plan(data []byte) (*fs1Plan, error) {
 		files:     header.Files,
 		entries:   entries,
 		blob:      blob,
+		// 与 recipePlan.digest 同义：整个 plan 容器的 sha256，是安装记录里
+		// 载荷内容身份的依据。
+		digest: digestBytes(data),
 	}, nil
 }
 
@@ -695,6 +699,10 @@ type fs1PlanSource struct {
 func (s *fs1PlanSource) sourceInfo() *manifest { return s.info }
 
 func (s *fs1PlanSource) engineName() string { return "plan " + s.plan.version(s.language) }
+
+// contentDigest 是这个安装源的内容身份：plan 容器摘要 + 语言。同一版本串
+// 的两个构建内容可以不同，安装记录据此按内容匹配，而不是按版本串。
+func (s *fs1PlanSource) contentDigest() string { return s.plan.digest + "/" + s.language }
 
 func (s *fs1PlanSource) close() error { return nil }
 

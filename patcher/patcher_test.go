@@ -1013,6 +1013,55 @@ func TestInstallSupplementsBackupWhenNewTargetAdded(t *testing.T) {
 	}
 }
 
+// TestInstallUpgradesSameVersionDifferentContent 版本串相同但补丁内容不同：
+// 直接安装必须升级重建，绝不能因为版本串一致而当成「已安装」跳过——这正是
+// 同一 recipe 版本号下发布修正版的真实升级路径。
+func TestInstallUpgradesSameVersionDifferentContent(t *testing.T) {
+	files := sampleFiles()
+	pathA, _ := buildPayload(t, t.TempDir(), "same-version", "zh-CN", files)
+	// vB 只改盘镜像的一个差异块；版本串与 vA 完全相同。
+	v2Disc := append([]byte(nil), files[0].patched...)
+	copy(v2Disc[3*blockSize:3*blockSize+8], pattern(11, 8))
+	filesB := []testFile{
+		{name: files[0].name, original: files[0].original, patched: v2Disc},
+		files[1], files[2],
+	}
+	pathB, _ := buildPayload(t, t.TempDir(), "same-version", "zh-CN", filesB)
+
+	game := buildGame(t, files)
+	if _, err := installPatch(game, openTestPayload(t, pathA), nil); err != nil {
+		t.Fatalf("安装 vA 失败: %v", err)
+	}
+	result, err := installPatch(game, openTestPayload(t, pathB), nil)
+	if err != nil {
+		t.Fatalf("同版本串升级安装失败: %v", err)
+	}
+	if result.AlreadyInstalled {
+		t.Fatal("版本串相同但内容不同，不应报告已安装")
+	}
+	for _, file := range filesB {
+		data, err := os.ReadFile(filepath.Join(game, filepath.FromSlash(file.name)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(data, file.patched) {
+			t.Fatalf("%s 升级后内容不符", file.name)
+		}
+	}
+	record, err := loadRecord(game)
+	if err != nil || record == nil {
+		t.Fatalf("安装记录缺失: %v", err)
+	}
+	if record.Files[files[0].name].PatchedSHA256 != sha256Hex(v2Disc) {
+		t.Fatal("安装记录应指向 vB 的补丁内容")
+	}
+	// 升级完成后再次安装同一载荷是幂等的。
+	again, err := installPatch(game, openTestPayload(t, pathB), nil)
+	if err != nil || !again.AlreadyInstalled {
+		t.Fatalf("升级后重复安装应识别为已安装: %v", err)
+	}
+}
+
 // TestInstallRefusesCorruptBackupWhenPatched 备份损坏且游戏已是补丁态：无法
 // 修复，必须明确指出是哪个文件不对。
 func TestInstallRefusesCorruptBackupWhenPatched(t *testing.T) {

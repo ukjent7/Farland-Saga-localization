@@ -94,6 +94,10 @@ func (s *recipeSource) sourceInfo() *manifest { return s.info }
 
 func (s *recipeSource) engineName() string { return "recipe " + s.plan.Version }
 
+// contentDigest 是这个安装源的内容身份：plan 容器摘要 + 语言。同一版本串
+// 的两个构建内容可以不同，安装记录据此按内容匹配，而不是按版本串。
+func (s *recipeSource) contentDigest() string { return s.plan.digest + "/" + s.language }
+
 func (s *recipeSource) close() error { return nil }
 
 func (s *recipeSource) patchedHash(path string) (string, bool) {

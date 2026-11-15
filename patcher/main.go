@@ -177,7 +177,7 @@ func commandInstall(game, payloadPath, planPath, engine, language string, yes, a
 	if err != nil {
 		return err
 	}
-	statuses := inspectAll(game, info, prior)
+	statuses := inspectAll(game, info, prior, source.contentDigest())
 	if !asJSON {
 		if loaded != nil {
 			fmt.Printf("补丁载荷：%s\n", filepath.Base(loaded.path))
@@ -450,7 +450,7 @@ func wizard() error {
 			return err
 		}
 	}
-	statuses := inspectAll(game, loaded.info, prior)
+	statuses := inspectAll(game, loaded.info, prior, loaded.contentDigest())
 	fmt.Printf("\n补丁载荷：%s（%s，%s）\n", filepath.Base(loaded.path), loaded.info.Version, loaded.info.Language)
 	fmt.Printf("游戏目录：%s\n", game)
 	printStatusTable(statuses)
