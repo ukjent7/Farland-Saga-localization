@@ -46,12 +46,16 @@
    "style": "label",
    "align": "left",
    "effect": "shadow",
-   "max_size": 16,
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 12
+   },
    "min_size": 7,
    "text": {
     "zh-CN": "属性",
     "ko-KR": "속성",
-    "en-US": "Element"
+    "en-US": "Elem"
    }
   }
  ]

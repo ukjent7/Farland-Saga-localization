@@ -126,7 +126,11 @@
    "style": "label",
    "align": "left",
    "effect": "shadow",
-   "max_size": 16,
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 14
+   },
    "min_size": 7,
    "text": {
     "zh-CN": "体力",
@@ -145,7 +149,11 @@
    "style": "label",
    "align": "left",
    "effect": "shadow",
-   "max_size": 16,
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 14
+   },
    "min_size": 7,
    "text": {
     "zh-CN": "魔力",
@@ -164,12 +172,16 @@
    "style": "label",
    "align": "left",
    "effect": "shadow",
-   "max_size": 16,
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 14
+   },
    "min_size": 7,
    "text": {
     "zh-CN": "攻击力",
     "ko-KR": "공격력",
-    "en-US": "Attack"
+    "en-US": "Atk"
    }
   },
   {
@@ -183,12 +195,16 @@
    "style": "label",
    "align": "left",
    "effect": "shadow",
-   "max_size": 16,
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 14
+   },
    "min_size": 7,
    "text": {
     "zh-CN": "防御力",
     "ko-KR": "방어력",
-    "en-US": "Defense"
+    "en-US": "Def"
    }
   },
   {
@@ -202,12 +218,16 @@
    "style": "label",
    "align": "left",
    "effect": "shadow",
-   "max_size": 16,
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 14
+   },
    "min_size": 7,
    "text": {
     "zh-CN": "智力",
     "ko-KR": "지력",
-    "en-US": "Intellect"
+    "en-US": "Int"
    }
   },
   {
@@ -221,12 +241,16 @@
    "style": "label",
    "align": "left",
    "effect": "shadow",
-   "max_size": 16,
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 14
+   },
    "min_size": 7,
    "text": {
     "zh-CN": "魔抗力",
     "ko-KR": "마저",
-    "en-US": "Magic Res."
+    "en-US": "M.Res"
    }
   },
   {
@@ -240,12 +264,16 @@
    "style": "label",
    "align": "left",
    "effect": "shadow",
-   "max_size": 16,
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 14
+   },
    "min_size": 7,
    "text": {
     "zh-CN": "敏捷度",
     "ko-KR": "민첩성",
-    "en-US": "Agility"
+    "en-US": "Agi"
    }
   },
   {
@@ -259,7 +287,11 @@
    "style": "label",
    "align": "left",
    "effect": "shadow",
-   "max_size": 16,
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 14
+   },
    "min_size": 7,
    "text": {
     "zh-CN": "经验值",
@@ -278,12 +310,16 @@
    "style": "label",
    "align": "left",
    "effect": "shadow",
-   "max_size": 16,
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 12
+   },
    "min_size": 7,
    "text": {
     "zh-CN": "属性",
     "ko-KR": "속성",
-    "en-US": "Element"
+    "en-US": "Elem"
    }
   }
  ]
