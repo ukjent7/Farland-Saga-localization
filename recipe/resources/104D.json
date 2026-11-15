@@ -3,8 +3,8 @@
   "description": "Nora nameplate.",
   "format": "plate_bitmap_8bpp",
   "fonts": {
-    "zh-CN": "NotoSansSC",
-    "ko-KR": "Galmuri11",
+    "zh-CN": "FusionPixel12",
+    "ko-KR": "Galmuri14",
     "en-US": "LiberationSans"
   },
   "canvas": {

@@ -1,0 +1,347 @@
+{
+ "resource": "0424",
+ "description": "equip screen panels (装備可能/能力 duplicate)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  304,
+  208
+ ],
+ "fonts": {
+  "zh-CN": "FusionPixel12",
+  "ko-KR": "Galmuri14",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    20,
+    49,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    50,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    51,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    52,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    53,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    54,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    55,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    56,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    57,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    58,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    59,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    60,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    61,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    20,
+    62,
+    59,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    49,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    50,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    51,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    52,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    53,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    54,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    55,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    56,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    57,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    58,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    59,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    60,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    61,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  },
+  {
+   "box": [
+    170,
+    62,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 8
+  }
+ ],
+ "labels": [
+  {
+   "name": "sophou",
+   "box": [
+    20,
+    49,
+    59,
+    14
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "可装备",
+    "ko-KR": "장비가능",
+    "en-US": "Can equip"
+   }
+  },
+  {
+   "name": "nouryoku",
+   "box": [
+    170,
+    49,
+    30,
+    14
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "能力",
+    "ko-KR": "능력",
+    "en-US": "Stats"
+   }
+  }
+ ]
+}

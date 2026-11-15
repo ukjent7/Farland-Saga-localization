@@ -245,8 +245,8 @@ def _card_missing_glyph(root):
 
 
 def _missing_font(root):
-    roles = ('NotoSansSC', 'Galmuri11', 'LiberationSans', 'Unifont',
-             'NotoSansSCAtlas', 'Galmuri11Atlas')
+    roles = ('NotoSansSC', 'Galmuri11', 'Galmuri14', 'LiberationSans', 'Unifont',
+             'NotoSansSCAtlas', 'Galmuri11Atlas', 'FusionPixel12')
     (root / 'fonts.json').write_text(
         json.dumps({'fonts': {role: '/nonexistent/font.ttf' for role in roles}}),
         encoding='utf-8')

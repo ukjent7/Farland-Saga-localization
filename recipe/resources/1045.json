@@ -1,0 +1,726 @@
+{
+ "resource": "1045",
+ "description": "save-overwrite yes/no prompt dialog with Mog art (table chunk 043D, was hidden inside 043B span)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  184,
+  88
+ ],
+ "fonts": {
+  "zh-CN": "FusionPixel12",
+  "ko-KR": "Galmuri14",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    60,
+    15,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    16,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    17,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    18,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    19,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    20,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    21,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    22,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    23,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    24,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    25,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    26,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    27,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    28,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    29,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    30,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    31,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    32,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    33,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    34,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    35,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    36,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    37,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    38,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    39,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    40,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    41,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    42,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    43,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    44,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    45,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    46,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    47,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    60,
+    48,
+    114,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    56,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    57,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    58,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    59,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    60,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    61,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    62,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    63,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    64,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    65,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    66,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    67,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    68,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    69,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    77,
+    70,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    56,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    57,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    58,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    59,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    60,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    61,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    62,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    63,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    64,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    65,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    66,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    67,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    68,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    69,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    126,
+    70,
+    42,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "question",
+   "box": [
+    60,
+    15,
+    114,
+    34
+   ],
+   "style": "label",
+   "align": "center",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "确定要覆盖吗？",
+    "ko-KR": "덮어쓸까요?",
+    "en-US": "Overwrite data?"
+   }
+  },
+  {
+   "name": "yes",
+   "box": [
+    77,
+    56,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "是",
+    "ko-KR": "예",
+    "en-US": "Yes"
+   }
+  },
+  {
+   "name": "no",
+   "box": [
+    126,
+    56,
+    42,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "否",
+    "ko-KR": "아니요",
+    "en-US": "No"
+   }
+  }
+ ]
+}

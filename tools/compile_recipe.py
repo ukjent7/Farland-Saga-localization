@@ -147,6 +147,69 @@ def font_at(path, size):
         raise SystemExit(f'cannot load font {path}: {error}') from None
 
 
+# Pixel-grid fonts are vectorised bitmap designs: rendering them at any size
+# other than their native grid rounds the pixel shapes unevenly and the glyphs
+# turn mushy on screen.  Their size candidates are therefore pinned to the
+# native grid and the rasteriser never resamples them.
+PIXEL_FONT_ROLES = {'Galmuri11', 'Galmuri11Atlas', 'Galmuri14', 'Galmuri14Atlas',
+                    'FusionPixel12'}
+PIXEL_FONT_NATIVE = {'Galmuri11': 11, 'Galmuri11Atlas': 11,
+                     'Galmuri14': 14, 'Galmuri14Atlas': 14,
+                     'FusionPixel12': 12}
+
+# Vector fonts (Noto, Liberation) rasterise through a supersampled coverage
+# pass: dense CJK glyphs at the engine's 12-16px sizes lose the gaps between
+# strokes when the 1-bit threshold is applied to direct FreeType output, while
+# a 4x render followed by a box downsample keeps those sub-pixel gaps and the
+# threshold produces separated, readable strokes.  The box average dilutes a
+# one-pixel stroke across two output pixels (~50% coverage each), so the
+# downsampled coverage is gamma-lifted before the threshold; without it, thin
+# strokes at the smaller sizes fall just under 128 and the glyph fragments.
+RASTER_SCALE = 4
+RASTER_GAMMA = 0.75
+
+# A story page that cannot fit the preferred pixel font's native grid falls
+# back to the smaller native pixel font instead of resampling it.
+PIXEL_FONT_STORY_FALLBACK = {'Galmuri14': ('Galmuri11', 11)}
+
+
+def font_role(recipe, language):
+    return recipe.get('fonts', {}).get(language)
+
+
+def raster_scale(recipe, language):
+    return 1 if font_role(recipe, language) in PIXEL_FONT_ROLES else RASTER_SCALE
+
+
+def size_candidates(role, largest, smallest, native_only=False):
+    """Allowed point sizes for one font role.  Pixel-grid fonts never exceed
+    their native size (larger renders resample the pixel shapes); they only
+    step below it when the native grid cannot fit, which the compile report
+    exposes for per-resource fallback to the smaller pixel font.  Story pages
+    pass native_only: a page that misses the native grid falls back to the
+    smaller pixel font whole, never to a resampled render."""
+    if role in PIXEL_FONT_NATIVE:
+        cap = min(largest, PIXEL_FONT_NATIVE[role])
+        if native_only:
+            return (cap,) if cap >= smallest else ()
+        if cap < smallest:
+            return ()
+        return range(cap, smallest - 1, -1)
+    return range(largest, smallest - 1, -1)
+
+
+def threshold_coverage(canvas, scale, threshold=128):
+    """Box-downsample a supersampled coverage canvas back to 1x, lift it with
+    RASTER_GAMMA and threshold it to 0/255.  With scale 1 the canvas is only
+    binarised."""
+    if scale > 1:
+        canvas = canvas.resize((canvas.width // scale, canvas.height // scale),
+                               Image.BOX)
+        gamma = RASTER_GAMMA
+        canvas = canvas.point(lambda value: int(255 * (value / 255) ** gamma))
+    return canvas.point(lambda value: 255 if value >= threshold else 0)
+
+
 _FONT_CMAPS = {}
 
 
@@ -197,18 +260,24 @@ def fit_pillow(path, text, width, height, largest, smallest, reserve):
                      f'sizes {smallest}..{largest})')
 
 
-def build_pillow_mask(label, text, path, threshold, style, size):
+def build_pillow_mask(label, text, path, threshold, style, size, scale=1):
     """Return a tile-atlas mask for one label at a chosen point size."""
     x0, y0, width, height = label['box']
     effect = label.get('effect', 'shadow')
     reserve = label.get('reserve', 2 if effect == 'outline' else 1)
     _, font, bbox, ink_width, ink_height = fit_pillow(
         path, text, width, height, size, size, reserve)
+    # Shared coverage canvas with a one-pixel logical margin around the ink;
+    # the shadow branch crops it back to the production geometry, so scale 1
+    # (pixel fonts) reproduces the historical masks byte for byte.
+    if scale > 1:
+        font = font_at(path, size * scale)
+        bbox = font.getbbox(text)
+    body = Image.new('L', ((ink_width + 2) * scale, (ink_height + 2) * scale), 0)
+    ImageDraw.Draw(body).text((scale - bbox[0], scale - bbox[1]),
+                              text, font=font, fill=255)
+    body = threshold_coverage(body, scale, threshold)
     if effect == 'outline':
-        body = Image.new('L', (ink_width + 2, ink_height + 2), 0)
-        ImageDraw.Draw(body).text((1 - bbox[0], 1 - bbox[1]), text, font=font, fill=255)
-        if threshold > 1:
-            body = body.point(lambda value: 255 if value >= threshold else 0)
         if style['outline'] == style['body']:
             outline = Image.new('L', body.size, 0)
         else:
@@ -229,10 +298,7 @@ def build_pillow_mask(label, text, path, threshold, style, size):
                 elif outline.getpixel((xx, yy)):
                     mask[(gy - y0) * width + (gx - x0)] = 1
     else:
-        body = Image.new('L', (ink_width, ink_height), 0)
-        ImageDraw.Draw(body).text((-bbox[0], -bbox[1]), text, font=font, fill=255)
-        if threshold > 1:
-            body = body.point(lambda value: 255 if value >= threshold else 0)
+        body = body.crop((1, 1, ink_width + 1, ink_height + 1))
         left = x0 if label['align'] == 'left' else x0 + (width - ink_width) // 2
         top = y0 + (height - ink_height) // 2
         mask = bytearray(width * height)
@@ -401,8 +467,12 @@ def choose_sizes(recipe, language, fonts, unifont):
     for group, members in groups.items():
         largest = min(size_limit(member, 'max_size', language) for member in members)
         smallest = max(size_limit(member, 'min_size', language, 7) for member in members)
+        candidates = size_candidates(font_role(recipe, language), largest, smallest)
+        if not candidates:
+            raise SystemExit(f'{recipe["resource"]}/{group}: font {font_role(recipe, language)!r} '
+                             f'has no size inside {smallest}..{largest}')
         chosen = None
-        for size in range(largest, smallest - 1, -1):
+        for size in candidates:
             if all(label_fits(label, text_for(label, language), language, recipe,
                               fonts, unifont, size) for label in members):
                 chosen = size
@@ -425,7 +495,6 @@ def choose_sizes(recipe, language, fonts, unifont):
 def build_label_mask(label, text, language, recipe, fonts, unifont, size):
     render = render_for(label, language)
     style = style_for(recipe, label)
-    path = font_path_for(recipe, language, fonts, render)
     if render == 'unifont':
         if size is None:
             largest = size_limit(label, 'max_size', language)
@@ -437,15 +506,29 @@ def build_label_mask(label, text, language, recipe, fonts, unifont, size):
             if size is None:
                 raise SystemExit(f'{label["name"]}: no unifont size fits {text!r}')
         return build_unifont_mask(label, text, unifont, style, language, size)
+    # A label may override the resource's font role; used where a box cannot
+    # fit the resource-wide pixel font's native grid.
+    role = label.get('fonts', {}).get(language) or font_role(recipe, language)
+    if not role or role not in fonts:
+        raise SystemExit(f'{label["name"]}: font role {role!r} is missing')
+    path = fonts[role]
     threshold = recipe['thresholds'][language]
     if size is None:
         width, height = label['box'][2], label['box'][3]
         effect = label.get('effect', 'shadow')
         reserve = label.get('reserve', 2 if effect == 'outline' else 1)
+        largest = size_limit(label, 'max_size', language)
+        smallest = size_limit(label, 'min_size', language, 7)
+        if role in PIXEL_FONT_NATIVE:
+            largest = min(largest, PIXEL_FONT_NATIVE[role])
+            if largest < smallest:
+                raise SystemExit(f'{label["name"]}: font {role!r} has no size inside '
+                                 f"{smallest}..{size_limit(label, 'max_size', language)} "
+                                 f'for {text!r}')
         size = fit_pillow(path, text, width, height,
-                          size_limit(label, 'max_size', language),
-                          size_limit(label, 'min_size', language, 7), reserve)[0]
-    return build_pillow_mask(label, text, path, threshold, style, size)
+                          largest, smallest, reserve)[0]
+    return build_pillow_mask(label, text, path, threshold, style, size,
+                             1 if role in PIXEL_FONT_ROLES else RASTER_SCALE)
 
 
 def validate_box(rid, name, box, width, height):
@@ -682,7 +765,11 @@ def plate_lines(probe, path, text, language, recipe, width):
     would collide with the line above or below.
     """
     limit = width - recipe['left'] - 1  # keep room for the drop shadow
-    for size in range(recipe['max_size'], recipe['min_size'] - 1, -1):
+    candidates = size_candidates(font_role(recipe, language),
+                                 recipe['max_size'], recipe['min_size'])
+    if not candidates:
+        return None
+    for size in candidates:
         font = font_at(path, size)
         lines = wrap_paragraphs(probe, text, font, limit, language)
         if len(lines) > len(recipe['bands']):
@@ -720,18 +807,22 @@ def compile_plate(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir
                 f'{rid}: {text!r} needs more than {len(recipe["bands"])} lines '
                 f'at {recipe["min_size"]}px')
         size, font, lines, boxes, placed = chosen
-        mask = Image.new('L', (width, height), 0)
+        scale = raster_scale(recipe, language)
+        font_s = font_at(path, size * scale) if scale > 1 else font
+        mask = Image.new('L', (width * scale, height * scale), 0)
         draw = ImageDraw.Draw(mask)
         for index, line in enumerate(lines):
             box = boxes[index]
             top = placed[index][0]
             x = recipe['left'] - box[0]
             y = top - box[1]
-            draw.text((x, y), line, font=font, fill=255)
+            draw.text((x * scale, y * scale), line, font=font_s, fill=255)
             report['writes'].setdefault(language, {})[f'line[{index}]'] = {
                 'text': line, 'font': recipe['fonts'][language],
                 'font_size': size, 'x': recipe['left'], 'y': top,
             }
+        if scale > 1:
+            mask = mask.resize((width, height), Image.BOX)
         # The canvas holds palette indices, so every pixel is either background,
         # body or shadow. Threshold the antialiased mask before it becomes an
         # index; a grey level would select an unrelated palette entry.
@@ -758,11 +849,25 @@ def compile_plate(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir
         'format': recipe['format'],
         'archive_offset': meta['archive_offset'],
         'size': meta['size'],
+        **relocation_fields(meta),
         'original_sha256': meta['original_sha256'],
         'expected': {language: oracle.get(rid, {}).get(language, '') for language in languages},
         'operations': operations,
     }
     return header, report
+
+
+def relocation_fields(meta):
+    """Pass the pristine read position/span through to the plan. A resource
+    whose chunk moved (the 02C9 tile-pool expansion) reads its original bytes
+    from relocate_from and is written to archive_offset; relocate_size keeps
+    the pristine span when the chunk grew or shrank."""
+    fields = {}
+    if meta.get('relocate_from') is not None:
+        fields['relocate_from'] = meta['relocate_from']
+    if meta.get('relocate_size') is not None:
+        fields['relocate_size'] = meta['relocate_size']
+    return fields
 
 
 def validate_manifest(manifest, recipe_dir):
@@ -870,6 +975,7 @@ def compile_tile(rid, meta, recipe, languages, fonts, unifont, oracle, blob, pre
         'atlas_size': recipe['atlas_size'],
         'archive_offset': meta['archive_offset'],
         'size': meta['size'],
+        **relocation_fields(meta),
         'original_sha256': meta['original_sha256'],
         'expected': {language: oracle.get(rid, {}).get(language, '') for language in languages},
         'operations': operations,
@@ -921,13 +1027,14 @@ def wrap_paragraphs(draw, text, font, max_width, language):
 
 
 def paint_slot(text, width, height, path, largest, smallest, background, ink,
-               box_width, align='center'):
-    image = Image.new('1', (width, height), background)
-    draw = ImageDraw.Draw(image)
+               box_width, align='center', scale=1, sizes=None):
+    probe = ImageDraw.Draw(Image.new('L', (1, 1)))
+    if sizes is None:
+        sizes = range(largest, smallest - 1, -1)
     chosen = None
-    for size in range(largest, smallest - 1, -1):
+    for size in sizes:
         font = font_at(path, size)
-        bbox = draw.textbbox((0, 0), text, font=font)
+        bbox = probe.textbbox((0, 0), text, font=font)
         ink_width, ink_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
         if ink_width <= box_width and ink_height <= height:
             chosen = (size, font, bbox, ink_width, ink_height)
@@ -941,8 +1048,36 @@ def paint_slot(text, width, height, path, largest, smallest, background, ink,
     else:
         x = (box_width - ink_width) // 2 - bbox[0]
     y = (height - ink_height) // 2 - bbox[1]
-    draw.text((x, y), text, font=font, fill=ink)
+    if scale <= 1:
+        image = Image.new('1', (width, height), background)
+        ImageDraw.Draw(image).text((x, y), text, font=font, fill=ink)
+    else:
+        canvas = Image.new('L', (width * scale, height * scale), 0)
+        ImageDraw.Draw(canvas).text((x * scale, y * scale), text,
+                                    font=font_at(path, size * scale), fill=255)
+        image = threshold_coverage(canvas, scale).point(
+            lambda value: (255 if ink else 0) if value else (255 if background else 0)
+        ).convert('1')
     return image.tobytes(), size
+
+
+def mono_render(width, height, placements, background, ink, scale, path):
+    """Paint 1x-positioned text lines into a mono sheet.  Pixel fonts keep the
+    direct 1-bit canvas; vector fonts render supersampled coverage."""
+    if scale <= 1:
+        image = Image.new('1', (width, height), background)
+        draw = ImageDraw.Draw(image)
+        for text, x, y, font, _ in placements:
+            draw.text((x, y), text, font=font, fill=ink)
+        return image.tobytes()
+    canvas = Image.new('L', (width * scale, height * scale), 0)
+    draw = ImageDraw.Draw(canvas)
+    for text, x, y, _, psize in placements:
+        draw.text((x * scale, y * scale), text,
+                  font=font_at(path, psize * scale), fill=255)
+    return threshold_coverage(canvas, scale).point(
+        lambda value: (255 if ink else 0) if value else (255 if background else 0)
+    ).convert('1').tobytes()
 
 
 def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir):
@@ -957,6 +1092,18 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
             offset = spec['offset']
             width, height = spec['width'], spec['height']
             stride = width // 8 * height
+            # Mono cells are 1-bit: supersampling cannot add anti-aliasing, it
+            # only fattens the hinted strokes after the gamma lift.  The direct
+            # 1x render keeps the font's own hinting, which is what the game's
+            # nameplates and item text always used.
+            scale = 1
+            role = font_role(recipe, language)
+            candidates = None
+            if spec['generator'] == 'slots' or spec.get('wrap'):
+                candidates = size_candidates(role, spec['max_size'], spec['min_size'])
+                if not candidates:
+                    raise SystemExit(f'{rid}/{name}: font {role!r} has no size inside '
+                                     f"{spec['min_size']}..{spec['max_size']}")
             if spec['generator'] == 'slots':
                 box_width = spec.get('box_width', width)
                 if isinstance(box_width, dict):
@@ -967,7 +1114,7 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
                         text[language], width, height, path,
                         spec['max_size'], spec['min_size'],
                         spec['background'], spec['ink'], box_width,
-                        spec.get('align', 'center'))
+                        spec.get('align', 'center'), scale=scale, sizes=candidates)
                     writes.append({'name': f'{name}[{slot}]',
                                    'offset': offset + slot * stride,
                                    'data_offset': len(blob),
@@ -980,18 +1127,18 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
                     }
                 sheets.append(sheet)
             else:
-                image = Image.new('1', (width, height), spec['background'])
-                draw = ImageDraw.Draw(image)
+                probe = ImageDraw.Draw(Image.new('L', (1, 1)))
+                placements = []
                 if spec.get('wrap'):
                     text = text_for(spec, language)
                     reserve = spec.get('reserve', 0)
                     chosen = None
-                    for size in range(spec['max_size'], spec['min_size'] - 1, -1):
+                    for size in candidates:
                         font = font_at(path, size)
-                        lines = wrap_paragraphs(draw, text, font, width - reserve, language)
+                        lines = wrap_paragraphs(probe, text, font, width - reserve, language)
                         if len(lines) > spec['max_lines']:
                             continue
-                        boxes = [draw.textbbox((0, 0), line, font=font) for line in lines]
+                        boxes = [probe.textbbox((0, 0), line, font=font) for line in lines]
                         if any(box[2] - box[0] > width - reserve for box in boxes):
                             continue
                         chosen = (size, font, lines, boxes)
@@ -1011,7 +1158,7 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
                         else:
                             x = (width - ink_width) // 2 - bbox[0]
                         y = top + index * spec['line_height'] - bbox[1]
-                        draw.text((x, y), line, font=font, fill=spec['ink'])
+                        placements.append((line, x, y, font, size))
                         report['writes'].setdefault(language, {})[f'{name}[{index}]'] = {
                             'text': line, 'font': recipe['fonts'][language],
                             'font_size': size, 'y': y + bbox[1],
@@ -1019,10 +1166,15 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
                 else:
                     for line in spec['lines']:
                         text = text_for(line, language)
+                        line_sizes = size_candidates(role, line['max_size'], line['min_size'])
+                        if not line_sizes:
+                            raise SystemExit(
+                                f'{rid}/{name}: font {role!r} has no size inside '
+                                f"{line['min_size']}..{line['max_size']}")
                         chosen = None
-                        for size in range(line['max_size'], line['min_size'] - 1, -1):
+                        for size in line_sizes:
                             font = font_at(path, size)
-                            bbox = draw.textbbox((0, 0), text, font=font)
+                            bbox = probe.textbbox((0, 0), text, font=font)
                             ink_width, ink_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
                             if ink_width <= width - spec.get('reserve', 0) and ink_height <= line['height']:
                                 chosen = (size, font, bbox, ink_width, ink_height)
@@ -1039,16 +1191,17 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
                         else:
                             x = (width - ink_width) // 2 - bbox[0]
                         y = line['y'] + (line['height'] - ink_height) // 2 - bbox[1]
-                        draw.text((x, y), text, font=font, fill=spec['ink'])
+                        placements.append((text, x, y, font, size))
                         report['writes'].setdefault(language, {})[f'{name}:{line["y"]}'] = {
                             'text': text, 'font': recipe['fonts'][language],
                             'font_size': size, 'y': line['y'],
                         }
-                data = image.tobytes()
+                data = mono_render(width, height, placements,
+                                   spec['background'], spec['ink'], scale, path)
                 writes.append({'name': name, 'offset': offset,
                                'data_offset': len(blob), 'data_length': len(data)})
                 blob.extend(data)
-                sheets.append(image)
+                sheets.append(Image.frombytes('1', (width, height), data))
         operations[language] = [{'type': 'mono_bitmap', 'writes': writes}]
         if preview_dir:
             preview_dir.mkdir(parents=True, exist_ok=True)
@@ -1065,6 +1218,7 @@ def compile_mono(rid, meta, recipe, languages, fonts, oracle, blob, preview_dir)
         'format': recipe['format'],
         'archive_offset': meta['archive_offset'],
         'size': meta['size'],
+        **relocation_fields(meta),
         'original_sha256': meta['original_sha256'],
         'expected': {language: oracle.get(rid, {}).get(language, '') for language in languages},
         'operations': operations,
@@ -1183,6 +1337,7 @@ def compile_card(rid, meta, recipe, languages, unifont, oracle, blob, preview_di
         'format': recipe['format'],
         'archive_offset': meta['archive_offset'],
         'size': meta['size'],
+        **relocation_fields(meta),
         'original_sha256': meta['original_sha256'],
         'expected': {language: oracle.get(rid, {}).get(language, '') for language in languages},
         'operations': operations,
@@ -1235,6 +1390,7 @@ def compile_word(rid, meta, recipe, languages, oracle):
         'format': recipe['format'],
         'archive_offset': meta['archive_offset'],
         'size': meta['size'],
+        **relocation_fields(meta),
         'original_sha256': meta['original_sha256'],
         'expected': {language: oracle.get(rid, {}).get(language, '') for language in languages},
         'operations': operations,
@@ -1405,7 +1561,7 @@ def paint_story_unifont(font, text, language, spec, rid):
     return None
 
 
-def paint_story_ttf(path, text, language, spec, rid):
+def paint_story_ttf(path, text, language, spec, rid, scale=1, sizes=None):
     draw = ImageDraw.Draw(Image.new('L', (1, 1)))
     variants = [text]
     if '\n' in text:
@@ -1413,7 +1569,9 @@ def paint_story_ttf(path, text, language, spec, rid):
             variants.append(' '.join(part.strip() for part in text.split('\n') if part.strip()))
         else:
             variants.append(''.join(part.strip() for part in text.split('\n') if part.strip()))
-    for size in range(spec['max_ttf_size'], spec['min_ttf_size'] - 1, -1):
+    if sizes is None:
+        sizes = range(spec['max_ttf_size'], spec['min_ttf_size'] - 1, -1)
+    for size in sizes:
         font = font_at(path, size)
         for variant in variants:
             lines = wrap_paragraphs(draw, variant, font, spec['max_width'], language)
@@ -1421,12 +1579,22 @@ def paint_story_ttf(path, text, language, spec, rid):
                 continue
             if any(draw.textlength(line, font=font) > spec['max_width'] for line in lines):
                 continue
-            mask = Image.new('1', (spec['width'], spec['height']))
-            target = ImageDraw.Draw(mask)
-            for index, line in enumerate(lines):
-                bbox = draw.textbbox((0, 0), line, font=font)
-                target.text((-bbox[0], index * spec['line_height'] - bbox[1]),
-                            line, font=font, fill=1)
+            if scale <= 1:
+                mask = Image.new('1', (spec['width'], spec['height']))
+                target = ImageDraw.Draw(mask)
+                for index, line in enumerate(lines):
+                    bbox = draw.textbbox((0, 0), line, font=font)
+                    target.text((-bbox[0], index * spec['line_height'] - bbox[1]),
+                                line, font=font, fill=1)
+            else:
+                font_s = font_at(path, size * scale)
+                page = Image.new('L', (spec['width'] * scale, spec['height'] * scale), 0)
+                target = ImageDraw.Draw(page)
+                for index, line in enumerate(lines):
+                    bbox = font_s.getbbox(line)
+                    target.text((-bbox[0], index * spec['line_height'] * scale - bbox[1]),
+                                line, font=font_s, fill=255)
+                mask = threshold_coverage(page, scale).convert('1')
             return mask, size, len(lines)
     raise SystemExit(f'{rid}: {language} story text does not fit {spec["max_lines"]} lines '
                      f'at {spec["min_ttf_size"]}px: {text!r}')
@@ -1517,16 +1685,39 @@ def compile_story(recipe_dir, manifest, languages, fonts, unifont, oracle, blob,
         operations = {}
         page_report = {}
         for language in languages:
-            mask = paint_story_unifont(unifont, texts[language], language, spec, rid)
-            if mask is None:
-                role = spec.get('fonts', {}).get(language)
-                if not role or role not in fonts:
-                    raise SystemExit(f'story recipe has no font role for {language}')
-                check_font_coverage(spec, language, fonts, texts[language], rid, 'story')
-                mask = paint_story_ttf(fonts[role], texts[language], language, spec, rid)
-                font_name = role
-            else:
-                font_name = 'Unifont'
+            role = spec.get('fonts', {}).get(language)
+            if not role or role not in fonts:
+                raise SystemExit(f'story recipe has no font role for {language}')
+            check_font_coverage(spec, language, fonts, texts[language], rid, 'story')
+            # Vector or native pixel fonts render the page; Unifont is the
+            # last-resort bitmap fallback for pages their grids cannot fit.
+            font_name = role
+            try:
+                mask = paint_story_ttf(
+                    fonts[role], texts[language], language, spec, rid,
+                    scale=raster_scale(spec, language),
+                    sizes=size_candidates(role, spec['max_ttf_size'],
+                                          spec['min_ttf_size'], native_only=True))
+            except SystemExit:
+                mask = None
+                fallback = PIXEL_FONT_STORY_FALLBACK.get(role)
+                if fallback is not None:
+                    try:
+                        check_font_coverage({'fonts': {language: fallback[0]}},
+                                            language, fonts, texts[language],
+                                            rid, 'story')
+                        mask = paint_story_ttf(fonts[fallback[0]], texts[language],
+                                               language, spec, rid, scale=1,
+                                               sizes=(fallback[1],))
+                        font_name = fallback[0]
+                    except SystemExit:
+                        mask = None
+                if mask is None:
+                    mask = paint_story_unifont(unifont, texts[language],
+                                               language, spec, rid)
+                    if mask is None:
+                        raise
+                    font_name = 'Unifont'
             image, timing = compose_story_image(mask[0], spec)
             if timing > (spec['timing_end'] - spec['timing_table_offset']) // 4 - 1:
                 raise SystemExit(f'{rid}: {language} timing table too long ({timing})')
@@ -2025,6 +2216,9 @@ def compile_plan(recipe_dir, output, report_path, preview_dir, allow_missing=Fal
             for language in languages:
                 if not resource['expected'].get(language):
                     raise SystemExit(f'{rid}: missing {language} expected hash')
+
+    if manifest.get('image_patches'):
+        header['image_patches'] = manifest['image_patches']
 
     header['files'], texture_report = compile_file_plan(
         recipe_dir, manifest, languages, fonts, blob, preview_dir)

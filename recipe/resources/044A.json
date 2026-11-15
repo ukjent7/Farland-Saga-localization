@@ -1,0 +1,546 @@
+{
+ "resource": "044A",
+ "description": "turn-end confirm",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  184,
+  72
+ ],
+ "fonts": {
+  "zh-CN": "FusionPixel12",
+  "ko-KR": "Galmuri14",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    15,
+    16,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    17,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    18,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    19,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    20,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    21,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    22,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    23,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    24,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    25,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    26,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    27,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    28,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    29,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    30,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    15,
+    31,
+    154,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    41,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    42,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    43,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    44,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    45,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    46,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    47,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    48,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    49,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    50,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    51,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    52,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    53,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    54,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    53,
+    55,
+    30,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    41,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    42,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    43,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    44,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    45,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    46,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    47,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    48,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    49,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    50,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    51,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    52,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    53,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    54,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    104,
+    55,
+    40,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "q1",
+   "box": [
+    15,
+    16,
+    154,
+    16
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "要结束回合吗？",
+    "ko-KR": "턴을 종료할까요?",
+    "en-US": "End the turn?"
+   }
+  },
+  {
+   "name": "yes1",
+   "box": [
+    53,
+    41,
+    30,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "是",
+    "ko-KR": "예",
+    "en-US": "Yes"
+   }
+  },
+  {
+   "name": "no1",
+   "box": [
+    104,
+    41,
+    40,
+    15
+   ],
+   "style": "label",
+   "align": "left",
+   "effect": "shadow",
+   "max_size": 16,
+   "min_size": 7,
+   "text": {
+    "zh-CN": "否",
+    "ko-KR": "아니요",
+    "en-US": "No"
+   }
+  }
+ ]
+}

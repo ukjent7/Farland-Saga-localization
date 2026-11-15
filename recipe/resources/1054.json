@@ -3,7 +3,7 @@
   "description": "Korotski nameplate.",
   "format": "plate_bitmap_8bpp",
   "fonts": {
-    "zh-CN": "NotoSansSC",
+    "zh-CN": "FusionPixel12",
     "ko-KR": "Galmuri11",
     "en-US": "LiberationSans"
   },

@@ -33,15 +33,16 @@ const (
 )
 
 type recipePlan struct {
-	Format     int
-	Version    string
-	Game       string
-	Languages  []string
-	ArchiveLBA int
-	SectorSize int
-	Resources  map[string]*recipeResource
-	Files      map[string]*recipeFile
-	blob       []byte
+	Format       int
+	Version      string
+	Game         string
+	Languages    []string
+	ArchiveLBA   int
+	SectorSize   int
+	Resources    map[string]*recipeResource
+	ImagePatches []recipeImagePatch `json:"image_patches,omitempty"`
+	Files        map[string]*recipeFile
+	blob         []byte
 }
 
 // recipeFile describes one non-resource target file. Disc images and texture
@@ -103,10 +104,24 @@ type recipeResource struct {
 	Format         string                       `json:"format"`
 	AtlasSize      []int                        `json:"atlas_size"`
 	ArchiveOffset  int64                        `json:"archive_offset"`
+	RelocateFrom   int64                        `json:"relocate_from,omitempty"`
+	RelocateSize   int                          `json:"relocate_size,omitempty"`
 	Size           int                          `json:"size"`
 	OriginalSHA256 string                       `json:"original_sha256"`
 	Expected       map[string]string            `json:"expected"`
 	Operations     map[string][]recipeOperation `json:"operations"`
+}
+
+// recipeImagePatch replaces one big-endian u16 inside an absolute image
+// sector. The FS2 engine's resource directory table (u16 BE sector indices)
+// lives inside the 0;1 program file, so chunk extent changes are declarative
+// word writes at a fixed image LBA instead of executable patches.
+type recipeImagePatch struct {
+	Name     string `json:"name"`
+	LBA      int64  `json:"lba"`
+	Offset   int    `json:"offset"`
+	Original string `json:"original"`
+	Patched  string `json:"patched"`
 }
 
 type recipeOperation struct {
@@ -160,6 +175,7 @@ type recipeHeader struct {
 	ArchiveLBA   int                        `json:"archive_lba"`
 	SectorSize   int                        `json:"sector_size"`
 	Resources    map[string]*recipeResource `json:"resources"`
+	ImagePatches []recipeImagePatch         `json:"image_patches,omitempty"`
 	Files        map[string]*recipeFile     `json:"files"`
 	BinarySHA256 string                     `json:"binary_sha256"`
 }
@@ -223,15 +239,16 @@ func loadRecipePlan(data []byte) (*recipePlan, error) {
 	}
 
 	plan := &recipePlan{
-		Format:     header.Format,
-		Version:    header.Version,
-		Game:       header.Game,
-		Languages:  header.Languages,
-		ArchiveLBA: header.ArchiveLBA,
-		SectorSize: header.SectorSize,
-		Resources:  header.Resources,
-		Files:      header.Files,
-		blob:       blob,
+		Format:       header.Format,
+		Version:      header.Version,
+		Game:         header.Game,
+		Languages:    header.Languages,
+		ArchiveLBA:   header.ArchiveLBA,
+		SectorSize:   header.SectorSize,
+		Resources:    header.Resources,
+		ImagePatches: header.ImagePatches,
+		Files:        header.Files,
+		blob:         blob,
 	}
 	if plan.Game != "saga2" {
 		return nil, fmt.Errorf("recipe plan 属于 %q，不能用于二代补丁", plan.Game)
@@ -241,10 +258,38 @@ func loadRecipePlan(data []byte) (*recipePlan, error) {
 			return nil, err
 		}
 	}
+	if err := validateRecipeImagePatches(plan); err != nil {
+		return nil, err
+	}
 	if err := validateRecipeFiles(plan); err != nil {
 		return nil, err
 	}
 	return plan, nil
+}
+
+func validateRecipeImagePatches(plan *recipePlan) error {
+	seen := make(map[string]bool, len(plan.ImagePatches))
+	for _, patch := range plan.ImagePatches {
+		if patch.Name == "" || seen[patch.Name] {
+			return fmt.Errorf("image patch 名称缺失或重复: %q", patch.Name)
+		}
+		seen[patch.Name] = true
+		if patch.LBA <= 0 {
+			return fmt.Errorf("image patch %s: LBA 不合法", patch.Name)
+		}
+		original, err := hex.DecodeString(patch.Original)
+		if err != nil || len(original) != 2 {
+			return fmt.Errorf("image patch %s: original 不是 2 字节十六进制", patch.Name)
+		}
+		patched, err := hex.DecodeString(patch.Patched)
+		if err != nil || len(patched) != 2 || bytes.Equal(original, patched) {
+			return fmt.Errorf("image patch %s: patched 不合法", patch.Name)
+		}
+		if patch.Offset < 0 || patch.Offset+2 > plan.SectorSize {
+			return fmt.Errorf("image patch %s: offset 越出扇区", patch.Name)
+		}
+	}
+	return nil
 }
 
 func validateRecipeFiles(plan *recipePlan) error {
@@ -445,6 +490,20 @@ func validateRecipeResource(rid string, resource *recipeResource, plan *recipePl
 	}
 	if resource.ArchiveOffset < 0 || resource.ArchiveOffset%int64(plan.SectorSize) != 0 {
 		return fmt.Errorf("%s: archive_offset 未按扇区对齐", rid)
+	}
+	if resource.RelocateFrom != 0 {
+		if resource.RelocateFrom < 0 || resource.RelocateFrom%int64(plan.SectorSize) != 0 {
+			return fmt.Errorf("%s: relocate_from 未按扇区对齐", rid)
+		}
+	}
+	if resource.RelocateSize != 0 {
+		// The pristine span may differ from the final chunk in either
+		// direction: a shrunk atlas reads its full pristine chunk and
+		// truncates after the ops; a grown atlas reads the pristine chunk
+		// and the repack extends it with spare tile slots.
+		if resource.RelocateSize <= 0 || resource.RelocateSize%plan.SectorSize != 0 {
+			return fmt.Errorf("%s: relocate_size 不合法", rid)
+		}
 	}
 	if resource.Size <= 0 || resource.Size%plan.SectorSize != 0 {
 		return fmt.Errorf("%s: 资源大小必须是扇区大小的正整数倍", rid)

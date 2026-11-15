@@ -60,6 +60,18 @@ func applyRecipeResource(rid string, resource *recipeResource, blob []byte, lang
 		if _, err := applyTileAtlasOperations(atlas, operations, blob); err != nil {
 			return nil, fmt.Errorf("%s: %w", rid, err)
 		}
+		// The engine reads this resource's chunk extent from its directory
+		// table, so the plan's declared size (not the pristine span) bounds
+		// the tile allocation: a grown chunk donates spare tile slots, a
+		// shrunk chunk must still cover every referenced tile.
+		if resource.Size != len(original) {
+			if resource.Size > len(original) {
+				atlas.raw = append(atlas.raw, make([]byte, resource.Size-len(original))...)
+			} else {
+				atlas.raw = atlas.raw[:resource.Size]
+			}
+			atlas.cells = (len(atlas.raw) - atlas.graphics) / tileCellBytes
+		}
 		if _, err := repackTileAtlas(atlas); err != nil {
 			return nil, fmt.Errorf("%s: %w", rid, err)
 		}

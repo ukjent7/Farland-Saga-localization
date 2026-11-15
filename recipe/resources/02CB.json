@@ -3,7 +3,7 @@
   "description": "Dialogue name bank, skills, classes, items and status labels.",
   "format": "mono_bitmap_1bpp",
   "fonts": {
-    "zh-CN": "NotoSansSC",
+    "zh-CN": "FusionPixel12",
     "ko-KR": "Galmuri11",
     "en-US": "LiberationSans"
   },

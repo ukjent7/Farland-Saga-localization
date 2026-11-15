@@ -208,6 +208,35 @@ func (s *recipeSource) buildOverrides(entry fileEntry, basePath, exePath string)
 		return s.overrides, nil
 	}
 	overrides := make(map[uint32][]byte)
+	// Image patches land first and may stack inside one sector (the resource
+	// directory table is a run of u16 entries); the resource loop below
+	// rejects any resource that claims a patched sector.
+	for _, patch := range s.plan.ImagePatches {
+		sector, ok := overrides[uint32(patch.LBA)]
+		if !ok {
+			var err error
+			sector, err = readPristineLBAs(basePath, exePath, s.plan, patch.LBA, 1)
+			if err != nil {
+				return nil, fmt.Errorf("image patch %s: %w", patch.Name, err)
+			}
+		}
+		original, err := hex.DecodeString(patch.Original)
+		if err != nil || len(original) != 2 {
+			return nil, fmt.Errorf("image patch %s: original 不合法", patch.Name)
+		}
+		patched, err := hex.DecodeString(patch.Patched)
+		if err != nil || len(patched) != 2 {
+			return nil, fmt.Errorf("image patch %s: patched 不合法", patch.Name)
+		}
+		if patch.Offset < 0 || patch.Offset+2 > len(sector) {
+			return nil, fmt.Errorf("image patch %s: offset 越出扇区", patch.Name)
+		}
+		if !bytes.Equal(sector[patch.Offset:patch.Offset+2], original) {
+			return nil, fmt.Errorf("image patch %s: 原版字节不匹配", patch.Name)
+		}
+		copy(sector[patch.Offset:patch.Offset+2], patched)
+		overrides[uint32(patch.LBA)] = sector
+	}
 	for rid, resource := range s.plan.Resources {
 		generated := s.generated[rid]
 		if generated == nil {
@@ -259,6 +288,35 @@ func digestBytes(data []byte) string {
 // image stores a 2352-byte logical sector stream split across SSF-encrypted
 // 2048-byte blocks; each sector is permuted inside its 64-sector group.
 func readOriginalResource(imagePath, exePath string, plan *recipePlan, resource *recipeResource) ([]byte, error) {
+	readOffset := resource.ArchiveOffset
+	if resource.RelocateFrom != 0 {
+		readOffset = resource.RelocateFrom
+	}
+	readSize := resource.Size
+	if resource.RelocateSize != 0 {
+		readSize = resource.RelocateSize
+	}
+	result, err := readPristineLBAs(imagePath, exePath, plan,
+		int64(plan.ArchiveLBA)+readOffset/int64(plan.SectorSize), int64(readSize)/int64(plan.SectorSize))
+	if err != nil {
+		return nil, err
+	}
+	if len(result) != readSize {
+		return nil, fmt.Errorf("原版资源大小不符：期望 %d，实际 %d", readSize, len(result))
+	}
+	if digestBytes(result) != resource.OriginalSHA256 {
+		return nil, fmt.Errorf("原版资源哈希不符：期望 %s，实际 %s",
+			resource.OriginalSHA256, digestBytes(result))
+	}
+	return result, nil
+}
+
+// readPristineLBAs decodes count consecutive user sectors starting at the
+// absolute image LBA firstLBA. The image stores a 2352-byte logical sector
+// stream split across SSF-encrypted 2048-byte blocks; each sector is
+// permuted inside its 64-sector group.
+func readPristineLBAs(imagePath, exePath string, plan *recipePlan, firstLBA, count int64) ([]byte, error) {
+	size := count * int64(plan.SectorSize)
 	info, err := os.Stat(imagePath)
 	if err != nil {
 		return nil, fmt.Errorf("无法读取原版镜像 %s: %w", imagePath, err)
@@ -277,10 +335,9 @@ func readOriginalResource(imagePath, exePath string, plan *recipePlan, resource 
 	}
 	defer file.Close()
 
-	result := make([]byte, 0, resource.Size)
-	first := int64(plan.ArchiveLBA) + resource.ArchiveOffset/int64(plan.SectorSize)
-	for offset := 0; offset < resource.Size; offset += plan.SectorSize {
-		lba := first + int64(offset/plan.SectorSize)
+	result := make([]byte, 0, size)
+	for cursor := int64(0); cursor < size; cursor += int64(plan.SectorSize) {
+		lba := firstLBA + cursor/int64(plan.SectorSize)
 		permIndex := discPermIndex*283840 + int(lba)
 		if permIndex < 0 || permIndex >= len(tables.Permutation) {
 			return nil, fmt.Errorf("LBA %d 的置换索引越界", lba)
@@ -293,12 +350,8 @@ func readOriginalResource(imagePath, exePath string, plan *recipePlan, resource 
 		plain := SectorTransform(cipher, int(lba), tables.Dwords, tables.Qwords, false)
 		result = append(result, plain[16:2064]...)
 	}
-	if len(result) != resource.Size {
-		return nil, fmt.Errorf("原版资源大小不符：期望 %d，实际 %d", resource.Size, len(result))
-	}
-	if digestBytes(result) != resource.OriginalSHA256 {
-		return nil, fmt.Errorf("原版资源哈希不符：期望 %s，实际 %s",
-			resource.OriginalSHA256, digestBytes(result))
+	if int64(len(result)) != size {
+		return nil, fmt.Errorf("原版区间大小不符：期望 %d，实际 %d", size, len(result))
 	}
 	return result, nil
 }

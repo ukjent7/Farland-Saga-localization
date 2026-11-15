@@ -7,7 +7,7 @@
   },
   "fonts": {
     "zh-CN": "NotoSansSC",
-    "ko-KR": "Galmuri11",
+    "ko-KR": "Galmuri14",
     "en-US": "LiberationSans"
   },
   "width": 196,
@@ -16,7 +16,7 @@
   "max_lines": 3,
   "max_width": 195,
   "unifont_size": 16,
-  "max_ttf_size": 14,
+  "max_ttf_size": 16,
   "min_ttf_size": 9,
   "columns_per_character": 14,
   "timing_offset": 2354,

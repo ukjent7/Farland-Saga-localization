@@ -110,8 +110,8 @@ jobs:
           {
             echo "## FARLAND SAGA I & II Saturn Tribute Trilingual Patcher ${GITHUB_REF_NAME}"
             echo
-            echo "> [!WARNING]"
-            echo "> **Alpha Preview Stage**: This release is an early preview build for testing purposes only."
+            echo "> [!NOTE]"
+            echo "> **Beta Release**: This is a beta build. If you run into any issues, please report them."
             echo
             echo "Standalone single-executable patchers embedding English, Simplified Chinese (简体中文), and Korean (한국어) localizations for both Farland Saga I & II."
             echo
@@ -146,7 +146,6 @@ jobs:
             gh release upload "$tag" binaries/* --clobber
           else
             gh release create "$tag" \
-              --prerelease \
               --target "${GITHUB_SHA}" \
               --title "FARLAND SAGA I & II Saturn Tribute Patcher ${tag}" \
               --notes-file release-notes.md \

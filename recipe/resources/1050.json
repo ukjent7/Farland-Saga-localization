@@ -1,0 +1,222 @@
+{
+ "resource": "1050",
+ "description": "quest reward message dialog, Gold line kept (table chunk 043E, was hidden inside 043B span)",
+ "format": "tile_atlas_8bpp",
+ "atlas_size": [
+  184,
+  72
+ ],
+ "fonts": {
+  "zh-CN": "FusionPixel12",
+  "ko-KR": "Galmuri14",
+  "en-US": "LiberationSans"
+ },
+ "thresholds": {
+  "zh-CN": 128,
+  "ko-KR": 128,
+  "en-US": 128
+ },
+ "styles": {
+  "label": {
+   "body": 2,
+   "outline": 1
+  }
+ },
+ "erase": [
+  {
+   "box": [
+    26,
+    40,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    41,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    42,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    43,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    44,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    45,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    46,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    47,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    48,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    49,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    50,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    51,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    52,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    53,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    54,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    55,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  },
+  {
+   "box": [
+    26,
+    56,
+    146,
+    1
+   ],
+   "mode": "color",
+   "color": 3
+  }
+ ],
+ "labels": [
+  {
+   "name": "reward",
+   "box": [
+    26,
+    40,
+    146,
+    17
+   ],
+   "style": "label",
+   "align": "center",
+   "effect": "shadow",
+   "max_size": {
+    "zh-CN": 16,
+    "ko-KR": 16,
+    "en-US": 11
+   },
+   "min_size": 7,
+   "text": {
+    "zh-CN": "的报酬到手了。",
+    "ko-KR": "의 보상을 받았다",
+    "en-US": "obtained as a reward."
+   }
+  }
+ ]
+}

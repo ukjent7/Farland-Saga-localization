@@ -3,7 +3,7 @@
   "description": "Save-slot scene titles.",
   "format": "mono_bitmap_1bpp",
   "fonts": {
-    "zh-CN": "NotoSansSC",
+    "zh-CN": "FusionPixel12",
     "ko-KR": "Galmuri11",
     "en-US": "LiberationSans"
   },

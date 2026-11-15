@@ -3,7 +3,7 @@
   "description": "Cook nameplate. 0117 now draws the text name from 02CB, so this art is a fallback for any remaining path that selects plate 1.",
   "format": "plate_bitmap_8bpp",
   "fonts": {
-    "zh-CN": "NotoSansSC",
+    "zh-CN": "FusionPixel12",
     "ko-KR": "Galmuri11",
     "en-US": "LiberationSans"
   },
